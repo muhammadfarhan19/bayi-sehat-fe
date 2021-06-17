@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from 'next/router'
 
 const navLinks = [
-  { title: "Profil", active: true, link: "/profil" },
+  { title: "Beranda", active: true, link: "/" },
   { title: "Kepegawaian", active: false, link: "/kepegawaian" },
   { title: "Keuangan", active: false, link: "/keuangan" },
   { title: "Barang Milik Negara", active: false, link: "/barang-milik-negara" },

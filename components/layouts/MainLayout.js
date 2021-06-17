@@ -202,7 +202,7 @@ export default function MainLayout({ children }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
+                              src="https://assets-a1.kompasiana.com/items/album/2021/03/24/blank-profile-picture-973460-1280-605aadc08ede4874e1153a12.png?t=o&v=770"
                               alt=""
                             />
                           </Menu.Button>
@@ -397,7 +397,7 @@ export default function MainLayout({ children }) {
                           <div className="flex-shrink-0">
                             <img
                               className="h-10 w-10 rounded-full"
-                              src={user.imageUrl}
+                              src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/User-Pict-Profil.svg/682px-User-Pict-Profil.svg.png"
                               alt=""
                             />
                           </div>

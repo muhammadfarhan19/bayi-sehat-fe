@@ -1,10 +1,11 @@
-
 import MainLayout from "../components/layouts/MainLayout";
 import {
   CalendarIcon,
   LocationMarkerIcon,
   UsersIcon,
+  ClockIcon,
 } from "@heroicons/react/solid";
+import Link from "next/link";
 
 const navigation = [
   { name: "Profil", href: "#", current: true, count: "5" },
@@ -25,13 +26,22 @@ const user = {
 };
 const positions = [
   {
+    id: 0,
+    title: "WFO 1",
+    type: "Wajib",
+    location: "Luring",
+    department: "Tata Usaha",
+    closeDate: "2020-01-07",
+    closeDateFull: "7:30 - 15:30",
+  },
+  {
     id: 1,
     title: "Rapat Pengumuman PKKM",
     type: "Narasumber",
     location: "Luring",
     department: "Tata Usaha",
     closeDate: "2020-01-07",
-    closeDateFull: "19:00 7 Januari 2020",
+    closeDateFull: "19:00",
   },
   {
     id: 2,
@@ -40,7 +50,7 @@ const positions = [
     location: "Luring",
     department: "Data dan Informasi",
     closeDate: "2020-01-07",
-    closeDateFull: "19:00 7 Januari 2020",
+    closeDateFull: "19:00",
   },
   {
     id: 3,
@@ -49,13 +59,13 @@ const positions = [
     location: "Daring",
     department: "Tata Usaha",
     closeDate: "2020-01-14",
-    closeDateFull: "19:00 7 Januari 2020",
+    closeDateFull: "19:00",
   },
 ];
 const stats = [
-  { label: "Kehadiran Bulan Ini", value: "100%" },
-  { label: "Kegiatan Hari Ini", value: 3 },
-  { label: "Sisa Cuti", value: 4 },
+  { label: "Kehadiran", value: "100%", link: "/profil" },
+  { label: "Kegiatan", value: 3, link: "/profil" },
+  { label: "Sisa Cuti", value: 4, link: "/profil" },
 ];
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -69,7 +79,7 @@ export default function Home() {
         {/* Main 3 column grid */}
         <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
           {/* Left column */}
-          <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+          <div className="grid grid-cols-1 gap-4 lg:col-span-1">
             <section aria-labelledby="section-1-title">
               <h2 className="sr-only" id="section-1-title">
                 lorem mantap
@@ -81,25 +91,30 @@ export default function Home() {
                   Profile Overview
                 </h2>
                 <div className="bg-white p-6">
-                  <div className="sm:flex sm:items-center sm:justify-between">
-                    <div className="sm:flex sm:space-x-5">
+                  <div className="text-center">
+                    <div className="text-center">
                       <div className="flex-shrink-0">
                         <img
                           className="mx-auto h-20 w-20 rounded-full"
-                          src={user.imageUrl}
+                          src="https://assets-a1.kompasiana.com/items/album/2021/03/24/blank-profile-picture-973460-1280-605aadc08ede4874e1153a12.png?t=o&v=770"
                           alt=""
                         />
                       </div>
-                      <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                        <p className="text-sm font-medium text-gray-600">
-                          Selamat datang,
+                      <div className="mt-4 text-center sm:mt-0 sm:pt-1 ">
+                        <p className="text-lg font-bold text-gray-900">
+                          Dr. Ir. Paristiyanti Nurwardani, M.P.
                         </p>
-                        <p className="text-xl font-bold text-gray-900 sm:text-2xl">
-                          Rian Ardiana Prapanca
+                        <p className="text-xs font-medium text-gray-600">
+                          Sekretaris Direktorat Jenderal DIKTI
                         </p>
-                        <p className="text-sm font-medium text-gray-600">
-                          Web Developer
-                        </p>
+                        <Link href="profil">
+                          <button
+                            type="button"
+                            className="my-1 items-center w-full block py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          >
+                            Profil
+                          </button>
+                        </Link>
                       </div>
                     </div>
                     {/* <div className="mt-5 flex justify-center sm:mt-0">
@@ -112,28 +127,31 @@ export default function Home() {
                     </div> */}
                   </div>
                 </div>
-                <div className="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+                <div className="border-t border-gray-200 bg-gray-50 grid grid-cols-3 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
                   {stats.map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="px-6 py-5 text-sm font-medium text-center"
-                    >
-                      <div className="text-gray-900">{stat.value}</div>{" "}
-                      <div className="text-gray-600">{stat.label}</div>
-                    </div>
+                    <Link href={stat.link}>
+                      <a
+                        key={stat.label}
+                        className="px-6 py-5 text-sm font-medium text-center"
+                      >
+                        <div className="text-gray-900">{stat.value}</div>{" "}
+                        <div className="text-gray-600 text-xs text-indigo-600">
+                          {stat.label}
+                        </div>
+                      </a>
+                    </Link>
                   ))}
                 </div>
               </div>
 
-              <div className="rounded-lg bg-white shadow px-4 py-5 border-b border-gray-200 sm:px-6 mb-3">
+              <div className="rounded-lg bg-white shadow px-2 py-5 border-b border-gray-200 sm:px-5 mb-3">
                 <div className="-ml-4 -mt-4 flex pb-2 justify-between items-center flex-wrap sm:flex-nowrap">
                   <div className="ml-4 mt-4">
                     <h3 className="text-lg leading-6 font-medium text-gray-900">
-                      Kegiatan
+                      Kegiatan hari ini
                     </h3>
                     <p className="mt-1 text-sm text-gray-500">
-                      Berikut kegiatan yang harus anda hadiri hari ini, tetap
-                      semangat!
+                      Tetap semangat!
                     </p>
                   </div>
                 </div>
@@ -154,7 +172,7 @@ export default function Home() {
                             </div>
                           </div>
                           <div className="mt-2 sm:flex sm:justify-between">
-                            <div className="sm:flex">
+                            <div className="">
                               <p className="flex items-center text-sm text-gray-500">
                                 <UsersIcon
                                   className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
@@ -162,7 +180,7 @@ export default function Home() {
                                 />
                                 {position.department}
                               </p>
-                              <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                              <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                                 <LocationMarkerIcon
                                   className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                                   aria-hidden="true"
@@ -171,7 +189,7 @@ export default function Home() {
                               </p>
                             </div>
                             <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                              <CalendarIcon
+                              <ClockIcon
                                 className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                                 aria-hidden="true"
                               />
@@ -187,50 +205,62 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
+                <button
+                  type="button"
+                  className="my-1 items-center w-full block py-1 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Kegiatan Lainnya
+                </button>
               </div>
             </section>
           </div>
 
           {/* Right column */}
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-4 lg:col-span-2">
             <section aria-labelledby="section-2-title">
               <h2 className="sr-only" id="section-2-title">
                 Section title
               </h2>
-              <div className="rounded-lg bg-white overflow-hidden shadow">
-                <nav className="space-y-1" aria-label="Sidebar">
-                  {navigation.map((item) => (
-                    <>
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-100 text-gray-900 py-3"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                          "group flex items-center px-3 py-3 text-sm font-medium rounded-md"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        <span className="truncate">{item.name}</span>
-                        {item.count ? (
-                          <span
-                            className={classNames(
-                              item.current
-                                ? "bg-white"
-                                : "bg-gray-100 group-hover:bg-gray-200",
-                              "ml-auto inline-block py-0.5 px-3 text-xs rounded-full"
-                            )}
-                          >
-                            {item.count}
-                          </span>
-                        ) : null}
-                        <hr />
-                      </a>
-                    </>
-                  ))}
-                </nav>
+
+              <div className="rounded-lg bg-white overflow-hidden shadow mb-3 p-5">
+                <h3 className="text-lg font-semibold mb-3">Log Kegiatan</h3>
+                <div className="mb-3">
+                  <label
+                    htmlFor="judul"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Judul
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      type="text"
+                      id="judul"
+                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="deskripsi"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Deskripsi
+                  </label>
+                  <div className="mt-1">
+                    <textarea
+                      type="text"
+                      id="deskripsi"
+                      rows="5"
+                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+                </div>
+                <div className="float-right">
+                  <button className="my-1 items-center  block py-2 px-8 border border-transparent text-sm font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Simpan</button>
+                </div>
               </div>
+
+              <div className="rounded-lg bg-white overflow-hidden shadow"></div>
             </section>
           </div>
         </div>
