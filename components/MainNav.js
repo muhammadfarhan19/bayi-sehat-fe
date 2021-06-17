@@ -1,20 +1,28 @@
 import Link from "next/link";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 const navLinks = [
   { title: "Beranda", active: true, link: "/" },
   { title: "Kepegawaian", active: false, link: "/kepegawaian" },
   { title: "Keuangan", active: false, link: "/keuangan" },
   { title: "Barang Milik Negara", active: false, link: "/barang-milik-negara" },
-  { title: "Naskah Dinas Elektronik", active: false, link: "/naskah-dinas-elektronik" },
-  { title: "Monitoring Program Kegiatan", active: false, link: "/monitoring-program-kegiatan" },
+  {
+    title: "Naskah Dinas Elektronik",
+    active: false,
+    link: "/naskah-dinas-elektronik",
+  },
+  {
+    title: "Monitoring Program Kegiatan",
+    active: false,
+    link: "/monitoring-program-kegiatan",
+  },
   { title: "Evaluasi Organisasi", active: false, link: "/evaluasi-organisasi" },
 ];
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 function MainNav() {
-    const router = useRouter()
+  const router = useRouter();
   return (
     <div className="hidden lg:block border-t border-white border-opacity-20 py-5">
       <div className="grid grid-cols-2 gap-8 items-center">
@@ -25,7 +33,9 @@ function MainNav() {
                 <a
                   key={link.title}
                   className={classNames(
-                    router.asPath == link.link  ? "text-white bg-opacity-10" : "text-indigo-100",
+                    router.asPath == link.link
+                      ? "text-white bg-opacity-10"
+                      : "text-indigo-100",
                     "text-sm font-medium rounded-md bg-white bg-opacity-0 px-5 mr-1 py-1 hover:bg-opacity-10"
                   )}
                   aria-current={link.active ? "page" : "false"}
