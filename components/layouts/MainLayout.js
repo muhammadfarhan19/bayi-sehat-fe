@@ -3,137 +3,9 @@ import { Menu, Popover, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { SearchIcon } from "@heroicons/react/solid";
 import MainNav from "../MainNav";
-import {
-  ChartBarIcon,
-  FolderIcon,
-  HomeIcon,
-  InboxIcon,
-} from "@heroicons/react/outline";
+import Head from "next/head";
 
-import {
-  CalendarIcon,
-  LocationMarkerIcon,
-  UsersIcon,
-} from "@heroicons/react/solid";
 import Link from "next/link";
-
-const navigation = [
-  { name: "Profil", href: "#", current: true, count: "5" },
-  { name: "Kalender Kegiatan", href: "#", current: false },
-  { name: "Gaji dan Honor", href: "#", current: false, count: "19" },
-  { name: "Kepegawaian", href: "#", current: false, count: "20+" },
-  { name: "Barang Milik Negara", href: "#", current: false },
-  { name: "Pengaturan", href: "#", current: false },
-];
-const user = {
-  name: "Chelsea Hagon",
-  handle: "chelseahagon",
-  email: "chelseahagon@example.com",
-  role: "Human Resources Manager",
-  imageId: "1550525811-e5869dd03032",
-  imageUrl:
-    "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
-const positions = [
-  {
-    id: 1,
-    title: "Rapat Pengumuman PKKM",
-    type: "Narasumber",
-    location: "Luring",
-    department: "Tata Usaha",
-    closeDate: "2020-01-07",
-    closeDateFull: "19:00 7 Januari 2020",
-  },
-  {
-    id: 2,
-    title: "Rapat Pengembangan Super Apps DIKTI",
-    type: "Peserta",
-    location: "Luring",
-    department: "Data dan Informasi",
-    closeDate: "2020-01-07",
-    closeDateFull: "19:00 7 Januari 2020",
-  },
-  {
-    id: 3,
-    title: "Rapat Pengembangan Sistem Manajemen Reviewer",
-    type: "Peserta",
-    location: "Daring",
-    department: "Tata Usaha",
-    closeDate: "2020-01-14",
-    closeDateFull: "19:00 7 Januari 2020",
-  },
-];
-const stats = [
-  { label: "Kehadiran Bulan Ini", value: "100%" },
-  { label: "Kegiatan Hari Ini", value: 3 },
-  { label: "Sisa Cuti", value: 4 },
-];
-const navLinks = [
-  { title: "Profil", active: true },
-  { title: "Kepegawaian", active: false },
-  { title: "Keuangan", active: false },
-  { title: "Barang Milik Negara", active: false },
-  { title: "Naskah Dinas Elektronik", active: false },
-  { title: "Monitoring Program Kegiatan", active: false },
-  { title: "Evaluasi Organisasi", active: false },
-];
-const people = [
-  {
-    name: "Jane Cooper",
-    title: "Regional Paradigm Technician",
-    role: "Admin",
-    email: "jane.cooper@example.com",
-  },
-  {
-    name: "Cody Fisher",
-    title: "Product Directives Officer",
-    role: "Owner",
-    email: "cody.fisher@example.com",
-  },
-  {
-    name: "Cody Fisher",
-    title: "Product Directives Officer",
-    role: "Owner",
-    email: "cody.fisher@example.com",
-  },
-  {
-    name: "Cody Fisher",
-    title: "Product Directives Officer",
-    role: "Owner",
-    email: "cody.fisher@example.com",
-  },
-  {
-    name: "Cody Fisher",
-    title: "Product Directives Officer",
-    role: "Owner",
-    email: "cody.fisher@example.com",
-  },
-  {
-    name: "Cody Fisher",
-    title: "Product Directives Officer",
-    role: "Owner",
-    email: "cody.fisher@example.com",
-  },
-  {
-    name: "Cody Fisher",
-    title: "Product Directives Officer",
-    role: "Owner",
-    email: "cody.fisher@example.com",
-  },
-  {
-    name: "Cody Fisher",
-    title: "Product Directives Officer",
-    role: "Owner",
-    email: "cody.fisher@example.com",
-  },
-  {
-    name: "Cody Fisher",
-    title: "Product Directives Officer",
-    role: "Owner",
-    email: "cody.fisher@example.com",
-  },
-  // More people...
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -142,6 +14,22 @@ function classNames(...classes) {
 export default function MainLayout({ children }) {
   return (
     <div className="min-h-screen bg-gray-100">
+      <Head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+        />
+        <meta name="description" content="Description" />
+        <meta name="keywords" content="Keywords" />
+        <title>Intra DIKTI</title>
+
+        <link rel="manifest" href="/manifest.json" />
+
+        <link rel="apple-touch-icon" href="/apple-icon.png"></link>
+        <meta name="theme-color" content="#317EFB" />
+      </Head>
       <Popover as="header" className="pb-24 bg-indigo-600">
         {({ open }) => (
           <>
