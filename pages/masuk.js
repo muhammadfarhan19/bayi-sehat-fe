@@ -4,7 +4,7 @@ import Head from "next/head";
 function Masuk() {
   const router = useRouter();
   function masuk() {
-    router.push("/profil");
+    router.push("/");
   }
   return (
     <>
