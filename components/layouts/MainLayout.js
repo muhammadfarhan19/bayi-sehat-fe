@@ -27,7 +27,9 @@ export default function MainLayout({ children }) {
 
         <link rel="manifest" href="/manifest.json" />
 
-        <link rel="apple-touch-icon" href="/apple-icon.png"></link>
+        <link rel="icon" href="/icon-192x192.png" type="image/png"></link>
+
+        <link rel="apple-touch-icon" href="/icon-192x192.png"></link>
         <meta name="theme-color" content="#317EFB" />
       </Head>
       <Popover as="header" className="pb-24 bg-indigo-600">
