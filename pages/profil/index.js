@@ -1,23 +1,17 @@
 import MainLayout from "../../components/layouts/MainLayout";
 import ProfilNav from "../../components/ProfilNav";
-import Head from 'next/head'
+import Head from "next/head";
 import {
   CalendarIcon,
   LocationMarkerIcon,
   UsersIcon,
-  ChevronRightIcon,
-  ChevronDownIcon
 } from "@heroicons/react/solid";
-
-
-const navigation = [
-  { name: "Profil", href: "#", current: true },
-  { name: "Kalender Kegiatan", href: "#", current: false },
-  { name: "Gaji dan Honor", href: "#", current: false, treeview:true },
-  { name: "Kepegawaian", href: "#", current: false, treeview:true },
-  { name: "Barang Milik Negara", href: "#", current: false },
-  { name: "Pengaturan", href: "#", current: false },
+const tabs = [
+  { name: "Data Diri Pegawai", href: "#", current: true },
+  { name: "Data Diri Pribadi", href: "#", current: false },
+  { name: "Riwayat Pendidikan", href: "#", current: false },
 ];
+
 const user = {
   name: "Chelsea Hagon",
   handle: "chelseahagon",
@@ -25,8 +19,64 @@ const user = {
   role: "Human Resources Manager",
   imageId: "1550525811-e5869dd03032",
   imageUrl:
-    "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    "https://dikti.kemdikbud.go.id/wp-content/uploads/2020/03/cropped-logo-dikbud.png",
 };
+
+const datadiri = [
+  {
+    judul: "Unit kerja",
+    deskripsi: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
+  },
+  {
+    judul: "Nomor batch",
+    deskripsi: "2914-00101",
+  },
+  {
+    judul: "NIP / NIP lama",
+    deskripsi: "196305071990022001 / 131878350",
+  },
+  {
+    judul: "Tempat, tanggal lahir",
+    deskripsi: "Sukabumi, 07-05-1963",
+  },
+  {
+    judul: "Tanggal CPNS",
+    deskripsi: "01-02-1990",
+  },
+  {
+    judul: "Status Kepegawaian",
+    deskripsi: "PNS",
+  },
+  {
+    judul: "Jabatan",
+    deskripsi: "Rangkap Jabatan",
+  },
+  {
+    judul: "Golongan",
+    deskripsi: "IV/c",
+  },
+  {
+    judul: "Tanggal mulai golongan",
+    deskripsi: "01-10-2017",
+  },
+  {
+    judul: "Pangkat",
+    deskripsi: "Pembina Utama Muda",
+  },
+  {
+    judul: "Masa kerja",
+    deskripsi: "27 tahun, 8 bulan",
+  },
+  {
+    judul: "Status",
+    deskripsi: "Aktif",
+  },
+  {
+    judul: "Karpeg",
+    deskripsi: "F 160772",
+  },
+];
+
 const positions = [
   {
     id: 1,
@@ -76,10 +126,22 @@ export default function Profil() {
         {/* Main 3 column grid */}
         <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
           {/* Left column */}
+
+          {/* Right column */}
+          <div className="grid grid-cols-1 gap-4">
+            <section aria-labelledby="section-2-title">
+              <h2 className="sr-only" id="section-2-title">
+                Section title
+              </h2>
+              <div className="rounded-lg bg-white overflow-hidden shadow">
+                <ProfilNav />
+              </div>
+            </section>
+          </div>
           <div className="grid grid-cols-1 gap-4 lg:col-span-2">
             <section aria-labelledby="section-1-title">
               <h2 className="sr-only" id="section-1-title">
-                lorem mantap
+                Profil
               </h2>
 
               {/* Profile Info */}
@@ -89,123 +151,75 @@ export default function Profil() {
                 </h2>
                 <div className="bg-white p-6">
                   <div className="sm:flex sm:items-center sm:justify-between">
-                    <div className="sm:flex sm:space-x-5">
+                    <div className="flex  items-center">
                       <div className="flex-shrink-0">
                         <img
-                          className="mx-auto h-20 w-20 rounded-full"
+                          className="mx-auto h-14 w-14 rounded-full"
                           src={user.imageUrl}
                           alt=""
                         />
                       </div>
-                      <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                        <p className="text-sm font-medium text-gray-600">
-                          Selamat datang,
+                      <div className=" text-left ml-2 sm:mt-0  sm:text-left">
+                        <p className="text-sm  font-bold text-gray-900 sm:text-2xl">
+                          Dr. Ir. Paristiyanti Nurwardani, M.P.
                         </p>
-                        <p className="text-xl font-bold text-gray-900 sm:text-2xl">
-                          Rian Ardiana Prapanca
-                        </p>
-                        <p className="text-sm font-medium text-gray-600">
-                          Web Developer
+                        <p className="text-xs sm:text-sm  font-medium text-gray-600">
+                          Sekretaris Direktorat Jenderal DIKTI
                         </p>
                       </div>
                     </div>
-                    {/* <div className="mt-5 flex justify-center sm:mt-0">
-                      <a
-                        href="#"
-                        className="flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                      >
-                        View profile
-                      </a>
-                    </div> */}
                   </div>
-                </div>
-                <div className="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
-                  {stats.map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="px-6 py-5 text-sm font-medium text-center"
-                    >
-                      <div className="text-gray-900">{stat.value}</div>{" "}
-                      <div className="text-gray-600">{stat.label}</div>
-                    </div>
-                  ))}
                 </div>
               </div>
 
               <div className="rounded-lg bg-white shadow px-4 py-5 border-b border-gray-200 sm:px-6 mb-3">
-                <div className="-ml-4 -mt-4 flex pb-2 justify-between items-center flex-wrap sm:flex-nowrap">
-                  <div className="ml-4 mt-4">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">
-                      Kegiatan
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-500">
-                      Berikut kegiatan yang harus anda hadiri hari ini, tetap
-                      semangat!
-                    </p>
+                <div className="mb-3">
+                  <div className="sm:hidden">
+                    <label htmlFor="tabs" className="sr-only">
+                      Pilih menu
+                    </label>
+                    <select
+                      id="tabs"
+                      name="tabs"
+                      className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                      defaultValue={tabs.find((tab) => tab.current).name}
+                    >
+                      {tabs.map((tab) => (
+                        <option key={tab.name}>{tab.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="hidden sm:block">
+                    <div className="border-b border-gray-100">
+                      <nav className="-mb-px flex" aria-label="Tabs">
+                        {tabs.map((tab) => (
+                          <a
+                            key={tab.name}
+                            href={tab.href}
+                            className={classNames(
+                              tab.current
+                                ? "border-indigo-500 text-indigo-600"
+                                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
+                              "whitespace-nowrap pb-2 px-10 border-b-2  text-sm"
+                            )}
+                            aria-current={tab.current ? "page" : undefined}
+                          >
+                            {tab.name}
+                          </a>
+                        ))}
+                      </nav>
+                    </div>
                   </div>
                 </div>
-                <hr />
-                <ul className="divide-y divide-gray-200">
-                  {positions.map((position) => (
-                    <li key={position.id}>
-                      <a href="#" className="block hover:bg-gray-50">
-                        <div className="px-1 py-4 sm:px-1">
-                          <div className="flex items-center justify-between">
-                            <p className="text-sm font-medium text-indigo-600 truncate">
-                              {position.title}
-                            </p>
-                            <div className="ml-2 flex-shrink-0 flex">
-                              <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                {position.type}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="mt-2 sm:flex sm:justify-between">
-                            <div className="sm:flex">
-                              <p className="flex items-center text-sm text-gray-500">
-                                <UsersIcon
-                                  className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                                {position.department}
-                              </p>
-                              <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                                <LocationMarkerIcon
-                                  className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                                {position.location}
-                              </p>
-                            </div>
-                            <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                              <CalendarIcon
-                                className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                              <p>
-                                <time dateTime={position.closeDate}>
-                                  {position.closeDateFull}
-                                </time>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </section>
-          </div>
 
-          {/* Right column */}
-          <div className="grid grid-cols-1 gap-4">
-            <section aria-labelledby="section-2-title">
-              <h2 className="sr-only" id="section-2-title">
-                Section title
-              </h2>
-              <div className="rounded-lg bg-white overflow-hidden shadow">
-                    <ProfilNav/>
+                <table className="w-full">
+                  {datadiri.map((data) => (
+                    <tr className="border-b ">
+                      <td className="py-2 text-sm">{data.judul}</td>
+                      <td className="py-2 text-sm">{data.deskripsi}</td>
+                    </tr>
+                  ))}
+                </table>
               </div>
             </section>
           </div>

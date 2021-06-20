@@ -1,17 +1,21 @@
 import { ChevronRightIcon } from "@heroicons/react/solid";
 const navigation = [
-  { name: "Biodata", href: "#", current: true },
-  { name: "Kalender Kegiatan", href: "#", current: false },
-  { name: "Kepegawaian", href: "#", current: false, treeview: true },
-  { name: "Keuangan", href: "#", current: false, treeview: true },
-  { name: "Inventaris", href: "#", current: false, treeview: true },
-  { name: "Pengaturan", href: "#", current: false },
+  { name: "Dashboard", href: "#", current: true },
+  { name: "Daftar Pegawai", href: "#", current: false },
+  { name: "Pemetaan Kepegawaian", href: "/kepegawaian/posisi", current: true },
+  { name: "Kehadiran", href: "#", current: false },
+  { name: "Cuti", href: "#", current: false, treeview: true },
+  { name: "Dinas", href: "#", current: false, treeview: true },
+  { name: "Kepangkatan", href: "#", current: false, treeview: true },
+  { name: "Tunjangan Kinerja", href: "#", current: false },
+  { name: "Pensiun", href: "#", current: false },
+  { name: "Satya Lencana", href: "#", current: false },
 ];
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
   
-const ProfilNav = () => {
+const KepegawaianNav = () => {
   return (
     <nav className="space-y-1" aria-label="Sidebar">
       {navigation.map((item) => (
@@ -51,4 +55,4 @@ const ProfilNav = () => {
   );
 };
 
-export default ProfilNav;
+export default KepegawaianNav;

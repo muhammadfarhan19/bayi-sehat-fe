@@ -1,6 +1,11 @@
 import { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import {
+  BellIcon,
+  MenuIcon,
+  XIcon,
+  LogoutIcon,
+} from "@heroicons/react/outline";
 import { SearchIcon } from "@heroicons/react/solid";
 import MainNav from "../MainNav";
 import Head from "next/head";
@@ -15,7 +20,7 @@ export default function MainLayout({ children }) {
   return (
     <div className="min-h-screen bg-gray-100">
       <Head>
-        <meta charset="utf-8" />
+        <meta charSet="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta
           name="viewport"
@@ -31,6 +36,12 @@ export default function MainLayout({ children }) {
 
         <link rel="apple-touch-icon" href="/icon-192x192.png"></link>
         <meta name="theme-color" content="#317EFB" />
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <script
+          defer
+          src="https://cdn.tuk.dev/dev/light-dark-switch.js"
+        ></script>
       </Head>
       <Popover as="header" className="pb-24 bg-indigo-600">
         {({ open }) => (
@@ -92,7 +103,7 @@ export default function MainLayout({ children }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src="https://assets-a1.kompasiana.com/items/album/2021/03/24/blank-profile-picture-973460-1280-605aadc08ede4874e1153a12.png?t=o&v=770"
+                              src="https://dikti.kemdikbud.go.id/wp-content/uploads/2020/03/cropped-logo-dikbud.png"
                               alt=""
                             />
                           </Menu.Button>
@@ -110,14 +121,36 @@ export default function MainLayout({ children }) {
                           >
                             <Menu.Item>
                               {({ active }) => (
+                                <Link href="/profil">
+                                  <a
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "flex px-4 py-2 text-sm text-gray-700 "
+                                    )}
+                                  >
+                                    <span className="rounded-full bg-gray-500 h-5 w-5">
+                                      <img
+                                        src="https://dikti.kemdikbud.go.id/wp-content/uploads/2020/03/cropped-logo-dikbud.png"
+                                        className="h-5 w-5"
+                                      />
+                                    </span>
+                                    <span className="ml-2">Profil</span>
+                                  </a>
+                                </Link>
+                              )}
+                            </Menu.Item>
+                            <hr />
+                            <Menu.Item>
+                              {({ active }) => (
                                 <Link href="/masuk">
                                   <a
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
-                                      "block px-4 py-2 text-sm text-gray-700"
+                                      "block px-4 py-2 text-sm text-gray-700 flex"
                                     )}
                                   >
-                                    Keluar
+                                    <LogoutIcon className="h-5 w-5 text-red-600" />
+                                    <span className="ml-2 ">Keluar</span>
                                   </a>
                                 </Link>
                               )}
