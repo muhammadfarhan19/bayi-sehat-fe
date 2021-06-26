@@ -35,7 +35,7 @@ function KartuProfilBeranda(props) {
           </div>
         </div>
       </div>
-      <div className="border-t border-gray-200  grid grid-cols-2 divide-y divide-gray-200 sm:grid-cols-2 sm:divide-y-0 sm:divide-x ">
+      <div className="border-t border-gray-200 mb-3  grid grid-cols-2 divide-y divide-gray-200 sm:grid-cols-2 sm:divide-y-0 sm:divide-x ">
         {stats.map((stat) => (
           <Link href={stat.link}>
             <a
