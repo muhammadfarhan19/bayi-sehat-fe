@@ -6,13 +6,20 @@ function Masuk() {
   function masuk() {
     router.push("/");
   }
+  const background = {
+    backgroundColor: "background-color:rgba(0, 0, 0, 0.5);",
+    backgroundImage: "url(/img/topography.svg)",
+  };
   return (
     <>
       <Head>
         <title>Masuk Intra DIKTI</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div
+        className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+        style={background}
+      >
         <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
           <div className="flex mb-3">
             <a href="#" className="flex mx-auto">
@@ -39,7 +46,7 @@ function Masuk() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Nomor Induk Pegawai
+                  Username
                 </label>
                 <div className="mt-1">
                   <input

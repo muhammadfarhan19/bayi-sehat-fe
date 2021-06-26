@@ -11,6 +11,7 @@ import MainNav from "../MainNav";
 import Head from "next/head";
 
 import Link from "next/link";
+import BottomNav from "../BottomNav";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -367,6 +368,10 @@ export default function MainLayout({ children }) {
         )}
       </Popover>
       <main className="-mt-24 pb-8">{children}</main>
+      <div className="mx-3"></div>
+      <BottomNav/>
+
+
       <footer>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
           <div className="border-t border-gray-200 py-8 text-sm text-gray-500 text-center sm:text-left">

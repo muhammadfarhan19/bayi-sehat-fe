@@ -649,7 +649,7 @@ function posisi(props) {
                           <tbody>
                             {jabatans.map((jabatan, jabatanIdx) => (
                               <tr
-                                key={jabatan.email}
+                                key={jabatanIdx}
                                 className={
                                   jabatanIdx % 2 === 0
                                     ? "bg-white hover:bg-gray-100"

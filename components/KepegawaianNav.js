@@ -1,6 +1,6 @@
 import { ChevronRightIcon } from "@heroicons/react/solid";
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
+  { name: "Dashboard", href: "/kepegawaian", current: true },
   { name: "Daftar Pegawai", href: "#", current: false },
   { name: "Pemetaan Kepegawaian", href: "/kepegawaian/posisi", current: true },
   { name: "Kehadiran", href: "#", current: false },
