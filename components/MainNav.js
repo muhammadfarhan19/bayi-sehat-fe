@@ -27,7 +27,7 @@ function MainNav() {
     <div className="hidden lg:block border-t border-white border-opacity-20 py-5">
       <div className="grid grid-cols-2 gap-8 items-center">
         <div className="col-span-2">
-          <nav className="flex px-2">
+          <nav className="flex">
             {navLinks.map((link) => (
               <Link href={link.link}>
                 <a
