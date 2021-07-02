@@ -28,7 +28,7 @@ export default function userList() {
             <section aria-labelledby="section-2-title">
                 <button
                     type="button"
-                    onClick={() => router.push('manajemen-user/tambah-pengguna')}
+                    onClick={() => router.push('/admin/manajemen-user/tambah-pengguna')}
                     className="inline-flex mb-2 items-center px-4 py-2 border-2 border-white-600 shadow-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 sm:text-sm"
                 >
                     Tambah
