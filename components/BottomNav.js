@@ -19,7 +19,7 @@ function BottomNav(props) {
             
           </a>
         </Link>
-        <div className="flex-grow text-center text-gray-500">
+        <div className="flex-grow rounded-full text-center text-gray-500">
           <Link href="#">
             <a href="">
               <CalendarIcon className="w-6 h-6 mx-auto" />
@@ -27,7 +27,7 @@ function BottomNav(props) {
             </a>
           </Link>
         </div>
-        <div className="flex-grow text-center text-gray-500">
+        <div className="flex-grow rounded-full text-center text-gray-500">
           <Link href="/menu">
             <a href="">
               <TemplateIcon className="w-6 h-6 mx-auto" />
@@ -35,7 +35,7 @@ function BottomNav(props) {
             </a>
           </Link>
         </div>
-        <div className="flex-grow text-center text-gray-500">
+        <div className="flex-grow rounded-full text-center text-gray-500">
           <Link href="/profil">
             <a href="">
               <UserIcon className="w-6 h-6 mx-auto" />

@@ -16,6 +16,7 @@ import NavIconBeranda from "../components/NavIconBeranda";
 import KartuProfilBeranda from "../components/KartuProfilBeranda";
 import KegiatanHariIni from "../components/KegiatanHariIni";
 import InfoKehadiranDashboard from "../components/InfoKehadiranDashboard";
+import RealisasiSkp from "../components/RealisasiSkp";
 
 
 const navigation = [
@@ -103,6 +104,7 @@ export default function Home() {
                 <KartuProfilBeranda></KartuProfilBeranda>
                 
               </div>
+                <RealisasiSkp/>
               <KegiatanHariIni/>
             </section>
           </div>
