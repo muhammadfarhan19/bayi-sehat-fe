@@ -1,5 +1,5 @@
 import React from "react";
-import AdminNav from "../../components/AdminNav";
+import AdminNav from "../../components/admin/AdminNav";
 import MainLayout from "../../components/layouts/MainLayout";
 
 const aksess = [
