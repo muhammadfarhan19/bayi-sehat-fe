@@ -17,7 +17,7 @@ const navLinks = [
   //   link: "/monitoring-program-kegiatan",
   // },
   // { title: "Evaluasi Organisasi", active: false, link: "/evaluasi-organisasi" },
-  { title: "Atur Pengguna", active: false, link: "/manage-user" },
+  { title: "Admin", active: false, link: "/admin" },
 ];
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
