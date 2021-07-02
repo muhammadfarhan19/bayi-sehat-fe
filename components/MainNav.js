@@ -5,18 +5,19 @@ const navLinks = [
   { title: "Beranda", active: true, link: "/" },
   { title: "Kepegawaian", active: false, link: "/kepegawaian" },
   { title: "Keuangan", active: false, link: "/keuangan" },
-  { title: "Barang Milik Negara", active: false, link: "/barang-milik-negara" },
-  {
-    title: "Naskah Dinas Elektronik",
-    active: false,
-    link: "/naskah-dinas-elektronik",
-  },
-  {
-    title: "Monitoring Program Kegiatan",
-    active: false,
-    link: "/monitoring-program-kegiatan",
-  },
-  { title: "Evaluasi Organisasi", active: false, link: "/evaluasi-organisasi" },
+  // { title: "Barang Milik Negara", active: false, link: "/barang-milik-negara" },
+  // {
+  //   title: "Naskah Dinas Elektronik",
+  //   active: false,
+  //   link: "/naskah-dinas-elektronik",
+  // },
+  // {
+  //   title: "Monitoring Program Kegiatan",
+  //   active: false,
+  //   link: "/monitoring-program-kegiatan",
+  // },
+  // { title: "Evaluasi Organisasi", active: false, link: "/evaluasi-organisasi" },
+  { title: "Atur Pengguna", active: false, link: "/manage-user" },
 ];
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");

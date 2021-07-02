@@ -33,7 +33,7 @@ export default function Profil() {
 
               {/* Profile Info */}
               <div className="rounded-lg bg-white shadow border-b border-gray-200 mb-3">
-                <KepegawaianNav/>
+                <KepegawaianNav />
               </div>
             </section>
           </div>
@@ -45,7 +45,7 @@ export default function Profil() {
                 Section title
               </h2>
               <div className="rounded-lg bg-white shadow py-5 border-b border-gray-200  mb-3">
-                <ExampleLineGraph/>
+                <ExampleLineGraph />
               </div>
             </section>
           </div>
