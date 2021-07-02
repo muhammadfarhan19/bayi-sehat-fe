@@ -1,30 +1,32 @@
+import React from "react";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-
 const tasks = [
   {
-    subjek: "Pengajuan Cuti",
+    subjek: "Pengajuan cuti",
     nilai: "20",
     link: "#",
   },
   {
-    subjek: "Klaim Kehadiran",
+    subjek: "Klaim kehadiran",
     nilai: "15",
     link: "#",
   },
   {
-    subjek: "Kenaikan Pangkat",
-    nilai: "15",
+    subjek: "Tidak hadir",
+    nilai: "16",
     link: "#",
   },
 ];
 
-function TaskKepegawaian() {
+function InfoKehadiranDashboard(props) {
   return (
     <div className="rounded-lg bg-white overflow-hidden shadow mb-3 p-5">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-lg font-semibold">Kepegawaian</h3>
-        <button className="bg-indigo-600 rounded-lg text-gray-100 px-6 py-2 text-xs hover:bg-indigo-700">Detail</button>
+        <h3 className="text-lg font-semibold">Kehadiran</h3>
+        <button className="bg-indigo-600 rounded-lg text-gray-100 px-6 py-2 text-xs hover:bg-indigo-700">
+          Detail
+        </button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
         {tasks.map((task) => (
@@ -50,4 +52,4 @@ function TaskKepegawaian() {
   );
 }
 
-export default TaskKepegawaian;
+export default InfoKehadiranDashboard;

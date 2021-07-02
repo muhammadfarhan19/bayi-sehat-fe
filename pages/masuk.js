@@ -1,18 +1,42 @@
-import { useRouter } from "next/router";
-import Head from "next/head";
+import React from 'react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { useLogin } from '../components/shared/fetcher/FetcherHooks';
 
 function Masuk() {
   const router = useRouter();
-  function masuk() {
-    router.push("/");
+  const loginForm = useLogin();
+
+  const { handleSubmit, register, formState: { errors } } = useForm();
+  
+  const handleLogin = async (handleSubmit) => {
+    try{
+      const login = await loginForm(handleSubmit);
+      if (login.status === 'OK') {
+        router.push("/");
+      }
+    }catch(e){
+      console.log(e)
+    }
   }
+
+
+  const background = {
+    backgroundColor: "background-color:rgba(0, 0, 0, 0.5);",
+    // backgroundImage: "url(/img/topography.svg)",
+  };
+
   return (
     <>
       <Head>
         <title>Masuk Intra DIKTI</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div
+        className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+        
+      >
         <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
           <div className="flex mb-3">
             <a href="#" className="flex mx-auto">
@@ -31,25 +55,26 @@ function Masuk() {
           </h2>
         </div>
 
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="mt-8 mx-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" onSubmit={handleSubmit(handleLogin)}>
               <div>
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Nomor Induk Pegawai
+                  Username
                 </label>
                 <div className="mt-1">
                   <input
                     id="nip"
                     name="nip"
                     type="text"
-                    required
+                    {...register('nip', { required: true })}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
+                {errors.nip && errors.nip.type === "required" && <p class="mt-1 text-red-500 text-xs">Mohon masukkan nip Anda yang terdaftar di IntraDikti</p>}
               </div>
 
               <div>
@@ -65,10 +90,11 @@ function Masuk() {
                     name="password"
                     type="password"
                     autoComplete="current-password"
-                    required
+                    {...register('password', { required: true })}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
+                {errors.password && errors.password.type === "required" && <p class="mt-1 text-red-500 text-xs">Mohon masukkan kata sandi Anda yang terdaftar di IntraDikti</p>}
               </div>
 
               <div className="flex items-center justify-between">
@@ -99,8 +125,7 @@ function Masuk() {
 
               <div>
                 <button
-                  onClick={masuk}
-                  type="button"
+                  type="submit"
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Masuk

@@ -1,17 +1,13 @@
 import { ChevronRightIcon } from "@heroicons/react/solid";
 const navigation = [
-  { name: "Biodata", href: "#", current: true },
-  { name: "Kalender Kegiatan", href: "#", current: false },
-  { name: "Kepegawaian", href: "#", current: false, treeview: true },
-  { name: "Keuangan", href: "#", current: false, treeview: true },
-  { name: "Inventaris", href: "#", current: false, treeview: true },
-  { name: "Pengaturan", href: "#", current: false },
+  { name: "Daftar Pengguna", href: "/manage-user", current: true },
+  { name: "Tambah Pengguna", href: "manage-user/tambah-pengguna", current: false },
 ];
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
   
-const ProfilNav = () => {
+const UserNav = () => {
   return (
     <nav className="space-y-1" aria-label="Sidebar">
       {navigation.map((item) => (
@@ -51,4 +47,4 @@ const ProfilNav = () => {
   );
 };
 
-export default ProfilNav;
+export default UserNav;
