@@ -5,18 +5,19 @@ const navLinks = [
   { title: "Beranda", active: true, link: "/" },
   { title: "Kepegawaian", active: false, link: "/kepegawaian" },
   { title: "Keuangan", active: false, link: "/keuangan" },
-  { title: "Barang Milik Negara", active: false, link: "/barang-milik-negara" },
-  {
-    title: "Naskah Dinas Elektronik",
-    active: false,
-    link: "/naskah-dinas-elektronik",
-  },
-  {
-    title: "Monitoring Program Kegiatan",
-    active: false,
-    link: "/monitoring-program-kegiatan",
-  },
-  { title: "Evaluasi Organisasi", active: false, link: "/evaluasi-organisasi" },
+  // { title: "Barang Milik Negara", active: false, link: "/barang-milik-negara" },
+  // {
+  //   title: "Naskah Dinas Elektronik",
+  //   active: false,
+  //   link: "/naskah-dinas-elektronik",
+  // },
+  // {
+  //   title: "Monitoring Program Kegiatan",
+  //   active: false,
+  //   link: "/monitoring-program-kegiatan",
+  // },
+  // { title: "Evaluasi Organisasi", active: false, link: "/evaluasi-organisasi" },
+  { title: "Admin", active: false, link: "/admin" },
 ];
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -27,7 +28,7 @@ function MainNav() {
     <div className="hidden lg:block border-t border-white border-opacity-20 py-5">
       <div className="grid grid-cols-2 gap-8 items-center">
         <div className="col-span-2">
-          <nav className="flex px-2">
+          <nav className="flex">
             {navLinks.map((link) => (
               <Link href={link.link}>
                 <a
