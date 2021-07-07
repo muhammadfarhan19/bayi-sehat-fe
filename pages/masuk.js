@@ -3,8 +3,12 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useLogin } from '../components/shared/fetcher/FetcherHooks';
+import FetcherAlert from '../components/shared/alert/FetcherAlert';
 
 function Masuk() {
+  const [status , setStatus] = React.useState('');
+  const [message , setMessage] = React.useState({ title : '', subtitle : ''});
+
   const router = useRouter();
   const loginForm = useLogin();
 
@@ -13,19 +17,17 @@ function Masuk() {
   const handleLogin = async (handleSubmit) => {
     try{
       const login = await loginForm(handleSubmit);
-      if (login.status === 'OK') {
+      if (login.status === 200) {
         router.push("/");
+      }else{
+        setStatus('error');
+        setMessage({title : 'Pengguna tidak di temukan', subtitle : 'username/password salah' })  
       }
     }catch(e){
-      console.log(e)
+      setStatus('error');
+      setMessage({title : 'Terjadi Kesalahan', subtitle : 'Silahkan coba beberapa saat lagi' })
     }
   }
-
-
-  const background = {
-    backgroundColor: "background-color:rgba(0, 0, 0, 0.5);",
-    // backgroundImage: "url(/img/topography.svg)",
-  };
 
   return (
     <>
@@ -33,9 +35,11 @@ function Masuk() {
         <title>Masuk Intra DIKTI</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+
+      {status === 'error' && <FetcherAlert alertStatus={status} alertMessage={message} />}
+
       <div
-        className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
-        
+        className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8" 
       >
         <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
           <div className="flex mb-3">
