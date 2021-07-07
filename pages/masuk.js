@@ -78,7 +78,7 @@ function Masuk() {
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
-                {errors.nip && errors.nip.type === "required" && <p class="mt-1 text-red-500 text-xs">Mohon masukkan nip Anda yang terdaftar di IntraDikti</p>}
+                {errors.nip && errors.nip.type === "required" && <p class="mt-1 text-red-500 text-xs">Mohon masukkan username Anda yang terdaftar di IntraDikti</p>}
               </div>
 
               <div>
