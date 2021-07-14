@@ -1,21 +1,49 @@
 import { ChevronRightIcon } from "@heroicons/react/solid";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useSelector, shallowEqual } from 'react-redux';
+import { useRouter } from "next/router";
+import { useModule } from '../shared/fetcher/FetcherHooks';
 
-const navigation = [
-  { name: "Manajemen Pengguna", href: "/admin/manajemen-user", current: true },
-  { name: "Manajemen Akses", href: "/admin/manajemen", current: false },
-];
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const AdminNav = () => {
+const ModuleNavigation = () => {
+  const module = useModule();
+  const [data, setData] = useState([])
+  const router = useRouter();
+  const app = router.pathname.toString().split('/')[1];
+
+  //   const [data , setData] = useState([]);
+  //   const getModule = useSelector(state => {
+  //     return {
+  //       module: state.ModuleReducer.module,
+  //     };
+  //   }, shallowEqual);
+
+
+  //   useEffect(() => {
+  //     setData(getModule.module)
+  //   }, [getModule]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const getModule = await module(app);
+        setData(getModule)
+      } catch (e) {
+        console.log(e)
+      }
+    })();
+  }, [])
+
   return (
     <div className="grid grid-cols-1 gap-4 lg:col-span-1">
       <section aria-labelledby="section-1-title">
         <div className="rounded-lg bg-white shadow border-b border-gray-200 mb-3">
           <nav className="space-y-1" aria-label="Sidebar">
-            {navigation.map((item) => (
+            {data.map((item) => (
               <>
                 <Link href={item.href}>
                   <a
@@ -56,4 +84,4 @@ const AdminNav = () => {
   );
 };
 
-export default AdminNav;
+export default ModuleNavigation;

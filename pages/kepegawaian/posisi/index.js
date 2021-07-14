@@ -1,11 +1,11 @@
-import MainLayout from "../../components/layouts/MainLayout";
-import ExampleLineGraph from "../../components/ExampleLineGraph";
-import ModuleNavigation from "../../components/navigation/ModuleNavigation";
+import MainLayout from "../../../components/layouts/MainLayout";
+import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
+import ListPosisi from "../../../components/kepegawaian/posisi/ListPosisi";
 import Cookies from 'js-cookie';
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
-export default function Profil() {
+export default function Posisi() {
   const router = useRouter();
   const [loadPage, setLoadPage] = useState(false);
   const token = Cookies.get('token');
@@ -28,7 +28,7 @@ export default function Profil() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
           <ModuleNavigation />
-          <ExampleLineGraph />
+          <ListPosisi />
         </div>
       </div>
     </MainLayout>

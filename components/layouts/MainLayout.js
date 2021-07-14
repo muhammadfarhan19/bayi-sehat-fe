@@ -7,17 +7,23 @@ import {
   LogoutIcon,
 } from "@heroicons/react/outline";
 import { SearchIcon } from "@heroicons/react/solid";
-import MainNav from "../MainNav";
+import MainNav from "../navigation/AppNavigation";
 import Head from "next/head";
 
 import Link from "next/link";
 import BottomNav from "../BottomNav";
+import Cookies from 'js-cookie';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function MainLayout({ children }) {
+
+  const handleLogout = () => {
+    Cookies.remove('token');
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Head>
@@ -143,12 +149,13 @@ export default function MainLayout({ children }) {
                             <hr />
                             <Menu.Item>
                               {({ active }) => (
-                                <Link href="/masuk">
+                                <Link href="/login">
                                   <a
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
                                       "block px-4 py-2 text-sm text-gray-700 flex"
                                     )}
+                                    onClick={handleLogout}
                                   >
                                     <LogoutIcon className="h-5 w-5 text-red-600" />
                                     <span className="ml-2 ">Keluar</span>
@@ -196,7 +203,7 @@ export default function MainLayout({ children }) {
                   </Popover.Button>
                 </div>
               </div>
-              <MainNav></MainNav>
+              <MainNav />
             </div>
 
             <Transition.Root show={open} as={Fragment}>
@@ -369,7 +376,7 @@ export default function MainLayout({ children }) {
       </Popover>
       <main className="-mt-24 pb-8">{children}</main>
       <div className="mx-3"></div>
-      <BottomNav/>
+      <BottomNav />
 
 
       <footer>
