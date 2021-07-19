@@ -3,8 +3,10 @@ import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon, ExclamationIcon } from '@heroicons/react/outline'
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
 import { AlertAction } from '../../../action/ActionTypes';
+import { useRouter } from 'next/router';
 
 export default function FetcherAlert() {
+    const router = useRouter();
     const dispatch = useDispatch();
 
     const alert = useSelector(state => {
@@ -13,6 +15,7 @@ export default function FetcherAlert() {
             status: state.AlertReducer.status,
             title: state.AlertReducer.title,
             subtitle: state.AlertReducer.subtitle,
+            redirect: state.AlertReducer.redirect,
         };
     }, shallowEqual);
 
@@ -28,13 +31,31 @@ export default function FetcherAlert() {
             open: false,
             title: '',
             subtitle: '',
-            status: ''
+            status: '',
+            confirm: false,
+        });
+
+        if (typeof (alert.redirect) !== 'undefined') {
+            router.push(alert.redirect)
+        }
+    }
+
+    const handleConfirm = () => {
+        dispatch({
+            type: AlertAction.SET_CLOSE,
+            open: false,
+            title: '',
+            subtitle: '',
+            status: '',
+            redirect: '',
+            confirm: true
         });
     }
 
+
     return (
         <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" static className="fixed z-10 inset-0 overflow-y-auto" open={open} onClose={setOpen}>
+            <Dialog as="div" static className="fixed z-10 inset-0 overflow-y-auto" open={open} onClose={handleClose}>
                 <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                     <Transition.Child
                         as={Fragment}
@@ -64,7 +85,7 @@ export default function FetcherAlert() {
                         <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
                             <div>
 
-                                {alert.status === 'error' ? (
+                                {alert.status === 'error' || alert.status === 'confirmation' ? (
                                     <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
                                         <ExclamationIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
                                     </div>
@@ -86,7 +107,7 @@ export default function FetcherAlert() {
                                 </div>
                             </div>
 
-                            <div className="mt-5 sm:mt-6">
+                            <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                                 {alert.status === 'error' ? (
                                     <button
                                         type="button"
@@ -103,6 +124,23 @@ export default function FetcherAlert() {
                                     >
                                         Close
                                     </button>
+                                ) : alert.status === 'confirmation' ? (
+                                    <>
+                                        <button
+                                            type="button"
+                                            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                            onClick={handleConfirm}
+                                        >
+                                            Delete
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                                            onClick={handleClose}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </>
                                 ) : ('')}
                             </div>
                         </div>

@@ -5,6 +5,8 @@ const initialState = {
   status: false,
   title: '',
   subtitle: '',
+  redirect: '',
+  confirm: false
 };
 
 export default function AlertReducer(state = initialState, action) {
@@ -15,6 +17,7 @@ export default function AlertReducer(state = initialState, action) {
       newState.status = action.status;
       newState.title = action.title;
       newState.subtitle = action.subtitle;
+      newState.redirect = action.redirect;
       return newState;
     }
     
@@ -24,6 +27,8 @@ export default function AlertReducer(state = initialState, action) {
       newState.status = action.status;
       newState.title = action.title;
       newState.subtitle = action.subtitle;
+      newState.confirm = action.confirm;
+      newState.redirect = action.redirect;
       return newState;
     }
     default:
