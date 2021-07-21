@@ -117,8 +117,8 @@ export default function userList() {
                                                     <button
                                                         type="button"
                                                         onClick={() => router.push({
-                                                            pathname: '/admin/manajemen-user/edit-pengguna/[uuid]',
-                                                            query: { uuid: user.id },
+                                                            pathname: '/admin/manajemen-user/edit-pengguna',
+                                                            query: { id: user.id },
                                                         })}
                                                         className="inline-flex mb-2 items-center px-4 py-2 border-2 border-white-600 shadow-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 sm:text-sm"
                                                     >

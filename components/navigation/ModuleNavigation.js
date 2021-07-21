@@ -4,10 +4,34 @@ import { useEffect, useState } from "react";
 import { useSelector, shallowEqual } from 'react-redux';
 import { useRouter } from "next/router";
 import { useModule } from '../shared/fetcher/FetcherHooks';
+import { Disclosure } from "@headlessui/react";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
+
+const navigation = [
+  { name: "Dashboard", href: "/kepegawaian", current: true },
+  { name: "Daftar Pegawai", href: "#", current: false },
+  {
+    name: "Pemetaan Kepegawaian",
+    href: "/kepegawaian/posisi",
+    current: true,
+    children: [
+      { name: 'Overview', href: '#' },
+      { name: 'Members', href: '#' },
+      { name: 'Calendar', href: '#' },
+      { name: 'Settings', href: '#' },
+    ],
+  },
+  { name: "Kehadiran", href: "#", current: false },
+  { name: "Cuti", href: "#", current: false },
+  { name: "Dinas", href: "#", current: false },
+  { name: "Kepangkatan", href: "#", current: false },
+  { name: "Tunjangan Kinerja", href: "#", current: false },
+  { name: "Pensiun", href: "#", current: false },
+  { name: "Satya Lencana", href: "#", current: false },
+];
 
 const ModuleNavigation = () => {
   const module = useModule();
@@ -43,40 +67,57 @@ const ModuleNavigation = () => {
       <section aria-labelledby="section-1-title">
         <div className="rounded-lg bg-white shadow border-b border-gray-200 mb-3">
           <nav className="space-y-1" aria-label="Sidebar">
-            {data.map((item) => (
-              <>
-                <Link href={item.href}>
+            {data.map((item) =>
+              !item.children ? (
+                <div key={item.name}>
                   <a
-                    key={item.name}
+                    href={item.href}
                     className={classNames(
                       item.current
                         ? "bg-gray-100 text-gray-900 py-3"
                         : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                       "group flex items-center px-3 py-3 text-sm font-medium rounded-md"
                     )}
-                    aria-current={item.current ? "page" : undefined}
                   >
-                    <span className="truncate">{item.name}</span>
-                    {item.count ? (
-                      <span
+                    {item.name}
+                  </a>
+                </div>
+              ) : (
+                <Disclosure as="div" key={item.name} className="space-y-1">
+                  {({ open }) => (
+                    <>
+                      <Disclosure.Button
                         className={classNames(
                           item.current
-                            ? "bg-white"
-                            : "bg-gray-100 group-hover:bg-gray-200",
-                          "ml-auto inline-block py-0.5 px-3 text-xs rounded-full"
+                            ? "bg-gray-100 text-gray-900 py-3"
+                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                          "group flex items-center px-3 py-3 text-sm font-medium rounded-md w-full"
                         )}
                       >
-                        {item.count}
-                      </span>
-                    ) : null}
-                    {item.treeview ? (
-                      <ChevronRightIcon className="ml-auto h-5 inline-block py-0.5 px-3 text-xs rounded-full"></ChevronRightIcon>
-                    ) : null}
-                    <hr />
-                  </a>
-                </Link>
-              </>
-            ))}
+
+                        {item.name}
+                        <ChevronRightIcon className={classNames(
+                          open ? 'text-gray-400 rotate-90' : 'text-gray-300',
+                          'ml-auto flex-shrink-0 h-5 w-5 transform group-hover:text-gray-400 transition-colors ease-in-out duration-150'
+                        )} />
+                      </Disclosure.Button>
+                      <Disclosure.Panel className="space-y-1">
+                        {item.children.map((subItem) => (
+                          <a
+                            key={subItem.name}
+                            href={subItem.href}
+                            className="group w-full flex items-center pl-10 pr-2 py-3 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
+                          >
+                            {subItem.name}
+                          </a>
+                        ))}
+                      </Disclosure.Panel>
+                    </>
+                  )}
+                </Disclosure>
+              )
+            )}
+
           </nav>
         </div>
       </section>

@@ -66,6 +66,19 @@ export function useDeleteUser() {
     }
 };
 
+export function useDetailUser() {
+    return (formData) => {
+        return axios
+            .get(config.apiHost + '/users/' + formData, {
+                timeout: 15000,
+            })
+            .then(res => res.data)
+            .catch(error => {
+                throw error.response.data;
+            });
+    }
+};
+
 export function useOrganization() {
     return () => {
         return axios
