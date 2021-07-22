@@ -4,34 +4,32 @@ export default function ListPangkat() {
     const [tahun, setTahun] = useState([]);
     const [bulan, setBulan] = useState([]);
 
-    const kepangkatan = [
+    const skp = [
         {
             no: "1",
             nip: "196612251987022001",
-            nama: "AAN SRIWIDAYATI",
-            unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            gol: "III/d",
-            tmt: "2017-04-01, 25 thn 2 bln",
+            nama: "Aan Sriwidayati, S.E.",
+            jabatan: "Pengolah Data Ketatalaksanaan",
+            nilai: "91",
         },
         {
             no: "2",
             nip: "196612251987022001",
-            nama: "AHMAD TAUFIK",
-            unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            gol: "III/b",
-            tmt: "2017-04-01, 25 thn 2 bln",
+            nama: "Aan Sriwidayati, S.E.",
+            jabatan: "Analis Data dan Informasi",
+            nilai: "91",
         },
         {
             no: "3",
             nip: "196612251987022001",
-            nama: "DEWI RATIH",
-            unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            gol: "III/d",
-            tmt: "2017-04-01, 25 thn 2 bln",
+            nama: "Aan Sriwidayati, S.E.",
+            jabatan: "Perencana Ahli Muda",
+            nilai: "91",
         },
     ];
 
     useEffect(() => {
+        setBulan([])
         getYear()
         getMonth()
     }, []);
@@ -55,19 +53,27 @@ export default function ListPangkat() {
                 <section aria-labelledby="section-2-title">
 
                     <dl className="mb-3 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-1 md:divide-y-0 md:divide-x">
-                        <div className="px-4 sm:p-6">
-                            <dt className="text-lg font-medium text-gray-900">
-                                Monitoring data kenaikan pangkat Jabatan Fungsional Umum
-                            </dt>
+                        <div className="grid md:grid-cols-3 px-4 sm:p-6 gap-4">
+                            <div className="w-full col-span-2 self-center flex">
+                                <dt className="text-lg font-medium text-gray-900">
+                                    Rekap Capaian Pegawai
+                                </dt>
+                            </div>
+                            <div class="w-full pb-2 flex justify-end">
+
+                                <button
+                                    type="submit"
+                                    className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                >
+                                    Download
+                                </button>
+                            </div>
                         </div>
                         <div className="grid md:grid-cols-4 py-2 px-6 gap-4">
-                            <div class="w-full pb-2">
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Tahun</label>
+                            <div class="w-full pb-2 col-span-2">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Unit Kerja</label>
                                 <select className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    <option value="0">Semua</option>
-                                    {tahun.map((data) => (
-                                        <option value={data}>{data}</option>
-                                    ))}
+                                    <option value="">Setditjen Dikti</option>
                                 </select>
                             </div>
                             <div class="w-full pb-2">
@@ -75,17 +81,12 @@ export default function ListPangkat() {
                                 <select className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     {bulan.map((data, i) => (
                                         <>
-                                            <option value={data} selected={i === new Date().getMonth()}>{data}</option>
+                                            <option value={data} selected={i === new Date().getMonth()}>{data} 2021</option>
                                         </>
                                     ))}
                                 </select>
                             </div>
-                            <div class="w-full pb-2 col-span-2">
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Unit Kerja</label>
-                                <select className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-300 disabled:opacity-50" disabled>
-                                    <option value="">Sekretariat Direktorat Jenderal Pendidikan Tinggi</option>
-                                </select>
-                            </div>
+
                         </div>
                     </dl>
 
@@ -94,12 +95,12 @@ export default function ListPangkat() {
                             <div className="-my-2 overflow-x-auto sm:mx-0 ">
                                 <div className="py-2 align-start inline-block min-w-full sm:px-0 lg:px-0">
                                     <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                                        <table className="w-full rounded-lg bg-gray-100 table-auto">
+                                        <table className="w-full rounded-lg bg-gray-100 table-fixed">
                                             <thead className="bg-gray-50">
                                                 <tr>
                                                     <th
                                                         scope="col"
-                                                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        className="w-10 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                     >
                                                         No
                                                     </th>
@@ -119,49 +120,40 @@ export default function ListPangkat() {
                                                         scope="col"
                                                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                     >
-                                                        Unit Kerja
+                                                        Jabatan
                                                     </th>
                                                     <th
                                                         scope="col"
                                                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                     >
-                                                        Golongan
-                                                    </th>
-                                                    <th
-                                                        scope="col"
-                                                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                                    >
-                                                        TMT, MK AWAL
+                                                        Nilai
                                                     </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {kepangkatan.map((kepangkatan, kepangkatanIdx) => (
+                                                {skp.map((skp, skpIdx) => (
                                                     <tr
-                                                        key={kepangkatanIdx}
+                                                        key={skpIdx}
                                                         className={
-                                                            kepangkatanIdx % 2 === 0
+                                                            skpIdx % 2 === 0
                                                                 ? "bg-white hover:bg-gray-100"
                                                                 : "bg-gray-50 hover:bg-gray-100"
                                                         }
                                                     >
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.no}
+                                                            {skp.no}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.nip}
+                                                            {skp.nip}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900 truncate">
-                                                            {kepangkatan.nama}
+                                                            {skp.nama}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.unit}
+                                                            {skp.jabatan}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.gol}
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.tmt}
+                                                            {skp.nilai}
                                                         </td>
                                                     </tr>
                                                 ))}
