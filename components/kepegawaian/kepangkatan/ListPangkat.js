@@ -34,7 +34,7 @@ export default function ListPangkat() {
         {
             no: "2",
             nip: "196612251987022001",
-            nama: "AAN SRIWIDAYATI",
+            nama: "AHMAD TAUFIK",
             unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
             gol: "III/b",
             tmt: "2017-04-01, 25 thn 2 bln",
@@ -42,7 +42,7 @@ export default function ListPangkat() {
         {
             no: "3",
             nip: "196612251987022001",
-            nama: "AAN SRIWIDAYATI",
+            nama: "DEWI RATIH",
             unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
             gol: "III/d",
             tmt: "2017-04-01, 25 thn 2 bln",
