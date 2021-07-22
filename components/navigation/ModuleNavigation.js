@@ -10,29 +10,6 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const navigation = [
-  { name: "Dashboard", href: "/kepegawaian", current: true },
-  { name: "Daftar Pegawai", href: "#", current: false },
-  {
-    name: "Pemetaan Kepegawaian",
-    href: "/kepegawaian/posisi",
-    current: true,
-    children: [
-      { name: 'Overview', href: '#' },
-      { name: 'Members', href: '#' },
-      { name: 'Calendar', href: '#' },
-      { name: 'Settings', href: '#' },
-    ],
-  },
-  { name: "Kehadiran", href: "#", current: false },
-  { name: "Cuti", href: "#", current: false },
-  { name: "Dinas", href: "#", current: false },
-  { name: "Kepangkatan", href: "#", current: false },
-  { name: "Tunjangan Kinerja", href: "#", current: false },
-  { name: "Pensiun", href: "#", current: false },
-  { name: "Satya Lencana", href: "#", current: false },
-];
-
 const ModuleNavigation = () => {
   const module = useModule();
   const [data, setData] = useState([])
