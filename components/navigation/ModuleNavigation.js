@@ -15,6 +15,7 @@ const ModuleNavigation = () => {
   const [data, setData] = useState([])
   const router = useRouter();
   const app = router.pathname.toString().split('/')[1];
+  const [count, setCount] = useState(0);
 
   //   const [data , setData] = useState([]);
   //   const getModule = useSelector(state => {
@@ -38,19 +39,19 @@ const ModuleNavigation = () => {
       }
     })();
   }, [])
-
+  
   return (
     <div className="grid grid-cols-1 gap-4 lg:col-span-1">
       <section aria-labelledby="section-1-title">
         <div className="rounded-lg bg-white shadow border-b border-gray-200 mb-3">
           <nav className="space-y-1" aria-label="Sidebar">
-            {data.map((item) =>
+            {data.map((item, i) =>
               !item.children ? (
                 <div key={item.name}>
                   <a
                     href={item.href}
                     className={classNames(
-                      item.current
+                      router.asPath == item.href
                         ? "bg-gray-100 text-gray-900 py-3"
                         : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                       "group flex items-center px-3 py-3 text-sm font-medium rounded-md"
@@ -65,7 +66,7 @@ const ModuleNavigation = () => {
                     <>
                       <Disclosure.Button
                         className={classNames(
-                          item.current
+                          router.asPath == item.href
                             ? "bg-gray-100 text-gray-900 py-3"
                             : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                           "group flex items-center px-3 py-3 text-sm font-medium rounded-md w-full"
