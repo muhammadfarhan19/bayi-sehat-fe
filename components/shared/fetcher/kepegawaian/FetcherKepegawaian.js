@@ -1,19 +1,19 @@
 import axios from 'axios';
+import config from '../../../../utils/Config';
+import { getClientToken } from '../../../../utils/CookieHandler';
 
-export const fetcherHandler = url => {
+export function useGetKepangkatan() {
+  return () => {
     return axios
-      .get(url, {
-        timeout: 10000,
+      .get(config.apiHost + '/daftar-kepangkatan', {
+        timeout: 15000,
         headers: {
           Authorization: 'Bearer ' + getClientToken(),
         },
       })
       .then(res => res.data)
       .catch(error => {
-        const errorObj = new Error('An error occurred while fetching the data.');
-        errorObj.info = ErrorMapText[error?.response?.data?.status] || ErrorMapText['default'];
-        errorObj.status = error?.response?.data?.status || null;
-        throw errorObj;
+        throw error;
       });
-  };
-  
+  }
+};

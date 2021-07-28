@@ -1,37 +1,22 @@
 import { useEffect, useState } from "react";
+import { useGetKepangkatan } from "../../shared/fetcher/kepegawaian/FetcherKepegawaian";
 
 export default function ListPangkat() {
     const [tahun, setTahun] = useState([]);
     const [bulan, setBulan] = useState([]);
-
-    const kepangkatan = [
-        {
-            no: "1",
-            nip: "196612251987022001",
-            nama: "AAN SRIWIDAYATI",
-            unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            gol: "III/d",
-            tmt: "2017-04-01, 25 thn 2 bln",
-        },
-        {
-            no: "2",
-            nip: "196612251987022001",
-            nama: "AHMAD TAUFIK",
-            unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            gol: "III/b",
-            tmt: "2017-04-01, 25 thn 2 bln",
-        },
-        {
-            no: "3",
-            nip: "196612251987022001",
-            nama: "DEWI RATIH",
-            unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            gol: "III/d",
-            tmt: "2017-04-01, 25 thn 2 bln",
-        },
-    ];
+    const getList = useGetKepangkatan();
+    const [kepangkatan,setKepangkatan] = useState([]);
 
     useEffect(() => {
+        (async () => {
+            try {
+                const getKepangkatan = await getList();
+                setKepangkatan(getKepangkatan)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
+        setBulan([])
         getYear()
         getMonth()
     }, []);
@@ -81,7 +66,7 @@ export default function ListPangkat() {
                                 </select>
                             </div>
                             <div class="w-full pb-2 col-span-2">
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Unit Kerja</label>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">unit_kerja Kerja</label>
                                 <select className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-300 disabled:opacity-50" disabled>
                                     <option value="">Sekretariat Direktorat Jenderal Pendidikan Tinggi</option>
                                 </select>
@@ -119,13 +104,13 @@ export default function ListPangkat() {
                                                         scope="col"
                                                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                     >
-                                                        Unit Kerja
+                                                        unit_kerja Kerja
                                                     </th>
                                                     <th
                                                         scope="col"
                                                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                     >
-                                                        Golongan
+                                                        golonganongan
                                                     </th>
                                                     <th
                                                         scope="col"
@@ -146,7 +131,7 @@ export default function ListPangkat() {
                                                         }
                                                     >
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.no}
+                                                            {kepangkatanIdx+1}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {kepangkatan.nip}
@@ -155,10 +140,10 @@ export default function ListPangkat() {
                                                             {kepangkatan.nama}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.unit}
+                                                            {kepangkatan.unit_kerja}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.gol}
+                                                            {kepangkatan.golongan}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {kepangkatan.tmt}
