@@ -1,36 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useGetTukin } from '../../shared/fetcher/kepegawaian/FetcherKepegawaian';
 import Modal from "./modal/Modal";
 
 export default function ListTunjangan() {
 
+    const getList = useGetTukin();
+    const [tunjangan,setTunjangan] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const getTunjangan = await getList();
+                setTunjangan(getTunjangan)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
+    }, []);
+
     const [open, setOpen] = React.useState(false);
-    const tunjangan = [
-        {
-            no: "1",
-            kode: "CMRJWHPTV",
-            bulan: "Juli 2021",
-            semester: "2021-2",
-            aksi: "2021-2",
-            sync: "2021-2",
-        },
-        {
-            no: "2",
-            kode: "CMRJWHPTV",
-            bulan: "Juli 2021",
-            semester: "2021-2",
-            aksi: "2021-2",
-            sync: "2021-2",
-        },
-        {
-            no: "3",
-            kode: "196612251987022001",
-            kode: "CMRJWHPTV",
-            bulan: "Juli 2021",
-            semester: "2021-2",
-            aksi: "2021-2",
-            sync: "2021-2",
-        },
-    ];
 
     const openModal = () => {
         setOpen(true)
@@ -126,7 +114,7 @@ export default function ListTunjangan() {
                                                         }
                                                     >
                                                         <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {tunjangan.no}
+                                                            {tunjanganIdx+1}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {tunjangan.kode}

@@ -66,7 +66,7 @@ export default function ListPangkat() {
                                 </select>
                             </div>
                             <div class="w-full pb-2 col-span-2">
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">unit_kerja Kerja</label>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Unit Kerja</label>
                                 <select className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-300 disabled:opacity-50" disabled>
                                     <option value="">Sekretariat Direktorat Jenderal Pendidikan Tinggi</option>
                                 </select>
@@ -104,13 +104,13 @@ export default function ListPangkat() {
                                                         scope="col"
                                                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                     >
-                                                        unit_kerja Kerja
+                                                        Unit Kerja
                                                     </th>
                                                     <th
                                                         scope="col"
                                                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                     >
-                                                        golonganongan
+                                                        Golongan
                                                     </th>
                                                     <th
                                                         scope="col"

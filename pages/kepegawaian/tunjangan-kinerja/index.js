@@ -3,7 +3,6 @@ import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
 import Cookies from 'js-cookie';
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import ListSatya from "../../../components/kepegawaian/satya-lencana/ListSatya";
 import ListTunjangan from "../../../components/kepegawaian/tunjangan-kinerja/ListTunjangan";
 
 export default function Tunjangan() {

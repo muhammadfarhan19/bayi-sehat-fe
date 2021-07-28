@@ -3,7 +3,7 @@ import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
 import Cookies from 'js-cookie';
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import ListSatya from "../../../components/kepegawaian/satya-lencana/ListSatya";
+import ListSatya from "../../../components/kepegawaian/satyalencana/ListSatya";
 
 export default function Satya() {
   const router = useRouter();

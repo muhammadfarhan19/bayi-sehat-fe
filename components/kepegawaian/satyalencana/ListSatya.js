@@ -1,26 +1,20 @@
-export default function ListSatya() {
+import { useEffect, useState } from 'react';
+import {useGetLencana} from '../../shared/fetcher/kepegawaian/FetcherKepegawaian'
 
-    const satya = [
-        {
-            no: "1",
-            nip: "196710012001121002",
-            nama: "SETIO WAHYU PURNOMO",
-            masa_kerja: "19 Tahun",
-        },
-        {
-            no: "2",
-            nip: "196710012001121002",
-            nama: "SETIO WAHYU PURNOMO",
-            masa_kerja: "19 Tahun",
-        },
-        {
-            no: "3",
-            nip: "196612251987022001",
-            nip: "196710012001121002",
-            nama: "SETIO WAHYU PURNOMO",
-            masa_kerja: "19 Tahun",
-        },
-    ];
+export default function ListSatya() {
+    const getList = useGetLencana();
+    const [satya,setSatya] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const getSatya = await getList();
+                setSatya(getSatya)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
+    }, []);
 
     return (
         <>
@@ -89,7 +83,7 @@ export default function ListSatya() {
                                                         }
                                                     >
                                                         <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {satya.no}
+                                                            {satyaIdx+1}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {satya.nip}
