@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useGetTukin } from '../../shared/fetcher/kepegawaian/FetcherKepegawaian';
 import Modal from "./modal/Modal";
+import { useRouter } from 'next/router';
 
 export default function ListTunjangan() {
-
+    const router = useRouter();
     const getList = useGetTukin();
     const [tunjangan,setTunjangan] = useState([]);
 
@@ -128,6 +129,10 @@ export default function ListTunjangan() {
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             <button
                                                                 type="button"
+                                                                onClick={() => router.push({
+                                                                    pathname: '/kepegawaian/tunjangan-kinerja/master-pegawai',
+                                                                    query: { id: tunjangan.id },
+                                                                })}
                                                                 className="mx-2 py-1 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 "
                                                             >
                                                                 Master Pegawai
@@ -135,18 +140,31 @@ export default function ListTunjangan() {
 
                                                             <button
                                                                 type="button"
+                                                                onClick={() => router.push({
+                                                                    pathname: '/kepegawaian/tunjangan-kinerja/rekap',
+                                                                    query: { id: tunjangan.id },
+                                                                })}
                                                                 className="mx-2 py-1 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 "
                                                             >
                                                                 Rekap
                                                             </button>
                                                             <button
                                                                 type="button"
+                                                                onClick={() => router.push({
+                                                                    pathname: '/kepegawaian/tunjangan-kinerja/resume',
+                                                                    query: { id: tunjangan.id },
+                                                                })}
                                                                 className="mx-2 py-1 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700 "
                                                             >
                                                                 Resume
                                                             </button>
                                                             <button
                                                                 type="button"
+                                                                type="button"
+                                                                onClick={() => router.push({
+                                                                    pathname: '/kepegawaian/tunjangan-kinerja/tukin',
+                                                                    query: { id: tunjangan.id },
+                                                                })}
                                                                 className="mx-2 py-1 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 "
                                                             >
                                                                 Tukin
@@ -155,6 +173,11 @@ export default function ListTunjangan() {
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             <button
                                                                 type="button"
+                                                                type="button"
+                                                                // onClick={() => router.push({
+                                                                //     pathname: '/kepegawaian/tunjangan-kinerja/sync',
+                                                                //     query: { id: tunjangan.id },
+                                                                // })}
                                                                 className="mx-2 py-1 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700 "
                                                             >
                                                                 Sync
