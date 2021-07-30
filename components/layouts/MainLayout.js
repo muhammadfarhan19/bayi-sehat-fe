@@ -6,7 +6,7 @@ import {
   XIcon,
   LogoutIcon,
 } from "@heroicons/react/outline";
-import { SearchIcon } from "@heroicons/react/solid";
+import { ArrowCircleRightIcon, SearchIcon } from "@heroicons/react/solid";
 import MainNav from "../navigation/AppNavigation";
 import Head from "next/head";
 
@@ -146,6 +146,36 @@ export default function MainLayout({ children }) {
                                 </Link>
                               )}
                             </Menu.Item>
+                            <Menu.Item>
+                              {({ active }) => (
+                                <Link href="/profil">
+                                  <a
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "flex px-4 py-2 text-sm text-gray-700 "
+                                    )}
+                                  >
+                                      <ArrowCircleRightIcon className="h-5 w-5 text-gray-600"/>
+                                    <span className="ml-2">Role 1</span>
+                                  </a>
+                                </Link>
+                              )}
+                            </Menu.Item>
+                            <Menu.Item>
+                              {({ active }) => (
+                                <Link href="/profil">
+                                  <a
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "flex px-4 py-2 text-sm text-gray-700 "
+                                    )}
+                                  >
+                                      <ArrowCircleRightIcon className="h-5 w-5 text-gray-600"/>
+                                    <span className="ml-2">Role 2</span>
+                                  </a>
+                                </Link>
+                              )}
+                            </Menu.Item>
                             <hr />
                             <Menu.Item>
                               {({ active }) => (
@@ -193,7 +223,7 @@ export default function MainLayout({ children }) {
                 {/* Menu button */}
                 <div className="absolute right-0 flex-shrink-0 lg:hidden">
                   {/* Mobile menu button */}
-                  <Popover.Button className="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-indigo-200 hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white">
+                  <Popover.Button className="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-indigo-200 hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none ">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -243,12 +273,12 @@ export default function MainLayout({ children }) {
                           <div>
                             <img
                               className="h-8 w-auto"
-                              src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                              src="https://dikti.kemdikbud.go.id/wp-content/uploads/2020/03/cropped-logo-dikbud.png"
                               alt="Workflow"
                             />
                           </div>
                           <div className="-mr-2">
-                            <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                            <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none ">
                               <span className="sr-only">Close menu</span>
                               <XIcon className="h-6 w-6" aria-hidden="true" />
                             </Popover.Button>
@@ -278,48 +308,6 @@ export default function MainLayout({ children }) {
                             className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                           >
                             Company Directory
-                          </a>
-                          <a
-                            href="#"
-                            className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                          >
-                            Openings
-                          </a>
-                          <a
-                            href="#"
-                            className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                          >
-                            Openings
-                          </a>
-                          <a
-                            href="#"
-                            className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                          >
-                            Openings
-                          </a>
-                          <a
-                            href="#"
-                            className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                          >
-                            Openings
-                          </a>
-                          <a
-                            href="#"
-                            className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                          >
-                            Openings
-                          </a>
-                          <a
-                            href="#"
-                            className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                          >
-                            Openings
-                          </a>
-                          <a
-                            href="#"
-                            className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                          >
-                            Openings
                           </a>
                         </div>
                       </div>
@@ -374,7 +362,7 @@ export default function MainLayout({ children }) {
           </>
         )}
       </Popover>
-      <main className="-mt-24 pb-8">{children}</main>
+      <main className="-mt-24 pb-8 ">{children}</main>
       <div className="mx-3"></div>
       <BottomNav />
 
