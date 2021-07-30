@@ -60,7 +60,7 @@ export default function AddTunjangan() {
             <FetcherAlert />
 
             {load ? <FetcherLoading /> : ''}
-            <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+            <div className="grid grid-cols-1 gap-4 lg:col-span-3">
                 <section aria-labelledby="section-2-title">
                     <div className="rounded-lg bg-white shadow border-b border-gray-200 mb-3">
 

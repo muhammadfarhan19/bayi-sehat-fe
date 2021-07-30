@@ -18,7 +18,7 @@ export default function ListSatya() {
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+            <div className="grid grid-cols-1 gap-4 lg:col-span-3">
                 <section aria-labelledby="section-2-title">
 
                     <dl className="mb-3 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-1 md:divide-y-0 md:divide-x">
