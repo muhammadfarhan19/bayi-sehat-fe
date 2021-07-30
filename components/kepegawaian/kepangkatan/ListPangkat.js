@@ -1,37 +1,22 @@
 import { useEffect, useState } from "react";
+import { useGetKepangkatan } from "../../shared/fetcher/kepegawaian/FetcherKepegawaian";
 
 export default function ListPangkat() {
     const [tahun, setTahun] = useState([]);
     const [bulan, setBulan] = useState([]);
-
-    const kepangkatan = [
-        {
-            no: "1",
-            nip: "196612251987022001",
-            nama: "AAN SRIWIDAYATI",
-            unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            gol: "III/d",
-            tmt: "2017-04-01, 25 thn 2 bln",
-        },
-        {
-            no: "2",
-            nip: "196612251987022001",
-            nama: "AHMAD TAUFIK",
-            unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            gol: "III/b",
-            tmt: "2017-04-01, 25 thn 2 bln",
-        },
-        {
-            no: "3",
-            nip: "196612251987022001",
-            nama: "DEWI RATIH",
-            unit: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            gol: "III/d",
-            tmt: "2017-04-01, 25 thn 2 bln",
-        },
-    ];
+    const getList = useGetKepangkatan();
+    const [kepangkatan,setKepangkatan] = useState([]);
 
     useEffect(() => {
+        (async () => {
+            try {
+                const getKepangkatan = await getList();
+                setKepangkatan(getKepangkatan)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
+        setBulan([])
         getYear()
         getMonth()
     }, []);
@@ -51,7 +36,7 @@ export default function ListPangkat() {
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+            <div className="grid grid-cols-1 gap-4 lg:col-span-3">
                 <section aria-labelledby="section-2-title">
 
                     <dl className="mb-3 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-1 md:divide-y-0 md:divide-x">
@@ -146,7 +131,7 @@ export default function ListPangkat() {
                                                         }
                                                     >
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.no}
+                                                            {kepangkatanIdx+1}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {kepangkatan.nip}
@@ -155,10 +140,10 @@ export default function ListPangkat() {
                                                             {kepangkatan.nama}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.unit}
+                                                            {kepangkatan.unit_kerja}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kepangkatan.gol}
+                                                            {kepangkatan.golongan}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {kepangkatan.tmt}

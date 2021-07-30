@@ -1,34 +1,21 @@
 import { useEffect, useState } from "react";
+import {useGetSkp} from '../../../../components/shared/fetcher/kepegawaian/FetcherKepegawaian'
 
 export default function ListPangkat() {
     const [tahun, setTahun] = useState([]);
     const [bulan, setBulan] = useState([]);
-
-    const skp = [
-        {
-            no: "1",
-            nip: "196612251987022001",
-            nama: "Aan Sriwidayati, S.E.",
-            jabatan: "Pengolah Data Ketatalaksanaan",
-            nilai: "91",
-        },
-        {
-            no: "2",
-            nip: "196612251987022001",
-            nama: "Aan Sriwidayati, S.E.",
-            jabatan: "Analis Data dan Informasi",
-            nilai: "91",
-        },
-        {
-            no: "3",
-            nip: "196612251987022001",
-            nama: "Aan Sriwidayati, S.E.",
-            jabatan: "Perencana Ahli Muda",
-            nilai: "91",
-        },
-    ];
+    const getList = useGetSkp();
+    const [skp,setSkp] = useState([]);
 
     useEffect(() => {
+        (async () => {
+            try {
+                const getSkp = await getList();
+                setSkp(getSkp)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
         setBulan([])
         getYear()
         getMonth()
@@ -49,7 +36,7 @@ export default function ListPangkat() {
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+            <div className="grid grid-cols-1 gap-4 lg:col-span-3">
                 <section aria-labelledby="section-2-title">
 
                     <dl className="mb-3 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-1 md:divide-y-0 md:divide-x">
@@ -95,7 +82,7 @@ export default function ListPangkat() {
                             <div className="-my-2 overflow-x-auto sm:mx-0 ">
                                 <div className="py-2 align-start inline-block min-w-full sm:px-0 lg:px-0">
                                     <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                                        <table className="w-full rounded-lg bg-gray-100 table-fixed">
+                                        <table className="w-full rounded-lg bg-gray-100 table-auto">
                                             <thead className="bg-gray-50">
                                                 <tr>
                                                     <th
@@ -141,7 +128,7 @@ export default function ListPangkat() {
                                                         }
                                                     >
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {skp.no}
+                                                            {skpIdx+1}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {skp.nip}
@@ -150,7 +137,7 @@ export default function ListPangkat() {
                                                             {skp.nama}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {skp.jabatan}
+                                                            {skp.nama_jabatan}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {skp.nilai}

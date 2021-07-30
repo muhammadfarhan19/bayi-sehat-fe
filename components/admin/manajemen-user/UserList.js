@@ -65,7 +65,7 @@ export default function userList() {
     return (
         <>
             <FetcherAlert />
-            <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+            <div className="grid grid-cols-1 gap-4 lg:col-span-3">
                 <section aria-labelledby="section-2-title">
                     <button
                         type="button"

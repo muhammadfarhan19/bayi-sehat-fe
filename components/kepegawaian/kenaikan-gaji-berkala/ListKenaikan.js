@@ -1,38 +1,24 @@
-export default function ListKenaikan() {
+import { useEffect, useState } from "react";
+import { useGetKgb } from "../../shared/fetcher/kepegawaian/FetcherKepegawaian";
 
-    const kgb = [
-        {
-            no: "1",
-            nip: "196710012001121002",
-            nama: "WAHYU PUJIATMOKO",
-            gol: "II/b",
-            mk_awal: "2014-10-01, 17th 9bln",
-            mk_baru: "2014-10-01, 17th 0bln",
-            status: "Belum Berhak",
-        },
-        {
-            no: "2",
-            nip: "196710012001121002",
-            nama: "WAHYU PUJIATMOKO",
-            gol: "II/b",
-            mk_awal: "2014-10-01, 17th 9bln",
-            mk_baru: "2014-10-01, 17th 0bln",
-            status: "Belum Berhak",
-        },
-        {
-            no: "3",
-            nip: "196612251987022001",
-            nama: "WAHYU PUJIATMOKO",
-            gol: "II/b",
-            mk_awal: "2014-10-01, 17th 9bln",
-            mk_baru: "2014-10-01, 17th 0bln",
-            status: "Belum Berhak",
-        },
-    ];
+export default function ListKenaikan() {
+    const getList = useGetKgb();
+    const [kgb,setKgb] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const getKgb = await getList();
+                setKgb(getKgb)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
+    }, []);
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+            <div className="grid grid-cols-1 gap-4 lg:col-span-3">
                 <section aria-labelledby="section-2-title">
 
                     <dl className="mb-3 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-1 md:divide-y-0 md:divide-x">
@@ -107,9 +93,6 @@ export default function ListKenaikan() {
                                                                 : "bg-gray-50 hover:bg-gray-100"
                                                         }
                                                     >
-                                                        <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kgb.no}
-                                                        </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {kgb.nip}
                                                         </td>
@@ -117,13 +100,16 @@ export default function ListKenaikan() {
                                                             {kgb.nama}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {kgb.gol}
+                                                            {kgb.golongan}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {kgb.mk_awal}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {kgb.mk_baru}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
+                                                            {kgb.status}
                                                         </td>
 
                                                     </tr>
