@@ -12,6 +12,28 @@ function Presensi(props) {
   function openModal() {
     setIsOpen(true);
   }
+  const statuses = [
+    {
+      status: 1,
+      deskripsi: "Belum jam masuk.",
+      jam: "6.30",
+    },
+    {
+      status: 2,
+      deskripsi: "Jam masuk.",
+      jam: "7.30",
+    },
+    {
+      status: 3,
+      deskripsi: "Belum jam keluar.",
+      jam: "17.00",
+    },
+    {
+      status: 4,
+      deskripsi: "Jam keluar.",
+      jam: "17.30",
+    },
+  ];
 
   return (
     <>
@@ -31,7 +53,7 @@ function Presensi(props) {
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
-          className="fixed inset-0 z-10 overflow-y-auto shadow-inner shadow-2xl"
+          className="fixed bg-gray-900 bg-opacity-30 backdrop-filter backdrop-blur-sm inset-0 z-10 overflow-y-auto shadow-inner shadow-2xl"
           onClose={closeModal}
         >
           <div className="min-h-screen px-4 text-center">

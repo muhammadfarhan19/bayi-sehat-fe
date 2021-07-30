@@ -3,7 +3,7 @@ import { LoginIcon } from "@heroicons/react/outline";
 import Presensi from "./Presensi";
 
 const stats = [
-  { label: "Kehadiran", value: "100%", link: "/#" },
+  { label: "Kehadiran", value: "100%", link: "/profil/kepegawaian/kehadiran" },
   { label: "Kegiatan", value: 3, link: "/#" },
 ];
 
