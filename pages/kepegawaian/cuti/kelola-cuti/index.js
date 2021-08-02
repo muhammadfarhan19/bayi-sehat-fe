@@ -89,7 +89,7 @@ function TabelKelolaCuti(params) {
 
           </div>
           <div className="flex">
-            <button className="focus:outline-none rounded-md p-2 text-sm border border-indigo-600 text-indigo-600 px-5 ml-1 hover:bg-gray-50"> Tambah Cuti </button>
+            <button className="focus:outline-none rounded-md p-2 text-sm bg-indigo-600 text-gray-100 px-5 ml-1 hover:bg-indigo-700"> Tambah Cuti </button>
           </div>
         </div>
         {/* Advanced Filter */}
@@ -272,9 +272,9 @@ export default function KelolaCuti() {
   return (
     <MainLayout>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
+        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
           <ModuleNavigation />
-          <div className="grid grid-cols-1 gap-4 lg:col-span-2 transition duration-500 ease-in-out">
+          <div className="grid grid-cols-1 gap-4 lg:col-span-3 transition duration-500 ease-in-out">
             <TabelKelolaCuti />
           </div>
         </div>

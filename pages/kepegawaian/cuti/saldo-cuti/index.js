@@ -16,42 +16,42 @@ function TabelKelolaCuti(params) {
       nama: "Rian Ardiana Prapanca",
       deskripsi: "Pergi Belajar ke Jerman",
       unit_kerja: "Sekretariat Direktorat Jendral Pendidikan Tinggi",
-      saldo_cuti: 20
+      saldo_cuti: 20,
     },
     {
       nip: "0001002003004005",
       nama: "Rian Ardiana Prapanca",
       deskripsi: "Pergi Belajar ke Jerman",
       unit_kerja: "Sekretariat Direktorat Jendral Pendidikan Tinggi",
-      saldo_cuti: 20
+      saldo_cuti: 20,
     },
     {
       nip: "0001002003004005",
       nama: "Rian Ardiana Prapanca",
       deskripsi: "Pergi Belajar ke Jerman",
       unit_kerja: "Sekretariat Direktorat Jendral Pendidikan Tinggi",
-      saldo_cuti: 20
+      saldo_cuti: 20,
     },
     {
       nip: "0001002003004005",
       nama: "Rian Ardiana Prapanca",
       deskripsi: "Pergi Belajar ke Jerman",
       unit_kerja: "Sekretariat Direktorat Jendral Pendidikan Tinggi",
-      saldo_cuti: 20
+      saldo_cuti: 20,
     },
     {
       nip: "0001002003004005",
       nama: "Rian Ardiana Prapanca",
       deskripsi: "Pergi Belajar ke Jerman",
       unit_kerja: "Sekretariat Direktorat Jendral Pendidikan Tinggi",
-      saldo_cuti: 20
+      saldo_cuti: 20,
     },
     {
       nip: "0001002003004005",
       nama: "Rian Ardiana Prapanca",
       deskripsi: "Pergi Belajar ke Jerman",
       unit_kerja: "Sekretariat Direktorat Jendral Pendidikan Tinggi",
-      saldo_cuti: 20
+      saldo_cuti: 20,
     },
   ];
   return (
@@ -76,9 +76,8 @@ function TabelKelolaCuti(params) {
             </button>
           </div>
           <div className="flex">
-            <button className="focus:outline-none rounded-md p-2 text-sm border border-indigo-600 text-indigo-600 px-5 ml-1 hover:bg-gray-50">
-              {" "}
-              Tambah Cuti{" "}
+            <button className="focus:outline-none rounded-md p-2 text-sm bg-indigo-600 text-white px-5 ml-1 hover:bg-indigo-700">
+              Tambah Cuti
             </button>
           </div>
         </div>
@@ -165,9 +164,7 @@ function TabelKelolaCuti(params) {
                       <th
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
-                      >
-                        
-                      </th>
+                      ></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -189,11 +186,13 @@ function TabelKelolaCuti(params) {
                         <td className="px-6 py-4 text-xs font-medium text-gray-900 truncate">
                           {df_cuti.unit_kerja}
                         </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900 truncate">
+                        <td className="px-6 py-4 text-xs font-medium text-right text-gray-900 truncate">
                           {df_cuti.saldo_cuti}
                         </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900 truncate">
-                          <button className="focus:outline-none border border-indigo-600 rounded px-4 py-1 text-indigo-600">Detail</button>
+                          <button className="focus:outline-none hover:bg-gray-50 border border-indigo-600 rounded px-4 py-1 text-indigo-600">
+                            Detail
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -211,9 +210,9 @@ export default function SaldoCuti() {
   return (
     <MainLayout>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
+        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
           <ModuleNavigation />
-          <div className="grid grid-cols-1 gap-4 lg:col-span-2 transition duration-500 ease-in-out">
+          <div className="grid grid-cols-1 gap-4 lg:col-span-3 transition duration-500 ease-in-out">
             <TabelKelolaCuti />
           </div>
         </div>

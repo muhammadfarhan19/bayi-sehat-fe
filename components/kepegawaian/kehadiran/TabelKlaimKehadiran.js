@@ -78,7 +78,7 @@ export default function TabelKlaimKehadiran() {
         <>
           <button
             onClick={() => setKlaimDialog1(true)}
-            className="bg-blue-500 w-full rounded-md text-white px-5 py-2 focus:outline-none"
+            className="bg-blue-500 w-full rounded-md text-white px-10 py-2 focus:outline-none"
           >
             Proses
           </button>
@@ -225,7 +225,7 @@ export default function TabelKlaimKehadiran() {
     if (id_status == 2) {
       return (
         <>
-          <button onClick={() => setKlaimDialog2(true)} className=" w-full rounded-md text-green-500 px-5 py-2 focus:outline-none">
+          <button onClick={() => setKlaimDialog2(true)} className=" w-full rounded-md text-green-500 px-10 py-2 focus:outline-none">
             Diterima
           </button>
 
@@ -362,7 +362,7 @@ export default function TabelKlaimKehadiran() {
     if (id_status == 3) {
       return (
         <>
-          <button onClick={() => setKlaimDialog3(true)} className=" w-full rounded-md text-red-500 px-5 py-2 focus:outline-none">
+          <button onClick={() => setKlaimDialog3(true)} className=" w-full rounded-md text-red-500 px-10 py-2 focus:outline-none">
             Ditolak
           </button>
 
