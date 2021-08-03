@@ -1,28 +1,28 @@
 import { useEffect, useState } from 'react';
 import { useGetLencana } from '../../shared/fetcher/kepegawaian/FetcherKepegawaian'
 
-export default function ListSatya() {
+export default function PengajuanSatya() {
     const getList = useGetLencana();
     const [satya, setSatya] = useState([]);
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const getSatya = await getList();
-                setSatya(getSatya)
-            } catch (e) {
-                console.log(e)
-            }
-        })();
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         try {
+    //             const getSatya = await getList();
+    //             setSatya(getSatya)
+    //         } catch (e) {
+    //             console.log(e)
+    //         }
+    //     })();
+    // }, []);
 
     return (
         <>
-            <dl className="mb-3 grid grid-cols-1 mt-5 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-1 md:divide-y-0 md:divide-x">
+            <dl className="mb-3 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-1 md:divide-y-0 md:divide-x">
                 <div className="px-4 sm:p-6">
                     <dt className="text-lg font-medium text-gray-900">
-                        Daftar Pegawai Berhak Menerima Satyalancana Karya Satya
-                            </dt>
+                        Kelola Pengajuan Satyalancana
+                    </dt>
                 </div>
                 <div className="grid md:grid-cols-4 pb-2 px-6 gap-4">
                     <div class="w-full pb-2">
@@ -33,6 +33,8 @@ export default function ListSatya() {
                         </select>
                     </div>
                 </div>
+
+
                 <div className="flex ">
                     <div className="-my-2 overflow-x-auto sm:mx-0 ">
                         <div className="py-2 align-start inline-block min-w-full sm:px-0 lg:px-0">
@@ -50,20 +52,26 @@ export default function ListSatya() {
                                                 scope="col"
                                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                             >
+                                                NAMA
+                                                    </th>
+                                            <th
+                                                scope="col"
+                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                            >
                                                 NIP
                                                     </th>
                                             <th
                                                 scope="col"
                                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                             >
-                                                Nama
+                                                JENIS PENGHARGAAN
                                                     </th>
                                             <th
                                                 scope="col"
                                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                             >
-                                                Masa Kerja
-                                                    </th>
+                                                TIPE JABATAN
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -98,6 +106,8 @@ export default function ListSatya() {
                     </div>
                 </div>
             </dl>
+
+
         </>
     )
 }
