@@ -33,7 +33,8 @@ export default function ListSatya() {
                         </select>
                     </div>
                 </div>
-                <div className="flex ">
+
+                <div className="flex">
                     <div className="-my-2 overflow-x-auto sm:mx-0 ">
                         <div className="py-2 align-start inline-block min-w-full sm:px-0 lg:px-0">
                             <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
