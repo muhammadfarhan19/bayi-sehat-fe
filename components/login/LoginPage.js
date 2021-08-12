@@ -23,7 +23,7 @@ export default function LoginPage() {
             const login = await request(config.apiHost + '/auth/login', handleSubmit, 'post', false);
             setLoad(false)
             if (login.responseData.status === 'SUCCESS') {
-                const exp = new Date(new Date().getTime() + 180 * 60 * 1000);
+                const exp = new Date(new Date().getTime() + 5 * 60 * 1000);
                 Cookies.set('token', login.responseData.data.access_token, { expires: exp });
                 Cookies.set('refreshtoken', login.responseData.data.refresh_token, { expires: exp });
                 router.push("/");
