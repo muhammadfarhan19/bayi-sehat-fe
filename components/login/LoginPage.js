@@ -3,16 +3,16 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import FetcherAlert from '../shared/alert/FetcherAlert';
 import FetcherLoading from '../shared/loading/fetcherLoading';
-import { useLogin } from '../shared/fetcher/FetcherHooks';
+import { request, useLogin } from '../shared/fetcher/FetcherHooks';
 import { AlertAction } from '../../action/ActionTypes';
 import Cookies from 'js-cookie'
 import Head from 'next/head';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import config from '../../utils/Config'
 
 export default function LoginPage() {
     const dispatch = useDispatch();
     const router = useRouter();
-    const loginForm = useLogin();
     const [load, setLoad] = useState(false)
 
     const { handleSubmit, register, formState: { errors } } = useForm();
@@ -20,40 +20,42 @@ export default function LoginPage() {
     const handleLogin = async (handleSubmit) => {
         setLoad(true)
         try {
-            const login = await loginForm(handleSubmit);
+            const login = await request(config.apiHost + '/auth/login', handleSubmit, 'post', false);
             setLoad(false)
-            if (login.status === 'SUCCESS') {
+            if (login.responseData.status === 'SUCCESS') {
                 const exp = new Date(new Date().getTime() + 180 * 60 * 1000);
-                Cookies.set('token', login.data.access_token, { expires: exp });
+                Cookies.set('token', login.responseData.data.access_token, { expires: exp });
+                Cookies.set('refreshtoken', login.responseData.data.refresh_token, { expires: exp });
                 router.push("/");
+            }else{
+                if (login.responseData.status === 'UNAUTHORIZED') {
+                    dispatch({
+                        type: AlertAction.SET_OPEN,
+                        open: true,
+                        title: 'Pengguna tidak di temukan',
+                        subtitle: 'Password yang anda masukan salah, silahkan coba lagi',
+                        status: 'error'
+                    });
+                } else if (login.responseData.status === 'NOT_FOUND') {
+                    dispatch({
+                        type: AlertAction.SET_OPEN,
+                        open: true,
+                        title: 'Pengguna tidak di temukan',
+                        subtitle: 'Username yang anda masukan salah, silahkan coba lagi',
+                        status: 'error'
+                    });
+                } else {
+                    dispatch({
+                        type: AlertAction.SET_OPEN,
+                        open: true,
+                        title: 'Terjadi Kesalahan',
+                        subtitle: 'Silahkan coba beberapa saat lagi',
+                        status: 'error'
+                    });
+                }
             }
         } catch (e) {
             setLoad(false)
-            if (e.status === 'WRONG_PASSWORD') {
-                dispatch({
-                    type: AlertAction.SET_OPEN,
-                    open: true,
-                    title: 'Pengguna tidak di temukan',
-                    subtitle: 'Password yang anda masukan salah, silahkan coba lagi',
-                    status: 'error'
-                });
-            } else if (e.status === 'USERNAME_NOT_FOUND') {
-                dispatch({
-                    type: AlertAction.SET_OPEN,
-                    open: true,
-                    title: 'Pengguna tidak di temukan',
-                    subtitle: 'Username yang anda masukan salah, silahkan coba lagi',
-                    status: 'error'
-                });
-            } else {
-                dispatch({
-                    type: AlertAction.SET_OPEN,
-                    open: true,
-                    title: 'Terjadi Kesalahan',
-                    subtitle: 'Silahkan coba beberapa saat lagi',
-                    status: 'error'
-                });
-            }
         }
     }
 

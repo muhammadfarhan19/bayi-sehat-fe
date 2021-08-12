@@ -22,6 +22,7 @@ export default function MainLayout({ children }) {
 
   const handleLogout = () => {
     Cookies.remove('token');
+    Cookies.remove('refreshtoken');
   }
 
   return (

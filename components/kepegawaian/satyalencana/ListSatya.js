@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useGetLencana } from '../../shared/fetcher/kepegawaian/FetcherKepegawaian'
+import config from '../../../utils/Config'
+import { request } from '../../shared/fetcher/FetcherHooks';
 
 export default function ListSatya() {
-    const getList = useGetLencana();
     const [satya, setSatya] = useState([]);
 
     useEffect(() => {
         (async () => {
             try {
-                const getSatya = await getList();
-                setSatya(getSatya)
+                const getSatya = await request(config.apiHost + '/satya-lencana', '', 'get', true);
+                setSatya(getSatya.responseData)
             } catch (e) {
                 console.log(e)
             }

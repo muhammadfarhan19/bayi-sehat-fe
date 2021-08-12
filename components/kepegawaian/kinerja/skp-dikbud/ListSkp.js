@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import {useGetSkp} from '../../../../components/shared/fetcher/kepegawaian/FetcherKepegawaian'
+import config from '../../../../utils/Config'
+import { request } from '../../../shared/fetcher/FetcherHooks';
 
 export default function ListPangkat() {
     const [tahun, setTahun] = useState([]);
     const [bulan, setBulan] = useState([]);
-    const getList = useGetSkp();
     const [skp,setSkp] = useState([]);
 
     useEffect(() => {
         (async () => {
             try {
-                const getSkp = await getList();
-                setSkp(getSkp)
+                const getSkp = await request(config.apiHost + '/skp-dikbud', '', 'get', true);
+                setSkp(getSkp.responseData)
             } catch (e) {
                 console.log(e)
             }

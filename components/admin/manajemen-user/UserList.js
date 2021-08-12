@@ -4,12 +4,13 @@ import { useUsers, useDeleteUser } from '../../shared/fetcher/settings/FetcherSe
 import { AlertAction } from '../../../action/ActionTypes';
 import FetcherAlert from '../../shared/alert/FetcherAlert';
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
+import config from '../../../utils/Config'
+import { request } from '../../shared/fetcher/FetcherHooks';
 
 export default function userList() {
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [uuid, setUuid] = useState('')
-    const userList = useUsers();
     const userDelete = useDeleteUser();
     const router = useRouter();
 
@@ -22,8 +23,8 @@ export default function userList() {
     useEffect(() => {
         (async () => {
             try {
-                const getUsers = await userList();
-                setData(getUsers.data)
+                const getUsers = await request(config.apiHost + '/users', '', 'get', true);
+                setData(getUsers.responseData.data)
             } catch (e) {
                 console.log(e)
             }

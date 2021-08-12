@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useGetTukin } from '../../shared/fetcher/kepegawaian/FetcherKepegawaian';
 import Modal from "./modal/Modal";
 import { useRouter } from 'next/router';
+import config from '../../../utils/Config'
+import { request } from '../../shared/fetcher/FetcherHooks';
 
 export default function ListTunjangan() {
     const router = useRouter();
-    const getList = useGetTukin();
     const [tunjangan,setTunjangan] = useState([]);
 
     useEffect(() => {
         (async () => {
             try {
-                const getTunjangan = await getList();
-                setTunjangan(getTunjangan)
+                const getTunjangan = await request(config.apiHost + '/tukin', '', 'get', true);
+                setTunjangan(getTunjangan.responseData)
             } catch (e) {
                 console.log(e)
             }

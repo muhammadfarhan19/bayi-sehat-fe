@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useGetLencana } from '../../shared/fetcher/kepegawaian/FetcherKepegawaian'
+// import { useGetLencana } from '../../shared/fetcher/kepegawaian/FetcherKepegawaian'
 
 export default function PengajuanSatya() {
-    const getList = useGetLencana();
+    // const getList = useGetLencana();
     const [satya, setSatya] = useState([]);
 
     // useEffect(() => {

@@ -3,30 +3,19 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSelector, shallowEqual } from "react-redux";
 import { useRouter } from "next/router";
-import { useModule } from "../shared/fetcher/FetcherHooks";
 import { Disclosure } from "@headlessui/react";
+import config from '../../utils/Config'
+import { request } from '../shared/fetcher/FetcherHooks';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const ModuleNavigation = ({menu}) => {
-  const module = useModule();
   const [data, setData] = useState([]);
   const router = useRouter();
   const app = router.pathname.toString().split("/")[1];
   const [count, setCount] = useState(0);
-
-  //   const [data , setData] = useState([]);
-  //   const getModule = useSelector(state => {
-  //     return {
-  //       module: state.ModuleReducer.module,
-  //     };
-  //   }, shallowEqual);
-
-  //   useEffect(() => {
-  //     setData(getModule.module)
-  //   }, [getModule]);
 
   useEffect(() => {
     if(menu){
@@ -34,9 +23,8 @@ const ModuleNavigation = ({menu}) => {
     }else{
       (async () => {
         try {
-          const getModule = await module(app);
-          setData(getModule);
-          console.log(getModule)
+          const getModule = await request(config.apiHost + '/menu-modules/' + app, '', 'get', true);
+          setData(getModule.responseData);
         } catch (e) {
           console.log(e);
         }

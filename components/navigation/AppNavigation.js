@@ -1,22 +1,22 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect,useState } from "react";
-import { useApplication } from '../shared/fetcher/FetcherHooks';
+import config from '../../utils/Config'
+import { request } from '../shared/fetcher/FetcherHooks';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function AppNavigation() {
-  const app = useApplication();
   const [data , setData] = useState([])
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
       try {
-        const getApp = await app();
-        setData(getApp)
+        const getApp = await request(config.apiHost + '/menu-application', '', 'get', true);
+        setData(getApp.responseData)
       } catch (e) {
         console.log(e)
       }
