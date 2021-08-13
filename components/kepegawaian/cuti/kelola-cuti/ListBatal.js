@@ -1,16 +1,13 @@
 import { AdjustmentsIcon } from "@heroicons/react/solid";
 import React, { useState } from "react";
-import Modal from "./modal/Modal";
-import {useRouter} from 'next/router'
 import config from '../../../../utils/Config'
 import { request } from '../../../shared/fetcher/FetcherHooks';
+import ModalPembatalan from "./modal/ModalPembatalan";
 
-export default function ListKelola() {
+export default function ListBatal() {
     const [showAdvancedFilter, setshowAdvancedFilter] = useState(true);
     const [open, setOpen] = React.useState(false);
     const [type, setType] = React.useState(0);
-
-    const router = useRouter()
 
     function toggleAdvancedFilter() {
         setshowAdvancedFilter(!showAdvancedFilter);
@@ -30,35 +27,9 @@ export default function ListKelola() {
             alamat: "Jl. in dulu aja yuk?",
             formulir: "-",
             lampiran: "-",
+            lampiran2: "-",
+            alasan: "Mau ubah tanggal",
             status: 0,
-        }, {
-            nip: "0001002003004005",
-            nama: "Joko Santosa, SE",
-            deskripsi: "Pergi Belajar ke Jerman",
-            unit_kerja: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            jenis_cuti: "Cuti Alasan Penting",
-            alasan: "Lagi Pengen Aja",
-            tgl_mulai: "1 Januari 2023",
-            tgl_selesai: "1 Maret 2023",
-            no_telp: "08781231231",
-            alamat: "Jl. in dulu aja yuk?",
-            formulir: "Lihat",
-            lampiran: "Lihat",
-            status: -1,
-        }, {
-            nip: "0001002003004005",
-            nama: "Joko Santosa, SE",
-            deskripsi: "Pergi Belajar ke Jerman",
-            unit_kerja: "SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI",
-            jenis_cuti: "Cuti Alasan Penting",
-            alasan: "Lagi Pengen Aja",
-            tgl_mulai: "1 Januari 2023",
-            tgl_selesai: "1 Maret 2023",
-            no_telp: "08781231231",
-            alamat: "Jl. in dulu aja yuk?",
-            formulir: "Lihat",
-            lampiran: "Lihat",
-            status: 1,
         }
     ];
 
@@ -84,10 +55,10 @@ export default function ListKelola() {
     return (
         <>
 
-            {open && <Modal close={closeModal} tipe={type} />}
-            <div className="flex align-center mb-3 pt-3 px-6">
+            {open && <ModalPembatalan close={closeModal} tipe={type} />}
+            <div className="flex alig-center mb-3 pt-3 px-6">
                 <div className="text-lg font-medium text-gray-900 my-auto">
-                    Pengajuan Cuti
+                    Pembatalan Cuti
                         </div>
                 <div className="ml-auto my-auto flex">
                     <input
@@ -96,19 +67,12 @@ export default function ListKelola() {
                         placeholder="Cari..."
                     />
                     <button
-                        className="border border-gray-300 rounded-md ml-1 p-2 focus:outline-none focus:bg-gray-50"
+                        className="border border-gray-300 rounded-md ml-1 p-2 focus:outline-none focus:bg-gray-50 "
                         onClick={toggleAdvancedFilter}
                     >
                         <AdjustmentsIcon className="w-5  h-5 text-gray-400 animate-pulse "></AdjustmentsIcon>
                     </button>
-                </div>
-                <div className="flex">
-                    <button onClick={() => router.push('/kepegawaian/cuti/pengajuan')} className="inline-flex items-center px-3 focus:outline-none rounded-md p-2 bg-indigo-600 text-sm border border-indigo-600 text-white ml-1 hover:bg-indigo-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-                        </svg>
-                        Ajukan Cuti
-                    </button>
+
                 </div>
             </div>
 
@@ -166,7 +130,7 @@ export default function ListKelola() {
                 <div className="overflow-x-auto sm:mx-0 ">
                     <div className="py-2 overflow-visible  align-start inline-block min-w-full sm:px-0 lg:px-0">
                         <div className="overflow-visible border-b border-gray-200 sm:rounded-lg">
-                            <table className="rounded-lg bg-gray-100 table-auto" style={{ width: '1900px' }}>
+                            <table className="rounded-lg bg-gray-100 table-auto" style={{ width: '2100px' }}>
                                 <thead className="bg-gray-50">
                                     <tr>
                                         <th
@@ -245,8 +209,20 @@ export default function ListKelola() {
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
-                                            Status Pengajuan
-                                                </th>
+                                            Lampiran
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
+                                        >
+                                            Alasan
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
+                                        >
+                                            Aksi
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -308,6 +284,19 @@ export default function ListKelola() {
                                                         Lihat
                                                     </button>
                                                 ) : ('-')}
+                                            </td>
+                                            <td className="px-6 py-4 text-xs font-medium text-gray-900 whitespace-nowrap">
+                                                {df_cuti.lampiran2 !== '-' ? (
+                                                    <button
+                                                        type="button"
+                                                        className="text-xs font-medium text-indigo-500 hover:text-indigo-700 focus:outline-none"
+                                                    >
+                                                        Lihat
+                                                    </button>
+                                                ) : ('-')}
+                                            </td>
+                                            <td className="px-6 py-4 text-xs font-medium text-gray-900 whitespace-nowrap">
+                                                {df_cuti.alasan}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 {df_cuti.status === 0 ? (

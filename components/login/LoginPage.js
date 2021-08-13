@@ -23,11 +23,12 @@ export default function LoginPage() {
             const login = await request(config.apiHost + '/auth/login', handleSubmit, 'post', false);
             setLoad(false)
             if (login.responseData.status === 'SUCCESS') {
-                const exp = new Date(new Date().getTime() + 5 * 60 * 1000);
+                const exp = new Date(new Date().getTime() + 180 * 60 * 1000);
+                const refreshexp = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000);
                 Cookies.set('token', login.responseData.data.access_token, { expires: exp });
-                Cookies.set('refreshtoken', login.responseData.data.refresh_token, { expires: exp });
+                Cookies.set('refreshtoken', login.responseData.data.refresh_token, { expires: refreshexp });
                 router.push("/");
-            }else{
+            } else {
                 if (login.responseData.status === 'UNAUTHORIZED') {
                     dispatch({
                         type: AlertAction.SET_OPEN,
@@ -64,9 +65,9 @@ export default function LoginPage() {
             <Head>
                 <title>Intra DIKTI</title>
             </Head>
-            
+
             <FetcherAlert />
-            
+
             {load ? <FetcherLoading /> : ''}
 
             <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

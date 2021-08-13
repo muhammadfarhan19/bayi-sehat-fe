@@ -5,19 +5,29 @@ import AksesList from "../../../components/admin/manajemen-akses/AksesList";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Cookies from 'js-cookie';
+import { request } from "../../../components/shared/fetcher/FetcherHooks";
+import config from "../../../utils/Config";
+
 
 function Akses() {
   const router = useRouter();
   const [loadPage, setLoadPage] = useState(false);
   const token = Cookies.get('token');
 
-  useEffect(() => {
-    if (typeof token === 'undefined') {
-      router.push('/login');
-    } else {
-      setLoadPage(true);
-    }
-  }, [token])
+useEffect(() => {
+    (async () => {
+        try {
+            const getUser = await request(config.apiHost + '/auth/getUser', '', 'get', true);
+            if(getUser.success){
+              setLoadPage(true);
+            }else{
+              router.push('/login');
+            }
+        } catch (e) {
+            router.push('/login');
+        }
+    })();
+  }, []);
 
 
   if (!loadPage) {

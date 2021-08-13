@@ -3,13 +3,12 @@ import ModuleNavigation from "../../../../components/navigation/ModuleNavigation
 import Cookies from 'js-cookie';
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import AddTunjangan from '../../../../components/kepegawaian/tunjangan-kinerja/AddTunjangan'
-import { request } from "../../../../components/shared/fetcher/FetcherHooks";
+import AddCuti from "../../../../components/kepegawaian/cuti/kelola-cuti/pengajuan/AddCuti";
 import config from "../../../../utils/Config";
+import { request } from "../../../../components/shared/fetcher/FetcherHooks";
 
 
-
-export default function Tunjangan() {
+export default function PengajuanPage() {
   const router = useRouter();
   const [loadPage, setLoadPage] = useState(false);
   const token = Cookies.get('token');
@@ -39,7 +38,7 @@ useEffect(() => {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
           <ModuleNavigation />
-          <AddTunjangan />
+          <AddCuti />
         </div>
       </div>
     </MainLayout>

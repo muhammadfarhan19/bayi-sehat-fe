@@ -5,14 +5,15 @@ import Cookies from 'js-cookie'
 
 const checkToken = async (headers) => {
   try {
-    const cekexp = await axios({ headers, url: config.apiHost + '/auth/getUser', method: 'get' })
+    const exp = await axios({ headers, url: config.apiHost + '/auth/getUser', method: 'get' })
   } catch (error) {
     const rtoken = getRefreshToken();
     headers['Authorization'] = 'Bearer ' + rtoken;
     const refresh = await axios({ headers, url: config.apiHost + '/auth/accessToken', method: 'get' })
-    if (refresh.data !== null) {
+    console.log(refresh)
+    if (refresh.status === 200) {
       const exp = new Date(new Date().getTime() + 5 * 60 * 1000);
-      Cookies.set('token', refresh.data, { expires: exp });
+      Cookies.set('token', refresh.data.data, { expires: exp });
     }
   }
 }

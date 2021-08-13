@@ -18,7 +18,7 @@ export default function Home() {
 
   useEffect(() => {
     if (typeof token === 'undefined') {
-      router.push('/login');
+      // router.push('/login');
     } else {
       setLoadPage(true);
     }
