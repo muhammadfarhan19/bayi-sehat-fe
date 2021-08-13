@@ -14,7 +14,7 @@ export default function Posisi() {
   const [loadPage, setLoadPage] = useState(false);
   const token = Cookies.get('token');
 
-useEffect(() => {
+  useEffect(() => {
     (async () => {
         try {
             const getUser = await request(config.apiHost + '/auth/getUser', '', 'get', true);

@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import ExampleLineGraph from "../../../components/ExampleLineGraph";
 import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
 import Cookies from 'js-cookie';
+import { request } from "../../../components/shared/fetcher/FetcherHooks";
+import config from "../../../utils/Config";
 
 export default function Dashboard() {
     const router = useRouter();
@@ -11,12 +13,19 @@ export default function Dashboard() {
     const token = Cookies.get('token');
 
     useEffect(() => {
-        if (typeof token === 'undefined') {
-            router.push('/login');
-        } else {
-            setLoadPage(true);
-        }
-    }, [token])
+        (async () => {
+            try {
+                const getUser = await request(config.apiHost + '/auth/getUser', '', 'get', true);
+                if(getUser.success){
+                  setLoadPage(true);
+                }else{
+                  router.push('/login');
+                }
+            } catch (e) {
+                router.push('/login');
+            }
+        })();
+      }, []);
 
 
     if (!loadPage) {

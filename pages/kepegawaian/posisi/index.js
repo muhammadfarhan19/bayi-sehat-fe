@@ -7,8 +7,6 @@ import { useState, useEffect } from "react";
 import { request } from "../../../components/shared/fetcher/FetcherHooks";
 import config from "../../../utils/Config";
 
-
-
 export default function Posisi() {
   const router = useRouter();
   const [loadPage, setLoadPage] = useState(false);

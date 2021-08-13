@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import TabelDataKehadiran from "../../../components/kepegawaian/kehadiran/TabelDataKehadiran";
 import TabelKlaimKehadiran from "../../../components/kepegawaian/kehadiran/TabelKlaimKehadiran";
+import { request } from "../../../components/shared/fetcher/FetcherHooks";
+import config from "../../../utils/Config";
 
 export default function Kehadiran() {
   const router = useRouter();
@@ -12,12 +14,19 @@ export default function Kehadiran() {
   const token = Cookies.get("token");
 
   useEffect(() => {
-    if (typeof token === "undefined") {
-      router.push("/login");
-    } else {
-      setLoadPage(true);
-    }
-  }, [token]);
+    (async () => {
+        try {
+            const getUser = await request(config.apiHost + '/auth/getUser', '', 'get', true);
+            if(getUser.success){
+              setLoadPage(true);
+            }else{
+              router.push('/login');
+            }
+        } catch (e) {
+            router.push('/login');
+        }
+    })();
+  }, []);
 
   if (!loadPage) {
     return <></>;

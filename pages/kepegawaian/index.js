@@ -11,18 +11,18 @@ export default function Profil() {
   const router = useRouter();
   const [loadPage, setLoadPage] = useState(false);
 
-useEffect(() => {
+  useEffect(() => {
     (async () => {
-        try {
-            const getUser = await request(config.apiHost + '/auth/getUser', '', 'get', true);
-            if(getUser.success){
-              setLoadPage(true);
-            }else{
-              router.push('/login');
-            }
-        } catch (e) {
-            router.push('/login');
+      try {
+        const getUser = await request(config.apiHost + '/auth/getUser', '', 'get', true);
+        if (getUser.success) {
+          setLoadPage(true);
+        } else {
+          router.push('/login');
         }
+      } catch (e) {
+        router.push('/login');
+      }
     })();
   }, []);
 
