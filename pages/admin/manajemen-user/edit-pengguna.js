@@ -3,20 +3,28 @@ import EditUser from "../../../components/admin/manajemen-user/EditUser";
 import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import Cookies from 'js-cookie';
+import { expiry } from "../../../components/shared/fetcher/FetcherHooks";
 
 export default function User() {
     const router = useRouter();
     const [loadPage, setLoadPage] = useState(false);
-    const token = Cookies.get('token');
+
+    const check = expiry();
 
     useEffect(() => {
-        if (typeof token === 'undefined') {
-            router.push('/login');
-        } else {
+      (async () => {
+        try {
+          const checkExpiry = await check();
+          if (checkExpiry.responseData.data !== null) {
             setLoadPage(true);
+          } else {
+            router.push('/login');
+          }
+        } catch (e) {
+          console.log(e)
         }
-    }, [token])
+      })();
+    }, []);
 
 
     if (!loadPage) {

@@ -20,10 +20,10 @@ useEffect(() => {
             if(getUser.success){
               setLoadPage(true);
             }else{
-              router.push('/login');
+              // router.push('/login');
             }
         } catch (e) {
-            router.push('/login');
+            // router.push('/login');
         }
     })();
   }, []);

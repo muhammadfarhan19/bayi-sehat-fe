@@ -10,7 +10,7 @@ const checkToken = async (headers) => {
     const rtoken = getRefreshToken();
     headers['Authorization'] = 'Bearer ' + rtoken;
     const refresh = await axios({ headers, url: config.apiHost + '/auth/accessToken', method: 'get' })
-    console.log(refresh)
+
     if (refresh.status === 200) {
       const exp = new Date(new Date().getTime() + 5 * 60 * 1000);
       Cookies.set('token', refresh.data.data, { expires: exp });
@@ -61,3 +61,56 @@ export const request = async (url, requestBody = {}, method = 'post', withToken 
       };
     });
 }
+
+
+export const expiry = () => {
+  return () => {
+    return axios
+      .get(config.apiHost + '/auth/getUser', {
+        timeout: 15000,
+        headers: {
+          Authorization: 'Bearer ' + getClientToken(),
+        },
+      })
+      .then(response => {
+        return {
+          success: true,
+          message: 'OK',
+          responseData: response.data,
+        };
+      })
+      .catch(err => {
+        const { response } = err || {};
+        if (response) {
+          return axios
+            .get(config.apiHost + '/auth/accessToken', {
+              timeout: 15000,
+              headers: {
+                Authorization: 'Bearer ' + getRefreshToken(),
+              },
+            })
+            .then(response => {
+              const exp = new Date(new Date().getTime() + 5 * 60 * 1000);
+              Cookies.set('token', response.data.data, { expires: exp });
+              return {
+                success: true,
+                message: 'OK',
+                responseData: response.data,
+              };
+            })
+            .catch(err => {
+              return {
+                success: false,
+                message: '',
+                responseData: null,
+              };
+            });
+        }
+        return {
+          success: false,
+          message: '',
+          responseData: null,
+        };
+      });
+  }
+};

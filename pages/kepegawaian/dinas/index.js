@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import ListKenaikan from "../../../components/kepegawaian/kenaikan-gaji-berkala/ListKenaikan";
 import config from "../../../utils/Config";
-import { request } from "../../../components/shared/fetcher/FetcherHooks";
+import { expiry } from "../../../components/shared/fetcher/FetcherHooks";
 
 
 export default function Dinas() {
@@ -13,18 +13,20 @@ export default function Dinas() {
   const [loadPage, setLoadPage] = useState(false);
   const token = Cookies.get('token');
 
-useEffect(() => {
+  const check = expiry();
+
+  useEffect(() => {
     (async () => {
-        try {
-            const getUser = await request(config.apiHost + '/auth/getUser', '', 'get', true);
-            if(getUser.success){
-              setLoadPage(true);
-            }else{
-              router.push('/login');
-            }
-        } catch (e) {
-            router.push('/login');
+      try {
+        const checkExpiry = await check();
+        if (checkExpiry.responseData.data !== null) {
+          setLoadPage(true);
+        } else {
+          router.push('/login');
         }
+      } catch (e) {
+        console.log(e)
+      }
     })();
   }, []);
 

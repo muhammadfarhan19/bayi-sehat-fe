@@ -4,24 +4,25 @@ import { useRouter } from 'next/router';
 import MainLayout from '../../components/layouts/MainLayout';
 import UserList from '../../components/admin/manajemen-user/UserList';
 import ModuleNavigation from '../../components/navigation/ModuleNavigation';
-import config from '../../utils/Config'
-import { request } from '../../components/shared/fetcher/FetcherHooks';
+import { expiry } from '../../components/shared/fetcher/FetcherHooks';
 
 function index() {
   const router = useRouter();
   const [loadPage, setLoadPage] = useState(false);
 
+  const check = expiry();
+
   useEffect(() => {
     (async () => {
       try {
-        const getUser = await request(config.apiHost + '/auth/getUser', '', 'get', true);
-        if (getUser.success) {
+        const checkExpiry = await check();
+        if (checkExpiry.responseData.data !== null) {
           setLoadPage(true);
         } else {
           router.push('/login');
         }
       } catch (e) {
-        router.push('/login');
+        console.log(e)
       }
     })();
   }, []);
