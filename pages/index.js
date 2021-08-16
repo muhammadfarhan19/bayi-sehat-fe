@@ -29,7 +29,7 @@ export default function Home() {
           router.push('/login');
         }
       } catch (e) {
-        console.log(e)
+        router.push('/login');
       }
     })();
   }, []);

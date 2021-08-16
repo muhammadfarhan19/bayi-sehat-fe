@@ -21,7 +21,7 @@ export default function Kepegawaian() {
           router.push('/login');
         }
       } catch (e) {
-        console.log(e)
+        router.push('/login');
       }
     })();
   }, []);

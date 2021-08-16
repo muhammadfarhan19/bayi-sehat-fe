@@ -25,7 +25,7 @@ export default function TukinPage() {
           router.push('/login');
         }
       } catch (e) {
-        console.log(e)
+router.push('/login');
       }
     })();
   }, []);

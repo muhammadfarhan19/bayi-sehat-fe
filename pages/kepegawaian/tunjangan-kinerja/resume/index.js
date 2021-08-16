@@ -26,7 +26,7 @@ export default function ResumePage() {
           router.push('/login');
         }
       } catch (e) {
-        console.log(e)
+router.push('/login');
       }
     })();
   }, []);

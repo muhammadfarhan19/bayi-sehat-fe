@@ -26,7 +26,7 @@ export default function SatyaPage() {
           router.push('/login');
         }
       } catch (e) {
-        console.log(e)
+router.push('/login');
       }
     })();
   }, []);
