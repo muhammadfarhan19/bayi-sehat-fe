@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import {
   BellIcon,
@@ -12,17 +12,41 @@ import Head from "next/head";
 
 import Link from "next/link";
 import BottomNav from "../BottomNav";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { auth } from "../../middleware/auth";
+import { useUser } from "../shared/fetcher/FetcherHooks";
+import { useStore } from "react-redux";
+import { useRouter } from "next/router";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function MainLayout({ children }) {
+export async function getServerSideProps(context) {
+  auth();
 
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+}
+
+export default function MainLayout({ children }) {
   const handleLogout = () => {
-    Cookies.remove('token');
-  }
+    Cookies.remove("token");
+  };
+  const [user, setUser] = useState(null);
+  const getUser = useUser;
+  const router = useRouter();
+  useEffect(async () => {
+    if(!user){
+      try {
+        let rUser = await getUser();
+        setUser(rUser);
+      } catch (e) {
+        router.push('/login');
+      }
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -53,56 +77,33 @@ export default function MainLayout({ children }) {
       <Popover as="header" className="pb-24 bg-indigo-600">
         {({ open }) => (
           <>
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-              <div className="relative py-5 flex items-center justify-center lg:justify-between">
+            <div className="container mx-auto px-3 md:px-0">
+              <div className="flex py-5 flex items-center justify-center lg:justify-between">
                 {/* Logo */}
-                <div className="absolute left-0 flex-shrink-0 lg:static">
-                  <a href="#" className="flex">
-                    <span className="sr-only">DIKTI</span>
-                    <img
-                      className="md:h-12 h-8 w-auto"
-                      src="https://dikti.kemdikbud.go.id/wp-content/uploads/2020/03/cropped-logo-dikbud.png"
-                      alt="Workflow"
-                    />
-                    <div className="text-white my-auto ml-2 lg:block hidden font-nunito text-3xl tracking-wide font-semibold">
-                      Intra DIKTI
-                    </div>
-                  </a>
+                <div className=" left-0 flex-shrink-0 lg:static">
+                  <Link href="/">
+                    <a className="flex">
+                      <span className="sr-only">DIKTI</span>
+                      <img
+                        className="md:h-12 h-8 w-auto"
+                        src="https://dikti.kemdikbud.go.id/wp-content/uploads/2020/03/cropped-logo-dikbud.png"
+                        alt="Workflow"
+                      />
+                      <div className="text-white my-auto ml-2 lg:block hidden font-nunito text-3xl tracking-wide font-semibold">
+                        Intra DIKTI
+                      </div>
+                    </a>
+                  </Link>
+                </div>
+                <div className="text-white my-auto mx-auto font-nunito text-lg lg:hidden tracking-wide font-semibold">
+                  Intra DIKTI
                 </div>
 
                 {/* Right section on desktop */}
-                <div className="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
-                  {/* Search */}
-                  <div className="flex-1 min-w-0 mr-3 ">
-                    <div className="max-w-xs w-full mx-auto">
-                      <label htmlFor="search" className="sr-only">
-                        Search
-                      </label>
-                      <div className="relative text-white focus-within:text-gray-600">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-                          <SearchIcon className="h-5 w-5" aria-hidden="true" />
-                        </div>
-                        <input
-                          id="search"
-                          className="block w-full bg-white bg-opacity-20 py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 text-gray-900 placeholder-white focus:outline-none focus:bg-opacity-100 focus:border-transparent focus:placeholder-gray-500 focus:ring-0 sm:text-sm"
-                          placeholder="Cari"
-                          type="search"
-                          name="search"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="flex-shrink-0 p-1 text-indigo-200 rounded-full hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white"
-                  >
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
+                <div className="ml-0">
 
                   {/* Profile dropdown */}
-                  <Menu as="div" className="ml-4 relative flex-shrink-0">
+                  <Menu as="div" className="relative flex-shrink-0">
                     {({ open }) => (
                       <>
                         <div>
@@ -124,7 +125,7 @@ export default function MainLayout({ children }) {
                         >
                           <Menu.Items
                             static
-                            className="origin-top-right z-40 absolute -right-2 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                            className="origin-top-right z-40 absolute -right-2 mt-2 w-64 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                           >
                             <Menu.Item>
                               {({ active }) => (
@@ -141,12 +142,12 @@ export default function MainLayout({ children }) {
                                         className="h-5 w-5"
                                       />
                                     </span>
-                                    <span className="ml-2">Profil</span>
+                                    <span className="ml-2">{user.nama}</span>
                                   </a>
                                 </Link>
                               )}
                             </Menu.Item>
-                            <Menu.Item>
+                            {/* <Menu.Item>
                               {({ active }) => (
                                 <Link href="/profil">
                                   <a
@@ -155,7 +156,7 @@ export default function MainLayout({ children }) {
                                       "flex px-4 py-2 text-sm text-gray-700 "
                                     )}
                                   >
-                                      <ArrowCircleRightIcon className="h-5 w-5 text-gray-600"/>
+                                    <ArrowCircleRightIcon className="h-5 w-5 text-gray-600" />
                                     <span className="ml-2">Role 1</span>
                                   </a>
                                 </Link>
@@ -170,12 +171,12 @@ export default function MainLayout({ children }) {
                                       "flex px-4 py-2 text-sm text-gray-700 "
                                     )}
                                   >
-                                      <ArrowCircleRightIcon className="h-5 w-5 text-gray-600"/>
+                                    <ArrowCircleRightIcon className="h-5 w-5 text-gray-600" />
                                     <span className="ml-2">Role 2</span>
                                   </a>
                                 </Link>
                               )}
-                            </Menu.Item>
+                            </Menu.Item> */}
                             <hr />
                             <Menu.Item>
                               {({ active }) => (
@@ -199,39 +200,7 @@ export default function MainLayout({ children }) {
                     )}
                   </Menu>
                 </div>
-                {/* Search */}
-                <div className="flex-1 min-w-0  lg:hidden px-12">
-                  <div className="max-w-xs w-full mx-auto">
-                    <label htmlFor="search" className="sr-only">
-                      Search
-                    </label>
-                    <div className="relative text-white focus-within:text-gray-600">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-                        <SearchIcon className="h-5 w-5" aria-hidden="true" />
-                      </div>
-                      <input
-                        id="search"
-                        className="block w-full bg-white bg-opacity-20 py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 text-gray-900 placeholder-white focus:outline-none focus:bg-opacity-100 focus:border-transparent focus:placeholder-gray-500 focus:ring-0 sm:text-sm"
-                        placeholder="Cari"
-                        type="search"
-                        name="search"
-                      />
-                    </div>
-                  </div>
-                </div>
 
-                {/* Menu button */}
-                <div className="absolute right-0 flex-shrink-0 lg:hidden">
-                  {/* Mobile menu button */}
-                  <Popover.Button className="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-indigo-200 hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none ">
-                    <span className="sr-only">Open main menu</span>
-                    {open ? (
-                      <XIcon className="block h-6 w-6" aria-hidden="true" />
-                    ) : (
-                      <MenuIcon className="block h-6 w-6" aria-hidden="true" />
-                    )}
-                  </Popover.Button>
-                </div>
               </div>
               <MainNav />
             </div>
@@ -362,13 +331,15 @@ export default function MainLayout({ children }) {
           </>
         )}
       </Popover>
-      <main className="-mt-24 pb-8 ">{children}</main>
+      
+      <main className="-mt-24 pb-8 container mx-auto ">{children}</main>
+      
       <div className="mx-3"></div>
+      
       <BottomNav />
 
-
       <footer>
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
+        <div className="container mx-auto">
           <div className="border-t border-gray-200 py-8 text-sm text-gray-500 text-center sm:text-left">
             <span className="block sm:inline">
               &copy; 2021 Tata Usaha Setditjen DIKTI.

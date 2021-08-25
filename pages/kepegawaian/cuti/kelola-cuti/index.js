@@ -183,7 +183,7 @@ function TabelKelolaCuti(params) {
         ) : (
           ""
         )}
-        <div className="flex ">
+      <div className=" ">
           <div className="-my-2 overflow-x-auto sm:mx-0 ">
             <div className="py-2 overflow-visible  align-start inline-block min-w-full sm:px-0 lg:px-0">
               <div className=" overflow-visible border-b border-gray-200 sm:rounded-lg">

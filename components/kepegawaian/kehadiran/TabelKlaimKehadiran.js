@@ -225,7 +225,10 @@ export default function TabelKlaimKehadiran() {
     if (id_status == 2) {
       return (
         <>
-          <button onClick={() => setKlaimDialog2(true)} className=" w-full rounded-md text-green-500 px-10 py-2 focus:outline-none">
+          <button
+            onClick={() => setKlaimDialog2(true)}
+            className=" w-full rounded-md text-green-500 px-10 py-2 focus:outline-none"
+          >
             Diterima
           </button>
 
@@ -362,7 +365,10 @@ export default function TabelKlaimKehadiran() {
     if (id_status == 3) {
       return (
         <>
-          <button onClick={() => setKlaimDialog3(true)} className=" w-full rounded-md text-red-500 px-10 py-2 focus:outline-none">
+          <button
+            onClick={() => setKlaimDialog3(true)}
+            className=" w-full rounded-md text-red-500 px-10 py-2 focus:outline-none"
+          >
             Ditolak
           </button>
 
@@ -502,7 +508,7 @@ export default function TabelKlaimKehadiran() {
       <div className="bg-white rounded-md shadow">
         {/* Header */}
         <div className="flex alig-center mb-3 pt-3 px-5">
-          <div className="text-lg font-medium text-gray-900 my-auto">
+          <div className="card-title my-auto">
             Daftar Klaim Kehadiran
           </div>
           <div className="ml-auto my-auto flex">
@@ -597,11 +603,12 @@ export default function TabelKlaimKehadiran() {
           ""
         )}
         {/* Body */}
-        <div className="flex ">
+
+        <div className=" ">
           <div className="-my-2 overflow-x-auto sm:mx-0 ">
             <div className="py-2 align-start inline-block min-w-full sm:px-0 lg:px-0">
-              <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <table className="w-full rounded-lg bg-gray-100 table-auto">
+              <div className="shadow overflow-visible border-b border-gray-200 sm:rounded-lg">
+                <table className="table w-full rounded-lg bg-gray-100 ">
                   <thead className="bg-gray-50">
                     <tr>
                       <th
@@ -647,13 +654,13 @@ export default function TabelKlaimKehadiran() {
                               : "bg-gray-50 hover:bg-gray-100"
                           }
                         >
-                          <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
+                          <td className=" px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                             {daftar_kehadiran.tanggal}
                           </td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">
                             {daftar_kehadiran.nip}
                           </td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900 truncate">
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
                             {daftar_kehadiran.nama}
                           </td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">

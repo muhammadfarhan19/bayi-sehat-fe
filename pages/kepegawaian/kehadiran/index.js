@@ -5,12 +5,13 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import TabelDataKehadiran from "../../../components/kepegawaian/kehadiran/TabelDataKehadiran";
 import TabelKlaimKehadiran from "../../../components/kepegawaian/kehadiran/TabelKlaimKehadiran";
+import menu from "../dev_menu";
 
 export default function Kehadiran() {
   const router = useRouter();
   const [loadPage, setLoadPage] = useState(false);
   const token = Cookies.get("token");
-
+  
   useEffect(() => {
     if (typeof token === "undefined") {
       router.push("/login");
@@ -25,15 +26,13 @@ export default function Kehadiran() {
 
   return (
     <MainLayout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
-          <ModuleNavigation />
+          <ModuleNavigation menu={menu} />
           <div className="grid grid-cols-1 gap-4 lg:col-span-3 transition duration-500 ease-in-out">
               <TabelKlaimKehadiran/>
               <TabelDataKehadiran/>
           </div>
         </div>
-      </div>
     </MainLayout>
   );
 }

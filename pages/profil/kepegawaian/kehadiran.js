@@ -59,7 +59,7 @@ function TabelKehadiran() {
         </div>
       </div>
       {/* Body */}
-      <div className="flex ">
+      <div className=" ">
         <div className="-my-2 overflow-x-auto sm:mx-0 ">
           <div className="py-2 overflow-visible  align-start inline-block min-w-full sm:px-0 lg:px-0">
             <div className=" overflow-visible border-b border-gray-200 sm:rounded-lg">
@@ -182,14 +182,12 @@ function DashboardKehadiran() {
 export default function Kehadiran() {
   return (
     <MainLayout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
-          <ModuleNavigation menu={menu} />
-          <div className="grid grid-cols-1 gap-4 lg:col-span-2 transition duration-500 ease-in-out">
-            <DashboardKehadiran />
-            <TabelKlaimKehadiran />
-            <TabelKehadiran />
-          </div>
+      <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
+        <ModuleNavigation menu={menu} />
+        <div className="grid grid-cols-1 gap-4 lg:col-span-3 transition duration-500 ease-in-out">
+          <DashboardKehadiran />
+          <TabelKlaimKehadiran />
+          <TabelKehadiran />
         </div>
       </div>
     </MainLayout>

@@ -68,7 +68,7 @@ export default function TabelDataKehadiran() {
       <div className="bg-white rounded-md shadow">
         {/* Header */}
         <div className="flex alig-center mb-3 pt-3 px-5">
-          <div className="text-lg font-medium text-gray-900 my-auto">
+          <div className="card-title my-auto">
             Daftar Kehadiran Pegawai
           </div>
           <div className="ml-auto my-auto flex">
@@ -163,7 +163,7 @@ export default function TabelDataKehadiran() {
           ""
         )}
         {/* Body */}
-        <div className="flex ">
+        <div className="">
           <div className="-my-2 overflow-x-auto sm:mx-0 ">
             <div className="py-2 overflow-visible  align-start inline-block min-w-full sm:px-0 lg:px-0">
               <div className=" overflow-visible border-b border-gray-200 sm:rounded-lg">
