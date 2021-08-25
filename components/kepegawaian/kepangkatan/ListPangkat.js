@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { useGetKepangkatan } from "../../shared/fetcher/kepegawaian/FetcherKepegawaian";
+import config from '../../../utils/Config'
+import { request } from '../../shared/fetcher/FetcherHooks';
 
 export default function ListPangkat() {
     const [tahun, setTahun] = useState([]);
     const [bulan, setBulan] = useState([]);
-    const getList = useGetKepangkatan();
     const [kepangkatan,setKepangkatan] = useState([]);
 
     useEffect(() => {
         (async () => {
             try {
-                const getKepangkatan = await getList();
-                setKepangkatan(getKepangkatan)
+                const getKepangkatan = await request(config.apiHost + '/daftar-kepangkatan', '', 'get', true);
+                setKepangkatan(getKepangkatan.responseData)
             } catch (e) {
                 console.log(e)
             }

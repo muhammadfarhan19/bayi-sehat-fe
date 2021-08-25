@@ -4,20 +4,29 @@ import MainLayout from "../../../components/layouts/MainLayout";
 import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import Cookies from 'js-cookie';
+import { expiry } from "../../../components/shared/fetcher/FetcherHooks";
+
 
 function Akses() {
   const router = useRouter();
   const [loadPage, setLoadPage] = useState(false);
-  const token = Cookies.get('token');
+
+  const check = expiry();
 
   useEffect(() => {
-    if (typeof token === 'undefined') {
-      router.push('/login');
-    } else {
-      setLoadPage(true);
-    }
-  }, [token])
+    (async () => {
+      try {
+        const checkExpiry = await check();
+        if (checkExpiry.responseData.data !== null) {
+          setLoadPage(true);
+        } else {
+          router.push('/login');
+        }
+      } catch (e) {
+router.push('/login');
+      }
+    })();
+  }, []);
 
 
   if (!loadPage) {

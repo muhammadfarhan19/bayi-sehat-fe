@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { useGetKgb } from "../../shared/fetcher/kepegawaian/FetcherKepegawaian";
+import config from '../../../utils/Config'
+import { request } from '../../shared/fetcher/FetcherHooks';
 
 export default function ListKenaikan() {
-    const getList = useGetKgb();
     const [kgb,setKgb] = useState([]);
 
     useEffect(() => {
         (async () => {
             try {
-                const getKgb = await getList();
-                setKgb(getKgb)
+                const getKgb = await request(config.apiHost + '/kenaikan-gaji-berkala', '', 'get', true);
+                setKgb(getKgb.responseData)
             } catch (e) {
                 console.log(e)
             }

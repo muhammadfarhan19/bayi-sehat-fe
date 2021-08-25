@@ -9,24 +9,37 @@ import InfoKehadiranDashboard from "../components/InfoKehadiranDashboard";
 import RealisasiSkp from "../components/RealisasiSkp";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { auth } from "../middleware/auth";
-import { useUser } from "../components/shared/fetcher/FetcherHooks";
+import { useRouter } from 'next/router';
+import { expiry } from "../components/shared/fetcher/FetcherHooks";
 
 export default function Home() {
   const [user, setUser] = useState(null);
-  const getUser = useUser;
+
   const router = useRouter();
-  useEffect(async () => {
-    if(!user){
+  const [loadPage, setLoadPage] = useState(false);
+  const token = Cookies.get('token');
+
+  const check = expiry();
+
+  useEffect(() => {
+    (async () => {
       try {
-        let rUser = await getUser();
-        setUser(rUser);
+        const checkExpiry = await check();
+        if (checkExpiry.responseData.data !== null) {
+          setLoadPage(true);
+        } else {
+          router.push('/login');
+        }
       } catch (e) {
         router.push('/login');
       }
-    }
-  }, [user]);
+    })();
+  }, []);
+
+
+  if (!loadPage) {
+    return <></>;
+  }
 
   return (
     <MainLayout>

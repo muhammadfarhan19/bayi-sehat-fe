@@ -4,19 +4,32 @@ import Cookies from 'js-cookie';
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Resume from "../../../../components/kepegawaian/tunjangan-kinerja/Resume";
+import { expiry } from "../../../../components/shared/fetcher/FetcherHooks";
+import config from "../../../../utils/Config";
+
+
 
 export default function ResumePage() {
   const router = useRouter();
   const [loadPage, setLoadPage] = useState(false);
   const token = Cookies.get('token');
 
+  const check = expiry();
+
   useEffect(() => {
-    if (typeof token === 'undefined') {
-      router.push('/login');
-    } else {
-      setLoadPage(true);
-    }
-  }, [token])
+    (async () => {
+      try {
+        const checkExpiry = await check();
+        if (checkExpiry.responseData.data !== null) {
+          setLoadPage(true);
+        } else {
+          router.push('/login');
+        }
+      } catch (e) {
+router.push('/login');
+      }
+    })();
+  }, []);
 
 
   if (!loadPage) {

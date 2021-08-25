@@ -13,7 +13,6 @@ import Head from "next/head";
 import Link from "next/link";
 import BottomNav from "../BottomNav";
 import Cookies from "js-cookie";
-import { auth } from "../../middleware/auth";
 import { useUser } from "../shared/fetcher/FetcherHooks";
 import { useStore } from "react-redux";
 import { useRouter } from "next/router";
@@ -32,21 +31,9 @@ export async function getServerSideProps(context) {
 
 export default function MainLayout({ children }) {
   const handleLogout = () => {
-    Cookies.remove("token");
-  };
-  const [user, setUser] = useState(null);
-  const getUser = useUser;
-  const router = useRouter();
-  useEffect(async () => {
-    if(!user){
-      try {
-        let rUser = await getUser();
-        setUser(rUser);
-      } catch (e) {
-        router.push('/login');
-      }
-    }
-  }, [user]);
+    Cookies.remove('token');
+    Cookies.remove('refreshtoken');
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
