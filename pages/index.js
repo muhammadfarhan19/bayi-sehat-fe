@@ -10,10 +10,22 @@ import RealisasiSkp from "../components/RealisasiSkp";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
-import { expiry } from "../components/shared/fetcher/FetcherHooks";
+import { expiry, getUser } from "../components/shared/fetcher/FetcherHooks";
 
 export default function Home() {
   const [user, setUser] = useState(null);
+  const doGetUser = getUser();
+  useEffect(async () => {
+    if (!user) {
+      try {
+        let rUser = await doGetUser();
+        // console.log('mantap'+rUser)
+        setUser(rUser);
+      } catch (e) {
+        router.push("/login");
+      }
+    }
+  }, [user]);
 
   const router = useRouter();
   const [loadPage, setLoadPage] = useState(false);

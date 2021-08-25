@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import MainLayout from "../../../components/layouts/MainLayout";
 import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
-import { useUser } from "../../../components/shared/fetcher/FetcherHooks";
+import { getUser, useUser } from "../../../components/shared/fetcher/FetcherHooks";
 import { useGetBiodata } from "../../../components/shared/fetcher/profil/FetcherProfil";
 import FetcherLoading from "../../../components/shared/loading/fetcherLoading";
 import menu from "../menu";
@@ -276,14 +276,14 @@ function DataDiriPendidikan({ data }) {
 
 export default function Biodata(params) {
   const [user, setUser] = useState(null);
-  const getUser = useUser;
+  const doGetUser = getUser();
   const getBiodata = useGetBiodata();
   const router = useRouter();
   const [biodata, setBiodata] = useState(null);
   useEffect(async () => {
     if (!user) {
       try {
-        let rUser = await getUser();
+        let rUser = await doGetUser();
         setUser(rUser);
       } catch (e) {
         router.push("/login");

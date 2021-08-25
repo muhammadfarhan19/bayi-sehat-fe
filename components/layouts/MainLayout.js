@@ -13,27 +13,31 @@ import Head from "next/head";
 import Link from "next/link";
 import BottomNav from "../BottomNav";
 import Cookies from "js-cookie";
-import { useUser } from "../shared/fetcher/FetcherHooks";
-import { useStore } from "react-redux";
-import { useRouter } from "next/router";
+import { getUser } from "../shared/fetcher/FetcherHooks";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export async function getServerSideProps(context) {
-  auth();
-
-  return {
-    props: {}, // will be passed to the page component as props
-  };
-}
-
 export default function MainLayout({ children }) {
+  const [user, setUser] = useState(null);
+  const doGetUser = getUser();
+  useEffect(async () => {
+    if (!user) {
+      try {
+        let rUser = await doGetUser();
+        // console.log('mantap'+rUser)
+        setUser(rUser);
+      } catch (e) {
+        router.push("/login");
+      }
+    }
+  }, [user]);
   const handleLogout = () => {
-    Cookies.remove('token');
-    Cookies.remove('refreshtoken');
-  }
+    Cookies.remove("token");
+    Cookies.remove("refreshtoken");
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -88,7 +92,6 @@ export default function MainLayout({ children }) {
 
                 {/* Right section on desktop */}
                 <div className="ml-0">
-
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative flex-shrink-0">
                     {({ open }) => (
@@ -187,7 +190,6 @@ export default function MainLayout({ children }) {
                     )}
                   </Menu>
                 </div>
-
               </div>
               <MainNav />
             </div>
@@ -318,11 +320,11 @@ export default function MainLayout({ children }) {
           </>
         )}
       </Popover>
-      
+
       <main className="-mt-24 pb-8 container mx-auto ">{children}</main>
-      
+
       <div className="mx-3"></div>
-      
+
       <BottomNav />
 
       <footer>
