@@ -61,7 +61,7 @@ export default function AddUser() {
             <FetcherAlert />
 
             {load ? <FetcherLoading /> : ''}
-            <div className="grid grid-cols-1 gap-4 lg:col-span-3">
+            <div className="grid grid-cols-1 gap-4 lg:col-span-4">
                 <section aria-labelledby="section-2-title">
                     <div className="rounded-lg bg-white shadow border-b border-gray-200 mb-3">
                         <div className="overflow-x-auto sm:mx-0 ">

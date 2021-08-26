@@ -3,6 +3,9 @@ import ListBatal from "../../../../components/kepegawaian/cuti/kelola-cuti/ListB
 import MainLayout from "../../../../components/layouts/MainLayout";
 import ModuleNavigation from "../../../../components/navigation/ModuleNavigation";
 import { Tab } from "@headlessui/react";
+import { useEffect } from "react";
+import { request } from "../../../../components/shared/fetcher/FetcherHooks";
+import config from "../../../../utils/Config";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -14,12 +17,24 @@ export default function KelolaCuti() {
     { name: "Pembatalan Cuti", href: "#", count: 1, current: false },
   ];
 
+  // api belom ready
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const getApp = await request(config.apiHost + '/cuti/manage', '', 'get', true);
+  //       setData(getApp.responseData)
+  //     } catch (e) {
+  //       console.log(e)
+  //     }
+  //   })();
+  // }, [])
+
   return (
     <MainLayout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
+      <div className="w-full lg:px-4">
+        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-5 lg:gap-8">
           <ModuleNavigation />
-          <div className="grid grid-cols-1 gap-4 lg:col-span-3 transition duration-500 ease-in-out">
+          <div className="grid grid-cols-1 gap-4 lg:col-span-4 transition duration-500 ease-in-out">
             <div className="rounded-lg bg-white shadow py-5 border-b border-gray-200 mb-3">
               <div className="mb-3">
                 <Tab.Group vertical>

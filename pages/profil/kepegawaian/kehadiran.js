@@ -182,9 +182,9 @@ function DashboardKehadiran() {
 export default function Kehadiran() {
   return (
     <MainLayout>
-      <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
+      <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-5 lg:gap-8">
         <ModuleNavigation menu={menu} />
-        <div className="grid grid-cols-1 gap-4 lg:col-span-3 transition duration-500 ease-in-out">
+        <div className="grid grid-cols-1 gap-4 lg:col-span-4 transition duration-500 ease-in-out">
           <DashboardKehadiran />
           <TabelKlaimKehadiran />
           <TabelKehadiran />

@@ -71,6 +71,9 @@ export default function AddCuti() {
                             <dt className="text-lg font-medium text-gray-900">
                                 Pengajuan Cuti
                             </dt>
+                            <dt className="mt-2 text-sm font-small text-gray-700">
+                                Isi data di bawah ini dengan teliti dan benar
+                            </dt>
                         </div>
 
                         <div className="overflow-x-auto sm:mx-0 ">
@@ -79,23 +82,53 @@ export default function AddCuti() {
                                     <form class="py-1" onSubmit={handleSubmit(handleLogin)}>
                                         <div class="w-full flex mb-4">
                                             <div class="w-full px-6">
-                                                <label className="block text-gray-700 text-sm font-bold mb-2"> Unit Kerja</label>
+                                                <label className="block text-gray-700 text-sm font-bold mb-2"> Nama</label>
+                                                <input
+                                                    type="text"
+                                                    name="c_password"
+                                                    readOnly
+                                                    placeholder='Dr. Ir. Paristiyanti Nurwardani, M.P.'
+                                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 bg-gray-100 rounded-md shadow-sm placeholder-gray-400 sm:text-sm"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* tanggal  */}
+                                        <div class="grid-col-2 w-full flex mb-4">
+                                            <div class="w-full px-6">
+                                                <label className="block text-gray-700 text-sm font-bold mb-2"> Tanggal Cuti (Mulai)</label>
+                                                <input type="date" min="2021-08-05" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
+                                                {errors.organization_id && errors.organization_id.type === "required" && <p class="mt-1 text-red-500 text-xs">Silahkan pilih nama organisasi</p>}
+                                            </div>
+                                            <div class="w-full px-6">
+                                                <label className="block text-gray-700 text-sm font-bold mb-2"> Tanggal Cuti (Selesai)</label>
+                                                <input type="date" min="2021-08-05" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
+                                                {errors.organization_id && errors.organization_id.type === "required" && <p class="mt-1 text-red-500 text-xs">Silahkan pilih nama organisasi</p>}
+                                            </div>
+                                        </div>
+
+                                        <div class="w-full flex mb-4">
+                                            <div class="w-full px-6">
+                                                <label className="block text-gray-700 text-sm font-bold mb-2"> Jenis Cuti</label>
                                                 <select className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" {...register('organization_id', { required: true })} name="organization_id">
                                                     <option value="">Silahkan Pilih</option>
+                                                    <option value="">Cuti Sakit</option>
+                                                    <option value="">Cuti Alasan Penting</option>
+                                                    <option value="">Cuti Tahunan</option>
                                                 </select>
                                                 {errors.organization_id && errors.organization_id.type === "required" && <p class="mt-1 text-red-500 text-xs">Silahkan pilih nama organisasi</p>}
                                             </div>
                                         </div>
-                                        <div class="w-full flex mb-4">
-                                            <div class="w-full px-6">
-                                                <label className="block text-gray-700 text-sm font-bold mb-2"> Nama Pegawai</label>
-                                                <select className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" {...register('user_group_id', { required: true })} name="user_group_id">
-                                                    <option value="">Silahkan Pilih</option>
-                                                    <option value="47f6e07a-af04-480b-9024-aa7cab144495">Pegawai</option>
-                                                    <option value="4784e593-950f-4690-a35c-058d70f1db7f">Kepala TU</option>
-                                                </select>
-                                                {errors.user_group_id && errors.user_group_id.type === "required" && <p class="mt-1 text-red-500 text-xs">Silahkan pilih grup pengguna</p>}
-                                            </div>
+                                        <div class="full px-6 mb-4">
+                                            <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Alasan Cuti</label>
+                                            <textarea
+                                                id="about"
+                                                name="about"
+                                                rows={3}
+                                                className="w-full shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md"
+                                                defaultValue={''}
+                                            />
+                                            {errors.c_password && <p class="mt-1 text-red-500 text-xs">Konfirmasi kata sandi tidak sesuai</p>}
                                         </div>
                                         <div class="full px-6 mb-4">
                                             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Nomor Telepon saat Cuti</label>
@@ -110,7 +143,7 @@ export default function AddCuti() {
                                             {errors.c_password && <p class="mt-1 text-red-500 text-xs">Konfirmasi kata sandi tidak sesuai</p>}
                                         </div>
                                         <div class="full px-6 mb-4">
-                                            <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Alasan Cuti</label>
+                                            <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Alamat saat cuti</label>
                                             <textarea
                                                 id="about"
                                                 name="about"
@@ -120,6 +153,7 @@ export default function AddCuti() {
                                             />
                                             {errors.c_password && <p class="mt-1 text-red-500 text-xs">Konfirmasi kata sandi tidak sesuai</p>}
                                         </div>
+                                        
 
 
                                         <div class="full px-6 mb-4">
@@ -194,7 +228,7 @@ export default function AddCuti() {
                                         <div class="w-full flex mb-4 px-6 justify-end">
                                             <button
                                                 type="button"
-                                                onClick={() => router.push('/kepegawaian/cuti/kelola-cuti')}
+                                                onClick={() => router.push('/profil/kepegawaian/cuti')}
                                                 className="flex mr-2 justify-center py-2 px-4 border border-indigo-600 rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-transparent hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                             >
                                                 Kembali

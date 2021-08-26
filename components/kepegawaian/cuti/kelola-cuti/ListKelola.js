@@ -1,14 +1,16 @@
 import { AdjustmentsIcon } from "@heroicons/react/solid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "./modal/Modal";
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router'
 import config from '../../../../utils/Config'
 import { request } from '../../../shared/fetcher/FetcherHooks';
 
 export default function ListKelola() {
     const [showAdvancedFilter, setshowAdvancedFilter] = useState(true);
+    const [data, setData] = React.useState([]);
     const [open, setOpen] = React.useState(false);
     const [type, setType] = React.useState(0);
+    const [uuid, setUuid] = React.useState(0);
 
     const router = useRouter()
 
@@ -62,7 +64,8 @@ export default function ListKelola() {
         }
     ];
 
-    const openModal = (tipe) => {
+    const openModal = (tipe,id) => {
+        setUuid(id)
         setOpen(true)
         setType(tipe)
     }
@@ -71,24 +74,26 @@ export default function ListKelola() {
         setOpen(data);
     };
 
-    // testing
-    // const handle = async () => {
-    //     try {
-    //         const response = await request(config.apiHost + '/auth/getUser', '', 'get', true);
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }
+    useEffect(() => {
+        (async () => {
+            try {
+                const getData = await request(config.apiHost + '/cuti/manage', '', 'get', true);
+                setData(getData.responseData.data)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
+    }, []);
 
 
     return (
         <>
 
-            {open && <Modal close={closeModal} tipe={type} />}
+            {open && <Modal close={closeModal} tipe={type} uuid={uuid} />}
             <div className="flex align-center mb-3 pt-3 px-6">
                 <div className="text-lg font-medium text-gray-900 my-auto">
                     Pengajuan Cuti
-                        </div>
+                </div>
                 <div className="ml-auto my-auto flex">
                     <input
                         type="text"
@@ -174,83 +179,83 @@ export default function ListKelola() {
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             No
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             NIP
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             Nama
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             Unit Kerja
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             Jenis Cuti
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             Alasan
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             Tgl. Mulai
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             Tgl. Selesai
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             No Telepon
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             Alamat
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             Formulir Pengajuan
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             Lampiran
-                                                </th>
+                                        </th>
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                         >
                                             Status Pengajuan
-                                                </th>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {daftar_cuti.map((df_cuti, df_cutiIdx) => (
+                                    {data.map((df_cuti, df_cutiIdx) => (
                                         <tr
                                             key={df_cutiIdx}
                                             className={
@@ -313,7 +318,7 @@ export default function ListKelola() {
                                                 {df_cuti.status === 0 ? (
                                                     <button
                                                         type="button"
-                                                        onClick={() => { openModal(0) }}
+                                                        onClick={() => { openModal(0,df_cuti.id) }}
                                                         className="py-1 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 "
                                                     >
                                                         Proses
@@ -321,7 +326,7 @@ export default function ListKelola() {
                                                 ) : df_cuti.status === 1 ? (
                                                     <button
                                                         type="button"
-                                                        onClick={() => { openModal(1) }}
+                                                        onClick={() => { openModal(1,df_cuti.id) }}
                                                         className="text-xs font-medium text-green-500 hover:text-green-700 focus:outline-none"
                                                     >
                                                         Disetujui
@@ -329,7 +334,7 @@ export default function ListKelola() {
                                                 ) : (
                                                     <button
                                                         type="button"
-                                                        onClick={() => { openModal(-1) }}
+                                                        onClick={() => { openModal(-1,df_cuti.id) }}
                                                         className="text-xs font-medium text-red-500 hover:text-red-700 focus:outline-none"
                                                     >
                                                         Ditolak

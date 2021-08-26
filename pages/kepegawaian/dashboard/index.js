@@ -35,7 +35,7 @@ export default function Dashboard() {
 
   return (
     <MainLayout>
-      <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
+      <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-5 lg:gap-8">
         <ModuleNavigation />
       </div>
     </MainLayout>

@@ -559,10 +559,10 @@ function posisi(props) {
       <Head>
         <title>Kepegawaian | Intra DIKTI</title>
       </Head>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="w-full lg:px-4">
         <h1 className="sr-only">Kepegawaian</h1>
         {/* Main 3 column grid */}
-        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
+        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-5 lg:gap-8">
           {/* Left column */}
           <div className="grid grid-cols-1 gap-4 lg:col-span-1">
             <section aria-labelledby="section-1-title">
@@ -578,7 +578,7 @@ function posisi(props) {
           </div>
 
           {/* Right column */}
-          <div className="grid grid-cols-1 gap-4 lg:col-span-3">
+          <div className="grid grid-cols-1 gap-4 lg:col-span-4">
             <section aria-labelledby="section-2-title">
               <h2 className="sr-only" id="section-2-title">
                 Section title
