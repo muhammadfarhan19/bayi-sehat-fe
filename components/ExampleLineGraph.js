@@ -4,7 +4,7 @@ export default function ExampleLineGraph() {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 lg:col-span-3">
+      <div className="grid grid-cols-1 gap-4 lg:col-span-4">
         <div className="rounded-lg bg-white shadow py-5 border-b border-gray-200  mb-3">
           <div className="flex items-center justify-center w-full ">
             <div className="w-full px-5">

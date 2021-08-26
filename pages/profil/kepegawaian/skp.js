@@ -5,14 +5,14 @@ import ProfilNav from "../../../components/ProfilNav";
 function skp(props) {
   return (
     <MainLayout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
+      <div className="w-full lg:px-4">
+        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-5 lg:gap-8">
           <div className="grid grid-cols-1 gap-4 lg:col-span-1">
             <div className="bg-white rounded-lg shadow">
               <ProfilNav />
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-4 lg:col-span-3">
+          <div className="grid grid-cols-1 gap-4 lg:col-span-4">
             <div className="bg-white rounded-lg shadow p-5">
               <div className="text-xl font-medium">Sasaran Kerja Pegawai</div>
             </div>

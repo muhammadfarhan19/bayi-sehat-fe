@@ -1,17 +1,13 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import { ExclamationIcon, XIcon } from '@heroicons/react/outline'
-import { request } from '../../../../shared/fetcher/FetcherHooks'
-import config from '../../../../../utils/Config'
-import moment from 'moment';
 
-export default function Modal({ close, tipe, uuid }) {
+export default function Modal({ close, tipe }) {
   const [open, setOpen] = useState(true)
   const [cancel, setCancel] = useState(false)
   const cancelButtonRef = useRef(null)
   const router = useRouter()
-  const [data, setData] = useState([]);
 
   const submit = () => {
     close(false)
@@ -26,18 +22,6 @@ export default function Modal({ close, tipe, uuid }) {
       setCancel(true)
     }
   }
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const getData = await request(config.apiHost + '/cuti/manage/' + uuid, '', 'get', true);
-        console.log(getData.responseData.data)
-        setData(getData.responseData.data)
-      } catch (e) {
-        console.log(e)
-      }
-    })();
-  }, []);
 
   return (
     <Transition appear show={open} as={Fragment}>
@@ -96,116 +80,73 @@ export default function Modal({ close, tipe, uuid }) {
               </div>
 
               <div className="mt-7">
-                <p className="text-center text-lg text-gray-900 font-bold">
-                  Cuti Sakit
-                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-right text-lg text-gray-900 font-bold">
+                      Cuti Sakit
+                    </p>
+                  </div>
+                  <div>
+                    {tipe === 0 ?
+                      <div className="w-20 bg-indigo-100 py-1 rounded-md">
+                        <label className="block text-indigo-800 text-sm text-center cursor-pointer"> Diproses</label>
+                      </div>
+                      : tipe === 1 ?
+                        <div className="w-20 bg-green-100 py-1 rounded-md">
+                          <label className="block text-green-800 text-sm text-center cursor-pointer"> Diterima</label>
+                        </div>
+                        : tipe === -1 ?
+                          <div className="w-20 bg-red-100 py-1 rounded-md cursor-pointer">
+                            <label className="block text-red-800 text-sm text-center cursor-pointer"> Ditolak</label>
+                          </div>
+                          : <div className="w-20 bg-yellow-100 py-1 rounded-md">
+                            <label className="block text-yellow-800 text-sm text-center cursor-pointer"> Dibatalkan</label>
+                          </div>
+                    }
+                  </div>
+                </div>
+
+
               </div>
 
               <div className="mt-3 text-center sm:mt-5 sm:mx-4 sm:text-left">
-                <table class="w-full table-fixed">
-                  <tr>
-                    <td className="w-20 py-2 text-sm text-gray-500">Nama</td>
-                    <td className="px-2 py-2 text-sm text-gray-500">:</td>
-                    <td className="w-80 py-2 text-sm text-gray-500">{data?.nama || '-'}</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 text-sm text-gray-500">NIP</td>
-                    <td className="px-2 py-2 text-sm text-gray-500">:</td>
-                    <td className="py-2 text-sm text-gray-500">{data?.nip || '-'}</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 text-sm text-gray-500">Unit Kerja</td>
-                    <td className="px-2 py-2 text-sm text-gray-500">:</td>
-                    <td className="py-2 text-sm text-gray-500">{data?.unit_kerja || '-'}</td>
-                  </tr>
+                <table class="w-full table-auto">
                   <tr>
                     <td className="py-2 text-sm text-gray-500">Tanggal</td>
                     <td className="px-2 py-2 text-sm text-gray-500">:</td>
-                    <td className="py-2 text-sm text-gray-500">{moment(data?.tgl_mulai).format("DD/MM/YYYY")} - {moment(data?.tgl_selesai).format("DD/MM/YYYY")}</td>
+                    <td className="py-2 text-sm text-gray-500">10/06/2021 - 13/06/2021</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-sm text-gray-500">Alasan</td>
                     <td className="px-2 py-2 text-sm text-gray-500">:</td>
-                    <td className="py-2 text-sm text-gray-500">{data?.alasan || '-'}</td>
+                    <td className="py-2 text-sm text-gray-500">Sakit dan perlu istirahat di rumah</td>
                   </tr>
                   <tr>
-                    <td className="py-2 text-sm text-gray-500">Formulir</td>
+                    <td className="py-2 text-sm text-gray-500">Formulir Pengajuan</td>
                     <td className="px-2 py-2 text-sm text-gray-500">:</td>
-                    <td className="py-2 text-sm text-indigo-500">{data?.berkas || '-'}</td>
+                    <td className="py-2 text-sm text-indigo-500">berkas-pengajuan.pdf</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-sm text-gray-500">Lampiran</td>
                     <td className="px-2 py-2 text-sm text-gray-500">:</td>
-                    <td className="py-2 text-sm text-indigo-500">{data?.lampiran || '-'}</td>
+                    <td className="py-2 text-sm text-indigo-500">lampiran.pdf</td>
                   </tr>
-                  {tipe === 0 ? (
-                    <>
-                      <tr>
-                        <td className="py-2 text-sm text-gray-500">Catatan</td>
-                      </tr>
-                      <tr>
-                        <td colSpan="3" className="py-2">
-                          <textarea
-                            id="about"
-                            name="about"
-                            rows={3}
-                            className="max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md"
-                            defaultValue={''}
-                          />
-                        </td>
-                      </tr>
-                    </>
-                  ) : (
-                    <tr>
-                      <td className="py-2 text-sm text-gray-500">Catatan</td>
-                      <td className="px-2 py-2 text-sm text-gray-500">:</td>
-                      <td className="py-2 text-sm text-gray-500">{data?.lampiran || '-'}</td>
-                    </tr>
-                  )}
-
+                  <tr>
+                    <td className="py-2 text-sm text-gray-500">Catatan</td>
+                    <td className="px-2 py-2 text-sm text-gray-500">:</td>
+                    <td className="py-2 text-sm text-gray-500">{tipe === 0 ? '-' : 'Semoga lekas sembuh'}</td>
+                  </tr>
                 </table>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mt-5 sm:mt-4 px-5">
-                {tipe === 0 ? (
+                {tipe === 0 || tipe === 1 ? (
                   <>
-                    <div>
-                      <button
-                        type="button"
-                        className="inline-flex justify-center rounded-md rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-full sm:text-sm"
-                        onClick={() => { setOpen(false), close(false) }}
-                      >
-                        Tolak
-                      </button>
-                    </div>
-                    <div>
-                      <button
-                        type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent shadow-sm py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-full sm:text-sm"
-                        onClick={submit}
-                      >
-                        Terima
-                      </button>
-                    </div>
-                  </>
-                ) : tipe === 1 ? (
-                  <>
-                    <div className="grid col-span-2 mt-5 sm:mt-4 px-5">
-                      <p className="py-2 text-sm font-bold text-green-500 text-center">Pengajuan Disetujui</p>
-                      <p className="text-sm text-gray-500 text-center">Oleh Admin TU</p>
-                    </div>
                     <div className="grid col-span-2 mt-5 sm:mt-4">
                       <p className="text-sm text-gray-500 text-left underline" style={{ cursor: 'pointer' }} onClick={handleCancel}>Batalkan Pengajuan?</p>
                     </div>
                   </>
-                ) : (
-                  <>
-                    <div className="grid col-span-2 mt-5 sm:mt-4 px-5">
-                      <p className="py-2 text-sm font-bold text-red-500 text-center">Pengajuan Ditolak</p>
-                      <p className="text-sm text-gray-500 text-center">Oleh Admin TU</p>
-                    </div>
-                  </>
-                )}
+                ) : ('')}
               </div>
 
               <div className="px-5 grid grid-col-1">
@@ -232,7 +173,7 @@ export default function Modal({ close, tipe, uuid }) {
                           className="mt-6 inline-flex justify-center rounded-md rounded-md border border-red-500 shadow-sm px-4 py-2 bg-white text-base font-medium text-red-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-full sm:text-sm"
                           onClick={() => { setOpen(false), close(false) }}
                         >
-                          Batalkan Pengajuan Cuti
+                          Ajukan Pembatalan Cuti
                         </button>
                       </td>
                     </tr>

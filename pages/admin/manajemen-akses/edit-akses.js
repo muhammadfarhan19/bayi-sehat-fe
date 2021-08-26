@@ -35,7 +35,7 @@ router.push('/login');
 
   return (
     <MainLayout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="w-full lg:px-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <ModuleNavigation />
           <PageEditAkses />

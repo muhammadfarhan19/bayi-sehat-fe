@@ -209,10 +209,10 @@ function TabelKelolaCuti(params) {
 export default function SaldoCuti() {
   return (
     <MainLayout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
+      <div className="w-full lg:px-4">
+        <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-5 lg:gap-8">
           <ModuleNavigation />
-          <div className="grid grid-cols-1 gap-4 lg:col-span-3 transition duration-500 ease-in-out">
+          <div className="grid grid-cols-1 gap-4 lg:col-span-4 transition duration-500 ease-in-out">
             <TabelKelolaCuti />
           </div>
         </div>
