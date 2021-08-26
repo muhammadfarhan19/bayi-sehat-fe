@@ -13,7 +13,9 @@ import Head from "next/head";
 import Link from "next/link";
 import BottomNav from "../BottomNav";
 import Cookies from "js-cookie";
-import { getUser } from "../shared/fetcher/FetcherHooks";
+import { getUser, request } from "../shared/fetcher/FetcherHooks";
+import config from "../../utils/Config";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -21,22 +23,22 @@ function classNames(...classes) {
 
 export default function MainLayout({ children }) {
   const [user, setUser] = useState(null);
-  const doGetUser = getUser();
-  useEffect(async () => {
-    if (!user) {
-      try {
-        let rUser = await doGetUser();
-        // console.log('mantap'+rUser)
-        setUser(rUser);
-      } catch (e) {
-        router.push("/login");
-      }
-    }
-  }, [user]);
+
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("refreshtoken");
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const getData = await request(config.apiHost + '/auth/getUser', '', 'get', true);
+        setUser(getData.responseData.data);
+      } catch (e) {
+        console.log(e)
+      }
+    })();
+  }, []);
 
 
   return (
