@@ -9,13 +9,15 @@ const development = require("./config/development");
 const staging = require("./config/staging");
 const production = require("./config/production");
 
-const withPWA = require('next-pwa')
- 
+const withPWA = require("next-pwa");
 
 // module.exports = withPWA({
-//     pwa: {
-//         dest: 'public'
-//     }
+//   pwa: {
+//       disable: process.env.NODE_ENV === 'development',
+//       dest: 'public', // comment out this line
+//       // register: true,
+//       // sw: '/sw.js'
+//   }
 // })
 
 module.exports = (phase) => {
@@ -40,6 +42,7 @@ module.exports = (phase) => {
         : "Unknown"
     }`
   );
+
   const config = () => {
     if (isDev) return development;
     if (isProd) return production;
@@ -55,8 +58,18 @@ module.exports = (phase) => {
     assetPrefix = String(publicRuntimeConfig.basePath);
   }
 
+  const pwaF = withPWA({
+    pwa: {
+        disable: process.env.NODE_ENV === 'development',
+        dest: 'public', // comment out this line
+        // register: true,
+        // sw: '/sw.js'
+    }
+  })
+
   return {
     publicRuntimeConfig,
     assetPrefix,
+    pwaF
   };
 };
