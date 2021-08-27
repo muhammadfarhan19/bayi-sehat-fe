@@ -33,7 +33,7 @@ export default function KelolaCuti() {
     <MainLayout>
         <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
           <ModuleNavigation />
-          <div className="grid grid-cols-1 gap-4 lg:col-span-4 transition duration-500 ease-in-out">
+          <div className="grid grid-cols-1 gap-4 lg:col-span-3 transition duration-500 ease-in-out">
             <div className="rounded-lg bg-white shadow py-5 border-b border-gray-200 mb-3">
               <div className="mb-3">
                 <Tab.Group vertical>

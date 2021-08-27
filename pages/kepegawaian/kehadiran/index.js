@@ -16,6 +16,8 @@ export default function Kehadiran() {
 
   const check = expiry();
 
+
+
   useEffect(() => {
     (async () => {
       try {
@@ -43,12 +45,12 @@ export default function Kehadiran() {
           <div class="bg-white rounded">
             <div class="border-b border-gray-200 ">
               <Tab.Group>
-                <Tab.List className="-mb-px flex space-x-8 mx-5 py-3">
+                <Tab.List className="-mb-px flex space-x-8 mx-5 py-5 ">
                   <Tab
                     className={({ selected }) =>
                       selected
-                        ? "border-indigo-500 text-indigo-600 border-transparent text-gray-800 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm focus:outline-none"
-                        : "border-transparent text-gray-800 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm focus:outline-none"
+                      ? "border-indigo-500 text-indigo-600 whitespace-nowrap pb-2 px-3 border-b-2  text-sm focus:outline-none"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hitespace-nowrap pb-2 px-3 border-b-2  text-sm focus:outline-none"
                     }
                   >
                     Kehadiran Pegawai
@@ -56,8 +58,8 @@ export default function Kehadiran() {
                   <Tab
                     className={({ selected }) =>
                       selected
-                        ? "border-indigo-500 text-indigo-600 border-transparent text-gray-800 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm focus:outline-none"
-                        : "border-transparent text-gray-800 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm focus:outline-none"
+                      ? "border-indigo-500 text-indigo-600 whitespace-nowrap pb-2 px-3 border-b-2  text-sm focus:outline-none"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hitespace-nowrap pb-2 px-3 border-b-2  text-sm focus:outline-none"
                     }
                   >
                     Klaim Kehadiran

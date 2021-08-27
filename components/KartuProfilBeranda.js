@@ -12,6 +12,9 @@ function KartuProfilBeranda(props) {
   const [load, setload] = useState(false);
   const user = JSON.parse(props.user);
 
+
+
+
   // if(test!=null){
   //   return <>{props.user} {test.nip}</>
   // }else{

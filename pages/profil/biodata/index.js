@@ -44,7 +44,7 @@ function KartuProfil(props) {
   } else {
     return (
       <>
-        <FetcherLoading />
+
       </>
     );
   }
@@ -301,9 +301,9 @@ export default function Biodata(params) {
   return (
     <MainLayout>
       {/* Main 3 column grid */}
-      <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-5 lg:gap-8">
+      <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
         <ModuleNavigation menu={menu} />
-        <div className="grid grid-cols-1 gap-4 lg:col-span-4">
+        <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <KartuProfil user={JSON.stringify(user)} />
           <TabBiodata biodata={biodata} />
         </div>

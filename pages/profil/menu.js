@@ -3,7 +3,7 @@ const menu = [
     {
       name: "Biodata",
       href: "/profil",
-      current: true,
+      current: false,
     },
     
     {
