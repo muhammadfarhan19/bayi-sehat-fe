@@ -10,14 +10,13 @@ const staging = require("./config/staging");
 const production = require("./config/production");
 
 const withPWA = require('next-pwa')
-const runtimeCaching = require('next-pwa/cache')
+ 
 
-module.exports = withPWA({
-  pwa: {
-    dest: 'public',
-    runtimeCaching,
-  },
-})
+// module.exports = withPWA({
+//     pwa: {
+//         dest: 'public'
+//     }
+// })
 
 module.exports = (phase) => {
   const isDev = phase === PHASE_DEVELOPMENT_SERVER;

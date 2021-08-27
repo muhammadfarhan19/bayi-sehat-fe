@@ -1,8 +1,7 @@
 const defaultProps = require('./default');
-const domain = '';
+const domain = 'http://localhost:3000';
 
 module.exports = {
   ...defaultProps,
-  apiHost: '', //host api
   domain,
 };

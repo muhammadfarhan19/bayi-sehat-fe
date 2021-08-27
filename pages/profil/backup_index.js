@@ -5,7 +5,6 @@ import ModuleNavigation from "../../components/navigation/ModuleNavigation";
 
 import menu from "./menu";
 import Cookies from "js-cookie";
-import { auth } from "../../middleware/auth";
 import { useEffect } from "react";
 import Biodata from "./biodata";
 

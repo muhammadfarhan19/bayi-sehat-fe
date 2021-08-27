@@ -3,7 +3,7 @@
     "background_color": "#8f35f6",
     "display": "fullscreen",
     "scope": "/",
-    "start_url": "/masuk",
+    "start_url": "/",
     "name": "Intra DIKTI",
     "short_name": "Intra",
     "icons": [
