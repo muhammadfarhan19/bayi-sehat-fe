@@ -4,9 +4,10 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import MainLayout from "../../../components/layouts/MainLayout";
 import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
-import { getUser, useUser } from "../../../components/shared/fetcher/FetcherHooks";
+import { getUser, request, useUser } from "../../../components/shared/fetcher/FetcherHooks";
 import { useGetBiodata } from "../../../components/shared/fetcher/profil/FetcherProfil";
 import FetcherLoading from "../../../components/shared/loading/fetcherLoading";
+import config from "../../../utils/Config";
 import menu from "../menu";
 
 function KartuProfil(props) {
@@ -280,24 +281,42 @@ export default function Biodata(params) {
   const getBiodata = useGetBiodata();
   const router = useRouter();
   const [biodata, setBiodata] = useState(null);
-  useEffect(async () => {
-    if (!user) {
+
+  // useEffect(async () => {
+  //   if (!user) {
+  //     try {
+  //       let rUser = await doGetUser();
+  //       setUser(rUser);
+  //     } catch (e) {
+  //       router.push("/login");
+  //     }
+  //   }
+  //   if (!biodata) {
+  //     try {
+  //       const data = await getBiodata(user.id);
+  //       setBiodata(data);
+  //     } catch (e) {
+  //       console.error(e);
+  //     }
+  //   }
+  // }, [user]);
+
+
+  useEffect(() => {
+    (async () => {
       try {
-        let rUser = await doGetUser();
-        setUser(rUser);
+        const getData = await request(config.apiHost + '/auth/getUser', '', 'get', true);
+        setUser(getData.responseData.data)
+        if(getData.responseData.status === 'SUCCESS'){
+          const getData2 = await request(config.apiHost + '/users/' + getData.responseData.data.id + '/biodata', '', 'get', true);
+          setBiodata(getData2.responseData.data);
+        }
       } catch (e) {
-        router.push("/login");
+        console.log(e)
       }
-    }
-    if (!biodata) {
-      try {
-        const data = await getBiodata(user.id);
-        setBiodata(data);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, [user]);
+    })();
+  }, []);
+
   return (
     <MainLayout>
       {/* Main 3 column grid */}

@@ -4,6 +4,7 @@ import Modal from "./modal/Modal";
 import { useRouter } from 'next/router'
 import config from '../../../../utils/Config'
 import { request } from '../../../shared/fetcher/FetcherHooks';
+import moment from 'moment';
 
 export default function ListKelola() {
     const [showAdvancedFilter, setshowAdvancedFilter] = useState(true);
@@ -283,10 +284,10 @@ export default function ListKelola() {
                                                 {df_cuti.alasan}
                                             </td>
                                             <td className="px-6 py-4 text-xs font-medium text-gray-900 whitespace-nowrap">
-                                                {df_cuti.tgl_mulai}
+                                                {moment(df_cuti?.tgl_mulai).format("DD/MM/YYYY")}
                                             </td>
                                             <td className="px-6 py-4 text-xs font-medium text-gray-900 whitespace-nowrap">
-                                                {df_cuti.tgl_selesai}
+                                                {moment(df_cuti?.tgl_selesai).format("DD/MM/YYYY")}
                                             </td>
                                             <td className="px-6 py-4 text-xs font-medium text-gray-900 whitespace-nowrap">
                                                 {df_cuti.no_telp}
