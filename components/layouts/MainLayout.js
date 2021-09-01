@@ -13,7 +13,7 @@ import Head from "next/head";
 import Link from "next/link";
 import BottomNav from "../BottomNav";
 import Cookies from "js-cookie";
-import { getUser, request } from "../shared/fetcher/FetcherHooks";
+import { request } from "../shared/fetcher/FetcherHooks";
 import config from "../../utils/Config";
 
 
