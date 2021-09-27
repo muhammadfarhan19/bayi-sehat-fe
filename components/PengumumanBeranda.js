@@ -69,7 +69,7 @@ const PengumumanBeranda = () => {
             </Tab.Panel>
           ))}
         </Tab.Panels>
-        <Tab.List>
+        <Tab.List className="flex">
           {data.map((dt, idx) => (
             <Tab
               className={({ selected }) =>

@@ -11,6 +11,8 @@ import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import { expiry, getUser } from "../components/shared/fetcher/FetcherHooks";
+import BottomNav from "../components/BottomNav";
+import WorkInProgress from "../components/WorkInProgress";
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -56,20 +58,22 @@ export default function Home() {
   return (
     <MainLayout>
       
-      <div className="container mx-auto">
+      <div className="container mx-auto pb-10">
         <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
-          <div className="grid grid-cols-1 gap-4 lg:col-span-1">
+          <div className="grid grid-cols-1 gap-1 lg:col-span-1">
             <section aria-labelledby="section-1-title">
                 <KartuProfilBeranda user={JSON.stringify(user)} />
               
               {/* <RealisasiSkp /> */}
-              {/* <KegiatanHariIni /> */}
+              <KegiatanHariIni />
+
             </section>
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:col-span-2">
             <section aria-labelledby="section-2-title">
-              <PengumumanBeranda />
+              {/* <PengumumanBeranda /> */}
+              <WorkInProgress/>
               {/* <NavIconBeranda /> */}
               {/* <TambahLogKegiatan /> */}
               {/* <TaskKepegawaian /> */}
@@ -79,6 +83,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <BottomNav/>
     </MainLayout>
   );
 }

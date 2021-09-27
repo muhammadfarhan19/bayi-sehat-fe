@@ -23,7 +23,7 @@ function KartuProfilBeranda(props) {
 
   if(user != null){
     return (
-      <div className="bg-white rounded-3xl lg:rounded-lg shadow">
+      <div className="bg-white rounded-3xl lg:rounded-lg shadow mb-3">
         <div className="bg-white p-6 rounded-3xl">
           <div className="text-center">
             <div className="text-center">
@@ -45,12 +45,12 @@ function KartuProfilBeranda(props) {
                   {user.jabatan && user.jabatan.map((item)=><span key="item">{item} <br /></span>)}
                 </p>
   
-                <Presensi></Presensi>
+                {/* <Presensi></Presensi> */}
               </div>
             </div>
           </div>
         </div>
-        <div className="border-t   grid grid-flow-col">
+        {/* <div className="border-t   grid grid-flow-col">
           {stats.map((stat) => (
             <Link href={stat.link} key={stat.link}>
               <a
@@ -64,7 +64,7 @@ function KartuProfilBeranda(props) {
               </a>
             </Link>
           ))}
-        </div>
+        </div> */}
       </div>
     );
   } else{
