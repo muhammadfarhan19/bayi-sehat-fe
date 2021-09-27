@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect,useState } from "react";
 import config from '../../utils/Config'
 import { request } from '../shared/fetcher/FetcherHooks';
-import PeminjamanMenu from '../../components/PeminjamanMenu'
+// import PeminjamanMenu from '../../components/PeminjamanMenu'
 
 const data = [
   {
