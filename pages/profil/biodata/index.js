@@ -278,9 +278,6 @@ function DataDiriPendidikan({ data }) {
 
 export default function Biodata(params) {
   const [user, setUser] = useState(null);
-  const doGetUser = getUser();
-  const getBiodata = useGetBiodata();
-  const router = useRouter();
   const [biodata, setBiodata] = useState(null);
 
   // useEffect(async () => {

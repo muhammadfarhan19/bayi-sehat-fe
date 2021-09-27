@@ -26,22 +26,6 @@ const checkToken = async (headers) => {
   }
 };
 
-export function getUser() {
-  return async () => {
-    try {
-      let res = await axios.get(config.apiHost + "/auth/getUser", {
-        timeout: 15000,
-        headers: {
-          Authorization: "Bearer " + getClientToken(),
-        },
-      });
-      return res.data.data;
-    } catch (e) {
-      throw e;
-    }
-  };
-}
-
 export const request = async (
   url,
   requestBody = {},

@@ -8,7 +8,7 @@ export default function Cuti() {
       <div className="w-full lg:px-4">
         <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-5 lg:gap-8">
           <ModuleNavigation />
-          <div className="grid grid-cols-1 lg:col-span-3 transition duration-500 ease-in-out">
+          <div className="grid grid-cols-1 lg:col-span-4 transition duration-500 ease-in-out">
             <ListCuti />
           </div>
         </div>

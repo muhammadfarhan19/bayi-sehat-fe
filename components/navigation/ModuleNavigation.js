@@ -24,6 +24,7 @@ const ModuleNavigation = ({menu}) => {
       (async () => {
         try {
           const getModule = await request(config.apiHost + '/menu-modules/' + app, '', 'get', true);
+          console.log(getModule)
           setData(getModule.responseData);
         } catch (e) {
           console.log(e);

@@ -6,55 +6,70 @@ import { usePostUser, useOrganization } from '../../../../shared/fetcher/setting
 import { AlertAction } from '../../../../../action/ActionTypes';
 import FetcherAlert from '../../../../shared/alert/FetcherAlert';
 import FetcherLoading from '../../../../shared/loading/fetcherLoading';
+import { request } from '../../../../shared/fetcher/FetcherHooks';
+import config from '../../../../../utils/Config';
+import moment from 'moment';
 
 export default function AddCuti() {
     const router = useRouter();
     const dispatch = useDispatch();
-    const addUser = usePostUser();
-    const orgList = useOrganization();
-    const { handleSubmit, register, getValues, formState: { errors } } = useForm();
-    const [org, setOrg] = useState([])
+    const { handleSubmit, getValues, register, formState: { errors } } = useForm();
     const [load, setLoad] = useState(false);
-
-    const handleLogin = async (handleSubmit) => {
-        setLoad(true)
-        try {
-            const post = await addUser(handleSubmit);
-            setLoad(false)
-            if (post.status === 'SUCCESS') {
-                dispatch({
-                    type: AlertAction.SET_OPEN,
-                    open: true,
-                    title: 'Data Berhasil Di Simpan',
-                    subtitle: '',
-                    status: 'success',
-                    redirect: '/admin/manajemen-user'
-                });
-            }
-        } catch (e) {
-            setLoad(false)
-            if (e.status === 'FAILED') {
-                dispatch({
-                    type: AlertAction.SET_OPEN,
-                    open: true,
-                    title: 'Pengguna sudah terdaftar',
-                    subtitle: 'Pengguna yang anda masukan telah terdaftar, silahkan coba lagi',
-                    status: 'error',
-                });
-            }
-        }
-    }
+    const [user, setUser] = useState([])
+    const [jenis, setJenis] = useState([])
 
     useEffect(() => {
         (async () => {
             try {
-                const getOrg = await orgList();
-                setOrg(getOrg.data)
+                const getData = await request(config.apiHost + '/auth/getUser', '', 'get', true);
+                const getJenis = await request(config.apiHost + '/cuti/jenis', '', 'get', true);
+                setUser(getData.responseData.data)
+                setJenis(getJenis.responseData.data)
             } catch (e) {
                 console.log(e)
             }
         })();
-    }, [])
+    }, []);
+
+    const handleCuti = async (handleSubmit) => {
+        setLoad(true)
+        try {
+            const post = await request(config.apiHost + '/cuti/post/' + user?.id, handleSubmit, 'post', false);
+            console.log(post)
+            // setLoad(false)
+            // if (login.responseData.status === 'SUCCESS') {
+
+            // } else {
+            //     if (login.responseData.status === 'UNAUTHORIZED') {
+            //         dispatch({
+            //             type: AlertAction.SET_OPEN,
+            //             open: true,
+            //             title: 'Pengguna tidak di temukan',
+            //             subtitle: 'Password yang anda masukan salah, silahkan coba lagi',
+            //             status: 'error'
+            //         });
+            //     } else if (login.responseData.status === 'NOT_FOUND') {
+            //         dispatch({
+            //             type: AlertAction.SET_OPEN,
+            //             open: true,
+            //             title: 'Pengguna tidak di temukan',
+            //             subtitle: 'Username yang anda masukan salah, silahkan coba lagi',
+            //             status: 'error'
+            //         });
+            //     } else {
+            //         dispatch({
+            //             type: AlertAction.SET_OPEN,
+            //             open: true,
+            //             title: 'Terjadi Kesalahan',
+            //             subtitle: 'Silahkan coba beberapa saat lagi',
+            //             status: 'error'
+            //         });
+            //     }
+            // }
+        } catch (e) {
+            setLoad(false)
+        }
+    }
 
     return (
         <>
@@ -79,7 +94,8 @@ export default function AddCuti() {
                         <div className="overflow-x-auto sm:mx-0 ">
                             <div className="py-2 align-start inline-block min-w-full sm:px-0 lg:px-0">
                                 <div class="w-full">
-                                    <form class="py-1" onSubmit={handleSubmit(handleLogin)}>
+                                    <form class="py-1" onSubmit={handleSubmit(handleCuti)}>
+                                        <input type="hidden" {...register('users_id')} name="users_id" value={user?.id} />
                                         <div class="w-full flex mb-4">
                                             <div class="w-full px-6">
                                                 <label className="block text-gray-700 text-sm font-bold mb-2"> Nama</label>
@@ -87,8 +103,8 @@ export default function AddCuti() {
                                                     type="text"
                                                     name="c_password"
                                                     readOnly
-                                                    placeholder='Dr. Ir. Paristiyanti Nurwardani, M.P.'
-                                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 bg-gray-100 rounded-md shadow-sm placeholder-gray-400 sm:text-sm"
+                                                    value={user?.nama}
+                                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 bg-gray-100 rounded-md shadow-sm placeholder-gray-400 sm:text-sm focus:ring-transparent cursor-not-allowed"
                                                 />
                                             </div>
                                         </div>
@@ -97,26 +113,36 @@ export default function AddCuti() {
                                         <div class="grid-col-2 w-full flex mb-4">
                                             <div class="w-full px-6">
                                                 <label className="block text-gray-700 text-sm font-bold mb-2"> Tanggal Cuti (Mulai)</label>
-                                                <input type="date" min="2021-08-05" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
-                                                {errors.organization_id && errors.organization_id.type === "required" && <p class="mt-1 text-red-500 text-xs">Silahkan pilih nama organisasi</p>}
+                                                <input type="date" placeholder="Date" min={moment().subtract(1, 'month').format('YYYY-MM-05')} max={moment().add(1, 'month').format('YYYY-MM-05')} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    {...register("tgl_mulai", {
+                                                        validate: (value) => value < getValues('tgl_selesai')
+                                                    })} 
+                                                    name="tgl_mulai"
+                                                />
+                                                {errors.tgl_mulai && <p class="mt-1 text-red-500 text-xs">Tanggal mulai tidak boleh lebih besar dari tanggal selesai</p>}
                                             </div>
                                             <div class="w-full px-6">
                                                 <label className="block text-gray-700 text-sm font-bold mb-2"> Tanggal Cuti (Selesai)</label>
-                                                <input type="date" min="2021-08-05" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
-                                                {errors.organization_id && errors.organization_id.type === "required" && <p class="mt-1 text-red-500 text-xs">Silahkan pilih nama organisasi</p>}
+                                                <input type="date" min={moment().subtract(1, 'month').format('YYYY-MM-05')} max={moment().add(1, 'month').format('YYYY-MM-05')} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    {...register("tgl_selesai", {
+                                                        validate: (value) => value > getValues('tgl_mulai')
+                                                    })}
+                                                    name="tgl_selesai"
+                                                />
+                                                {errors.tgl_selesai && <p class="mt-1 text-red-500 text-xs">Tanggal selesai tidak boleh lebih kecil dari tanggal mulai</p>}
                                             </div>
                                         </div>
 
                                         <div class="w-full flex mb-4">
                                             <div class="w-full px-6">
                                                 <label className="block text-gray-700 text-sm font-bold mb-2"> Jenis Cuti</label>
-                                                <select className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" {...register('organization_id', { required: true })} name="organization_id">
+                                                <select className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" {...register('jenis_cuti', { required: true })} name="jenis_cuti">
                                                     <option value="">Silahkan Pilih</option>
-                                                    <option value="">Cuti Sakit</option>
-                                                    <option value="">Cuti Alasan Penting</option>
-                                                    <option value="">Cuti Tahunan</option>
+                                                    {jenis.map((data) => (
+                                                        <option value={data.id}> {data.nama_cuti}</option>
+                                                    ))}
                                                 </select>
-                                                {errors.organization_id && errors.organization_id.type === "required" && <p class="mt-1 text-red-500 text-xs">Silahkan pilih nama organisasi</p>}
+                                                {errors.jenis_cuti && errors.jenis_cuti.type === "required" && <p class="mt-1 text-red-500 text-xs">Silahkan pilih jenis cuti</p>}
                                             </div>
                                         </div>
                                         <div class="full px-6 mb-4">
@@ -127,20 +153,19 @@ export default function AddCuti() {
                                                 rows={3}
                                                 className="w-full shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md"
                                                 defaultValue={''}
+                                                {...register('alasan', { required: true })} name="alasan"
                                             />
-                                            {errors.c_password && <p class="mt-1 text-red-500 text-xs">Konfirmasi kata sandi tidak sesuai</p>}
+                                            {errors.alasan && <p class="mt-1 text-red-500 text-xs">Silahkan masukan alasan cuti</p>}
                                         </div>
                                         <div class="full px-6 mb-4">
                                             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Nomor Telepon saat Cuti</label>
                                             <input
-                                                type="text"
-                                                name="c_password"
-                                                {...register("c_password", {
-                                                    validate: (value) => value === getValues('password')
-                                                })}
+                                                type="number"
+                                                name="no_telp"
+                                                {...register('no_telp', { required: true })} name="no_telp"
                                                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                             />
-                                            {errors.c_password && <p class="mt-1 text-red-500 text-xs">Konfirmasi kata sandi tidak sesuai</p>}
+                                            {errors.no_telp && errors.no_telp.type === "required" && <p class="mt-1 text-red-500 text-xs">Silahkan masukan nomor telepon</p>}
                                         </div>
                                         <div class="full px-6 mb-4">
                                             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Alamat saat cuti</label>
@@ -150,14 +175,13 @@ export default function AddCuti() {
                                                 rows={3}
                                                 className="w-full shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md"
                                                 defaultValue={''}
+                                                {...register('alamat', { required: true })} name="alamat"
                                             />
-                                            {errors.c_password && <p class="mt-1 text-red-500 text-xs">Konfirmasi kata sandi tidak sesuai</p>}
+                                            {errors.alamat && errors.alamat.type === "required" && <p class="mt-1 text-red-500 text-xs">Silahkan masukan alamat saat cuti</p>}
                                         </div>
-                                        
-
 
                                         <div class="full px-6 mb-4">
-                                            <label class="block text-gray-700 text-sm font-bold mb-2" for="username"> Formulir Pengajuan Cuti</label>
+                                            <label class="block text-gray-700 text-sm font-bold mb-2" for="username"> Formulir Pengajuan Cuti *</label>
                                             <p className="text-xs text-gray-500">Unggah formulir pengajuan cuti yang telah ditandatangani</p>
                                             <div className="mt-1 sm:mt-0 sm:col-span-2">
                                                 <div className="w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -182,7 +206,7 @@ export default function AddCuti() {
                                                                 className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                                                             >
                                                                 <span>Unggah Dokumen</span>
-                                                                <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                                                                <input id="file-upload" name="file-upload" type="file" className="sr-only" {...register('formulir')} name="formulir" />
                                                             </label>
                                                         </div>
                                                         <p className="text-xs text-gray-500">PDF maks. 2MB</p>
@@ -216,7 +240,7 @@ export default function AddCuti() {
                                                                 className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                                                             >
                                                                 <span>Unggah Dokumen</span>
-                                                                <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                                                                <input id="file-upload" type="file" className="sr-only" {...register('lampiran')} name="lampiran" />
                                                             </label>
                                                         </div>
                                                         <p className="text-xs text-gray-500">PDF maks. 2MB</p>
