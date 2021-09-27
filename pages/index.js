@@ -32,7 +32,7 @@ export default function Home() {
         console.log(e)
       }
     })();
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     (async () => {
