@@ -23,8 +23,8 @@ export default function EditBukuTamu() {
                     reset({
                         tanggal_kunjungan: moment(getTamu.responseData.data?.tanggal_kunjungan).format('YYYY-MM-DD'),
                         nomor_kartu: getTamu.responseData.data?.nomor_kartu,
-                        waktu_mulai: getTamu.responseData.data?.waktu_mulai ? moment(getTamu.responseData.data?.waktu_mulai).format('H:mm') : '',
-                        waktu_selesai: getTamu.responseData.data?.waktu_mulai ? moment(getTamu.responseData.data?.waktu_selesai).format('H:mm') : '',
+                        waktu_mulai: getTamu.responseData.data?.waktu_mulai, 
+                        waktu_selesai: getTamu.responseData.data?.waktu_selesai,
                         keperluan: getTamu.responseData.data?.keperluan,
                         asal_instansi: getTamu.responseData.data?.asal_instansi,
                         nama_tamu: getTamu.responseData.data?.nama_tamu,
@@ -42,8 +42,11 @@ export default function EditBukuTamu() {
     const handleCuti = async (handleSubmit) => {
         setLoad(true)
         try {
-            const post = await request(config.apiHost + '/buku-tamu/update/' + router.query.id, handleSubmit, 'put', true);
-            console.log(post.responseData.status)
+            let submit = {
+                ...handleSubmit,
+                tujuan: '598546d3-e840-4782-9c43-5b10a8c6b951'
+            }
+            const post = await request(config.apiHost + '/buku-tamu/update/' + router.query.id, submit, 'put', true);
             setLoad(false)
             if (post.responseData.status === 'SUCCESS') {
                 router.push('/kunjungan/buku-tamu')
@@ -248,7 +251,6 @@ export default function EditBukuTamu() {
                                 </button>
 
                             </div>
-
                         </form>
                     </div>
                 </div>

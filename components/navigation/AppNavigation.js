@@ -14,10 +14,10 @@ const data = [
     'link':'/kegiatan',
     'title':'Kegiatan',
   },
-  // {
-  //   'link':'/kunjungan-tamu',
-  //   'title':'Kunjungan Tamu',
-  // },
+  {
+    'link':'/kunjungan',
+    'title':'Kunjungan',
+  },
   // {
   //   'link':'/admin',
   //   'title':'Admin',
