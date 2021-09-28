@@ -2,75 +2,39 @@ import * as React from 'react'
 import { useRouter } from "next/router";
 import { AdjustmentsIcon } from "@heroicons/react/solid";
 import Modal from './modal/Modal';
+import { request } from '../../shared/fetcher/FetcherHooks';
+import config from '../../../utils/Config';
+import moment from 'moment';
 
 export default function ListBukuTamu() {
     const router = useRouter();
     const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
     const [open, setOpen] = React.useState(false);
+    const [result, setResult] = React.useState(false);
     const [type, setType] = React.useState(0);
+    const [tamu, setTamu] = React.useState([]);
+    const [dash, setDash] = React.useState([]);
+    const [data, setData] = React.useState({});
+
 
     function toggleAdvancedFilter() {
         setshowAdvancedFilter(!showAdvancedFilter);
     }
 
-    const tamu = [
-        {
-            kartu: 'Cuti Tahunan',
-            nama: 'Daniel',
-            asal: 'Wakanda',
-            nik: '123321456654',
-            jam_datang: '11.00',
-            jam_pulang: '12.00',
-            tujuan: 'Yayat Hendayana, S.s.',
-            keperluan: 'Rapat Koordinasi',
-            hp: '08783141432',
-            alamat: 'Cibinong',
-            status_perjanjian: 'Tanpa Perjanjian',
-            status: 0
-        }, {
-            kartu: 'Cuti Tahunan',
-            nama: 'Daniel',
-            asal: 'Wakanda',
-            nik: '123321456654',
-            jam_datang: '11.00',
-            jam_pulang: '',
-            tujuan: 'Yayat Hendayana, S.s.',
-            keperluan: 'Rapat Koordinasi',
-            hp: '08783141432',
-            alamat: 'Cibinong',
-            status_perjanjian: 'Tanpa Perjanjian',
-            status: 1
-        }, {
-            kartu: 'Cuti Tahunan',
-            nama: 'Daniel',
-            asal: 'Wakanda',
-            nik: '123321456654',
-            jam_datang: '10.00',
-            jam_pulang: '12.00',
-            tujuan: 'Yayat Hendayana, S.s.',
-            keperluan: 'Rapat Koordinasi',
-            hp: '08783141432',
-            alamat: 'Cibinong',
-            status_perjanjian: 'Tanpa Perjanjian',
-            status: -1
-        }, {
-            kartu: 'Cuti Tahunan',
-            nama: 'Daniel',
-            asal: 'Wakanda',
-            nik: '123321456654',
-            jam_datang: '11.00',
-            jam_pulang: '13.00',
-            tujuan: 'Yayat Hendayana, S.s.',
-            keperluan: 'Rapat Koordinasi',
-            hp: '08783141432',
-            alamat: 'Cibinong',
-            status_perjanjian: 'Tanpa Perjanjian',
-            status: 2
-        }
-    ]
+    const refresh = (data) => {
+        setResult(data)
+        console.log(data)
+      }
 
-    const openModal = (tipe) => {
+    const openModal = (tipe,nomor_kartu,nik,id) => {
+        setData({
+            status: tipe,
+            nomor_kartu : nomor_kartu,
+            nik: nik,
+            id: id
+        })
         setOpen(true)
+        setResult(false)
         setType(tipe)
     }
 
@@ -78,9 +42,22 @@ export default function ListBukuTamu() {
         setOpen(data);
     };
 
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const getTamu = await request(config.apiHost + '/buku-tamu', '', 'get', true);
+                const getDash = await request(config.apiHost + '/buku-tamu/hitung-dashboard', '', 'get', true);
+                setTamu(getTamu.responseData.data)
+                setDash(getDash.responseData.data)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
+    }, [result]);
+
     return (
         <>
-            {open && <Modal close={closeModal} tipe={type} />}
+            {open && <Modal close={closeModal} tipe={type} data={data} result={refresh} />}
             <div className="grid grid-cols-1 gap-4 lg:col-span-4">
                 <section aria-labelledby="section-2-title">
 
@@ -99,7 +76,7 @@ export default function ListBukuTamu() {
                                     Jumlah Tamu di Dalam Gedung
                                 </dt>
                                 <dt className="text-3xl font-medium pt-2 text-indigo-600">
-                                    1
+                                    {dash[0]?.jmlh_tamu_dalam_gedung}
                                 </dt>
                             </div>
                             <div className="w-full bg-gray-100 rounded-xl p-6">
@@ -107,7 +84,7 @@ export default function ListBukuTamu() {
                                     Jumlah Tamu Hari Ini
                                 </dt>
                                 <dt className="text-3xl font-medium pt-2 text-indigo-600">
-                                    18
+                                    {dash[0]?.jmlh_tamu_hari_ini}
                                 </dt>
                             </div>
                             <div className="w-full bg-gray-100 rounded-xl p-6">
@@ -115,7 +92,7 @@ export default function ListBukuTamu() {
                                     Jumlah Tamu Bulan Ini
                                 </dt>
                                 <dt className="text-3xl font-medium pt-2 text-indigo-600">
-                                    100
+                                    {dash[0]?.jmlh_tamu_bulan_ini}
                                 </dt>
                             </div>
                         </div>
@@ -278,71 +255,78 @@ export default function ListBukuTamu() {
                                                         }
                                                     >
                                                         <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {tamu.status === 0 ?
-                                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-blue-100 text-blue-800 cursor-pointer" onClick={() => { openModal(0) }}>
+                                                            {tamu.status === 'MENUNGGU' ?
+                                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-blue-100 text-blue-800 cursor-pointer" onClick={() => { openModal('MENUNGGU',tamu?.nomor_kartu,tamu?.nik,tamu?.id) }}>
                                                                     <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-blue-400" fill="currentColor" viewBox="0 0 8 8">
                                                                         <circle cx={4} cy={4} r={3} />
                                                                     </svg>
                                                                     Menunggu
                                                                 </span>
-                                                                : tamu.status === 1 ?
-                                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-100 text-yellow-800 cursor-pointer" onClick={() => { openModal(1) }}>
-                                                                        <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
+                                                                : tamu.status === 'MASUK' ?
+                                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800 cursor-pointer" onClick={() => { openModal('MASUK',tamu?.nomor_kartu,tamu?.nik,tamu?.id) }}>
+                                                                        <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
                                                                             <circle cx={4} cy={4} r={3} />
                                                                         </svg>
-                                                                        Pulang
+                                                                        Masuk
                                                                     </span>
-                                                                    : tamu.status === 2 ?
-                                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-100 text-yellow-800 cursor-pointer" onClick={() => { openModal(2) }}>
+                                                                    : tamu.status === 'PULANG' ?
+                                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-100 text-yellow-800 cursor-pointer" onClick={() => { openModal('PULANG',tamu?.nomor_kartu,tamu?.nik,tamu?.id) }}>
                                                                             <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
                                                                                 <circle cx={4} cy={4} r={3} />
                                                                             </svg>
                                                                             Pulang
                                                                         </span>
-                                                                        : <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-100 text-gray-800 cursor-pointer" onClick={() => { openModal(-1) }}>
+                                                                        : <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-100 text-gray-800 cursor-pointer" onClick={() => { openModal('BATAL',tamu?.nomor_kartu,tamu?.nik,tamu?.id) }}>
                                                                             <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-gray-400" fill="currentColor" viewBox="0 0 8 8">
                                                                                 <circle cx={4} cy={4} r={3} />
                                                                             </svg>
                                                                             Batal
                                                                         </span>
-                                                                // : <div className="bg-yellow-100 py-1 rounded-md">
-                                                                //     <label className="block text-yellow-800 text-sm text-center cursor-pointer" onClick={() => { openModal(-3) }}> Dibatalkan</label>
-                                                                // </div>
                                                             }
                                                         </td>
                                                         <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {tamu.kartu}
+                                                            {tamu.nomor_kartu}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.nama} <br />
-                                                            {tamu.asal}
+                                                            {tamu.nama_tamu} <br />
+                                                            {tamu.asal_instansi}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                                                             {tamu.nik}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.jam_datang}
+                                                            {tamu?.waktu_mulai}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.jam_pulang}
+                                                            {tamu?.waktu_selesai}
                                                         </td>
                                                         <td className="text-indigo-800 px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.tujuan}
+                                                            {tamu.nama_tujuan}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                                                             {tamu.keperluan}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.hp}
+                                                            {tamu.nomor_telepon}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                                                             {tamu.alamat}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.status_perjanjian}
+                                                            {tamu.status_perjajian === 'YA' ? (
+                                                                'Dengan Perjanjian'
+                                                            ) : (
+                                                                'Tanpa Perjanjian'
+                                                            )}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-indigo-800">
-                                                            <button onClick={() => router.push('/kunjungan/buku-tamu/edit')} className="inline-flex items-center px-2 focus:outline-none rounded-md p-1 text-sm border border-indigo-600 ml-1 hover:bg-gray-50">
+                                                            <button
+                                                                onClick={() => router.push({
+                                                                    pathname: '/kunjungan/buku-tamu/edit',
+                                                                    query: { id: tamu?.id },
+                                                                })}
+                                                                className="inline-flex items-center px-2 focus:outline-none rounded-md p-1 text-sm border border-indigo-600 ml-1 hover:bg-gray-50"
+                                                            >
                                                                 Edit
                                                             </button>
                                                         </td>

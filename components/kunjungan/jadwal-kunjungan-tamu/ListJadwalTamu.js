@@ -2,64 +2,67 @@ import * as React from 'react'
 import { useRouter } from "next/router";
 import { AdjustmentsIcon } from "@heroicons/react/solid";
 import Modal from './modal/Modal';
+import { request } from '../../shared/fetcher/FetcherHooks';
+import config from '../../../utils/Config';
 
 export default function ListJadwalTamu() {
     const router = useRouter();
     const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
     const [open, setOpen] = React.useState(false);
     const [type, setType] = React.useState(0);
+    const [tamu, setTamu] = React.useState([]);
 
     function toggleAdvancedFilter() {
         setshowAdvancedFilter(!showAdvancedFilter);
     }
 
-    const tamu = [
-        {
-            tanggal: 'Rabu, 15 Sep 2021',
-            waktu: '09:00 - 12:00',
-            nama: 'Daniel',
-            asal: 'Wakanda',
-            jam_datang: '11.00',
-            jam_pulang: '12.00',
-            tujuan: 'Yayat Hendayana, S.s.',
-            keperluan: 'Rapat Koordinasi',
-            hp: '08783141432',
-            alamat: 'Cibinong'
-        }, {
-            tanggal: 'Rabu, 15 Sep 2021',
-            waktu: '09:00 - 12:00',
-            nama: 'Daniel',
-            asal: 'Wakanda',
-            jam_datang: '11.00',
-            jam_pulang: '',
-            tujuan: 'Yayat Hendayana, S.s.',
-            keperluan: 'Rapat Koordinasi',
-            hp: '08783141432',
-            alamat: 'Cibinong'
-        }, {
-            tanggal: 'Rabu, 15 Sep 2021',
-            waktu: '09:00 - 12:00',
-            nama: 'Daniel',
-            asal: 'Wakanda',
-            jam_datang: '10.00',
-            jam_pulang: '12.00',
-            tujuan: 'Yayat Hendayana, S.s.',
-            keperluan: 'Rapat Koordinasi',
-            hp: '08783141432',
-            alamat: 'Cibinong'
-        }, {
-            tanggal: 'Rabu, 15 Sep 2021',
-            waktu: '09:00 - 12:00',
-            nama: 'Daniel',
-            asal: 'Wakanda',
-            jam_datang: '11.00',
-            jam_pulang: '13.00',
-            tujuan: 'Yayat Hendayana, S.s.',
-            keperluan: 'Rapat Koordinasi',
-            hp: '08783141432',
-            alamat: 'Cibinong'
-        }
-    ]
+    // const tamu = [
+    //     {
+    //         tanggal: 'Rabu, 15 Sep 2021',
+    //         waktu: '09:00 - 12:00',
+    //         nama: 'Daniel',
+    //         asal: 'Wakanda',
+    //         jam_datang: '11.00',
+    //         jam_pulang: '12.00',
+    //         tujuan: 'Yayat Hendayana, S.s.',
+    //         keperluan: 'Rapat Koordinasi',
+    //         hp: '08783141432',
+    //         alamat: 'Cibinong'
+    //     }, {
+    //         tanggal: 'Rabu, 15 Sep 2021',
+    //         waktu: '09:00 - 12:00',
+    //         nama: 'Daniel',
+    //         asal: 'Wakanda',
+    //         jam_datang: '11.00',
+    //         jam_pulang: '',
+    //         tujuan: 'Yayat Hendayana, S.s.',
+    //         keperluan: 'Rapat Koordinasi',
+    //         hp: '08783141432',
+    //         alamat: 'Cibinong'
+    //     }, {
+    //         tanggal: 'Rabu, 15 Sep 2021',
+    //         waktu: '09:00 - 12:00',
+    //         nama: 'Daniel',
+    //         asal: 'Wakanda',
+    //         jam_datang: '10.00',
+    //         jam_pulang: '12.00',
+    //         tujuan: 'Yayat Hendayana, S.s.',
+    //         keperluan: 'Rapat Koordinasi',
+    //         hp: '08783141432',
+    //         alamat: 'Cibinong'
+    //     }, {
+    //         tanggal: 'Rabu, 15 Sep 2021',
+    //         waktu: '09:00 - 12:00',
+    //         nama: 'Daniel',
+    //         asal: 'Wakanda',
+    //         jam_datang: '11.00',
+    //         jam_pulang: '13.00',
+    //         tujuan: 'Yayat Hendayana, S.s.',
+    //         keperluan: 'Rapat Koordinasi',
+    //         hp: '08783141432',
+    //         alamat: 'Cibinong'
+    //     }
+    // ]
 
     const openModal = (tipe) => {
         setOpen(true)
@@ -69,6 +72,17 @@ export default function ListJadwalTamu() {
     const closeModal = (data) => {
         setOpen(data);
     };
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const getTamu = await request(config.apiHost + '/buku-tamu-pimpinan', '', 'get', true);
+                setTamu(getTamu.responseData.data)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
+    }, []);
 
     return (
         <>
@@ -215,23 +229,23 @@ export default function ListJadwalTamu() {
                                                         }
                                                     >
                                                         <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {tamu.tanggal}
+                                                            {moment(tamu?.tanggal_kunjungan).format("D/M/Y")}
                                                         </td>
                                                         <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {tamu.waktu}
+                                                            {moment(tamu?.waktu_mulai).format("H:mm")} - {moment(tamu?.waktu_selesai).format("H:mm")}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.nama} <br />
-                                                            {tamu.asal}
+                                                            {tamu.nama_tamu} <br />
+                                                            {tamu.asal_instansi}
                                                         </td>
                                                         <td className="text-indigo-800 px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.tujuan}
+                                                            Yayat Hendayana, S.s.
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                                                             {tamu.keperluan}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.hp}
+                                                            {tamu.nomor_telepon}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                                                             {tamu.alamat}

@@ -1,49 +1,98 @@
 import * as React from 'react'
 import { useRouter } from "next/router";
 import { AdjustmentsIcon } from "@heroicons/react/solid";
+import { request } from '../../shared/fetcher/FetcherHooks';
+import config from '../../../utils/Config';
+import moment from 'moment';
 
 export default function ListRekapTamu() {
     const router = useRouter();
     const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
+    const [tamu, setTamu] = React.useState([]);
 
     function toggleAdvancedFilter() {
         setshowAdvancedFilter(!showAdvancedFilter);
     }
 
-    const tamu = [
-        {
-            no: '1',
-            tanggal: '10 Juli 2021',
-            hari: 'Jumat',
-            nama: 'Daniel',
-            asal: 'Wakanda',
-            nik: '123321456654',
-            jam_datang: '11.00',
-            jam_pulang: '12.00',
-            tujuan: 'Yayat Hendayana, S.s.',
-            keperluan: 'Rapat Koordinasi',
-            hp: '08783141432',
-            alamat: 'Cibinong',
-            status_perjajian: 'Dengan Perjanjian',
-            status: '1'
-        },
-        {
-            no: '2',
-            tanggal: '10 Juli 2021',
-            hari: 'Jumat',
-            nama: 'Daniel',
-            asal: 'Wakanda',
-            nik: '123321456654',
-            jam_datang: '11.00',
-            jam_pulang: '12.00',
-            tujuan: 'Yayat Hendayana, S.s.',
-            keperluan: 'Rapat Koordinasi',
-            hp: '08783141432',
-            alamat: 'Cibinong',
-            status_perjajian: 'Dengan Perjanjian',
-            status: '-1'
+    // const tamu = [
+    //     {
+    //         no: '1',
+    //         tanggal: '10 Juli 2021',
+    //         hari: 'Jumat',
+    //         nama: 'Daniel',
+    //         asal: 'Wakanda',
+    //         nik: '123321456654',
+    //         jam_datang: '11.00',
+    //         jam_pulang: '12.00',
+    //         tujuan: 'Yayat Hendayana, S.s.',
+    //         keperluan: 'Rapat Koordinasi',
+    //         hp: '08783141432',
+    //         alamat: 'Cibinong',
+    //         status_perjajian: 'Dengan Perjanjian',
+    //         status: '1'
+    //     },
+    //     {
+    //         no: '2',
+    //         tanggal: '10 Juli 2021',
+    //         hari: 'Jumat',
+    //         nama: 'Daniel',
+    //         asal: 'Wakanda',
+    //         nik: '123321456654',
+    //         jam_datang: '11.00',
+    //         jam_pulang: '12.00',
+    //         tujuan: 'Yayat Hendayana, S.s.',
+    //         keperluan: 'Rapat Koordinasi',
+    //         hp: '08783141432',
+    //         alamat: 'Cibinong',
+    //         status_perjajian: 'Dengan Perjanjian',
+    //         status: '-1'
+    //     }
+    // ]
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const getTamu = await request(config.apiHost + '/buku-tamu/rekap-tamu', '', 'get', true);
+                console.log(getTamu)
+                setTamu(getTamu.responseData.data)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
+    }, []);
+
+    const getDays = (data) => {
+        let hari = ''
+        const day = moment(data).format("dddd")
+        
+        switch (day) {
+            case 'Monday':
+                hari = 'Senin'
+                break
+            case 'Tuesday':
+                hari = 'Selasa'
+                break
+            case 'Wednesday':
+                hari = 'Rabu'
+                break
+            case 'Thrusday':
+                hari = 'Kamis'
+                break
+            case 'Friday':
+                hari = 'Jumat'
+                break
+            case 'Saturday':
+                hari = 'Sabtu'
+                break
+            case 'Sunday':
+                hari = 'Minggu'
+                break
+            default:
+                hari = ''
         }
-    ]
+
+        return hari
+    }
 
     return (
         <>
@@ -116,7 +165,7 @@ export default function ListRekapTamu() {
                         <div className="-my-2 overflow-x-auto sm:mx-0 ">
                             <div className="py-2 overflow-visible  align-start inline-block min-w-full sm:px-0 lg:px-0">
                                 <div className=" overflow-visible border-b border-gray-200 sm:rounded-lg">
-                                    <table className="w-full mt-4 overflow-visible rounded-lg bg-gray-100 table-auto">
+                                    <table className="w-full mt-4 overflow-visible rounded-lg bg-gray-100 table-auto" style={{ width: '1900px' }}>
                                         <thead className="bg-gray-50">
                                             <tr>
                                                 <th
@@ -220,25 +269,26 @@ export default function ListRekapTamu() {
                                                             {tamuIdx + 1}
                                                         </td>
                                                         <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {tamu.tanggal}
+                                                            {moment(tamu?.tanggal_kunjungan).format("D/M/Y")}
                                                         </td>
                                                         <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {tamu.hari}
+                                                            {getDays(tamu?.tanggal_kunjungan)}
+                                                            {/* {moment(tamu?.tanggal_kunjungan).format("dddd")} */}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.nama}
+                                                            {tamu.nama_tamu}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.asal}
+                                                            {tamu.asal_instansi}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                                                             {tamu.nik}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.jam_datang}
+                                                            {moment(tamu?.waktu_mulai).format("H:mm")}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.jam_pulang}
+                                                            {moment(tamu?.waktu_selesai).format("H:mm")}
                                                         </td>
                                                         <td className="text-indigo-800 px-6 py-4 text-xs font-medium text-gray-900">
                                                             {tamu.tujuan}
@@ -247,16 +297,20 @@ export default function ListRekapTamu() {
                                                             {tamu.keperluan}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.hp}
+                                                            {tamu.nomor_telepon}
                                                         </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900 tracking-wider">
                                                             {tamu.alamat}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.status_perjajian}
+                                                            {tamu.status_perjajian === 'YA' ? (
+                                                                'Dengan Perjanjian'
+                                                            ) : (
+                                                                'Tanpa Perjanjian'
+                                                            )}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium flex">
-                                                            {tamu.status === '1' ? (
+                                                            {tamu.status === 'KUNJUNGAN' ? (
                                                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-green-100 text-green-800">
                                                                     Kunjungan
                                                                 </span>
