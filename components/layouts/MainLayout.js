@@ -6,7 +6,7 @@ import {
   XIcon,
   LogoutIcon,
 } from "@heroicons/react/outline";
-import { ArrowCircleRightIcon, SearchIcon } from "@heroicons/react/solid";
+import { ArrowCircleRightIcon, SearchIcon, UserCircleIcon } from "@heroicons/react/solid";
 import MainNav from "../navigation/AppNavigation";
 import Head from "next/head";
 
@@ -21,14 +21,14 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function MainLayout({ children }) {
-  const [user, setUser] = useState(null);
-
+export default function MainLayout({ children, single }) {
+  
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("refreshtoken");
   };
-
+  
+  const [user, setUser] = useState(null);
   useEffect(() => {
     (async () => {
       try {
@@ -70,7 +70,8 @@ export default function MainLayout({ children }) {
       <Popover as="header" className="pb-24 bg-indigo-600">
         {({ open }) => (
           <>
-            <div className="container mx-auto px-3 md:px-0">
+            <div className={`container mx-auto px-3 lg:px-9 ${single ? "hidden md:block" : ""}`}>
+            
               <div className="flex py-5 flex items-center justify-center lg:justify-between">
                 {/* Logo */}
                 <div className=" left-0 flex-shrink-0 lg:static">
@@ -101,11 +102,12 @@ export default function MainLayout({ children }) {
                         <div>
                           <Menu.Button className="bg-white rounded-full flex text-sm ring-2 ring-white ring-opacity-20 focus:outline-none focus:ring-opacity-100">
                             <span className="sr-only">Open user menu</span>
-                            <img
+                            {/* <img
                               className="h-8 w-8 rounded-full"
                               src="https://dikti.kemdikbud.go.id/wp-content/uploads/2020/03/cropped-logo-dikbud.png"
                               alt=""
-                            />
+                            /> */}
+                            <UserCircleIcon className="h-8 w-8 text-indigo-500"/>
                           </Menu.Button>
                         </div>
                         <Transition
@@ -323,14 +325,13 @@ export default function MainLayout({ children }) {
         )}
       </Popover>
 
-      <main className="-mt-24 pb-8 container mx-auto ">{children}</main>
+      <main className="-mt-24 pb-8 lg:px-9  container mx-auto ">{children}</main>
 
       <div className="mx-3"></div>
 
-      <BottomNav />
 
-      <footer>
-        <div className="container mx-auto">
+      <footer className="hidden md:flex ">
+        <div className="container mx-auto lg:px-9" >
           <div className="border-t border-gray-200 py-8 text-sm text-gray-500 text-center sm:text-left">
             <span className="block sm:inline">
               &copy; 2021 Tata Usaha Setditjen DIKTI.

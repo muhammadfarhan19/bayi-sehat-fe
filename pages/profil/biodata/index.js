@@ -2,6 +2,7 @@ import { Tab } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import BottomNav from "../../../components/BottomNav";
 import MainLayout from "../../../components/layouts/MainLayout";
 import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
 import { getUser, request, useUser } from "../../../components/shared/fetcher/FetcherHooks";
@@ -318,12 +319,13 @@ export default function Biodata(params) {
     <MainLayout>
       {/* Main 3 column grid */}
       <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
-        <ModuleNavigation />
-        <div className="grid grid-cols-1 gap-4 lg:col-span-3">
+        {/* <ModuleNavigation menu={menu} /> */}
+        <div className="grid grid-cols-1 gap-2 lg:col-span-4">
           <KartuProfil user={JSON.stringify(user)} />
           <TabBiodata biodata={biodata} />
         </div>
       </div>
+      <BottomNav/>
     </MainLayout>
   );
 }

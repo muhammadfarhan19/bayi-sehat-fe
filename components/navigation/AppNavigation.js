@@ -3,24 +3,43 @@ import { useRouter } from "next/router";
 import { useEffect,useState } from "react";
 import config from '../../utils/Config'
 import { request } from '../shared/fetcher/FetcherHooks';
+// import PeminjamanMenu from '../../components/PeminjamanMenu'
 
+const data = [
+  {
+    'link':'/',
+    'title':'Beranda',
+  },
+  {
+    'link':'/kegiatan',
+    'title':'Kegiatan',
+  },
+  // {
+  //   'link':'/kunjungan-tamu',
+  //   'title':'Kunjungan Tamu',
+  // },
+  // {
+  //   'link':'/admin',
+  //   'title':'Admin',
+  // },
+]
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function AppNavigation() {
-  const [data , setData] = useState([])
+  // const [data , setData] = useState([])
   const router = useRouter();
 
   useEffect(() => {
-    (async () => {
-      try {
-        const getApp = await request(config.apiHost + '/menu-application', '', 'get', true);
-        setData(getApp.responseData)
-      } catch (e) {
-        console.log(e)
-      }
-    })();
+    // (async () => {
+    //   try {
+    //     const getApp = await request(config.apiHost + '/menu-application', '', 'get', true);
+    //     setData(getApp.responseData)
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // })();
   }, [])
   
   return (
@@ -44,6 +63,8 @@ function AppNavigation() {
                 </a>
               </Link>
             ))}
+
+            {/* <PeminjamanMenu/> */}
           </nav>
         </div>
       </div>
