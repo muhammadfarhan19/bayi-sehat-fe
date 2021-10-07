@@ -116,7 +116,7 @@ export default function AddBukuTamu() {
                                                 name="push-notifications"
                                                 type="radio"
                                                 className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                                                value="umum"
+                                                value="UMUM"
                                                 {...register('jenis_tamu', { required: true })}
                                                 name="jenis_tamu"
                                             />
@@ -129,7 +129,7 @@ export default function AddBukuTamu() {
                                                 name="push-notifications"
                                                 type="radio"
                                                 className="focus:ring-indigo-500 h-4 w-4 ml-4 text-indigo-600 border-gray-300"
-                                                value="pimpinan"
+                                                value="PIMPINAN"
                                                 {...register('jenis_tamu', { required: true })}
                                                 name="jenis_tamu"
                                             />
