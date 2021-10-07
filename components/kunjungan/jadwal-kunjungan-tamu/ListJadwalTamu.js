@@ -1,77 +1,36 @@
 import * as React from 'react'
 import { useRouter } from "next/router";
 import { AdjustmentsIcon } from "@heroicons/react/solid";
-import Modal from './modal/Modal';
 import { request } from '../../shared/fetcher/FetcherHooks';
 import config from '../../../utils/Config';
+import moment from 'moment';
+import DeleteModal from './modal/DeteleModal';
 
 export default function ListJadwalTamu() {
     const router = useRouter();
     const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
     const [open, setOpen] = React.useState(false);
-    const [type, setType] = React.useState(0);
+    const [result, setResult] = React.useState(false);
+    const [data, setData] = React.useState('');
     const [tamu, setTamu] = React.useState([]);
 
     function toggleAdvancedFilter() {
         setshowAdvancedFilter(!showAdvancedFilter);
     }
 
-    // const tamu = [
-    //     {
-    //         tanggal: 'Rabu, 15 Sep 2021',
-    //         waktu: '09:00 - 12:00',
-    //         nama: 'Daniel',
-    //         asal: 'Wakanda',
-    //         jam_datang: '11.00',
-    //         jam_pulang: '12.00',
-    //         tujuan: 'Yayat Hendayana, S.s.',
-    //         keperluan: 'Rapat Koordinasi',
-    //         hp: '08783141432',
-    //         alamat: 'Cibinong'
-    //     }, {
-    //         tanggal: 'Rabu, 15 Sep 2021',
-    //         waktu: '09:00 - 12:00',
-    //         nama: 'Daniel',
-    //         asal: 'Wakanda',
-    //         jam_datang: '11.00',
-    //         jam_pulang: '',
-    //         tujuan: 'Yayat Hendayana, S.s.',
-    //         keperluan: 'Rapat Koordinasi',
-    //         hp: '08783141432',
-    //         alamat: 'Cibinong'
-    //     }, {
-    //         tanggal: 'Rabu, 15 Sep 2021',
-    //         waktu: '09:00 - 12:00',
-    //         nama: 'Daniel',
-    //         asal: 'Wakanda',
-    //         jam_datang: '10.00',
-    //         jam_pulang: '12.00',
-    //         tujuan: 'Yayat Hendayana, S.s.',
-    //         keperluan: 'Rapat Koordinasi',
-    //         hp: '08783141432',
-    //         alamat: 'Cibinong'
-    //     }, {
-    //         tanggal: 'Rabu, 15 Sep 2021',
-    //         waktu: '09:00 - 12:00',
-    //         nama: 'Daniel',
-    //         asal: 'Wakanda',
-    //         jam_datang: '11.00',
-    //         jam_pulang: '13.00',
-    //         tujuan: 'Yayat Hendayana, S.s.',
-    //         keperluan: 'Rapat Koordinasi',
-    //         hp: '08783141432',
-    //         alamat: 'Cibinong'
-    //     }
-    // ]
-
-    const openModal = (tipe) => {
+    const openModal = (id) => {
+        setData(id)
         setOpen(true)
-        setType(tipe)
     }
 
     const closeModal = (data) => {
         setOpen(data);
     };
+
+    const refresh = (data) => {
+        setResult(data)
+        console.log(data)
+    }
 
     React.useEffect(() => {
         (async () => {
@@ -82,11 +41,11 @@ export default function ListJadwalTamu() {
                 console.log(e)
             }
         })();
-    }, []);
+    }, [result]);
 
     return (
         <>
-            {open && <Modal close={closeModal} tipe={type} />}
+            {open && <DeleteModal close={closeModal} data={data} result={refresh} />}
             <div className="grid grid-cols-1 gap-4 lg:col-span-4">
                 <div className="bg-white rounded-md shadow ">
                     <div className="flex align-center mb-3 pt-3 px-6 pt-6">
@@ -161,7 +120,7 @@ export default function ListJadwalTamu() {
                     )}
 
                     <div className="flex">
-                        <div className="-my-2 overflow-x-auto sm:mx-0 ">
+                        <div className="-my-2 overflow-x-auto sm:mx-0 w-full">
                             <div className="py-2 overflow-visible  align-start inline-block min-w-full sm:px-0 lg:px-0">
                                 <div className=" overflow-visible border-b border-gray-200 sm:rounded-lg">
                                     <table className="w-full mt-4 overflow-visible rounded-lg bg-gray-100 table-auto">
@@ -211,56 +170,73 @@ export default function ListJadwalTamu() {
                                                 </th>
                                                 <th
                                                     scope="col"
-                                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
+                                                    className="px-16 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                                                 >
                                                     Aksi
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {tamu.map(
-                                                (tamu, tamuIdx) => (
-                                                    <tr
-                                                        key={tamuIdx}
-                                                        className={
-                                                            tamuIdx % 2 === 0
-                                                                ? "bg-white hover:bg-gray-100"
-                                                                : "bg-gray-50 hover:bg-gray-100"
-                                                        }
-                                                    >
-                                                        <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {moment(tamu?.tanggal_kunjungan).format("D/M/Y")}
-                                                        </td>
-                                                        <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {moment(tamu?.waktu_mulai).format("H:mm")} - {moment(tamu?.waktu_selesai).format("H:mm")}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.nama_tamu} <br />
-                                                            {tamu.asal_instansi}
-                                                        </td>
-                                                        <td className="text-indigo-800 px-6 py-4 text-xs font-medium text-gray-900">
-                                                            Yayat Hendayana, S.s.
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.keperluan}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.nomor_telepon}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.alamat}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium flex">
-                                                            <button onClick={() => router.push('/kunjungan/jadwal-kunjungan-tamu/edit')} className="inline-flex items-center px-3 focus:outline-none rounded-md bg-indigo-600 text-sm border border-indigo-600 text-white ml-1 hover:bg-indigo-700">
-                                                                Edit
-                                                            </button>
-                                                            <button onClick={() => router.push('#')} className="inline-flex items-center px-2 ml-2 focus:outline-none rounded-md p-1 text-sm  text-red-500 border border-red-600 ml-1 hover:bg-red-50">
-                                                                Hapus
-                                                            </button>
-                                                        </td>
+                                            {tamu?.length > 0 ? (
+                                                <>
+                                                    {tamu.map(
+                                                        (tamu, tamuIdx) => (
+                                                            <tr
+                                                                key={tamuIdx}
+                                                                className={
+                                                                    tamuIdx % 2 === 0
+                                                                        ? "bg-white hover:bg-gray-100"
+                                                                        : "bg-gray-50 hover:bg-gray-100"
+                                                                }
+                                                            >
+                                                                <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
+                                                                    {moment(tamu?.tanggal_kunjungan).format("D/M/Y")}
+                                                                </td>
+                                                                <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
+                                                                    {tamu?.waktu_mulai} - {tamu?.waktu_selesai}
+                                                                </td>
+                                                                <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                    {tamu.nama_tamu} <br />
+                                                                    {tamu.asal_instansi}
+                                                                </td>
+                                                                <td className="text-indigo-800 px-6 py-4 text-xs font-medium text-gray-900">
+                                                                    {tamu.nama_tujuan}
+                                                                </td>
+                                                                <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                    {tamu.keperluan}
+                                                                </td>
+                                                                <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                    {tamu.nomor_telepon}
+                                                                </td>
+                                                                <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                    {tamu.alamat}
+                                                                </td>
+                                                                <td className="px-6 py-4 text-xs font-medium flex">
+                                                                    <button
+                                                                        onClick={() => router.push({
+                                                                            pathname: '/kunjungan/jadwal-kunjungan-tamu/edit',
+                                                                            query: { id: tamu?.id },
+                                                                        })}
+                                                                        className="inline-flex items-center px-3 focus:outline-none rounded-md bg-indigo-600 text-sm border border-indigo-600 text-white ml-1 hover:bg-indigo-700">
+                                                                        Edit
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => { openModal(tamu?.id) }}
+                                                                        className="inline-flex items-center px-2 ml-2 focus:outline-none rounded-md p-1 text-sm  text-red-500 border border-red-600 ml-1 hover:bg-red-50">
+                                                                        Hapus
+                                                                    </button>
+                                                                </td>
 
-                                                    </tr>
-                                                )
+                                                            </tr>
+                                                        )
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <tr className="text-center bg-white hover:bg-gray-100">
+                                                    <td className="px-6 py-4 text-xs font-medium text-gray-900" colSpan="8">
+                                                        Tidak ada tamu hari ini
+                                                    </td>
+                                                </tr>
                                             )}
                                         </tbody>
                                     </table>
@@ -270,9 +246,6 @@ export default function ListJadwalTamu() {
                     </div>
                 </div>
             </div>
-
-
-
         </>
     )
 }

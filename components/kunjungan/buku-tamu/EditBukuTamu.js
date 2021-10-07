@@ -8,12 +8,17 @@ import FetcherAlert from '../../shared/alert/FetcherAlert';
 import FetcherLoading from '../../shared/loading/fetcherLoading';
 import { useDispatch } from 'react-redux';
 import { AlertAction } from '../../../action/ActionTypes';
+import AutoComplete from '../../shared/AutoComplete';
 
 export default function EditBukuTamu() {
     const router = useRouter();
     const { handleSubmit, register, reset, getValues, formState: { errors } } = useForm();
     const [load, setLoad] = React.useState(false);
     const dispatch = useDispatch();
+    const [tujuan, setTujuan] = React.useState([])
+    const [uuid, setUuid] = React.useState('')
+    const [namakunjungan, setNamakunjungan] = React.useState('')
+    const [open, setOpen] = React.useState(false)
 
     React.useEffect(() => {
         if (router.query.id) {
@@ -31,7 +36,10 @@ export default function EditBukuTamu() {
                         nik: getTamu.responseData.data?.nik,
                         nomor_telepon: getTamu.responseData.data?.nomor_telepon,
                         alamat: getTamu.responseData.data?.alamat,
+                        tujuan: getTamu.responseData.data?.nama_tujuan,
                     });
+                    setUuid(getTamu.responseData.data?.tujuan)
+                    setNamakunjungan(getTamu.responseData.data?.nama_tujuan)
                 } catch (e) {
                     console.log(e)
                 }
@@ -44,7 +52,7 @@ export default function EditBukuTamu() {
         try {
             let submit = {
                 ...handleSubmit,
-                tujuan: '598546d3-e840-4782-9c43-5b10a8c6b951'
+                tujuan: uuid
             }
             const post = await request(config.apiHost + '/buku-tamu/update/' + router.query.id, submit, 'put', true);
             setLoad(false)
@@ -61,6 +69,30 @@ export default function EditBukuTamu() {
             }
         } catch (e) {
             setLoad(false)
+        }
+    }
+
+    const nama = (data) => {
+        setOpen(data.open)
+        setNamakunjungan(data.dataNama)
+        setUuid(data.dataUuid)
+    }
+
+    const handleOpen = (e) => {
+        setNamakunjungan(e.target.value)
+        const count = e.target.value.length
+        if (count > 1) {
+            (async () => {
+                try {
+                    const getData = await request(config.apiHost + '/buku-tamu/tujuan/' + e.target.value, '', 'get', true);
+                    setTujuan(getData.responseData.data)
+                } catch (e) {
+                    console.log(e)
+                }
+            })();
+            setOpen(true)
+        } else {
+            setOpen(false)
         }
     }
 
@@ -148,18 +180,24 @@ export default function EditBukuTamu() {
                                 </div>
                             </div>
 
-                            <div class="w-full flex mb-4 gap-4">
-                                <div class="w-full">
+                            <div className="w-full flex mb-4 gap-4">
+                                <div className="w-full">
                                     <label className="block text-gray-700 text-sm mb-2"> Tujuan</label>
                                     <input
                                         type="text"
-                                        name="c_password"
-                                        defaultValue="Ratna"
-                                        readOnly
-                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm placeholder-gray-400 bg-gray-100 focus:ring-transparent cursor-not-allowed"
+                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
+                                        {...register('tujuan', { required: true })}
+                                        name="tujuan"
+                                        onChange={handleOpen}
+                                        autocomplete="off"
+                                        value={namakunjungan}
                                     />
+
+                                    {errors.tujuan && <p className="mt-1 text-red-500 text-xs">Silahkan pilih tujuan</p>}
                                 </div>
                             </div>
+
+                            {open && <AutoComplete result={nama} dataTujuan={tujuan} />}
 
                             <div class="w-full flex mb-4 gap-4">
                                 <div class="w-full">

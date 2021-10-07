@@ -1,24 +1,32 @@
 import * as React from 'react'
 import { useRouter } from "next/router";
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { request } from '../../shared/fetcher/FetcherHooks';
 import config from '../../../utils/Config';
 import FetcherLoading from '../../shared/loading/fetcherLoading';
 import FetcherAlert from '../../shared/alert/FetcherAlert';
 import { useDispatch } from 'react-redux';
 import { AlertAction } from '../../../action/ActionTypes';
+import AutoComplete from '../../shared/AutoComplete';
 
 export default function AddBukuTamu() {
     const router = useRouter();
     const { handleSubmit, register, formState: { errors } } = useForm();
     const [load, setLoad] = React.useState(false);
+    const [open, setOpen] = React.useState(false)
+    const [tujuan, setTujuan] = React.useState([])
+    const [uuid, setUuid] = React.useState('')
+    const [namakunjungan, setNamakunjungan] = React.useState('')
     const dispatch = useDispatch();
 
     const handleCuti = async (handleSubmit) => {
         setLoad(true)
+        let submit = {
+            ...handleSubmit,
+            tujuan: uuid
+        }
         try {
-            const post = await request(config.apiHost + '/buku-tamu/post', handleSubmit, 'post', true);
-            console.log(post.responseData.status)
+            const post = await request(config.apiHost + '/buku-tamu/post', submit, 'post', true);
             setLoad(false)
             if (post.responseData.status === 'SUCCESS') {
                 router.push('/kunjungan/buku-tamu')
@@ -33,6 +41,30 @@ export default function AddBukuTamu() {
             }
         } catch (e) {
             setLoad(false)
+        }
+    }
+
+    const nama = (data) => {
+        setOpen(data.open)
+        setNamakunjungan(data.dataNama)
+        setUuid(data.dataUuid)
+    }
+
+    const handleOpen = (e) => {
+        setNamakunjungan(e.target.value)
+        const count = e.target.value.length
+        if (count > 1) {
+            (async () => {
+                try {
+                    const getData = await request(config.apiHost + '/buku-tamu/tujuan/' + e.target.value, '', 'get', true);
+                    setTujuan(getData.responseData.data)
+                } catch (e) {
+                    console.log(e)
+                }
+            })();
+            setOpen(true)
+        } else {
+            setOpen(false)
         }
     }
 
@@ -62,8 +94,8 @@ export default function AddBukuTamu() {
                     </div>
 
                     <div className="w-full px-6">
+
                         <form className="py-1" onSubmit={handleSubmit(handleCuti)}>
-                            {/* <input type="hidden" {...register('users_id')} name="users_id" value={user?.id} /> */}
                             <div className="w-full flex mb-4 gap-4">
                                 <div className="w-1/2">
                                     <label className="block text-gray-700 text-sm mb-2"> Nomor Kartu</label>
@@ -113,17 +145,23 @@ export default function AddBukuTamu() {
                             <div className="w-full flex mb-4 gap-4">
                                 <div className="w-full">
                                     <label className="block text-gray-700 text-sm mb-2"> Tujuan</label>
-                                    <select
-                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    <input
+                                        type="tes"
+                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
                                         {...register('tujuan', { required: true })}
                                         name="tujuan"
-                                    >
-                                        <option value="">Silahkan Pilih</option>
-                                        <option value="598546d3-e840-4782-9c43-5b10a8c6b951">Ratna</option>
-                                    </select>
-                                    {errors.tujuan && errors.tujuan.type === "required" && <p className="mt-1 text-red-500 text-xs">Silahkan masukan tujuan kunjungan</p>}
+                                        onChange={handleOpen}
+                                        autocomplete="off"
+                                        value={namakunjungan}
+
+                                    />
+
+                                    {errors.tujuan && <p className="mt-1 text-red-500 text-xs">Silahkan pilih tujuan</p>}
                                 </div>
                             </div>
+
+                            {open && <AutoComplete result={nama} dataTujuan={tujuan} />}
+
 
                             <div className="w-full flex mb-4 gap-4">
                                 <div className="w-full">
@@ -215,6 +253,7 @@ export default function AddBukuTamu() {
                             </div>
 
                         </form>
+
                     </div>
                 </div>
             </div>

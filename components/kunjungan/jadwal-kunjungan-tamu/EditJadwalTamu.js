@@ -1,8 +1,97 @@
 import * as React from 'react'
 import { useRouter } from "next/router";
+import { request } from '../../shared/fetcher/FetcherHooks';
+import config from '../../../utils/Config';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import moment from 'moment';
+import AutoComplete from '../../shared/AutoComplete';
 
 export default function EditJadwalTamu() {
     const router = useRouter();
+    const { handleSubmit, register, reset, getValues, formState: { errors } } = useForm();
+    const [load, setLoad] = React.useState(false);
+    const dispatch = useDispatch();
+    const [tujuan, setTujuan] = React.useState([])
+    const [uuid, setUuid] = React.useState('')
+    const [namakunjungan, setNamakunjungan] = React.useState('')
+    const [open, setOpen] = React.useState(false)
+
+    React.useEffect(() => {
+        if (router.query.id) {
+            (async () => {
+                try {
+                    const getTamu = await request(config.apiHost + '/buku-tamu/' + router.query.id, '', 'get', true);
+                    reset({
+                        tanggal_kunjungan: moment(getTamu.responseData.data?.tanggal_kunjungan).format('YYYY-MM-DD'),
+                        nomor_kartu: getTamu.responseData.data?.nomor_kartu,
+                        waktu_mulai: getTamu.responseData.data?.waktu_mulai, 
+                        waktu_selesai: getTamu.responseData.data?.waktu_selesai,
+                        keperluan: getTamu.responseData.data?.keperluan,
+                        asal_instansi: getTamu.responseData.data?.asal_instansi,
+                        nama_tamu: getTamu.responseData.data?.nama_tamu,
+                        nik: getTamu.responseData.data?.nik,
+                        nomor_telepon: getTamu.responseData.data?.nomor_telepon,
+                        alamat: getTamu.responseData.data?.alamat,
+                        tujuan: getTamu.responseData.data?.nama_tujuan,
+                    });
+                    setUuid(getTamu.responseData.data?.tujuan)
+                    setNamakunjungan(getTamu.responseData.data?.nama_tujuan)
+                } catch (e) {
+                    console.log(e)
+                }
+            })();
+        }
+    }, [router])
+
+    const handlePost = async (handleSubmit) => {
+        setLoad(true)
+        try {
+            let submit = {
+                ...handleSubmit,
+                tujuan: uuid
+            }
+            const post = await request(config.apiHost + '/buku-tamu/update-jadwal-kunjungan-tamu/' + router.query.id, submit, 'put', true);
+            setLoad(false)
+            if (post.responseData.status === 'SUCCESS') {
+                router.push('/kunjungan/jadwal-kunjungan-tamu')
+            } else {
+                dispatch({
+                    type: AlertAction.SET_OPEN,
+                    open: true,
+                    title: 'Terjadi Kesalahan',
+                    subtitle: 'Silahkan coba beberapa saat lagi',
+                    status: 'error'
+                });
+            }
+        } catch (e) {
+            setLoad(false)
+        }
+    }
+
+    const nama = (data) => {
+        setOpen(data.open)
+        setNamakunjungan(data.dataNama)
+        setUuid(data.dataUuid)
+    }
+
+    const handleOpen = (e) => {
+        setNamakunjungan(e.target.value)
+        const count = e.target.value.length
+        if (count > 1) {
+            (async () => {
+                try {
+                    const getData = await request(config.apiHost + '/buku-tamu/tujuan/' + e.target.value, '', 'get', true);
+                    setTujuan(getData.responseData.data)
+                } catch (e) {
+                    console.log(e)
+                }
+            })();
+            setOpen(true)
+        } else {
+            setOpen(false)
+        }
+    }
 
     return (
         <>
@@ -27,16 +116,19 @@ export default function EditJadwalTamu() {
                     </div>
 
                     <div class="w-full px-6">
-                        <form class="py-1">
-                            {/* <input type="hidden" {...register('users_id')} name="users_id" value={user?.id} /> */}
+                        <form class="py-1" onSubmit={handleSubmit(handlePost)}>
                             <div class="w-full flex mb-4 gap-4">
                                 <div class="w-full">
                                     <label className="block text-gray-700 text-sm mb-2"> Tanggal</label>
                                     <input
-                                        type="text"
-                                        name="c_password"
-                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
+                                        type="date"
+                                        placeholder="Date"
+                                        min={moment().format('YYYY-MM-DD')}
+                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        name="tanggal_kunjungan"
+                                        {...register('tanggal_kunjungan', { required: true })}
                                     />
+                                    {errors.tanggal_kunjungan && <p className="mt-1 text-red-500 text-xs">Silahkan masukan tanggal kunjungan</p>}
                                 </div>
                             </div>
 
@@ -44,18 +136,30 @@ export default function EditJadwalTamu() {
                                 <div class="w-1/2">
                                     <label className="block text-gray-700 text-sm mb-2"> Jam Mulai</label>
                                     <input
-                                        type="text"
-                                        name="c_password"
+                                        type="time"
+                                        name="waktu_mulai"
+                                        {...register('waktu_mulai',
+                                            {
+                                                validate: (value) => value < getValues('waktu_selesai')
+                                            }
+                                        )}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
                                     />
+                                    {errors.waktu_mulai && <p className="mt-1 text-red-500 text-xs"> Silahkan masukan jam mulai, jam mulai tidak boleh lebih besar dari jam selesai </p>}
                                 </div>
                                 <div class="w-1/2">
                                     <label className="block text-gray-700 text-sm mb-2"> Jam Selesai</label>
                                     <input
-                                        type="text"
-                                        name="c_password"
+                                        type="time"
+                                        name="waktu_selesai"
+                                        {...register('waktu_selesai',
+                                        {
+                                            validate: (value) => value > getValues('waktu_mulai')
+                                        }
+                                    )}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
                                     />
+                                    {errors.waktu_selesai && <p className="mt-1 text-red-500 text-xs">Silahkan masukan jam selesai, jam selesai tidak boleh lebih kecil dari jam mulai</p>}
                                 </div>
                             </div>
 
@@ -64,20 +168,30 @@ export default function EditJadwalTamu() {
                                     <label className="block text-gray-700 text-sm mb-2"> Tujuan</label>
                                     <input
                                         type="text"
-                                        name="c_password"
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
+                                        {...register('tujuan', { required: true })}
+                                        name="tujuan"
+                                        onChange={handleOpen}
+                                        autocomplete="off"
+                                        value={namakunjungan}
                                     />
+
+                                    {errors.tujuan && <p className="mt-1 text-red-500 text-xs">Silahkan pilih tujuan</p>}
                                 </div>
                             </div>
+
+                            {open && <AutoComplete result={nama} dataTujuan={tujuan} />}
 
                             <div class="w-full flex mb-4 gap-4">
                                 <div class="w-full">
                                     <label className="block text-gray-700 text-sm mb-2"> Keperluan</label>
                                     <input
                                         type="text"
-                                        name="c_password"
+                                        name="keperluan"
+                                        {...register('keperluan', { required: true })}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
                                     />
+                                    {errors.keperluan && <p className="mt-1 text-red-500 text-xs">Silahkan masukan keperluan</p>}
                                 </div>
                             </div>
 
@@ -92,9 +206,11 @@ export default function EditJadwalTamu() {
                                     <label className="block text-gray-700 text-sm mb-2"> Asal Instansi</label>
                                     <input
                                         type="text"
-                                        name="c_password"
+                                        name="asal_instansi"
+                                        {...register('asal_instansi', { required: true })}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
                                     />
+                                    {errors.asal_instansi && <p className="mt-1 text-red-500 text-xs">Silahkan masukan asal instansi</p>}
                                 </div>
                             </div>
 
@@ -103,18 +219,22 @@ export default function EditJadwalTamu() {
                                     <label className="block text-gray-700 text-sm mb-2"> Nama</label>
                                     <input
                                         type="text"
-                                        name="c_password"
+                                        name="nama_tamu"
+                                        {...register('nama_tamu', { required: true })}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
                                     />
+                                    {errors.nama_tamu && <p className="mt-1 text-red-500 text-xs">Silahkan masukan nama tamu</p>}
                                 </div>
                                 <div class="w-1/2">
                                     <label className="block text-gray-700 text-sm mb-2"> NIK</label>
                                     <input
-                                        type="text"
-                                        name="c_password"
-                                        readOnly
+                                        type="number"
+                                        onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault() } 
+                                        name="nik"
+                                        {...register('nik', {required:true})}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
                                     />
+                                    {errors.nik && <p className="mt-1 text-red-500 text-xs">Silahkan masukan nik</p>}
                                 </div>
                             </div>
 
@@ -122,19 +242,23 @@ export default function EditJadwalTamu() {
                                 <div class="w-1/2">
                                     <label className="block text-gray-700 text-sm mb-2"> Nomor Telepon</label>
                                     <input
-                                        type="text"
-                                        name="c_password"
+                                        type="number"
+                                        onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault() } 
+                                        name="nomor_telepon"
+                                        {...register('nomor_telepon', { required: true })}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
                                     />
+                                    {errors.nomor_telepon && <p className="mt-1 text-red-500 text-xs">Silahkan masukan nomor telepon</p>}
                                 </div>
                                 <div class="w-1/2">
                                     <label className="block text-gray-700 text-sm mb-2"> Alamat</label>
                                     <input
                                         type="text"
-                                        name="c_password"
-                                        readOnly
+                                        name="alamat"
+                                        {...register('alamat', { required: true })}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
                                     />
+                                    {errors.alamat && <p className="mt-1 text-red-500 text-xs">Silahkan masukan nomor alamat</p>}
                                 </div>
                             </div>
 

@@ -24,12 +24,12 @@ export default function ListBukuTamu() {
     const refresh = (data) => {
         setResult(data)
         console.log(data)
-      }
+    }
 
-    const openModal = (tipe,nomor_kartu,nik,id) => {
+    const openModal = (tipe, nomor_kartu, nik, id) => {
         setData({
             status: tipe,
-            nomor_kartu : nomor_kartu,
+            nomor_kartu: nomor_kartu,
             nik: nik,
             id: id
         })
@@ -166,7 +166,7 @@ export default function ListBukuTamu() {
                         <div className="-my-2 overflow-x-auto sm:mx-0 ">
                             <div className="py-2 overflow-visible  align-start inline-block min-w-full sm:px-0 lg:px-0">
                                 <div className=" overflow-visible border-b border-gray-200 sm:rounded-lg">
-                                    <table className="w-full mt-4 overflow-visible rounded-lg bg-gray-100 table-auto">
+                                    <table className={tamu?.length > 0 ? "w-full mt-4 overflow-visible rounded-lg bg-gray-100 table-auto" : "w-full mt-4 overflow-visible rounded-lg bg-gray-100 table-fixed"}>
                                         <thead className="bg-gray-50">
                                             <tr>
                                                 <th
@@ -244,96 +244,109 @@ export default function ListBukuTamu() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {tamu.map(
-                                                (tamu, tamuIdx) => (
-                                                    <tr
-                                                        key={tamuIdx}
-                                                        className={
-                                                            tamuIdx % 2 === 0
-                                                                ? "bg-white hover:bg-gray-100"
-                                                                : "bg-gray-50 hover:bg-gray-100"
-                                                        }
-                                                    >
-                                                        <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {tamu.status === 'MENUNGGU' ?
-                                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-blue-100 text-blue-800 cursor-pointer" onClick={() => { openModal('MENUNGGU',tamu?.nomor_kartu,tamu?.nik,tamu?.id) }}>
-                                                                    <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-blue-400" fill="currentColor" viewBox="0 0 8 8">
-                                                                        <circle cx={4} cy={4} r={3} />
-                                                                    </svg>
-                                                                    Menunggu
-                                                                </span>
-                                                                : tamu.status === 'MASUK' ?
-                                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800 cursor-pointer" onClick={() => { openModal('MASUK',tamu?.nomor_kartu,tamu?.nik,tamu?.id) }}>
-                                                                        <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
-                                                                            <circle cx={4} cy={4} r={3} />
-                                                                        </svg>
-                                                                        Masuk
-                                                                    </span>
-                                                                    : tamu.status === 'PULANG' ?
-                                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-100 text-yellow-800 cursor-pointer" onClick={() => { openModal('PULANG',tamu?.nomor_kartu,tamu?.nik,tamu?.id) }}>
-                                                                            <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
-                                                                                <circle cx={4} cy={4} r={3} />
-                                                                            </svg>
-                                                                            Pulang
-                                                                        </span>
-                                                                        : <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-100 text-gray-800 cursor-pointer" onClick={() => { openModal('BATAL',tamu?.nomor_kartu,tamu?.nik,tamu?.id) }}>
-                                                                            <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-gray-400" fill="currentColor" viewBox="0 0 8 8">
-                                                                                <circle cx={4} cy={4} r={3} />
-                                                                            </svg>
-                                                                            Batal
-                                                                        </span>
-                                                            }
-                                                        </td>
-                                                        <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
-                                                            {tamu.nomor_kartu}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.nama_tamu} <br />
-                                                            {tamu.asal_instansi}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.nik}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu?.waktu_mulai}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu?.waktu_selesai}
-                                                        </td>
-                                                        <td className="text-indigo-800 px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.nama_tujuan}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.keperluan}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.nomor_telepon}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.alamat}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.status_perjajian === 'YA' ? (
-                                                                'Dengan Perjanjian'
-                                                            ) : (
-                                                                'Tanpa Perjanjian'
-                                                            )}
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs font-medium text-indigo-800">
-                                                            <button
-                                                                onClick={() => router.push({
-                                                                    pathname: '/kunjungan/buku-tamu/edit',
-                                                                    query: { id: tamu?.id },
-                                                                })}
-                                                                className="inline-flex items-center px-2 focus:outline-none rounded-md p-1 text-sm border border-indigo-600 ml-1 hover:bg-gray-50"
-                                                            >
-                                                                Edit
-                                                            </button>
-                                                        </td>
+                                            {tamu?.length > 0 ? (
+                                                <>
+                                                    {
+                                                        tamu.map(
+                                                            (tamu, tamuIdx) => (
+                                                                <tr
+                                                                    key={tamuIdx}
+                                                                    className={
+                                                                        tamuIdx % 2 === 0
+                                                                            ? "bg-white hover:bg-gray-100"
+                                                                            : "bg-gray-50 hover:bg-gray-100"
+                                                                    }
+                                                                >
+                                                                    <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
+                                                                        {tamu.status === 'MENUNGGU' ?
+                                                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-blue-100 text-blue-800 cursor-pointer" onClick={() => { openModal('MENUNGGU', tamu?.nomor_kartu, tamu?.nik, tamu?.id) }}>
+                                                                                <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-blue-400" fill="currentColor" viewBox="0 0 8 8">
+                                                                                    <circle cx={4} cy={4} r={3} />
+                                                                                </svg>
+                                                                                Menunggu
+                                                                            </span>
+                                                                            : tamu.status === 'MASUK' ?
+                                                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800 cursor-pointer" onClick={() => { openModal('MASUK', tamu?.nomor_kartu, tamu?.nik, tamu?.id) }}>
+                                                                                    <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
+                                                                                        <circle cx={4} cy={4} r={3} />
+                                                                                    </svg>
+                                                                                    Masuk
+                                                                                </span>
+                                                                                : tamu.status === 'PULANG' ?
+                                                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-100 text-yellow-800 cursor-pointer" onClick={() => { openModal('PULANG', tamu?.nomor_kartu, tamu?.nik, tamu?.id) }}>
+                                                                                        <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
+                                                                                            <circle cx={4} cy={4} r={3} />
+                                                                                        </svg>
+                                                                                        Pulang
+                                                                                    </span>
+                                                                                    : <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-100 text-gray-800 cursor-pointer" onClick={() => { openModal('BATAL', tamu?.nomor_kartu, tamu?.nik, tamu?.id) }}>
+                                                                                        <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-gray-400" fill="currentColor" viewBox="0 0 8 8">
+                                                                                            <circle cx={4} cy={4} r={3} />
+                                                                                        </svg>
+                                                                                        Batal
+                                                                                    </span>
+                                                                        }
+                                                                    </td>
+                                                                    <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
+                                                                        {tamu.nomor_kartu}
+                                                                    </td>
+                                                                    <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                        {tamu.nama_tamu} <br />
+                                                                        {tamu.asal_instansi}
+                                                                    </td>
+                                                                    <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                        {tamu.nik}
+                                                                    </td>
+                                                                    <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                        {tamu?.waktu_mulai}
+                                                                    </td>
+                                                                    <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                        {tamu?.waktu_selesai}
+                                                                    </td>
+                                                                    <td className="text-indigo-800 px-6 py-4 text-xs font-medium text-gray-900">
+                                                                        {tamu.nama_tujuan}
+                                                                    </td>
+                                                                    <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                        {tamu.keperluan}
+                                                                    </td>
+                                                                    <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                        {tamu.nomor_telepon}
+                                                                    </td>
+                                                                    <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                        {tamu.alamat}
+                                                                    </td>
+                                                                    <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                                                        {tamu.status_perjajian === 'YA' ? (
+                                                                            'Dengan Perjanjian'
+                                                                        ) : (
+                                                                            'Tanpa Perjanjian'
+                                                                        )}
+                                                                    </td>
+                                                                    <td className="px-6 py-4 text-xs font-medium text-indigo-800">
+                                                                        <button
+                                                                            onClick={() => router.push({
+                                                                                pathname: '/kunjungan/buku-tamu/edit',
+                                                                                query: { id: tamu?.id },
+                                                                            })}
+                                                                            className="inline-flex items-center px-2 focus:outline-none rounded-md p-1 text-sm border border-indigo-600 ml-1 hover:bg-gray-50"
+                                                                        >
+                                                                            Edit
+                                                                        </button>
+                                                                    </td>
 
-                                                    </tr>
-                                                )
+                                                                </tr>
+                                                            )
+                                                        )
+                                                    }
+                                                </>
+                                            ) : (
+                                                <tr className="text-center bg-white hover:bg-gray-100">
+                                                    <td className="px-6 py-4 text-xs font-medium text-gray-900" colSpan="12">
+                                                        Tidak ada tamu hari ini
+                                                    </td>
+                                                </tr>
                                             )}
+
                                         </tbody>
                                     </table>
                                 </div>
