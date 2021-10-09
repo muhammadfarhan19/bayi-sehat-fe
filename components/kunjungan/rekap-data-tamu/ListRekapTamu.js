@@ -64,6 +64,7 @@ export default function ListRekapTamu() {
     const getDays = (data) => {
         let hari = ''
         const day = moment(data).format("dddd")
+        console.log(day)
         
         switch (day) {
             case 'Monday':
@@ -75,7 +76,7 @@ export default function ListRekapTamu() {
             case 'Wednesday':
                 hari = 'Rabu'
                 break
-            case 'Thrusday':
+            case 'Thursday':
                 hari = 'Kamis'
                 break
             case 'Friday':
@@ -273,7 +274,6 @@ export default function ListRekapTamu() {
                                                         </td>
                                                         <td className="w-10 px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">
                                                             {getDays(tamu?.tanggal_kunjungan)}
-                                                            {/* {moment(tamu?.tanggal_kunjungan).format("dddd")} */}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                                                             {tamu.nama_tamu}
@@ -285,10 +285,10 @@ export default function ListRekapTamu() {
                                                             {tamu.nik}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {moment(tamu?.waktu_mulai).format("H:mm")}
+                                                            {tamu?.waktu_mulai}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {moment(tamu?.waktu_selesai).format("H:mm")}
+                                                            {tamu?.waktu_selesai}
                                                         </td>
                                                         <td className="text-indigo-800 px-6 py-4 text-xs font-medium text-gray-900">
                                                             {tamu.tujuan}
@@ -303,7 +303,7 @@ export default function ListRekapTamu() {
                                                             {tamu.alamat}
                                                         </td>
                                                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                            {tamu.status_perjajian === 'YA' ? (
+                                                            {tamu.status_perjanjian == 'YA' ? (
                                                                 'Dengan Perjanjian'
                                                             ) : (
                                                                 'Tanpa Perjanjian'
