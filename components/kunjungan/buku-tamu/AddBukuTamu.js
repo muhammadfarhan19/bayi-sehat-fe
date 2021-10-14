@@ -11,12 +11,13 @@ import AutoComplete from '../../shared/AutoComplete';
 
 export default function AddBukuTamu() {
     const router = useRouter();
-    const { handleSubmit, register, formState: { errors } } = useForm();
+    const { handleSubmit, register, formState: { errors }, setValue } = useForm();
     const [load, setLoad] = React.useState(false);
     const [open, setOpen] = React.useState(false)
     const [tujuan, setTujuan] = React.useState([])
     const [uuid, setUuid] = React.useState('')
     const [namakunjungan, setNamakunjungan] = React.useState('')
+    const [opentujuan, setOpentujuan] = React.useState(false)
     const dispatch = useDispatch();
 
     const handleCuti = async (handleSubmit) => {
@@ -67,6 +68,21 @@ export default function AddBukuTamu() {
             setOpen(false)
         }
     }
+
+    const handleTujuan = (data) => {
+        setOpentujuan(data)
+        if (!data) {
+            setUuid('')
+            setNamakunjungan('')
+            setValue("tujuan", "")
+        }
+        // console.log(namakunjungan)
+
+
+    }
+
+    React.useEffect(() => {
+     }, [namakunjungan]);
 
     return (
         <>
@@ -119,6 +135,8 @@ export default function AddBukuTamu() {
                                                 value="UMUM"
                                                 {...register('jenis_tamu', { required: true })}
                                                 name="jenis_tamu"
+                                                onClick={() => handleTujuan(false)}
+
                                             />
                                             <label htmlFor="push-everything" className="ml-3 block text-sm font-medium text-gray-700">
                                                 Umum
@@ -132,6 +150,7 @@ export default function AddBukuTamu() {
                                                 value="PIMPINAN"
                                                 {...register('jenis_tamu', { required: true })}
                                                 name="jenis_tamu"
+                                                onClick={() => handleTujuan(true)}
                                             />
                                             <label htmlFor="push-email" className="ml-3 block text-sm font-medium text-gray-700">
                                                 Pimpinan
@@ -142,23 +161,23 @@ export default function AddBukuTamu() {
                                 </div>
                             </div>
 
-                            <div className="w-full flex mb-4 gap-4">
-                                <div className="w-full">
-                                    <label className="block text-gray-700 text-sm mb-2"> Tujuan</label>
-                                    <input
-                                        type="tes"
-                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
-                                        {...register('tujuan', { required: true })}
-                                        name="tujuan"
-                                        onChange={handleOpen}
-                                        autocomplete="off"
-                                        value={namakunjungan}
-
-                                    />
-
-                                    {errors.tujuan && <p className="mt-1 text-red-500 text-xs">Silahkan pilih tujuan</p>}
+                            {opentujuan &&
+                                <div className="w-full flex mb-4 gap-4">
+                                    <div className="w-full">
+                                        <label className="block text-gray-700 text-sm mb-2"> Tujuan</label>
+                                        <input
+                                            type="tes"
+                                            className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-transparent"
+                                            {...register('tujuan', { required: true })}
+                                            name="tujuan"
+                                            onChange={handleOpen}
+                                            autocomplete="off"
+                                            value={namakunjungan}
+                                        />
+                                        {errors.tujuan && <p className="mt-1 text-red-500 text-xs">Silahkan pilih tujuan</p>}
+                                    </div>
                                 </div>
-                            </div>
+                            }
 
                             {open && <AutoComplete result={nama} dataTujuan={tujuan} />}
 

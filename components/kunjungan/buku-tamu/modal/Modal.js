@@ -136,46 +136,39 @@ export default function Modal({ close, tipe, data, result }) {
                   <div className="grid grid-cols-4 gap-4 px-4">
 
                     {tipe === 'MENUNGGU' &&
+                      <>
+                        <div>
+                          <button
+                            type="button"
+                            onClick={() => { handleStatus('MASUK') }}
+                            className="w-full text-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          >
+                            Masuk
+                          </button>
+                        </div>
+                        <div>
+                          <button
+                            type="button"
+                            onClick={() => { handleStatus('BATAL') }}
+                            className="w-full text-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          >
+                            Batal
+                          </button>
+                        </div>
+                      </>
+                    }
+
+                    {tipe === 'MASUK' &&
                       <div>
                         <button
                           type="button"
-                          onClick={() => { handleStatus('MENUNGGU') }}
+                          onClick={() => { handleStatus('PULANG') }}
                           className="w-full text-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
-                          Menunggu
+                          Pulang
                         </button>
                       </div>
                     }
-
-                    <div>
-                      <button
-                        type="button"
-                        onClick={() => { handleStatus('MASUK') }}
-                        className="w-full text-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      >
-                        Masuk
-                      </button>
-                    </div>
-
-                    <div>
-                      <button
-                        type="button"
-                        onClick={() => { handleStatus('PULANG') }}
-                        className="w-full text-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      >
-                        Pulang
-                      </button>
-                    </div>
-
-                    <div>
-                      <button
-                        type="button"
-                        onClick={() => { handleStatus('BATAL') }}
-                        className="w-full text-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      >
-                        Batal
-                      </button>
-                    </div>
                   </div>
                   <div className="grid-cols-1 mt-2 px-4">
                     {err && <p className="mt-1 text-red-500 text-xs">Silahkan pilih status</p>}

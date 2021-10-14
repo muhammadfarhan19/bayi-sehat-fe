@@ -273,13 +273,13 @@ export default function ListBukuTamu() {
                                                                                     Masuk
                                                                                 </span>
                                                                                 : tamu.status === 'PULANG' ?
-                                                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-100 text-yellow-800 cursor-pointer" onClick={() => { openModal('PULANG', tamu?.nomor_kartu, tamu?.nik, tamu?.id) }}>
+                                                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-100 text-yellow-800 cursor-not-allowed">
                                                                                         <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
                                                                                             <circle cx={4} cy={4} r={3} />
                                                                                         </svg>
                                                                                         Pulang
                                                                                     </span>
-                                                                                    : <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-100 text-gray-800 cursor-pointer" onClick={() => { openModal('BATAL', tamu?.nomor_kartu, tamu?.nik, tamu?.id) }}>
+                                                                                    : <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-100 text-gray-800 cursor-not-allowed">
                                                                                         <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-gray-400" fill="currentColor" viewBox="0 0 8 8">
                                                                                             <circle cx={4} cy={4} r={3} />
                                                                                         </svg>
@@ -316,7 +316,7 @@ export default function ListBukuTamu() {
                                                                         {tamu.alamat}
                                                                     </td>
                                                                     <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                                                                        {tamu.status_perjajian === 'YA' ? (
+                                                                        {tamu.status_perjanjian === 'YA' ? (
                                                                             'Dengan Perjanjian'
                                                                         ) : (
                                                                             'Tanpa Perjanjian'

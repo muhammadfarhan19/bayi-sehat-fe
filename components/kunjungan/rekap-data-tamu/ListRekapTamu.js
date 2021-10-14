@@ -1,53 +1,16 @@
 import * as React from 'react'
-import { useRouter } from "next/router";
 import { AdjustmentsIcon } from "@heroicons/react/solid";
 import { request } from '../../shared/fetcher/FetcherHooks';
 import config from '../../../utils/Config';
 import moment from 'moment';
 
 export default function ListRekapTamu() {
-    const router = useRouter();
     const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
     const [tamu, setTamu] = React.useState([]);
 
     function toggleAdvancedFilter() {
         setshowAdvancedFilter(!showAdvancedFilter);
     }
-
-    // const tamu = [
-    //     {
-    //         no: '1',
-    //         tanggal: '10 Juli 2021',
-    //         hari: 'Jumat',
-    //         nama: 'Daniel',
-    //         asal: 'Wakanda',
-    //         nik: '123321456654',
-    //         jam_datang: '11.00',
-    //         jam_pulang: '12.00',
-    //         tujuan: 'Yayat Hendayana, S.s.',
-    //         keperluan: 'Rapat Koordinasi',
-    //         hp: '08783141432',
-    //         alamat: 'Cibinong',
-    //         status_perjajian: 'Dengan Perjanjian',
-    //         status: '1'
-    //     },
-    //     {
-    //         no: '2',
-    //         tanggal: '10 Juli 2021',
-    //         hari: 'Jumat',
-    //         nama: 'Daniel',
-    //         asal: 'Wakanda',
-    //         nik: '123321456654',
-    //         jam_datang: '11.00',
-    //         jam_pulang: '12.00',
-    //         tujuan: 'Yayat Hendayana, S.s.',
-    //         keperluan: 'Rapat Koordinasi',
-    //         hp: '08783141432',
-    //         alamat: 'Cibinong',
-    //         status_perjajian: 'Dengan Perjanjian',
-    //         status: '-1'
-    //     }
-    // ]
 
     React.useEffect(() => {
         (async () => {
@@ -101,7 +64,7 @@ export default function ListRekapTamu() {
                 <div className="bg-white rounded-md shadow ">
                     <div className="flex align-center mb-3 pt-3 px-6 pt-6">
                         <div className="text-lg font-medium text-gray-900 my-auto">
-                            Jadwal Kunjungan Tamu
+                            Rekap Data Tamu
                         </div>
                         <div className="ml-auto my-auto flex">
                             <input
