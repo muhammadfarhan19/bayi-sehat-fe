@@ -26,13 +26,7 @@ const checkToken = async (headers) => {
   }
 };
 
-export const request = async (
-  url,
-  requestBody = {},
-  method = "post",
-  withToken = true,
-  isFile = false
-) => {
+export const request = async (url,requestBody = {},method = "post",withToken = true,isFile = false) => {
   const token = getClientToken();
   const headers = {};
   if (token && withToken) {
@@ -44,12 +38,7 @@ export const request = async (
     headers["Content-Type"] = "multipart/form-data";
   }
 
-  const axiosProps = {
-    headers,
-    method,
-    url,
-    data: requestBody,
-  };
+  const axiosProps = {headers,method,url,data: requestBody,};
 
   return axios(axiosProps)
     .then((response) => {

@@ -1,7 +1,6 @@
 import { ChevronRightIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useSelector, shallowEqual } from "react-redux";
 import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
 import config from '../../utils/Config'

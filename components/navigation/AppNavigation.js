@@ -15,6 +15,10 @@ const data = [
     'title':'Kegiatan',
   },
   {
+    'link':'/peminjaman-ruangan',
+    'title':'Peminjaman Ruangan',
+  },
+  {
     'link':'/kunjungan',
     'title':'Kunjungan',
   },
