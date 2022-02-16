@@ -5,8 +5,7 @@ import { useRouter } from "next/router";
 import FormPengajuanRuangan from "../../../components/FormPengajuanRuangan"
 import DetailPengajuanRuangan from "../../../components/DetailPengajuanRuangan"
 import {
-  expiry,
-  getUser,
+  expiry, getUser,
 } from "../../../components/shared/fetcher/FetcherHooks";
 import MainLayout from "../../../components/layouts/MainLayout";
 import {

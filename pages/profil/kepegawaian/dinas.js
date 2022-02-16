@@ -1,6 +1,6 @@
 import MainLayout from "../../../components/layouts/MainLayout";
 import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
-import menu from "../menu";
+import menu from "../../../constants/menu";
 
 function TabelDinas() {
   const daftar_dinas = [

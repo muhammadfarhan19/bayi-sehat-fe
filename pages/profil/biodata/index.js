@@ -9,7 +9,7 @@ import { getUser, request, useUser } from "../../../components/shared/fetcher/Fe
 import { useGetBiodata } from "../../../components/shared/fetcher/profil/FetcherProfil";
 import FetcherLoading from "../../../components/shared/loading/fetcherLoading";
 import config from "../../../utils/Config";
-import menu from "../menu";
+import menu from "../../../constants/menu";
 
 function KartuProfil(props) {
   const user = JSON.parse(props.user);

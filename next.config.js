@@ -52,24 +52,11 @@ module.exports = (phase) => {
 
   const publicRuntimeConfig = config();
 
-  let assetPrefix = "";
-  if (isProd || isStaging) {
-    console.log("publicRuntimeConfig", publicRuntimeConfig);
-    assetPrefix = String(publicRuntimeConfig.basePath);
-  }
-
-  const pwaF = withPWA({
-    pwa: {
-        disable: process.env.NODE_ENV === 'development',
-        dest: 'public', // comment out this line
-        // register: true,
-        // sw: '/sw.js'
-    }
-  })
-
   return {
     publicRuntimeConfig,
-    assetPrefix,
-    pwaF
+    generateBuildId: async () => {
+      // You can, for example, get the latest git commit hash here
+      return 'my-build-id'
+    },
   };
 };

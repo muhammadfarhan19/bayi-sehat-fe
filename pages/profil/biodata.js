@@ -13,7 +13,7 @@ const user = {
   imageUrl:
     "https://dikti.kemdikbud.go.id/wp-content/uploads/2020/03/cropped-logo-dikbud.png",
 };
-import menu from "./menu"
+import menu from "../../constants/menu"
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }

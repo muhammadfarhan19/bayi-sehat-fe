@@ -1,7 +1,7 @@
 import MainLayout from "../../../components/layouts/MainLayout";
 import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
 import ListKepangkatan from "../../../components/profil/kepangkatan/ListKepangkatan";
-import menu from "../menu";
+import menu from "../../../constants/menu";
 
 export default function Kepangkatan() {
   return (

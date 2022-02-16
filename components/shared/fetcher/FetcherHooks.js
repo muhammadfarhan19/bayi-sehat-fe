@@ -116,3 +116,20 @@ export const expiry = () => {
       });
   };
 };
+
+export const getUser = () => () => {
+  return axios
+      .get(config.apiHost + "/auth/getUser", {
+        timeout: 15000,
+        headers: {
+          Authorization: "Bearer " + getClientToken(),
+        },
+      })
+      .then((response) => {
+        return {
+          success: true,
+          message: "OK",
+          responseData: response.data,
+        };
+      })
+};

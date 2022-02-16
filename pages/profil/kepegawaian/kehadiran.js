@@ -1,7 +1,7 @@
 import { Tab } from "@headlessui/react";
 import MainLayout from "../../../components/layouts/MainLayout";
 import ModuleNavigation from "../../../components/navigation/ModuleNavigation";
-import menu from "../menu";
+import menu from "../../../constants/menu";
 
 function TabelKehadiran() {
   const daftar_kehadiran = [
