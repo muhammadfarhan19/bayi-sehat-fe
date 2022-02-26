@@ -1,4 +1,3 @@
 module.exports = {
-    apiHost: 'https://intra.dikti.info/api',
-  };
-  
+  apiHost: 'https://intra.dikti.info/api',
+};
