@@ -52,11 +52,12 @@ export default function HeaderMobile(props: NavigationProps) {
                   <div className="mt-3 space-y-1 px-2">
                     {navigation.map(({ childMenu, name, href }, index) =>
                       childMenu && Array.isArray(childMenu) ? (
-                        <MenuDropdown {...MenuDropdown.SimpleMobileProps} navigation={childMenu} key={index}>
+                        <MenuDropdown key={index} {...MenuDropdown.SimpleMobileProps} navigation={childMenu}>
                           {name} <ChevronDownIcon className="inline-block h-3 w-3" aria-hidden="true" />
                         </MenuDropdown>
                       ) : (
                         <a
+                          key={index}
                           href={href}
                           className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                         >

@@ -8,7 +8,9 @@
     "start": "next start",
     "type-check": "tsc",
     "format": "prettier --write .",
-    "lint": "next lint --fix"
+    "lint": "next lint --fix",
+    "mock-server:start": "mockoon-cli start --data config/_mockServer.json",
+    "mock-server:stop": "mockoon-cli stop 'all'"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.0",
@@ -29,6 +31,7 @@
     "tailwindcss": "^3.0.23"
   },
   "devDependencies": {
+    "@mockoon/cli": "^1.5.1",
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",

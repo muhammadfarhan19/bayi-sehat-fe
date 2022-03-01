@@ -4,12 +4,19 @@ export interface User {
   imageUrl: string;
 }
 
-export interface Navigation {
+export type Navigation = {
   name: string;
-  href: string;
   current?: boolean;
-  childMenu?: Navigation[];
-}
+} & (
+  | {
+      href: string;
+      childMenu?: never;
+    }
+  | {
+      href?: never;
+      childMenu: Navigation[];
+    }
+);
 
 export interface NavigationProps {
   user: User;

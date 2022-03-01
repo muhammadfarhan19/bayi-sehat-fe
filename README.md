@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-## Getting Started
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
-First, run the development server:
+- [Super Apps DIKTI - FE](#super-apps-dikti---fe)
+  - [Start development](#start-development)
+  - [Start with Mock](#start-with-mock)
+    - [Update MOCK State](#update-mock-state)
+  - [Deploy to staging](#deploy-to-staging)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Super Apps DIKTI - FE
+
+## Start development
+
+---
+
+Prerequisites:
+Make sure, to install `yarn` as the package manager (preferable).
+
+Install all dependencies (run if there's a new dependency added in `package.json`)
 
 ```bash
-npm run dev
-# or
+yarn
+```
+
+And run the development server:
+
+```bash
 yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Start with Mock
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+---
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Add `MOCK=1` to run the development server directed to the mock server. This will start the application with API host directed to http://localhost:3001 (MOCK Server)
 
-## Learn More
+```bash
+MOCK=1 yarn dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start the mock server manually by running:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+yarn mock-server:start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The mock server will be served in http://localhost:3001,
 
-## Deploy on Vercel
+And use this command to stop the mock server:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+yarn mock-server:stop
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Update MOCK State
 
-# fe
+- If you want to update the mock server state, use `mockoon` apps from this [link](https://mockoon.com) and load the mock state in `config/_mockServer.json`
+
+## Deploy to staging
+
+---
+
+- Create Pull Request to branch `dev` after merging the PR. The workflow will be run and deploy the changes to `staging`.

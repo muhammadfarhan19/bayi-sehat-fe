@@ -1,3 +1,3 @@
-export default function DaftarJabatan(){
-    return('')
+export default function DaftarJabatan() {
+  return '';
 }

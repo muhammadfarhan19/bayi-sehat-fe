@@ -65,7 +65,7 @@ export default function HeaderDesktop(props: NavigationProps) {
                     <nav className="flex space-x-4">
                       {navigation.map((item, index) =>
                         item.childMenu && Array.isArray(item.childMenu) ? (
-                          <div className="relative flex">
+                          <div key={index} className="relative flex">
                             <MenuDropdown navigation={item.childMenu} key={index} {...MenuDropdown.SimpleDesktopProps}>
                               {item.name} <ChevronDownIcon className="inline-block h-3 w-3" aria-hidden="true" />
                             </MenuDropdown>

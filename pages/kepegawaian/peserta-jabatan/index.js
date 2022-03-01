@@ -1,3 +1,3 @@
-export default function PesertaJabatan(){
-    return('')
+export default function PesertaJabatan() {
+  return '';
 }
