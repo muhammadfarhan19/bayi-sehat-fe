@@ -12,7 +12,7 @@ export default function DataPegawai(props) {
       current: false,
       children: [
         { name: 'Data Pegawai', href: '/kepegawaian/data-pegawai', current: true },
-        { name: 'Daftar Jabatan', href: '#', current: false },
+        { name: 'Daftar Jabatan', href: '/kepegawaian/daftar-jabatan', current: false },
         { name: 'Peta Jabatan', href: '#', current: false },
       ],
     },
