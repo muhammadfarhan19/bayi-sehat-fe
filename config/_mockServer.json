@@ -3,7 +3,7 @@
   "lastMigration": 19,
   "name": "SuperApps",
   "endpointPrefix": "",
-  "latency": 0,
+  "latency": 500,
   "port": 3001,
   "hostname": "127.0.0.1",
   "routes": [
@@ -14,47 +14,9 @@
       "endpoint": "auth/info",
       "responses": [
         {
-          "uuid": "1de1a771-0b25-46cc-b1fd-77bf02eb834d",
-          "body": "{\n  \"status\": \"UNAUTHENTICATED\",\n  \"data\": null\n}\n",
-          "latency": 1000,
-          "statusCode": 401,
-          "label": "",
-          "headers": [
-            {
-              "key": "access-control-allow-headers",
-              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
-            },
-            {
-              "key": "access-control-allow-methods",
-              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
-            },
-            {
-              "key": "access-control-allow-origin",
-              "value": "*"
-            },
-            {
-              "key": "content-type",
-              "value": "application/json; charset=utf-8"
-            }
-          ],
-          "filePath": "",
-          "sendFileAsBody": false,
-          "rules": [
-            {
-              "target": "header",
-              "modifier": "Authorization",
-              "value": "null",
-              "operator": "regex"
-            }
-          ],
-          "rulesOperator": "OR",
-          "disableTemplating": false,
-          "fallbackTo404": false
-        },
-        {
           "uuid": "ec5a4814-3ec6-4f1c-888e-4da84d745461",
-          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"user_id\": {{ faker 'random.number' min=0 max=10 }},\n    \"session_uuid\": \"{{ faker 'random.uuid' }}\"\n  }\n}\n",
-          "latency": 1000,
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"user_id\": {{ faker 'datatype.number' min=0 max=10 }},\n    \"session_uuid\": \"{{ faker 'random.uuid' }}\"\n  }\n}\n",
+          "latency": 500,
           "statusCode": 200,
           "label": "",
           "headers": [
@@ -88,6 +50,44 @@
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false
+        },
+        {
+          "uuid": "1de1a771-0b25-46cc-b1fd-77bf02eb834d",
+          "body": "{\n  \"status\": \"UNAUTHENTICATED\",\n  \"data\": null\n}\n",
+          "latency": 500,
+          "statusCode": 401,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "header",
+              "modifier": "Authorization",
+              "value": "null",
+              "operator": "regex"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
         }
       ],
       "enabled": true,
@@ -103,7 +103,7 @@
         {
           "uuid": "1f73096f-cd49-4baa-839b-aa744b768456",
           "body": "{ \n  \"status\": \"OK\", \n  \"access_token\": \"{{ faker 'random.uuid' }}\", \n  \"refresh_token\": \"{{ faker 'random.uuid' }}\"\n}",
-          "latency": 2000,
+          "latency": 500,
           "statusCode": 200,
           "label": "",
           "headers": [
@@ -145,7 +145,7 @@
         {
           "uuid": "3cd5eddf-53ca-4be3-8c4a-2107136e9470",
           "body": "{\n  \"status\": \"OK\",\n  \"data\": \"User logged out\"\n}\n",
-          "latency": 0,
+          "latency": 500,
           "statusCode": 200,
           "label": "",
           "headers": [
@@ -187,7 +187,166 @@
         {
           "uuid": "9d23ac3c-00cb-4269-9133-b54d81467c2f",
           "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"access_token\": \"{{ faker 'random.uuid' }}\", \n    \"refresh_token\": \"{{ faker 'random.uuid' }}\"\n  }\n}\n",
-          "latency": 0,
+          "latency": 500,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "1748e020-1797-4486-9e62-a476873a0e3c",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "user/profile",
+      "responses": [
+        {
+          "uuid": "e2709812-55e3-422e-a29b-177ca0888e09",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"user_id\": {{ faker 'datatype.number' min=100000 max=999999 }},\n    \"jenis_kelamin\": {{ faker 'datatype.number' min=1 max=2 }},\n    \"status_menikah\": {{ faker 'datatype.number' min=1 max=3 }},\n    \"jumlah_anak\": {{ faker 'datatype.number' min=1 max=5 }},\n    \"ktp\": \"{{ faker 'datatype.number' min=1000000000000000 max=9999999999999999 }}\",\n    \"email\": \"{{ faker 'internet.email' }}\",\n    \"alamat\": \"{{ faker 'address.streetAddress' }}\",\n    \"npwp\": \"{{ faker 'datatype.number' min=1000000000000000 max=9999999999999999 }}\",\n    \"bpjs\": \"{{ faker 'datatype.number' min=1000000000000000 max=9999999999999999 }}\"\n  }\n}\n",
+          "latency": 500,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "dd94b1df-75d9-4423-9c6d-90a64cd41305",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "user/personal-pegawai",
+      "responses": [
+        {
+          "uuid": "5e7b34b4-7019-4f8a-8ca4-cbf9fa73f2f9",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"user_id\": 1,\n    \"nip\": \"196912152002121003\",\n    \"name\": \"PAUZAN\",\n    \"tempat_lahir\": \"TANJUNG KEMUNING\",\n    \"tanggal_lahir\": \"1969-12-15\",\n    \"tmt_cpns\": \"2002-12-01\",\n    \"status_cpns\": 1,\n    \"jabatan\": \"Pengelola Data Tata Organisasi dan Tata Laksana\",\n    \"unit_kerja\": \"Dirjen DIkti\",\n    \"golongan\": \"IV/a\",\n    \"tmt_golongan\": \"2018-10-01\"\n  }\n}",
+          "latency": 500,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "6a45969a-b77f-4498-b37e-a87d05452118",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "pegawai/list",
+      "responses": [
+        {
+          "uuid": "588c02cf-dba8-4dd8-b176-deb013cddec5",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"list\": [\n      {{# repeat 10 20 }}\n        {\n          \"user_id\": {{ faker 'datatype.number' min=1000 max=9999 }},\n          \"nip\": \"{{ faker 'datatype.number' 100000000000 }}\",\n          \"name\": \"{{ faker 'name.findName' }}\",\n          \"unit_kerja\": \"Kemdikbud\",\n          \"golongan\": \"{{ faker 'name.jobDescriptor' }}\",\n          \"tipe_jabatan\": \"Struktural\",\n          \"jabatan\": \"{{ faker 'name.jobTitle' }}\"\n        }\n      {{/ repeat }}\n    ],\n    \"pagination\": {\n      \"next_page\": true,\n      \"total_page\": {{ faker 'datatype.number' 20 }}\n    }\n  }\n}\n",
+          "latency": 500,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "4b871fe7-bd42-47a9-8471-a298f8060244",
+      "documentation": "",
+      "method": "put",
+      "endpoint": "user/password",
+      "responses": [
+        {
+          "uuid": "449ce974-3805-49ca-aed0-82ccf3a4a7a3",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": \"Change Password Success\"\n}\n",
+          "latency": 500,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "e6d1d5ed-57e8-4031-ae93-e399e9d9a10d",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "rbac/bulk-authorize",
+      "responses": [
+        {
+          "uuid": "cb943406-b50c-421d-8f24-5343d10cd80c",
+          "body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {{#each (bodyRaw 'bulk_request')}}\n        {\n            \"user_id\": {{ this.user_id }},\n            \"resource_id\": {{ this.resource_id }},\n            \"action\": {{ this.action }},\n            \"is_authorized\": true,\n            \"error\": \"\"\n        }\n        {{/each}}\n    ]\n}\n",
+          "latency": 500,
           "statusCode": 200,
           "label": "",
           "headers": [

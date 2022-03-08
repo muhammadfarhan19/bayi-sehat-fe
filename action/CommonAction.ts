@@ -3,6 +3,7 @@ import { CommonState } from '../reducer/CommonReducer';
 export enum CommonActionType {
   SET_API_RES = 'SET_API_RES',
   SET_MODAL = 'SET_MODAL',
+  SET_SNACKBAR = 'SET_SNACKBAR',
 }
 
 export const setAPIRes = (
@@ -32,4 +33,16 @@ export const setModal = (
   };
 };
 
-export type CommonAction = ReturnType<typeof setAPIRes> | ReturnType<typeof setModal>;
+export const setSnackbar = (
+  snackbarProps: Partial<CommonState['snackbar']>
+): {
+  type: CommonActionType.SET_SNACKBAR;
+  snackbar: Partial<CommonState['snackbar']>;
+} => {
+  return {
+    type: CommonActionType.SET_SNACKBAR,
+    snackbar: snackbarProps,
+  };
+};
+
+export type CommonAction = ReturnType<typeof setAPIRes> | ReturnType<typeof setModal> | ReturnType<typeof setSnackbar>;

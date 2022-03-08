@@ -5,6 +5,7 @@ export interface User {
 }
 
 export type Navigation = {
+  id: number;
   name: string;
   current?: boolean;
 } & (

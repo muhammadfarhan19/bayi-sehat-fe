@@ -2,8 +2,9 @@ import { ExclamationCircleIcon, EyeIcon, EyeOffIcon, InformationCircleIcon } fro
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { UserAPI } from '../../constants/APIUrls';
-import { PostAuthLoginReq, PostAuthLoginRes } from '../../types/UserAPI';
+import { AuthAPI } from '../../constants/APIUrls';
+import { PostAuthLoginReq, PostAuthLoginRes } from '../../types/AuthAPI';
+import { Status } from '../../types/Common';
 import { getCookie, setCookie } from '../../utils/CookieHandler';
 import { callAPI } from '../../utils/Fetchers';
 import { CircleProgress } from '../shared/CircleProgress';
@@ -24,10 +25,10 @@ export default function LoginPage() {
 
   const submitHandler = async (formData: PostAuthLoginReq) => {
     setLoading(true);
-    const loginRes = await callAPI<PostAuthLoginReq, PostAuthLoginRes>(UserAPI.POST_AUTH_LOGIN, formData, {
+    const loginRes = await callAPI<PostAuthLoginReq, PostAuthLoginRes>(AuthAPI.POST_AUTH_LOGIN, formData, {
       withToken: false,
     });
-    if (loginRes.status === 200 && loginRes.data?.status === 'OK') {
+    if (loginRes.status === 200 && loginRes.data?.status === Status.OK) {
       const { access_token, refresh_token } = loginRes.data;
       setCookie('rememberme', 1);
       setCookie('token', access_token);

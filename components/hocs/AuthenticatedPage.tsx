@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { UserAPI } from '../../constants/APIUrls';
-import { PostAuthInfoRes } from '../../types/UserAPI';
+import { AuthAPI } from '../../constants/APIUrls';
+import { GetAuthInfoRes } from '../../types/AuthAPI';
 import { removeCookie } from '../../utils/CookieHandler';
 import { callAPI } from '../../utils/Fetchers';
 import Loader from '../shared/Loader/Loader';
@@ -26,7 +26,7 @@ export const withAuthenticatedPage: WithAuthenticatedPage =
 
       React.useEffect(() => {
         (async () => {
-          const infoRes = await callAPI<never, PostAuthInfoRes>(UserAPI.POST_AUTH_INFO, {}, { checkToken: false });
+          const infoRes = await callAPI<never, GetAuthInfoRes>(AuthAPI.GET_AUTH_INFO, {}, { checkToken: false });
           if (infoRes.status === 200) {
             if (checkLogin) {
               setLoadPage(true);

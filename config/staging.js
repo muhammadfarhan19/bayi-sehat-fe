@@ -1,3 +1,4 @@
 module.exports = {
-  apiHost: 'https://intra.dikti.info/api',
+  apiHost: 'http://43.241.149.99:3001',
+  environment: 'staging',
 };

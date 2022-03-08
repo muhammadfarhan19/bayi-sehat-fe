@@ -5,8 +5,8 @@ export const generateUrlWithQueryString = (url: string): string => {
   return url;
 };
 
-export const getQueryString = () => {
-  const result: Record<string, string | number> = {};
+export const getQueryString = <T = Record<string, string | number>>(): T => {
+  const result = {};
   if (typeof window !== 'undefined') {
     const query = window.location.search.substring(1);
     const vars = query.split('&');
@@ -15,5 +15,5 @@ export const getQueryString = () => {
       result[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
     }
   }
-  return result;
+  return result as T;
 };

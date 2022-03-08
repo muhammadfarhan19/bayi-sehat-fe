@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
-import { UserAPI } from '../constants/APIUrls';
-import { PostAuthRefreshRes } from '../types/UserAPI';
+import { AuthAPI } from '../constants/APIUrls';
+import { PostAuthRefreshRes } from '../types/AuthAPI';
 import { getCookie, removeCookie, setCookie } from './CookieHandler';
 
 interface CallAPIOptions {
@@ -47,7 +47,7 @@ export const callAPI: CallAPI = async (url, requestData = {}, options) => {
     timeout: 15000, // Timeout 15 seconds
     url,
   };
-  if (method === 'post') {
+  if (method === 'post' || method === 'put' || method === 'delete') {
     axiosProps.data = requestData;
   } else if (method === 'get') {
     axiosProps.params = requestData;
@@ -69,7 +69,7 @@ export const callAPI: CallAPI = async (url, requestData = {}, options) => {
 export const refreshTokenHandler = () => {
   return axios
     .post<PostAuthRefreshRes>(
-      UserAPI.POST_AUTH_REFRESH,
+      AuthAPI.POST_AUTH_REFRESH,
       {
         refresh_token: getCookie('refreshtoken'),
       },

@@ -1,5 +1,7 @@
-import React from 'react';
+import * as React from 'react';
+import { useDispatch } from 'react-redux';
 
+import { setModal, setSnackbar } from '../action/CommonAction';
 import DashboardPage from '../components/Dashboard/DashboardPage';
 import { withAuthenticatedPage } from '../components/hocs/AuthenticatedPage';
 import { withReduxPage } from '../components/hocs/ReduxPage';
@@ -7,18 +9,20 @@ import LeftMenu from '../components/MainLayout/LeftMenu';
 import MainLayout from '../components/MainLayout/MainLayout';
 import { filterMenu } from '../utils/Components';
 
-const navigation = filterMenu();
+function Kepegawaian() {
+  const menu = filterMenu();
 
-function Dashboard() {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(setSnackbar({ show: true, message: 'Test Snackbar' }));
+    dispatch(setModal({ show: true, message: 'Test Modal' }));
+  });
+
   return (
     <MainLayout>
-      {/* Main 3 column grid */}
-      <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
-        {/* Left column */}
-        <LeftMenu navigation={navigation} />
-
-        {/* Right column */}
-        <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+      <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-8">
+        <LeftMenu navigation={menu} />
+        <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <DashboardPage />
         </div>
       </div>
@@ -26,4 +30,4 @@ function Dashboard() {
   );
 }
 
-export default withReduxPage()(withAuthenticatedPage()(Dashboard));
+export default withReduxPage()(withAuthenticatedPage()(Kepegawaian));
