@@ -13,7 +13,7 @@ export default function MasterPns() {
     {
       nama: 'Widodo Arjuna',
       nip: '196601211986012001',
-      unit_kerja: 'DIREKTORAT SUMBER DAYA ',
+      unit_kerja: 'DIREKTORAT SUMBER DAYA',
       jabatan: 'Jabatan Fungsional',
       disiplin: 'Tidak di hukum',
       aktif: 'Aktif',
@@ -22,7 +22,7 @@ export default function MasterPns() {
     {
       nama: 'Widodo Arjuna',
       nip: '196601211986012001',
-      unit_kerja: 'DIREKTORAT SUMBER DAYA ',
+      unit_kerja: 'DIREKTORAT SUMBER DAYA',
       jabatan: 'Jabatan Fungsional',
       disiplin: 'Tidak di hukum',
       aktif: 'Aktif',
@@ -31,7 +31,7 @@ export default function MasterPns() {
     {
       nama: 'Widodo Arjuna',
       nip: '196601211986012001',
-      unit_kerja: 'DIREKTORAT SUMBER DAYA ',
+      unit_kerja: 'DIREKTORAT SUMBER DAYA',
       jabatan: 'Jabatan Fungsional',
       disiplin: 'Tidak di hukum',
       aktif: 'Aktif',
@@ -181,7 +181,7 @@ export default function MasterPns() {
                       <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
                       <td
                         className="cursor-pointer whitespace-nowrap px-6 py-4 text-xs font-medium text-indigo-800"
-                        onClick={() => router.push(`/kepegawaian/data-pegawai?nip=${data.nip}`)}
+                        onClick={() => router.push(`/kepegawaian/data-pegawai?userId=${data.nip}`)}
                       >
                         {data.nama}
                       </td>

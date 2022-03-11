@@ -9,7 +9,7 @@ import { getQueryString } from '../../../utils/URLUtils';
 
 function DataPegawai() {
   const menu = filterMenu();
-  const { nip } = getQueryString();
+  const { userId } = getQueryString();
 
   return (
     <MainLayout>
@@ -18,7 +18,7 @@ function DataPegawai() {
 
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <section aria-labelledby="section-1-title">
-            <div>{typeof nip === 'undefined' ? <DataKepegawaian /> : <DetailPegawai />}</div>
+            <div>{typeof userId === 'undefined' ? <DataKepegawaian /> : <DetailPegawai />}</div>
           </section>
         </div>
       </div>

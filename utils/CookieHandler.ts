@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import config from './Config';
 
 type CookieName = 'token' | 'refreshtoken' | 'lastrefresh' | 'rememberme';
 type CookieOption = Partial<{
@@ -16,8 +17,8 @@ export const getCookie = (name: CookieName) => {
 };
 
 export const setCookie = (name: CookieName, value: string | number, options: CookieOption = {}) => {
-  const rememberMe = Cookies.get('rememberme', { sameSite: true, secure: true });
-  const cookieOption = { ...options, sameSite: true, secure: true };
+  const rememberMe = Cookies.get('rememberme', { sameSite: true, secure: config.cookieSecure });
+  const cookieOption = { ...options, sameSite: true, secure: config.cookieSecure };
   if (rememberMe === 1) {
     cookieOption.expires = 30;
   }
@@ -25,5 +26,5 @@ export const setCookie = (name: CookieName, value: string | number, options: Coo
 };
 
 export const removeCookie = (name: CookieName, options: CookieOption = {}) => {
-  Cookies.remove(name, { ...options, sameSite: true, secure: true });
+  Cookies.remove(name, { ...options, sameSite: true, secure: config.cookieSecure });
 };

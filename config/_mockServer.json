@@ -5,7 +5,7 @@
   "endpointPrefix": "",
   "latency": 500,
   "port": 3001,
-  "hostname": "127.0.0.1",
+  "hostname": "0.0.0.0",
   "routes": [
     {
       "uuid": "b63fcdb6-9158-420f-a7fe-29f815bf82ad",
@@ -13,44 +13,6 @@
       "method": "post",
       "endpoint": "auth/info",
       "responses": [
-        {
-          "uuid": "ec5a4814-3ec6-4f1c-888e-4da84d745461",
-          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"user_id\": {{ faker 'datatype.number' min=0 max=10 }},\n    \"session_uuid\": \"{{ faker 'random.uuid' }}\"\n  }\n}\n",
-          "latency": 500,
-          "statusCode": 200,
-          "label": "",
-          "headers": [
-            {
-              "key": "access-control-allow-headers",
-              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
-            },
-            {
-              "key": "access-control-allow-methods",
-              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
-            },
-            {
-              "key": "access-control-allow-origin",
-              "value": "*"
-            },
-            {
-              "key": "content-type",
-              "value": "application/json; charset=utf-8"
-            }
-          ],
-          "filePath": "",
-          "sendFileAsBody": false,
-          "rules": [
-            {
-              "target": "header",
-              "modifier": "Authorization",
-              "value": "[Bearer]\\s.*",
-              "operator": "regex"
-            }
-          ],
-          "rulesOperator": "OR",
-          "disableTemplating": false,
-          "fallbackTo404": false
-        },
         {
           "uuid": "1de1a771-0b25-46cc-b1fd-77bf02eb834d",
           "body": "{\n  \"status\": \"UNAUTHENTICATED\",\n  \"data\": null\n}\n",
@@ -82,6 +44,44 @@
               "target": "header",
               "modifier": "Authorization",
               "value": "null",
+              "operator": "regex"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        },
+        {
+          "uuid": "ec5a4814-3ec6-4f1c-888e-4da84d745461",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"user_id\": {{ faker 'datatype.number' min=0 max=10 }},\n    \"session_uuid\": \"{{ faker 'random.uuid' }}\"\n  }\n}\n",
+          "latency": 500,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "header",
+              "modifier": "Authorization",
+              "value": "[Bearer]\\s.*",
               "operator": "regex"
             }
           ],
@@ -187,6 +187,90 @@
         {
           "uuid": "9d23ac3c-00cb-4269-9133-b54d81467c2f",
           "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"access_token\": \"{{ faker 'random.uuid' }}\", \n    \"refresh_token\": \"{{ faker 'random.uuid' }}\"\n  }\n}\n",
+          "latency": 500,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "113ca33c-f8c2-4614-ac2f-7fd9e5ea72aa",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "rbac/set-resource-group",
+      "responses": [
+        {
+          "uuid": "9eae932b-bca0-4d44-bc96-52decd8e7932",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": \"Success\"\n}\n",
+          "latency": 500,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "eb0a14e5-2b56-447f-8253-4711d1dbf8d5",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "unit-kerja/insert",
+      "responses": [
+        {
+          "uuid": "39af8235-5645-461a-935d-2c1a86057e5e",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"unit_kerja\": \"Coba\",\n    \"parent_id\": \"5\"\n  }\n}\n",
           "latency": 500,
           "statusCode": 200,
           "label": "",

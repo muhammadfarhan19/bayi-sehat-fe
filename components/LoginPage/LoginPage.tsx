@@ -7,6 +7,7 @@ import { PostAuthLoginReq, PostAuthLoginRes } from '../../types/AuthAPI';
 import { Status } from '../../types/Common';
 import { getCookie, setCookie } from '../../utils/CookieHandler';
 import { callAPI } from '../../utils/Fetchers';
+import { encrypt } from '../../utils/Value';
 import { CircleProgress } from '../shared/CircleProgress';
 
 export default function LoginPage() {
@@ -25,9 +26,14 @@ export default function LoginPage() {
 
   const submitHandler = async (formData: PostAuthLoginReq) => {
     setLoading(true);
+
+    // Encrypt password
+    formData.password = await encrypt(formData.password);
+
     const loginRes = await callAPI<PostAuthLoginReq, PostAuthLoginRes>(AuthAPI.POST_AUTH_LOGIN, formData, {
       withToken: false,
     });
+
     if (loginRes.status === 200 && loginRes.data?.status === Status.OK) {
       const { access_token, refresh_token } = loginRes.data;
       setCookie('rememberme', 1);

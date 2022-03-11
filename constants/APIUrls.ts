@@ -20,3 +20,7 @@ export const RbacAPI = {
   GET_RBAC_RESOURCE_GET_PARENT: config.apiHost + '/rbac-resource-get-parent',
   GET_RBAC_RESOURCE_GET_CHILDREN: config.apiHost + '/rbac-resource-get-children',
 };
+
+export const UnitKerjaAPI = {
+  POST_UNIT_KERJA_INSERT: config.apiHost + '/unit-kerja/insert',
+};

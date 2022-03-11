@@ -26,7 +26,7 @@ export const withAuthenticatedPage: WithAuthenticatedPage =
 
       React.useEffect(() => {
         (async () => {
-          const infoRes = await callAPI<never, GetAuthInfoRes>(AuthAPI.GET_AUTH_INFO, {}, { checkToken: false });
+          const infoRes = await callAPI<null, GetAuthInfoRes>(AuthAPI.GET_AUTH_INFO, null, { checkToken: false });
           if (infoRes.status === 200) {
             if (checkLogin) {
               setLoadPage(true);

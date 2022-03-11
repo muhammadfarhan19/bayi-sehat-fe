@@ -4,17 +4,18 @@ import * as React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { setSnackbar } from '../../../action/CommonAction';
-import { CommonState } from '../../../reducer/CommonReducer';
+import { CommonState, SnackbarType } from '../../../reducer/CommonReducer';
+import { classNames } from '../../../utils/Components';
 
 type SnackbarProps = {
   message: string;
   timeout?: number;
-  type?: string;
+  type?: SnackbarType;
 };
 
 function Snackbar(props: SnackbarProps) {
   const dispatch = useDispatch();
-  const { message, timeout } = props;
+  const { message, timeout, type } = props;
 
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
@@ -49,29 +50,39 @@ function Snackbar(props: SnackbarProps) {
       >
         <div className="-0 fixed inset-x-0 top-2 z-40 pt-2 sm:pt-5">
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div className="rounded-lg bg-emerald-600 p-2 shadow-lg sm:p-3">
+            <div
+              className={classNames(
+                type === SnackbarType.INFO && 'bg-emerald-600',
+                type === SnackbarType.ERROR && 'bg-red-600',
+                type === SnackbarType.WARNING && 'bg-amber-600',
+                'rounded-lg p-2 shadow-lg sm:p-3'
+              )}
+            >
               <div className="flex flex-wrap items-center justify-between">
                 <div className="flex w-0 flex-1 items-center">
-                  <span className="flex rounded-lg bg-emerald-800 p-2">
+                  <span
+                    className={classNames(
+                      type === SnackbarType.INFO && 'bg-emerald-800',
+                      type === SnackbarType.ERROR && 'bg-red-800',
+                      type === SnackbarType.WARNING && 'bg-amber-800',
+                      'flex rounded-lg p-2'
+                    )}
+                  >
                     <SpeakerphoneIcon className="h-6 w-6 text-white" aria-hidden="true" />
                   </span>
                   <p className="ml-3 truncate font-medium text-white">
-                    <span className="md:hidden">We announced a new product!</span>
-                    <span className="hidden md:inline">{message}</span>
+                    <span className="inline">{message}</span>
                   </p>
-                </div>
-                <div className="order-3 mt-2 w-full flex-shrink-0 sm:order-2 sm:mt-0 sm:w-auto">
-                  <a
-                    href="#"
-                    className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-medium text-emerald-600 shadow-sm hover:bg-emerald-50"
-                  >
-                    Learn more
-                  </a>
                 </div>
                 <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
                   <button
                     type="button"
-                    className="-mr-1 flex rounded-md p-2 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-white"
+                    className={classNames(
+                      type === SnackbarType.INFO && 'hover:bg-emerald-500',
+                      type === SnackbarType.ERROR && 'hover:bg-red-500',
+                      type === SnackbarType.WARNING && 'hover:bg-amber-500',
+                      '-mr-1 flex rounded-md p-2  focus:outline-none focus:ring-2 focus:ring-white'
+                    )}
                     onClick={handleClose}
                   >
                     <span className="sr-only">Tutup</span>
@@ -88,12 +99,12 @@ function Snackbar(props: SnackbarProps) {
 }
 
 export default function NotificationBar() {
-  const { show, message, timeout } = useSelector<{ common: CommonState }, CommonState['snackbar']>(state => {
+  const { show, message, timeout, type } = useSelector<{ common: CommonState }, CommonState['snackbar']>(state => {
     return state.common.snackbar;
   }, shallowEqual);
 
   if (show) {
-    return <Snackbar message={message} timeout={timeout} />;
+    return <Snackbar message={message} timeout={timeout} type={type} />;
   }
 
   return null;

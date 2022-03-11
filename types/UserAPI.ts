@@ -24,7 +24,12 @@ export interface GetUserPersonalPegawaiData {
   unit_kerja: string;
   golongan: string;
   tmt_golongan: string;
+  karpeg: string;
 }
+
+export type GetUserProfileReq = {
+  user_id: number;
+};
 
 export type GetUserProfileRes =
   | {
@@ -39,6 +44,10 @@ export type GetUserProfileRes =
       status: Status.ERROR_DB;
       error_message: string;
     };
+
+export type GetUserPersonalPegawaiReq = {
+  user_id: number;
+};
 
 export interface GetUserPersonalPegawaiRes {
   status: Status;

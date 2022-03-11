@@ -5,23 +5,32 @@ import { ContentResource } from '../../../../constants/Resource';
 import { Status, StatusMenikah } from '../../../../types/Common';
 import {
   GetUserPersonalPegawaiData,
+  GetUserPersonalPegawaiReq,
   GetUserPersonalPegawaiRes,
   GetUserProfileData,
+  GetUserProfileReq,
   GetUserProfileRes,
 } from '../../../../types/UserAPI';
-import { callAPI } from '../../../../utils/Fetchers';
+import { callAPI, callAPIParallel } from '../../../../utils/Fetchers';
+import { getQueryString } from '../../../../utils/URLUtils';
+import { withErrorBoundary } from '../../../hocs/ErrorBoundary';
 import Loader from '../../../shared/Loader/Loader';
 
 type DataPersonal = Partial<GetUserProfileData & GetUserPersonalPegawaiData>;
 
-export default function DataDiriPegawai() {
+function DataDiriPegawai() {
+  const { userId } = getQueryString<{ userId?: number }>();
+  const [throwError, setThrowError] = React.useState<string>(null);
   const [dataPersonal, setDataPersonal] = React.useState<DataPersonal>({});
 
   React.useEffect(() => {
     (async () => {
-      await Promise.all([
-        callAPI<never, GetUserProfileRes>(UserAPI.GET_USER_PROFILE, {}, { method: 'GET' }),
-        callAPI<never, GetUserPersonalPegawaiRes>(UserAPI.GET_USER_PERSONAL_PEGAWAI, {}, { method: 'GET' }),
+      const apiReq = userId ? { user_id: userId } : null;
+      await callAPIParallel([
+        callAPI<GetUserProfileReq, GetUserProfileRes>(UserAPI.GET_USER_PROFILE, apiReq, { method: 'GET' }),
+        callAPI<GetUserPersonalPegawaiReq, GetUserPersonalPegawaiRes>(UserAPI.GET_USER_PERSONAL_PEGAWAI, apiReq, {
+          method: 'GET',
+        }),
       ]).then(res => {
         let dataPersonalRes = {};
         if (res[0].status === 200 && res[0].data && res[0].data.status === Status.OK) {
@@ -30,10 +39,19 @@ export default function DataDiriPegawai() {
         if (res[1].status === 200 && res[1].data && res[1].data.status === Status.OK) {
           dataPersonalRes = { ...dataPersonalRes, ...res[1].data.data };
         }
-        setDataPersonal(dataPersonalRes);
+
+        if (Object.keys(dataPersonalRes).length) {
+          setDataPersonal(dataPersonalRes);
+        } else {
+          setThrowError('Failed to fetch the data');
+        }
       });
     })();
   }, []);
+
+  if (throwError) {
+    throw throwError;
+  }
 
   if (!Object.keys(dataPersonal).length) {
     return (
@@ -60,7 +78,7 @@ export default function DataDiriPegawai() {
             { label: 'Pangkat', value: '?' },
             { label: 'Masa Kerja', value: '?' },
             { label: 'Status', value: ContentResource[StatusMenikah[dataPersonal.status_menikah]] },
-            { label: 'Karpeg', value: '?' },
+            { label: 'Karpeg', value: dataPersonal.karpeg },
           ].map((each, index) => (
             <tr key={index}>
               <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
@@ -72,3 +90,5 @@ export default function DataDiriPegawai() {
     </div>
   );
 }
+
+export default withErrorBoundary(DataDiriPegawai);
