@@ -25,6 +25,8 @@ export interface GetUserPersonalPegawaiData {
   golongan: string;
   tmt_golongan: string;
   karpeg: string;
+  masa_kerja: string;
+  pangkat: string;
 }
 
 export type GetUserProfileReq = {

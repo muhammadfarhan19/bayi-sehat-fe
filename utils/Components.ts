@@ -1,11 +1,11 @@
-import { Navigation } from '../components/MainLayout/NavigationProps';
+import { Navigation } from '../components/shared/MainLayout/NavigationProps';
 import { NavigationList } from '../constants/NavigationList';
 
-export function classNames(...classes) {
+export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export function filterMenu(): Navigation[] {
+export function filterMenu(allowedMap?: Record<number, boolean>): Navigation[] {
   if (typeof window !== 'undefined') {
     const currentLocation = window.location.pathname;
     const currentAppender = (listOfMenu: Navigation[], parent?: Navigation): Navigation[] => {
@@ -21,7 +21,13 @@ export function filterMenu(): Navigation[] {
           // Recursive check
           iterator.childMenu = currentAppender(iterator.childMenu, iterator);
         }
-        result.push(iterator);
+
+        // Check if authorize
+        if (allowedMap && allowedMap[iterator.id]) {
+          result.push(iterator);
+        } else if (!allowedMap) {
+          result.push(iterator);
+        }
       }
       return result;
     };

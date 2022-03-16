@@ -6,7 +6,7 @@ import HeaderMobile from './HeaderMobile';
 import MenuDropdown from './MenuDropdown';
 import { NavigationProps } from './NavigationProps';
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 

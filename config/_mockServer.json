@@ -10,7 +10,7 @@
     {
       "uuid": "b63fcdb6-9158-420f-a7fe-29f815bf82ad",
       "documentation": "",
-      "method": "post",
+      "method": "get",
       "endpoint": "auth/info",
       "responses": [
         {
@@ -102,7 +102,7 @@
       "responses": [
         {
           "uuid": "1f73096f-cd49-4baa-839b-aa744b768456",
-          "body": "{ \n  \"status\": \"OK\", \n  \"access_token\": \"{{ faker 'random.uuid' }}\", \n  \"refresh_token\": \"{{ faker 'random.uuid' }}\"\n}",
+          "body": "{ \n  \"status\": \"OK\",\n  \"data\": {\n    \"access_token\": \"{{ faker 'random.uuid' }}\", \n    \"refresh_token\": \"{{ faker 'random.uuid' }}\"\n  }\n}",
           "latency": 500,
           "statusCode": 200,
           "label": "",
@@ -337,7 +337,7 @@
       "responses": [
         {
           "uuid": "5e7b34b4-7019-4f8a-8ca4-cbf9fa73f2f9",
-          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"user_id\": 1,\n    \"nip\": \"196912152002121003\",\n    \"name\": \"PAUZAN\",\n    \"tempat_lahir\": \"TANJUNG KEMUNING\",\n    \"tanggal_lahir\": \"1969-12-15\",\n    \"tmt_cpns\": \"2002-12-01\",\n    \"status_cpns\": 1,\n    \"jabatan\": \"Pengelola Data Tata Organisasi dan Tata Laksana\",\n    \"unit_kerja\": \"Dirjen DIkti\",\n    \"golongan\": \"IV/a\",\n    \"tmt_golongan\": \"2018-10-01\"\n  }\n}",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"user_id\": 1,\n    \"nip\": \"196912152002121003\",\n    \"name\": \"PAUZAN\",\n    \"tempat_lahir\": \"TANJUNG KEMUNING\",\n    \"tanggal_lahir\": \"1969-12-15\",\n    \"tmt_cpns\": \"2002-12-01\",\n    \"status_cpns\": 1,\n    \"jabatan\": \"Pengelola Data Tata Organisasi dan Tata Laksana\",\n    \"unit_kerja\": \"Dirjen DIkti\",\n    \"golongan\": \"IV/a\",\n    \"tmt_golongan\": \"2018-10-01\",\n    \"karpeg\": \"E. ABCD\",\n    \"masa_kerja\": \"1 Tahun, 1 Bulan\",\n    \"pangkat\": \"Pembina\"\n  }\n}",
           "latency": 500,
           "statusCode": 200,
           "label": "",
@@ -429,7 +429,7 @@
       "responses": [
         {
           "uuid": "cb943406-b50c-421d-8f24-5343d10cd80c",
-          "body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {{#each (bodyRaw 'bulk_request')}}\n        {\n            \"user_id\": {{ this.user_id }},\n            \"resource_id\": {{ this.resource_id }},\n            \"action\": {{ this.action }},\n            \"is_authorized\": true,\n            \"error\": \"\"\n        }\n        {{/each}}\n    ]\n}\n",
+          "body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {{#each (bodyRaw 'bulk_request') }}\n        {\n            \"user_id\": {{ this.user_id }},\n            \"resource_id\": {{ this.resource_id }},\n            \"action\": \"{{ this.action }}\",\n            \"is_authorized\": true,\n            \"error\": \"\"\n        }{{#unless @last}},{{/unless}}\n        {{/each}}\n    ]\n}\n",
           "latency": 500,
           "statusCode": 200,
           "label": "",
@@ -465,7 +465,7 @@
     }
   ],
   "proxyMode": false,
-  "proxyHost": "",
+  "proxyHost": "http://43.241.149.99/api",
   "proxyRemovePrefix": false,
   "tlsOptions": {
     "enabled": false,

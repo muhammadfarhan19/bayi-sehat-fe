@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { withAuthenticatedPage } from '../../components/hocs/AuthenticatedPage';
-import LoginPage from '../../components/LoginPage/LoginPage';
+import LoginPage from '../../components/LoginPage';
+import { withAuthenticatedPage } from '../../components/shared/hocs/AuthenticatedPage';
 
 function Login() {
   return (

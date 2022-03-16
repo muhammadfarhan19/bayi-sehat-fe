@@ -1,7 +1,7 @@
 import { ClockIcon, LocationMarkerIcon, UsersIcon } from '@heroicons/react/outline';
 import React from 'react';
 
-import { classNames } from '../../utils/Components';
+import { classNames } from '../../../utils/Components';
 
 function LeftProfile() {
   return (

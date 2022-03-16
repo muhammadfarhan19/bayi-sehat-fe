@@ -38,8 +38,10 @@ export interface PostAuthLoginReq {
 export type PostAuthLoginRes =
   | {
       status: Status.OK;
-      access_token: string;
-      refresh_token: string;
+      data: {
+        access_token: string;
+        refresh_token: string;
+      };
     }
   | {
       status: Status.BAD_REQUEST | Status.ERROR_DB;

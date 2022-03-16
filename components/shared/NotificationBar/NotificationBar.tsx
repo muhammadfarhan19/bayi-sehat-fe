@@ -52,9 +52,9 @@ function Snackbar(props: SnackbarProps) {
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div
               className={classNames(
-                type === SnackbarType.INFO && 'bg-emerald-600',
-                type === SnackbarType.ERROR && 'bg-red-600',
-                type === SnackbarType.WARNING && 'bg-amber-600',
+                type === SnackbarType.INFO ? 'bg-emerald-600' : '',
+                type === SnackbarType.ERROR ? 'bg-red-600' : '',
+                type === SnackbarType.WARNING ? 'bg-amber-600' : '',
                 'rounded-lg p-2 shadow-lg sm:p-3'
               )}
             >
@@ -62,9 +62,9 @@ function Snackbar(props: SnackbarProps) {
                 <div className="flex w-0 flex-1 items-center">
                   <span
                     className={classNames(
-                      type === SnackbarType.INFO && 'bg-emerald-800',
-                      type === SnackbarType.ERROR && 'bg-red-800',
-                      type === SnackbarType.WARNING && 'bg-amber-800',
+                      type === SnackbarType.INFO ? 'bg-emerald-800' : '',
+                      type === SnackbarType.ERROR ? 'bg-red-800' : '',
+                      type === SnackbarType.WARNING ? 'bg-amber-800' : '',
                       'flex rounded-lg p-2'
                     )}
                   >
@@ -78,9 +78,9 @@ function Snackbar(props: SnackbarProps) {
                   <button
                     type="button"
                     className={classNames(
-                      type === SnackbarType.INFO && 'hover:bg-emerald-500',
-                      type === SnackbarType.ERROR && 'hover:bg-red-500',
-                      type === SnackbarType.WARNING && 'hover:bg-amber-500',
+                      type === SnackbarType.INFO ? 'hover:bg-emerald-500' : '',
+                      type === SnackbarType.ERROR ? 'hover:bg-red-500' : '',
+                      type === SnackbarType.WARNING ? 'hover:bg-amber-500' : '',
                       '-mr-1 flex rounded-md p-2  focus:outline-none focus:ring-2 focus:ring-white'
                     )}
                     onClick={handleClose}

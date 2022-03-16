@@ -4,9 +4,7 @@ import { classNames } from '../../utils/Components';
 import DaftarPetaJabatan from './DaftarPetaJabatan';
 
 export default function DataKepegawaian() {
-  const tabs = [
-    { name: 'Peta Jabatan', href: '#' }
-  ];
+  const tabs = [{ name: 'Peta Jabatan', href: '#' }];
 
   const [selected, setSelected] = React.useState('Peta Jabatan');
 
@@ -50,7 +48,7 @@ export default function DataKepegawaian() {
           </div>
         </div>
       </div>
-      <div>{selected === 'Peta Jabatan' && <DaftarPetaJabatan /> }</div>
+      <div>{selected === 'Peta Jabatan' && <DaftarPetaJabatan />}</div>
     </div>
   );
 }

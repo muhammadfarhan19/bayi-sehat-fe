@@ -1,7 +1,12 @@
+import { DesktopComputerIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { classNames } from '../../../../utils/Components';
+import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
+import usePersonalPegawaiData from '../../../shared/hooks/usePersonalPegawaiData';
+import Loader from '../../../shared/Loader/Loader';
 import DataDiriPegawai from './DataDiriPegawai';
+import DataDiriPribadi from './DataDiriPribadi';
 
 const tabs = [
   { name: 'Data Diri Pegawai', href: '#' },
@@ -12,16 +17,25 @@ const tabs = [
   { name: 'Tanda Tangan Digital', href: '#' },
 ];
 
-export default function DetailPegawai() {
+function DetailPegawai() {
   const [selected, setSelected] = React.useState(tabs[0].name);
+  const personalPegawaiData = usePersonalPegawaiData();
+
+  if (!personalPegawaiData) {
+    return (
+      <div className="relative h-[150px] w-full divide-y divide-gray-200">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <>
       <div className="flex flex-row gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
         <img src="../../../detail-pegawai/img.svg" className="h-[88px] w-[88px]" />
         <div className="my-auto flex flex-col">
-          <p className="text-[24px] font-[700]">Widodo</p>
-          <p className="text-[14px] font-[500] text-[#6B7280]">Analis Sumber Daya Manusia Aparatur Ahli Muda</p>
+          <p className="text-[24px] font-[700]">{personalPegawaiData?.name}</p>
+          <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
         </div>
       </div>
       <div className="mt-[12px] rounded-[8px] bg-white py-6 px-[24px] shadow">
@@ -64,12 +78,23 @@ export default function DetailPegawai() {
           </div>
         </div>
         {selected === tabs[0].name ? <DataDiriPegawai /> : null}
-        {selected === tabs[1].name ? <DataDiriPegawai /> : null}
-        {selected === tabs[2].name ? <DataDiriPegawai /> : null}
-        {selected === tabs[3].name ? <DataDiriPegawai /> : null}
-        {selected === tabs[4].name ? <DataDiriPegawai /> : null}
-        {selected === tabs[5].name ? <DataDiriPegawai /> : null}
+        {selected === tabs[1].name ? <DataDiriPribadi /> : null}
+        {selected === tabs[2].name ? <EmptyState /> : null}
+        {selected === tabs[3].name ? <EmptyState /> : null}
+        {selected === tabs[4].name ? <EmptyState /> : null}
+        {selected === tabs[5].name ? <EmptyState /> : null}
       </div>
     </>
   );
 }
+
+const EmptyState = () => {
+  return (
+    <div className="mt-2 flex flex-col items-center">
+      <DesktopComputerIcon className="h-24 text-gray-600" />
+      <div className="font-semibold text-gray-600">- In Progress -</div>
+    </div>
+  );
+};
+
+export default withErrorBoundary(DetailPegawai);

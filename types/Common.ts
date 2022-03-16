@@ -1,3 +1,5 @@
+export type Action = 'read' | 'write';
+
 export enum Status {
   BAD_REQUEST = 'BAD_REQUEST',
   ERROR_DB = 'ERROR_DB',

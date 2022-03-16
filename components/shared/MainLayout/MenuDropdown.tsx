@@ -1,14 +1,14 @@
 import { Menu, Transition } from '@headlessui/react';
 import { ElementType, Fragment, ReactNode } from 'react';
 
-import { classNames } from '../../utils/Components';
+import { classNames } from '../../../utils/Components';
 import { Navigation } from './NavigationProps';
 
 interface MenuDropdownProps {
   children: ReactNode;
   menuAs?: ElementType<unknown>;
   menuClassName?: string;
-  buttonAs?: ElementType<unknown>;
+  buttonAs?: ElementType;
   buttonClassName?: string;
   navigation: Navigation[];
   position?: string;
@@ -64,7 +64,7 @@ MenuDropdown.SimpleMobileProps = {
   buttonClassName:
     'block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800 cursor-pointer',
   position: '',
-} as Partial<MenuDropdownProps>;
+} as unknown as Partial<MenuDropdownProps>;
 
 MenuDropdown.SimpleDesktopProps = {
   menuAs: Fragment,
@@ -73,4 +73,4 @@ MenuDropdown.SimpleDesktopProps = {
   buttonClassName:
     'rounded-md bg-white bg-opacity-0 px-3 py-2 text-sm font-medium hover:bg-opacity-10 text-indigo-100 cursor-pointer',
   position: 'top-8',
-} as Partial<MenuDropdownProps>;
+} as unknown as Partial<MenuDropdownProps>;

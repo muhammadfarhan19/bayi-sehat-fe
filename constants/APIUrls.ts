@@ -9,7 +9,7 @@ export const AuthAPI = {
 
 export const UserAPI = {
   GET_USER_PROFILE: config.apiHost + '/user/profile',
-  GET_USER_PASSWORD: config.apiHost + '/user/password',
+  PUT_USER_PASSWORD: config.apiHost + '/user/password',
   GET_USER_PERSONAL_PEGAWAI: config.apiHost + '/user/personal-pegawai',
 };
 

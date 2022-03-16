@@ -18,6 +18,7 @@ export interface CommonState {
     show: boolean;
     type: ModalType;
     message: string;
+    redirect: string | null;
   };
   snackbar: {
     show: boolean;
@@ -33,6 +34,7 @@ const initialState: CommonState = {
     show: false,
     type: ModalType.INFO,
     message: '',
+    redirect: null,
   },
   snackbar: {
     show: false,

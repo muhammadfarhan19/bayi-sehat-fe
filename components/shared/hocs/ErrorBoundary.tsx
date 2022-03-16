@@ -2,11 +2,12 @@ import { RefreshIcon } from '@heroicons/react/solid';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setSnackbar } from '../../action/CommonAction';
-import { SnackbarType } from '../../reducer/CommonReducer';
+import { setSnackbar } from '../../../action/CommonAction';
+import { SnackbarType } from '../../../reducer/CommonReducer';
 
-class ErrorBoundary extends React.Component<{ errorHandler: () => void }, { hasError: boolean }> {
-  constructor(props) {
+type ErrorBoundaryProps = { errorHandler: () => void };
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, { hasError: boolean }> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
       hasError: false,
@@ -17,7 +18,7 @@ class ErrorBoundary extends React.Component<{ errorHandler: () => void }, { hasE
     return { hasError: true };
   }
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     this.props.errorHandler();
     console.error(error, errorInfo);
   }
@@ -49,8 +50,12 @@ class ErrorBoundary extends React.Component<{ errorHandler: () => void }, { hasE
   }
 }
 
-export const withErrorBoundary = Component => {
-  const enhancedComponent = props => {
+interface WithErrorBoundary {
+  <T extends React.FunctionComponent<P>, P>(Component: T): (props: P) => JSX.Element;
+}
+
+export const withErrorBoundary: WithErrorBoundary = Component => {
+  const enhancedComponent = (props = {}) => {
     const dispatch = useDispatch();
 
     const handleError = () => {
@@ -65,7 +70,7 @@ export const withErrorBoundary = Component => {
 
     return (
       <ErrorBoundary errorHandler={handleError}>
-        <Component {...props} />
+        <Component {...(props as never)} />
       </ErrorBoundary>
     );
   };

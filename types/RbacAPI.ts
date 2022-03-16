@@ -1,9 +1,9 @@
-import { Status } from './Common';
+import { Action, Status } from './Common';
 
 export interface AuthorizeData {
   user_id: number;
   resource_id: number;
-  action: string;
+  action: Action;
   is_authorized: boolean;
   error?: string;
 }
@@ -24,12 +24,12 @@ export interface Resource {
 export interface PostRbacAuthorizeReq {
   user_id: number;
   resource_id: number;
-  action: string;
+  action: Action;
 }
 
 export interface PostRbacAuthorizeRes {
   status: Status;
-  data: AuthorizeData | null;
+  data: AuthorizeData[] | null;
 }
 
 export interface PostRbacBulkAuthorizeReq {

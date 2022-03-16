@@ -1,7 +1,7 @@
-export const ContentResource = {
-  MARRIED: 'Menikah',
-  NOT_MARRIED: 'Belum menikah',
-  DIVORCE: 'Bercerai',
-  MALE: 'Pria',
-  FEMALE: 'Wanita',
+import { StatusMenikah } from '../types/Common';
+
+export const StatusMenikahText: Record<StatusMenikah, string> = {
+  [StatusMenikah.MARRIED]: 'Menikah',
+  [StatusMenikah.NOT_MARRIED]: 'Belum menikah',
+  [StatusMenikah.DIVORCE]: 'Bercerai',
 };

@@ -2,14 +2,20 @@ import { Disclosure } from '@headlessui/react';
 import { ChevronRightIcon, SearchIcon } from '@heroicons/react/outline';
 import * as React from 'react';
 
-import { classNames } from '../../utils/Components';
+import { classNames } from '../../../utils/Components';
+import { useAuthorizedMenuContext } from '../context/AuthorizedMenuContext';
 import { Navigation } from './NavigationProps';
 
-function LeftMenu({ navigation = [] }: { navigation: Navigation[] }) {
+export default function LeftMenu() {
+  const navigation = useAuthorizedMenuContext();
   const [filteredNavigation, setFilteredNavigation] = React.useState(() => navigation);
 
+  React.useEffect(() => {
+    setFilteredNavigation(navigation);
+  }, [navigation]);
+
   const handleFilterMenu = () => {
-    let timeout;
+    let timeout: NodeJS.Timeout;
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       const filterText = event.target.value;
       if (!timeout) {
@@ -19,7 +25,7 @@ function LeftMenu({ navigation = [] }: { navigation: Navigation[] }) {
         if (filterText) {
           const immutableNav = [...navigation];
           const filterNav = (navigationList: Navigation[]) =>
-            navigationList.reduce((res, each) => {
+            navigationList.reduce<Navigation[]>((res, each) => {
               if (each.childMenu && Array.isArray(each.childMenu)) {
                 const eachNav = { ...each };
                 eachNav.childMenu = filterNav(eachNav.childMenu);
@@ -73,8 +79,8 @@ function LeftMenu({ navigation = [] }: { navigation: Navigation[] }) {
                   item.current
                     ? 'bg-gray-100 text-gray-900'
                     : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                  index === 0 && 'rounded-t-md',
-                  index === navigation.length - 1 && 'rounded-b-md',
+                  index === 0 ? 'rounded-t-md' : '',
+                  index === navigation.length - 1 ? 'rounded-b-md' : '',
                   'group flex w-full items-center border-b-2 border-b-gray-100 py-3 pl-7 pr-2 text-sm font-medium'
                 )}
               >
@@ -87,8 +93,8 @@ function LeftMenu({ navigation = [] }: { navigation: Navigation[] }) {
                 <>
                   <Disclosure.Button
                     className={classNames(
-                      index === 0 && 'rounded-t-md',
-                      index === navigation.length - 1 && 'rounded-b-md',
+                      index === 0 ? 'rounded-t-md' : '',
+                      index === navigation.length - 1 ? 'rounded-b-md' : '',
                       'group flex w-full items-center justify-between border-b-2 border-b-gray-100 bg-white py-3 pl-7 pr-2 text-left text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                     )}
                   >
@@ -106,7 +112,7 @@ function LeftMenu({ navigation = [] }: { navigation: Navigation[] }) {
                         key={subIndex}
                         href={subItem.href}
                         className={classNames(
-                          subIndex === item.childMenu.length - 1 && 'rounded-b-md',
+                          subIndex === item.childMenu.length - 1 ? 'rounded-b-md' : '',
                           subItem.current
                             ? 'bg-gray-100 text-gray-900'
                             : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
@@ -126,5 +132,3 @@ function LeftMenu({ navigation = [] }: { navigation: Navigation[] }) {
     </div>
   );
 }
-
-export default LeftMenu;

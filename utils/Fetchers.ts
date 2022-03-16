@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import { AuthAPI } from '../constants/APIUrls';
 import { PostAuthRefreshRes } from '../types/AuthAPI';
+import config from './Config';
 import { getCookie, removeCookie, setCookie } from './CookieHandler';
 
 interface CallAPIOptions {
@@ -17,11 +18,17 @@ interface CallAPI {
 export const callAPI: CallAPI = async (url, requestData, options) => {
   const { checkToken = true, isMultipart = false, method = 'post', withToken = true } = options || {};
 
-  const headers = {
+  const headers: {
+    'Content-Type': string;
+    Authorization?: string;
+  } = {
     'Content-Type': isMultipart ? 'multipart/form-data' : 'application/json',
   };
 
-  await checkTokenHandler();
+  // CHECK is token expired
+  if (checkToken) {
+    await checkTokenHandler();
+  }
 
   if (withToken) {
     const tokenCookie = getCookie('token');
@@ -33,7 +40,7 @@ export const callAPI: CallAPI = async (url, requestData, options) => {
   const axiosProps: AxiosRequestConfig = {
     headers,
     method,
-    timeout: 15000, // Timeout 15 seconds
+    timeout: config.apiTimeoutMs, // Timeout 15 seconds
     url,
   };
   if (method === 'post' || method === 'put' || method === 'delete') {
@@ -48,9 +55,6 @@ export const callAPI: CallAPI = async (url, requestData, options) => {
     })
     .catch((err: AxiosError) => {
       const { response } = err;
-      if (checkToken && response?.status === 401) {
-        refreshTokenHandler();
-      }
       return response || {};
     });
 };
@@ -87,8 +91,7 @@ export const refreshTokenHandler = async () => {
 
 export const checkTokenHandler = async () => {
   const lastRefresh = getCookie('lastrefresh');
-  // Check last 9 seconds
-  if (lastRefresh && Date.now() - Number(lastRefresh) > 9000) {
+  if (lastRefresh && Date.now() - Number(lastRefresh) > config.tokenExpiredMs) {
     await refreshTokenHandler();
   } else if (isNaN(lastRefresh)) {
     await refreshTokenHandler();
@@ -96,7 +99,6 @@ export const checkTokenHandler = async () => {
   return true;
 };
 
-export const callAPIParallel = async <T extends readonly unknown[] | []>(promises: T) => {
-  await checkTokenHandler();
-  return Promise.all(promises);
+export const callAPIParallel = <T extends readonly unknown[] | []>(promises: () => T) => {
+  return checkTokenHandler().then(() => Promise.all(promises()));
 };

@@ -7,11 +7,14 @@ import { CommonState } from '../../../reducer/CommonReducer';
 
 export default function ModalDialog() {
   const dispatch = useDispatch();
-  const { show, message } = useSelector<{ common: CommonState }, CommonState['modal']>(state => {
+  const { show, message, redirect } = useSelector<{ common: CommonState }, CommonState['modal']>(state => {
     return state.common.modal;
   }, shallowEqual);
 
   function handleModal() {
+    if (redirect) {
+      window.location.href = redirect;
+    }
     dispatch(setModal({ show: false }));
   }
 

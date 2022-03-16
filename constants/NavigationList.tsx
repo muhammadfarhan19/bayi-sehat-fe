@@ -1,18 +1,18 @@
-import { Navigation } from '../components/MainLayout/NavigationProps';
+import { Navigation } from '../components/shared/MainLayout/NavigationProps';
 
-export enum NavigationId {
-  BERANDA = 1,
-  KEPEGAWAIAN = 2,
-  DATA_PEGAWAI = 3,
-  DAFTAR_JABATAN = 4,
-  PETA_JABATAN = 5,
-  UNKNOWN = 0,
-}
+const UNKNOWN = 0;
+export const NavigationId = {
+  BERANDA: 1,
+  KEPEGAWAIAN: 2,
+  DATA_PEGAWAI: 3,
+  DAFTAR_JABATAN: 4,
+  PETA_JABATAN: 5,
+};
 
 export const UserNavigationList: Navigation[] = [
-  { name: 'Biodata', href: '/biodata', id: NavigationId.UNKNOWN },
-  { name: 'Kalender Kegiatan', href: '#', id: NavigationId.UNKNOWN },
-  { name: 'Log Out', href: '/logout', id: NavigationId.UNKNOWN },
+  { name: 'Biodata', href: '/biodata', id: UNKNOWN },
+  { name: 'Ubah Kata Sandi', href: '/changepassword', id: UNKNOWN },
+  { name: 'Keluar', href: '/logout', id: UNKNOWN },
 ];
 
 export const NavigationList: Navigation[] = [

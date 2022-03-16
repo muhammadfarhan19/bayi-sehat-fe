@@ -2,13 +2,12 @@ import { ExclamationCircleIcon, EyeIcon, EyeOffIcon, InformationCircleIcon } fro
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { AuthAPI } from '../../constants/APIUrls';
-import { PostAuthLoginReq, PostAuthLoginRes } from '../../types/AuthAPI';
-import { Status } from '../../types/Common';
-import { getCookie, setCookie } from '../../utils/CookieHandler';
-import { callAPI } from '../../utils/Fetchers';
-import { encrypt } from '../../utils/Value';
-import { CircleProgress } from '../shared/CircleProgress';
+import { AuthAPI } from '../constants/APIUrls';
+import { PostAuthLoginReq, PostAuthLoginRes } from '../types/AuthAPI';
+import { Status } from '../types/Common';
+import { getCookie, setCookie } from '../utils/CookieHandler';
+import { callAPI } from '../utils/Fetchers';
+import { CircleProgress } from './shared/CircleProgress';
 
 export default function LoginPage() {
   const [passwordShown, setPasswordShown] = React.useState(false);
@@ -27,15 +26,13 @@ export default function LoginPage() {
   const submitHandler = async (formData: PostAuthLoginReq) => {
     setLoading(true);
 
-    // Encrypt password
-    formData.password = await encrypt(formData.password);
-
     const loginRes = await callAPI<PostAuthLoginReq, PostAuthLoginRes>(AuthAPI.POST_AUTH_LOGIN, formData, {
       withToken: false,
+      checkToken: false,
     });
 
     if (loginRes.status === 200 && loginRes.data?.status === Status.OK) {
-      const { access_token, refresh_token } = loginRes.data;
+      const { access_token, refresh_token } = loginRes.data.data;
       setCookie('rememberme', 1);
       setCookie('token', access_token);
       setCookie('refreshtoken', refresh_token);
