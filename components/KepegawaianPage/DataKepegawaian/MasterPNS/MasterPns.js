@@ -1,43 +1,59 @@
 import { AdjustmentsIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { callAPI } from '../../../../utils/Fetchers';
+import config from '../../../../utils/Config';
 
 export default function MasterPns() {
   const router = useRouter();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
+  const [list, setList] = React.useState([])
+  const [filter, setFilter] = React.useState({
+    nama: '',
+    unit_kerja: '',
+    tipe_jabatan: '',
+    jabatan: ''
+  })
+  const unitKerja = [
+    'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
+    'Direktorat Pembelajaran dan Kemahasiswaan',
+    'Direktorat Jenderal Pendidikan Tinggi',
+    'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
+    'Direktorat Pembelajaran dan Kemahasiswaan'
+  ]
+
   const toggleAdvancedFilter = () => {
     setshowAdvancedFilter(!showAdvancedFilter);
   };
 
-  const dataTable = [
-    {
-      nama: 'Widodo Arjuna',
-      nip: '196601211986012001',
-      unit_kerja: 'DIREKTORAT SUMBER DAYA',
-      jabatan: 'Jabatan Fungsional',
-      disiplin: 'Tidak di hukum',
-      aktif: 'Aktif',
-      kum: '1',
-    },
-    {
-      nama: 'Widodo Arjuna',
-      nip: '196601211986012001',
-      unit_kerja: 'DIREKTORAT SUMBER DAYA',
-      jabatan: 'Jabatan Fungsional',
-      disiplin: 'Tidak di hukum',
-      aktif: 'Aktif',
-      kum: '1',
-    },
-    {
-      nama: 'Widodo Arjuna',
-      nip: '196601211986012001',
-      unit_kerja: 'DIREKTORAT SUMBER DAYA',
-      jabatan: 'Jabatan Fungsional',
-      disiplin: 'Tidak di hukum',
-      aktif: 'Aktif',
-      kum: '1',
-    },
-  ];
+  const handleUrl = ({ unit_kerja = '', nama = '', tipe_jabatan = 'struktural', jabatan = '' }) => {
+    let url = config.apiHost + `/pegawai/list?unit_kerja=${unit_kerja}&nama=${nama}&tipe_jabatan=${tipe_jabatan}&jabatan=${jabatan}&page=1&per_page=20`
+
+    return url
+  }
+
+  const search = async (type, value) => {
+    const newState = { ...filter }
+    newState[type] = value
+    setFilter(newState)
+    const getData = await callAPI(handleUrl(newState), '', {
+      method: 'get',
+      withToken: true,
+      checkToken: true,
+    })
+    setList(getData?.data?.data?.list)
+  }
+
+  React.useEffect(() => {
+    (async () => {
+      const getData = await callAPI(handleUrl({}), '', {
+        method: 'get',
+        withToken: true,
+        checkToken: true,
+      })
+      setList(getData?.data?.data?.list)
+    })()
+  }, [])
 
   return (
     <>
@@ -49,6 +65,7 @@ export default function MasterPns() {
               type="text"
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               placeholder="Cari..."
+              onChange={(e) => search('nama', e.target.value)}
             />
             <button
               className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
@@ -75,34 +92,25 @@ export default function MasterPns() {
           <div className="flex w-full flex-row gap-x-[16px]">
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
-              </select>
-            </div>
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Nama</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
+              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" onChange={(e) => search('unit_kerja', e.target.value)}>
+                <option value="">Semua</option>
+                {unitKerja.map((item)=>(
+                  <option value={item}>{item}</option>
+                ))}
+                
               </select>
             </div>
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Tipe Jabatan</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
+              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" onChange={(e) => search('tipe_jabatan', e.target.value)}>
+                <option value="">Semua</option>
+                <option value="Struktural">Struktural</option>
               </select>
             </div>
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Nama Jabatan</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
+              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" onChange={(e) => search('jabatan', e.target.value)}>
+                <option value="">Semua</option>
               </select>
             </div>
           </div>
@@ -144,25 +152,13 @@ export default function MasterPns() {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
+                      Golongan
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
                       Jabatan
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Disiplin
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Aktif
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      KUM
                     </th>
                     <th
                       scope="col"
@@ -173,7 +169,7 @@ export default function MasterPns() {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataTable.map((data, dataIdx) => (
+                  {list?.map((data, dataIdx) => (
                     <tr
                       key={dataIdx}
                       className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
@@ -183,16 +179,16 @@ export default function MasterPns() {
                         className="cursor-pointer whitespace-nowrap px-6 py-4 text-xs font-medium text-indigo-800"
                         onClick={() => router.push(`/kepegawaian/data-pegawai?userId=${data.nip}`)}
                       >
-                        {data.nama}
+                        {data.name}
                       </td>
-                      <td className="whitespace-nowrap px-6 text-xs font-medium text-gray-900">{data.nip}</td>
+                      <td className="whitespace-nowrap px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
                       <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                        {data.unit_kerja}
+                        {data?.unit_kerja}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.jabatan}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.disiplin}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data?.aktif}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data?.kum}</td>
+                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                        {data?.golongan}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
                       <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
                         <button
                           type="button"
