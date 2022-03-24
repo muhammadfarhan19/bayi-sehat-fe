@@ -24,3 +24,7 @@ export const RbacAPI = {
 export const UnitKerjaAPI = {
   POST_UNIT_KERJA_INSERT: config.apiHost + '/unit-kerja/insert',
 };
+
+export const StatisticAPI = {
+  GET_STATISTIC_FIND: config.apiHost + '/statistic/find',
+};
