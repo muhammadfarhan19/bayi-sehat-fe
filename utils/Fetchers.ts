@@ -43,9 +43,9 @@ export const callAPI: CallAPI = async (url, requestData, options) => {
     timeout: config.apiTimeoutMs, // Timeout 15 seconds
     url,
   };
-  if (method === 'post' || method === 'put' || method === 'delete') {
+  if (method.toLowerCase() === 'post' || method.toLowerCase() === 'put' || method.toLowerCase() === 'delete') {
     axiosProps.data = requestData;
-  } else if (method === 'get') {
+  } else if (method.toLowerCase() === 'get') {
     axiosProps.params = requestData;
   }
 
@@ -60,6 +60,8 @@ export const callAPI: CallAPI = async (url, requestData, options) => {
 };
 
 export const refreshTokenHandler = async () => {
+  //@ts-ignore
+  window.refreshcalled = true;
   return axios
     .post<PostAuthRefreshRes>(
       AuthAPI.POST_AUTH_REFRESH,
@@ -78,12 +80,14 @@ export const refreshTokenHandler = async () => {
       setCookie('token', access_token);
       setCookie('refreshtoken', refresh_token);
       setCookie('lastrefresh', Date.now());
+      window.refreshcalled = false;
       return true;
     })
     .catch(() => {
       removeCookie('token');
       removeCookie('refreshtoken');
       removeCookie('lastrefresh');
+      window.refreshcalled = false;
       window.location.href = '/login';
       return true;
     });
@@ -91,12 +95,14 @@ export const refreshTokenHandler = async () => {
 
 export const checkTokenHandler = async () => {
   const lastRefresh = getCookie('lastrefresh');
-  if (lastRefresh && Date.now() - Number(lastRefresh) > config.tokenExpiredMs) {
-    await refreshTokenHandler();
-  } else if (isNaN(lastRefresh)) {
-    await refreshTokenHandler();
+  if (!window.refreshcalled) {
+    if (lastRefresh && Date.now() - Number(lastRefresh) > config.tokenExpiredMs) {
+      await refreshTokenHandler();
+    } else if (isNaN(lastRefresh)) {
+      await refreshTokenHandler();
+    }
   }
-  return true;
+  return;
 };
 
 export const callAPIParallel = <T extends readonly unknown[] | []>(promises: () => T) => {

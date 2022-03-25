@@ -2,8 +2,8 @@ import { Dialog, Transition } from '@headlessui/react';
 import * as React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
-import { setModal } from '../../../action/CommonAction';
-import { CommonState } from '../../../reducer/CommonReducer';
+import { setModal } from '../../action/CommonAction';
+import { CommonState } from '../../reducer/CommonReducer';
 
 export default function ModalDialog() {
   const dispatch = useDispatch();

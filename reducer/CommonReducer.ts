@@ -40,7 +40,7 @@ const initialState: CommonState = {
     show: false,
     type: SnackbarType.INFO,
     message: '',
-    timeout: 1000,
+    timeout: 3000, // 3 seconds
   },
 };
 

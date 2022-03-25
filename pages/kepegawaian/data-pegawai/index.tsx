@@ -25,4 +25,4 @@ function DataPegawai() {
   );
 }
 
-export default withReduxPage()(withAuthenticatedPage({ resourceId: NavigationId.DATA_PEGAWAI })(DataPegawai));
+export default withReduxPage()(withAuthenticatedPage({ resourceId: NavigationId.KEPEGAWAIAN })(DataPegawai));

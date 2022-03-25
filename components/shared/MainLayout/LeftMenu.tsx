@@ -7,12 +7,21 @@ import { useAuthorizedMenuContext } from '../context/AuthorizedMenuContext';
 import { Navigation } from './NavigationProps';
 
 export default function LeftMenu() {
-  const navigation = useAuthorizedMenuContext();
-  const [filteredNavigation, setFilteredNavigation] = React.useState(() => navigation);
+  const navigationContext = useAuthorizedMenuContext();
+  const navigation = React.useCallback<() => Navigation[]>(() => {
+    for (let i = 0; i < navigationContext.length; i++) {
+      if (navigationContext[i].current) {
+        return navigationContext[i].childMenu as Navigation[];
+      }
+    }
+    return navigationContext[0].childMenu as Navigation[];
+  }, [navigationContext]);
+
+  const [filteredNavigation, setFilteredNavigation] = React.useState(navigation);
 
   React.useEffect(() => {
-    setFilteredNavigation(navigation);
-  }, [navigation]);
+    setFilteredNavigation(navigation());
+  }, [navigationContext]);
 
   const handleFilterMenu = () => {
     let timeout: NodeJS.Timeout;
@@ -23,7 +32,7 @@ export default function LeftMenu() {
       }
       timeout = setTimeout(() => {
         if (filterText) {
-          const immutableNav = [...navigation];
+          const immutableNav = navigation();
           const filterNav = (navigationList: Navigation[]) =>
             navigationList.reduce<Navigation[]>((res, each) => {
               if (each.childMenu && Array.isArray(each.childMenu)) {

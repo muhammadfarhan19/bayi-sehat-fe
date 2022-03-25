@@ -1,11 +1,12 @@
 import React from 'react';
 
+import { StatusPNSText } from '../../../../constants/Resource';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
-import usePersonalPegawaiData from '../../../shared/hooks/usePersonalPegawaiData';
+import usePersonalData from '../../../shared/hooks/usePersonalData';
 import Loader from '../../../shared/Loader/Loader';
 
 function DataDiriPegawai() {
-  const dataPersonal = usePersonalPegawaiData();
+  const dataPersonal = usePersonalData();
 
   if (!dataPersonal) {
     return (
@@ -25,13 +26,15 @@ function DataDiriPegawai() {
             { label: 'NIP/NIP Lama', value: dataPersonal.nip },
             { label: 'Tempat, Tanggal Lahir', value: dataPersonal.tanggal_lahir },
             { label: 'TMT CPNS', value: dataPersonal.tmt_cpns },
-            { label: 'Status CPNS/PNS', value: dataPersonal.status_cpns },
+            {
+              label: 'Status CPNS/PNS',
+              value: dataPersonal?.status_cpns ? StatusPNSText[dataPersonal.status_cpns] : '',
+            },
             { label: 'Jabatan', value: dataPersonal.jabatan },
             { label: 'Golongan', value: dataPersonal.golongan },
             { label: 'TMT Golongan', value: dataPersonal.tmt_golongan },
             { label: 'Pangkat', value: dataPersonal.pangkat },
             { label: 'Masa Kerja', value: dataPersonal.masa_kerja },
-            { label: 'Status', value: '??' },
             { label: 'Karpeg', value: dataPersonal.karpeg },
           ].map((each, index) => (
             <tr key={index}>

@@ -11,8 +11,10 @@ export const getQueryString = <T = Record<string, string>>(): T => {
     const query = window.location.search.substring(1);
     const vars = query.split('&');
     for (let i = 0; i < vars.length; i++) {
-      const pair = vars[i].split('=');
-      result[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+      if (vars[i]) {
+        const pair = vars[i].split('=');
+        result[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+      }
     }
   }
   return result as unknown as T;

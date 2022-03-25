@@ -1,5 +1,6 @@
 import { Navigation } from '../components/shared/MainLayout/NavigationProps';
 import { NavigationList } from '../constants/NavigationList';
+import { getQueryString } from './URLUtils';
 
 export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -13,19 +14,20 @@ export function filterMenu(allowedMap?: Record<number, boolean>): Navigation[] {
       for (const iterator of listOfMenu) {
         if (iterator.href && iterator.href === currentLocation) {
           iterator.current = true;
-          // Also inject current to parent if exist
-          if (parent && !parent.current) {
-            parent.current = true;
-          }
         } else if (iterator.childMenu && Array.isArray(iterator.childMenu)) {
           // Recursive check
           iterator.childMenu = currentAppender(iterator.childMenu, iterator);
         }
 
+        // Also inject current to parent if exist
+        if (parent && !parent.current && iterator.current) {
+          parent.current = true;
+        }
+
         // Check if authorize
         if (allowedMap && allowedMap[iterator.id]) {
           result.push(iterator);
-        } else if (!allowedMap) {
+        } else if (!allowedMap || !iterator.id) {
           result.push(iterator);
         }
       }

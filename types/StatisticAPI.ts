@@ -7,28 +7,28 @@ export type StatisticInfo = {
   statistic_id: number;
   title: string;
   description: string;
-  type: number
-}
+  type: number;
+};
 
 export interface StatisticTableData {
   table: {
     header: Array<string>;
-    rows: Array<Array<string>>
-  }
+    rows: Array<Array<string>>;
+  };
 }
 
 export type ChartData = {
   x_axis: string;
   y_axis: string;
-}
+};
 
 export interface StatisticMultipleBarChart {
   chart_title: string;
-  chart_data: Array<ChartData>
+  chart_data: Array<ChartData>;
 }
 
 export interface StatisticMultipleBarChartData {
-  multiple_bar_charts: Array<StatisticMultipleBarChart>
+  multiple_bar_charts: Array<StatisticMultipleBarChart>;
 }
 
 export interface StatisticData {
@@ -36,9 +36,8 @@ export interface StatisticData {
   data: {
     data_id: number;
     timestamp: string;
-    data: StatisticTableData | StatisticMultipleBarChartData
-  }
-
+    data: StatisticTableData | StatisticMultipleBarChartData;
+  };
 }
 
 export interface GetStatisticDataRes {

@@ -1,13 +1,12 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
-
 - [Super Apps DIKTI - FE](#super-apps-dikti---fe)
   - [Start development](#start-development)
   - [Start with Mock](#start-with-mock)
     - [Update MOCK State](#update-mock-state)
   - [Deploy to staging](#deploy-to-staging)
+  - [Staging Credential](#staging-credential)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -67,3 +66,11 @@ yarn mock-server:stop
 ---
 
 - Create Pull Request to branch `dev` after merging the PR. The workflow will be run and deploy the changes to `staging`.
+
+## Staging Credential
+
+```
+196107061987101001,06071961
+197707242009121001,24071977
+196912152002121003,15121969
+```

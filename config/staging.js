@@ -3,5 +3,5 @@ module.exports = {
   environment: 'staging',
   cookieSecure: false,
   apiTimeoutMs: 15000, // 10 seconds
-  tokenExpiredMs: 600000 - 15000, // 10 Minutes
+  tokenExpiredMs: 300000, // 5 Minutes
 };

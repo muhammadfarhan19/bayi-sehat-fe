@@ -13,8 +13,8 @@ import thunk from 'redux-thunk';
 
 import commonReducer from '../../../reducer/CommonReducer';
 import config from '../../../utils/Config';
-import ModalDialog from '../ModalDialog/ModalDialog';
-import NotificationBar from '../NotificationBar/NotificationBar';
+import ModalDialog from '../ModalDialog';
+import NotificationBar from '../NotificationBar';
 
 function logger({ getState }: MiddlewareAPI) {
   return (next: Dispatch) => (action: AnyAction) => {

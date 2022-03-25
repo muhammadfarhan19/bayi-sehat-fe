@@ -1,44 +1,60 @@
 import { Navigation } from '../components/shared/MainLayout/NavigationProps';
 
-const UNKNOWN = 0;
+const PUBLIC = 0;
 export const NavigationId = {
-  BERANDA: 1,
-  KEPEGAWAIAN: 2,
-  DATA_PEGAWAI: 3,
-  DAFTAR_JABATAN: 4,
-  PETA_JABATAN: 5,
+  ADMIN: 16,
+  BERANDA: 15,
+  KEPEGAWAIAN: 6,
+  KEUANGAN: 14,
 };
 
 export const UserNavigationList: Navigation[] = [
-  { name: 'Biodata', href: '/biodata', id: UNKNOWN },
-  { name: 'Ubah Kata Sandi', href: '/changepassword', id: UNKNOWN },
-  { name: 'Keluar', href: '/logout', id: UNKNOWN },
+  { name: 'Biodata', href: '/', id: PUBLIC },
+  { name: 'Ubah Kata Sandi', href: '/changepassword', id: PUBLIC },
+  { name: 'Keluar', href: '/logout', id: PUBLIC },
 ];
 
 export const NavigationList: Navigation[] = [
   {
-    id: NavigationId.KEPEGAWAIAN,
+    id: PUBLIC,
     name: 'Beranda',
-    href: '/kepegawaian',
+    childMenu: [
+      {
+        id: PUBLIC,
+        name: 'Biodata',
+        href: '/',
+      },
+    ],
   },
   {
     id: NavigationId.KEPEGAWAIAN,
     name: 'Kepegawaian',
     childMenu: [
       {
-        id: NavigationId.DATA_PEGAWAI,
-        name: 'Data Pegawai',
-        href: '/kepegawaian/data-pegawai',
+        id: NavigationId.KEPEGAWAIAN,
+        name: 'Dashboard',
+        href: '/kepegawaian',
       },
       {
-        id: NavigationId.DAFTAR_JABATAN,
-        name: 'Daftar Jabatan',
-        href: '/kepegawaian/daftar-jabatan',
-      },
-      {
-        id: NavigationId.PETA_JABATAN,
-        name: 'Peta Jabatan',
-        href: '/kepegawaian/peta-jabatan',
+        id: NavigationId.KEPEGAWAIAN,
+        name: 'Pegawai',
+        childMenu: [
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Data Pegawai',
+            href: '/kepegawaian/data-pegawai',
+          },
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Daftar Jabatan',
+            href: '/kepegawaian/daftar-jabatan',
+          },
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Peta Jabatan',
+            href: '/kepegawaian/peta-jabatan',
+          },
+        ],
       },
     ],
   },

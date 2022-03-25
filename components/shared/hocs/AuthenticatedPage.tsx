@@ -40,19 +40,15 @@ export const withAuthenticatedPage: WithAuthenticatedPage =
         (async () => {
           const infoRes = await callAPI<null, GetAuthInfoRes>(AuthAPI.GET_AUTH_INFO, null, {
             method: 'get',
-            checkToken: false,
           });
           if (infoRes.status === 200 && infoRes.data?.data) {
             if (checkLogin) {
               // Check RBAC
-              let authorizedNavigations = filterMenu();
-              if (resourceId) {
-                const [filteredMenu, allowedMap] = await getAuthorizedNavigation(infoRes.data.data.user_id);
-                authorizedNavigations = filteredMenu;
-                if (!allowedMap[resourceId]) {
-                  window.location.href = '/';
-                  return null;
-                }
+              const [filteredMenu, allowedMap] = await getAuthorizedNavigation(infoRes.data.data.user_id);
+              const authorizedNavigations = filteredMenu;
+              if (resourceId && !allowedMap[resourceId]) {
+                window.location.href = '/';
+                return null;
               }
 
               // Load page
@@ -93,7 +89,6 @@ export const withAuthenticatedPage: WithAuthenticatedPage =
   };
 
 const getAuthorizedNavigation = async (userId: number): Promise<[Navigation[], Record<number, boolean>]> => {
-  console.log(NavigationId);
   const authRbacRes = await callAPI<PostRbacBulkAuthorizeReq, PostRbacAuthorizeRes>(RbacAPI.POST_RBAC_BULK_AUTHORIZE, {
     bulk_request: Object.keys(NavigationId).map(each => {
       const key = each as keyof typeof NavigationId;

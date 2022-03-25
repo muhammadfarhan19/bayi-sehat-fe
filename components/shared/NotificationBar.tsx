@@ -3,9 +3,9 @@ import { SpeakerphoneIcon, XIcon } from '@heroicons/react/outline';
 import * as React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
-import { setSnackbar } from '../../../action/CommonAction';
-import { CommonState, SnackbarType } from '../../../reducer/CommonReducer';
-import { classNames } from '../../../utils/Components';
+import { setSnackbar } from '../../action/CommonAction';
+import { CommonState, SnackbarType } from '../../reducer/CommonReducer';
+import { classNames } from '../../utils/Components';
 
 type SnackbarProps = {
   message: string;

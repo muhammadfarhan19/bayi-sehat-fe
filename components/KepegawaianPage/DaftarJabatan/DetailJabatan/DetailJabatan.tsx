@@ -1,45 +1,32 @@
-import { UserCircleIcon } from '@heroicons/react/solid';
+import { ChevronLeftIcon } from '@heroicons/react/solid';
 import React from 'react';
 
 import { classNames } from '../../../../utils/Components';
+import { getQueryString } from '../../../../utils/URLUtils';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
-import usePersonalData from '../../../shared/hooks/usePersonalData';
 import InProgressState from '../../../shared/InProgressState';
-import Loader from '../../../shared/Loader/Loader';
-import DataDiriPegawai from './DataDiriPegawai';
-import DataDiriPribadi from './DataDiriPribadi';
+import DaftarPegawai from './DaftarPegawai';
+import DeskripsiJabatan from './DeskripsiJabatan';
 
 const tabs = [
-  { name: 'Data Diri Pegawai', href: '#' },
-  { name: 'Data Diri Pribadi', href: '#' },
-  { name: 'Riwayat Pendidikan', href: '#' },
-  { name: 'Riwayat Jabatan', href: '#' },
-  { name: 'Arsip Digital', href: '#' },
-  { name: 'Tanda Tangan Digital', href: '#' },
+  { name: 'Deskripsi Jabatan', href: '#' },
+  { name: 'Pegawai', href: '#' },
+  { name: 'Kompetensi', href: '#' },
+  { name: 'Pendidikan', href: '#' },
 ];
 
-function DetailPegawai() {
+function DetailJabatan() {
   const [selected, setSelected] = React.useState(tabs[0].name);
-  const personalPegawaiData = usePersonalData();
-
-  if (!personalPegawaiData) {
-    return (
-      <div className="relative h-[150px] w-full divide-y divide-gray-200">
-        <Loader />
-      </div>
-    );
-  }
+  const { name } = getQueryString<{ name: string }>();
 
   return (
     <>
-      <div className="flex flex-row gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
-        <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
-        <div className="my-auto flex flex-col">
-          <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
-          <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
-        </div>
-      </div>
-      <div className="mt-[12px] rounded-[8px] bg-white py-6 px-[24px] shadow">
+      <a href="/kepegawaian/daftar-jabatan" className="flex flex-row items-center gap-x-2 py-6 px-6">
+        <ChevronLeftIcon className="h-8 w-8" />
+        <div>Kembali</div>
+      </a>
+      <div className="rounded-[8px] bg-white px-6 pb-6 shadow">
+        <div className="text-xl font-semibold tracking-wide">{name}</div>
         <div className="flex flex-row gap-x-[20px] overflow-auto">
           <div className="sm:hidden">
             <label htmlFor="tabs" className="sr-only">
@@ -78,15 +65,13 @@ function DetailPegawai() {
             </div>
           </div>
         </div>
-        {selected === tabs[0].name ? <DataDiriPegawai /> : null}
-        {selected === tabs[1].name ? <DataDiriPribadi /> : null}
+        {selected === tabs[0].name ? <DeskripsiJabatan /> : null}
+        {selected === tabs[1].name ? <DaftarPegawai /> : null}
         {selected === tabs[2].name ? <InProgressState /> : null}
         {selected === tabs[3].name ? <InProgressState /> : null}
-        {selected === tabs[4].name ? <InProgressState /> : null}
-        {selected === tabs[5].name ? <InProgressState /> : null}
       </div>
     </>
   );
 }
 
-export default withErrorBoundary(DetailPegawai);
+export default withErrorBoundary(DetailJabatan);

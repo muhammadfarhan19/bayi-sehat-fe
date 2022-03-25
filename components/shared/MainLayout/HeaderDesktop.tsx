@@ -1,5 +1,6 @@
 import { Popover } from '@headlessui/react';
 import { BellIcon, ChevronDownIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
+import { UserCircleIcon } from '@heroicons/react/solid';
 import * as React from 'react';
 
 import HeaderMobile from './HeaderMobile';
@@ -42,7 +43,11 @@ export default function HeaderDesktop(props: NavigationProps) {
                   {/* Profile dropdown */}
                   <MenuDropdown navigation={userNavigation}>
                     <span className="sr-only">Open user menu</span>
-                    <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                    {user.imageUrl ? (
+                      <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                    ) : (
+                      <UserCircleIcon className="h-8 w-8 rounded-full fill-white" />
+                    )}
                   </MenuDropdown>
                 </div>
 

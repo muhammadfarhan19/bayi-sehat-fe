@@ -18,7 +18,12 @@ export enum Gender {
   FEMALE = 2,
 }
 
+export enum StatusCpns {
+  PNS = 1,
+  PPNPN = 2,
+}
+
 export interface Pagination {
-  next_page: boolean;
+  total_data: number;
   total_page: number;
 }

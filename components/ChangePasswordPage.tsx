@@ -30,8 +30,6 @@ export default function ChangePasswordPage() {
     setLoading(true);
     const changePassRes = await callAPI<PutUserPasswordReq, PutUserPasswordRes>(UserAPI.PUT_USER_PASSWORD, formData, {
       method: 'put',
-      withToken: false,
-      checkToken: false,
     });
 
     if (changePassRes.status === 200 && changePassRes.data?.status === Status.OK) {
@@ -44,7 +42,10 @@ export default function ChangePasswordPage() {
         })
       );
     } else {
-      setError('confirm_new_password', { type: 'validate' });
+      if (changePassRes.status !== 200 && changePassRes.data?.error_message) {
+        const errorMessage = changePassRes.data.error_message;
+        setError('confirm_new_password', { type: 'pattern', message: errorMessage });
+      }
       setLoading(false);
     }
   };
@@ -117,12 +118,15 @@ export default function ChangePasswordPage() {
                 )}
               </div>
 
-              {errors.confirm_new_password && errors.confirm_new_password.type === 'validate' && (
+              {errors.confirm_new_password && ['validate', 'pattern'].includes(errors.confirm_new_password.type) && (
                 <div className="my-1 flex items-center space-x-1">
-                  <ExclamationCircleIcon className="h-4 w-4 text-red-500" />
-                  <div className="text-sm text-red-500">Konfirmasi password salah!</div>
+                  <ExclamationCircleIcon className="h-4 min-h-[1rem] w-4 min-w-[1rem] text-red-500" />
+                  <div className="text-sm text-red-500">
+                    {errors.confirm_new_password.message || 'Konfirmasi password salah!'}
+                  </div>
                 </div>
               )}
+
               <div>
                 <button
                   disabled={loading}

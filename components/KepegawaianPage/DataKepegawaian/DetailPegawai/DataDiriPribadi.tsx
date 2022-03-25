@@ -1,39 +1,12 @@
 import React from 'react';
 
-import { UserAPI } from '../../../../constants/APIUrls';
-import { Status } from '../../../../types/Common';
-import { GetUserProfileData, GetUserProfileReq, GetUserProfileRes } from '../../../../types/UserAPI';
-import { callAPI } from '../../../../utils/Fetchers';
-import { getQueryString } from '../../../../utils/URLUtils';
+import { GenderText, StatusMenikahText } from '../../../../constants/Resource';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
+import usePersonalData from '../../../shared/hooks/usePersonalData';
 import Loader from '../../../shared/Loader/Loader';
 
 function DataDiriPribadi() {
-  const { userId } = getQueryString<{ userId?: number }>();
-  const [throwError, setThrowError] = React.useState<string>('');
-  const [dataApiRes, setDataApiRes] = React.useState<GetUserProfileData>();
-
-  React.useEffect(() => {
-    (async () => {
-      const apiReq = userId ? { user_id: userId } : null;
-      callAPI<GetUserProfileReq | null, GetUserProfileRes>(UserAPI.GET_USER_PROFILE, apiReq, {
-        method: 'GET',
-      }).then(res => {
-        if (res.status === 200 && res.data && res.data.status === Status.OK) {
-          const userPersonalPegawaiRes = res.data.data;
-          if (Object.keys(userPersonalPegawaiRes).length) {
-            setDataApiRes(userPersonalPegawaiRes);
-          } else {
-            setThrowError('Failed to fetch the data');
-          }
-        }
-      });
-    })();
-  }, []);
-
-  if (throwError) {
-    throw throwError;
-  }
+  const dataApiRes = usePersonalData();
 
   if (!dataApiRes) {
     return (
@@ -49,8 +22,11 @@ function DataDiriPribadi() {
         <thead></thead>
         <tbody className="divide-y divide-gray-200 bg-white">
           {[
-            { label: 'Jenis Kelamin', value: dataApiRes.jenis_kelamin },
-            { label: 'Status Nikah', value: dataApiRes.status_menikah },
+            { label: 'Jenis Kelamin', value: dataApiRes?.jenis_kelamin ? GenderText[dataApiRes.jenis_kelamin] : '' },
+            {
+              label: 'Status Nikah',
+              value: dataApiRes?.status_menikah ? StatusMenikahText[dataApiRes.status_menikah] : '',
+            },
             { label: 'Jumlah Anak', value: dataApiRes.jumlah_anak },
             { label: 'KTP', value: dataApiRes.ktp },
             { label: 'Email', value: dataApiRes.email },

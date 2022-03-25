@@ -1,9 +1,9 @@
 import { Pagination } from './Common';
 
 export interface GetPegawaiListReq {
-  unit_kerja: string;
-  nama: string;
-  tipe_jabatan: string;
+  unit_kerja?: string;
+  nama?: string;
+  tipe_jabatan?: string;
   jabatan: string;
   page: number;
   per_page: number;

@@ -6,7 +6,12 @@ import { Bar } from 'react-chartjs-2';
 
 import { StatisticAPI } from '../../constants/APIUrls';
 import { Status } from '../../types/Common';
-import { GetStatisticDataRes, GetStatisticReq, StatisticMultipleBarChartData, StatisticTableData } from '../../types/StatisticAPI';
+import {
+  GetStatisticDataRes,
+  GetStatisticReq,
+  StatisticMultipleBarChartData,
+  StatisticTableData,
+} from '../../types/StatisticAPI';
 import { callAPI, callAPIParallel } from '../../utils/Fetchers';
 import { withErrorBoundary } from '../shared/hocs/ErrorBoundary';
 import Loader from '../shared/Loader/Loader';
@@ -43,7 +48,9 @@ function DashboardPage() {
   const [selectedDirectoratJenjangPendidikan, setSelectedDirectoratJenjangPendidikan] = useState(dummyGolongan[0]);
   const [dataStatisticTable, setDataStatisticTable] = useState<DataStatisticTable>({});
   const [dataStatisticGolongan, setDataStatisticGolongan] = useState<DataStatisticMultipleChartBar>({});
-  const [dataStatisticJenjangPendidikan, setDataStatisticJenjangPendidikan] = useState<DataStatisticMultipleChartBar>({});
+  const [dataStatisticJenjangPendidikan, setDataStatisticJenjangPendidikan] = useState<DataStatisticMultipleChartBar>(
+    {}
+  );
 
   React.useEffect(() => {
     getStatiscticData();
@@ -53,46 +60,55 @@ function DashboardPage() {
     const dateNowStr = new Date().toISOString().slice(0, 10);
     const apiReqTotalPegawai = {
       id: STATISTIC_ID_TOTAL_PEGAWAI,
-      date: dateNowStr
+      date: dateNowStr,
     };
 
     const apiReqGolongan = {
       id: STATISTIC_ID_GOLONGAN,
-      date: dateNowStr
+      date: dateNowStr,
     };
 
     const apiReqJenjangPendidikan = {
       id: STATISTIC_ID_JENJANG_PENDIDIKAN,
-      date: dateNowStr
+      date: dateNowStr,
     };
 
     await callAPIParallel(() => [
-      callAPI<GetStatisticReq, GetStatisticDataRes>(StatisticAPI.GET_STATISTIC_FIND, apiReqTotalPegawai, { method: 'get' }),
-      callAPI<GetStatisticReq, GetStatisticDataRes>(StatisticAPI.GET_STATISTIC_FIND, apiReqGolongan, { method: 'get', }),
-      callAPI<GetStatisticReq, GetStatisticDataRes>(StatisticAPI.GET_STATISTIC_FIND, apiReqJenjangPendidikan, { method: 'get', }),]).then(res => {
-        let dataStatisticTableRes: DataStatisticTable = {};
-        let dataStatisticGolonganRes: DataStatisticMultipleChartBar = {};
-        let dataStatisticJenjangPendidikanRes: DataStatisticMultipleChartBar = {};
+      callAPI<GetStatisticReq, GetStatisticDataRes>(StatisticAPI.GET_STATISTIC_FIND, apiReqTotalPegawai, {
+        method: 'get',
+      }),
+      callAPI<GetStatisticReq, GetStatisticDataRes>(StatisticAPI.GET_STATISTIC_FIND, apiReqGolongan, { method: 'get' }),
+      callAPI<GetStatisticReq, GetStatisticDataRes>(StatisticAPI.GET_STATISTIC_FIND, apiReqJenjangPendidikan, {
+        method: 'get',
+      }),
+    ]).then(res => {
+      let dataStatisticTableRes: DataStatisticTable = {};
+      let dataStatisticGolonganRes: DataStatisticMultipleChartBar = {};
+      let dataStatisticJenjangPendidikanRes: DataStatisticMultipleChartBar = {};
 
-        if (res[0].status === 200 && res[0].data && res[0].data?.status === Status.OK) {
-          dataStatisticTableRes = { ...dataStatisticTableRes, ...res[0].data.data.data.data };
-        }
-        if (res[1].status === 200 && res[1].data && res[1].data?.status === Status.OK) {
-          dataStatisticGolonganRes = { ...dataStatisticGolonganRes, ...res[1].data.data.data.data };
-        }
-        if (res[2].status === 200 && res[2].data && res[2].data?.status === Status.OK) {
-          dataStatisticJenjangPendidikanRes = { ...dataStatisticJenjangPendidikanRes, ...res[2].data.data.data.data };
-        }
+      if (res[0].status === 200 && res[0].data && res[0].data?.status === Status.OK) {
+        dataStatisticTableRes = { ...dataStatisticTableRes, ...res[0].data.data.data.data };
+      }
+      if (res[1].status === 200 && res[1].data && res[1].data?.status === Status.OK) {
+        dataStatisticGolonganRes = { ...dataStatisticGolonganRes, ...res[1].data.data.data.data };
+      }
+      if (res[2].status === 200 && res[2].data && res[2].data?.status === Status.OK) {
+        dataStatisticJenjangPendidikanRes = { ...dataStatisticJenjangPendidikanRes, ...res[2].data.data.data.data };
+      }
 
-        if (Object.keys(dataStatisticTableRes).length && Object.keys(dataStatisticGolonganRes).length && Object.keys(dataStatisticJenjangPendidikanRes).length) {
-          setDataStatisticTable(dataStatisticTableRes);
-          setDataStatisticGolongan(dataStatisticGolonganRes);
-          setDataStatisticJenjangPendidikan(dataStatisticJenjangPendidikanRes);
-        } else {
-          setThrowError('Failed to fetch the data');
-        }
-      });
-  }
+      if (
+        Object.keys(dataStatisticTableRes).length &&
+        Object.keys(dataStatisticGolonganRes).length &&
+        Object.keys(dataStatisticJenjangPendidikanRes).length
+      ) {
+        setDataStatisticTable(dataStatisticTableRes);
+        setDataStatisticGolongan(dataStatisticGolonganRes);
+        setDataStatisticJenjangPendidikan(dataStatisticJenjangPendidikanRes);
+      } else {
+        setThrowError('Failed to fetch the data');
+      }
+    });
+  };
 
   if (throwError) {
     throw throwError;
@@ -109,15 +125,19 @@ function DashboardPage() {
   const totalPegawai = (index: number) => {
     const total = dataStatisticTable?.table?.rows.reduce((sum, i) => sum + parseInt(i[index]), 0);
     return total;
-  }
+  };
 
   const GetStatisticGolonganByDirectorat = () => {
-    return dataStatisticGolongan?.multiple_bar_charts?.find(item => item.chart_title === selectedDirectoratGolongan.name);
-  }
+    return dataStatisticGolongan?.multiple_bar_charts?.find(
+      item => item.chart_title === selectedDirectoratGolongan.name
+    );
+  };
 
   const GetStatisticJenjangPendidikanByDirectorat = () => {
-    return dataStatisticJenjangPendidikan?.multiple_bar_charts?.find(item => item.chart_title === selectedDirectoratJenjangPendidikan.name);
-  }
+    return dataStatisticJenjangPendidikan?.multiple_bar_charts?.find(
+      item => item.chart_title === selectedDirectoratJenjangPendidikan.name
+    );
+  };
 
   return (
     <>
@@ -170,12 +190,8 @@ function DashboardPage() {
                           <tr key={index}>
                             <td className="whitespace-nowrap px-6 py-4 text-xs text-gray-500">{index + 1}</td>
                             <td className="whitespace-nowrap px-6 py-4 text-xs text-gray-500">{row[1]}</td>
-                            <td className="whitespace-nowrap px-6 py-4 text-center text-xs text-gray-500">
-                              {row[2]}
-                            </td>
-                            <td className="whitespace-nowrap px-6 py-4 text-center text-xs text-gray-500">
-                              {row[3]}
-                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-center text-xs text-gray-500">{row[2]}</td>
+                            <td className="whitespace-nowrap px-6 py-4 text-center text-xs text-gray-500">{row[3]}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -198,7 +214,9 @@ function DashboardPage() {
                   <>
                     <div className="relative mt-1">
                       <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-                        <span className="block truncate text-sm leading-5 text-gray-700">{selectedDirectoratGolongan.name}</span>
+                        <span className="block truncate text-sm leading-5 text-gray-700">
+                          {selectedDirectoratGolongan.name}
+                        </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                           <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                         </span>
@@ -255,16 +273,19 @@ function DashboardPage() {
             <p className="text-sm font-light leading-8 text-gray-500">
               Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi
             </p>
-            <Bar options={options} data={{
-              labels: GetStatisticGolonganByDirectorat()?.chart_data?.map(item => item.x_axis),
-              datasets: [
-                {
-                  label: 'Golongan',
-                  data: GetStatisticGolonganByDirectorat()?.chart_data?.map(item => item.y_axis),
-                  backgroundColor: '#4F46E5',
-                },
-              ],
-            }} />
+            <Bar
+              options={options}
+              data={{
+                labels: GetStatisticGolonganByDirectorat()?.chart_data?.map(item => item.x_axis),
+                datasets: [
+                  {
+                    label: 'Golongan',
+                    data: GetStatisticGolonganByDirectorat()?.chart_data?.map(item => item.y_axis),
+                    backgroundColor: '#4F46E5',
+                  },
+                ],
+              }}
+            />
           </div>
         </div>
       </section>
@@ -338,16 +359,19 @@ function DashboardPage() {
             <p className="text-sm font-light leading-8 text-gray-500">
               Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi
             </p>
-            <Bar options={options} data={{
-              labels: GetStatisticJenjangPendidikanByDirectorat()?.chart_data?.map(item => item.x_axis),
-              datasets: [
-                {
-                  label: 'Pendidikan',
-                  data: GetStatisticJenjangPendidikanByDirectorat()?.chart_data?.map(item => item.y_axis),
-                  backgroundColor: '#10B981',
-                },
-              ],
-            }} />
+            <Bar
+              options={options}
+              data={{
+                labels: GetStatisticJenjangPendidikanByDirectorat()?.chart_data?.map(item => item.x_axis),
+                datasets: [
+                  {
+                    label: 'Pendidikan',
+                    data: GetStatisticJenjangPendidikanByDirectorat()?.chart_data?.map(item => item.y_axis),
+                    backgroundColor: '#10B981',
+                  },
+                ],
+              }}
+            />
           </div>
         </div>
       </section>

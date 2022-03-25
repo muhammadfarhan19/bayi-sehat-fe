@@ -3,5 +3,5 @@ module.exports = {
   environment: 'development',
   cookieSecure: false,
   apiTimeoutMs: 15000, // 10 seconds
-  tokenExpiredMs: 9000, // 10 Minutes
+  tokenExpiredMs: 60000, // 1 Minutes
 };

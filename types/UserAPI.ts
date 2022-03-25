@@ -1,4 +1,4 @@
-import { Gender, Status, StatusMenikah } from './Common';
+import { Gender, Status, StatusCpns, StatusMenikah } from './Common';
 
 export interface GetUserProfileData {
   user_id: number;
@@ -15,11 +15,11 @@ export interface GetUserProfileData {
 export interface GetUserPersonalPegawaiData {
   user_id: number;
   nip: string;
-  name: string;
+  nama: string;
   tempat_lahir: string;
   tanggal_lahir: string;
   tmt_cpns: string;
-  status_cpns: number;
+  status_cpns: StatusCpns;
   jabatan: string;
   unit_kerja: string;
   golongan: string;
