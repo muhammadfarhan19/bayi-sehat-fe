@@ -27,7 +27,7 @@ export default function MasterPns() {
     setshowAdvancedFilter(!showAdvancedFilter);
   };
 
-  const handleUrl = ({ unit_kerja = '', nama = '', tipe_jabatan = 'struktural', jabatan = '' }) => {
+  const handleUrl = ({ unit_kerja = '', nama = '', tipe_jabatan = '', jabatan = '' }) => {
     let url =
       config.apiHost +
       `/pegawai/list?unit_kerja=${unit_kerja}&nama=${nama}&tipe_jabatan=${tipe_jabatan}&jabatan=${jabatan}&page=1&per_page=20`;
@@ -203,7 +203,8 @@ export default function MasterPns() {
                       <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
                         <button
                           type="button"
-                          className="text-xs font-medium text-indigo-500 hover:text-indigo-700 focus:outline-none"
+                          className="rounded-md bg-[#4F46E5] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-indigo-700 focus:outline-none"
+                          onClick={()=>window.location.href = `/kepegawaian/data-pegawai?userId=${data?.user_id}`}
                         >
                           Lihat
                         </button>

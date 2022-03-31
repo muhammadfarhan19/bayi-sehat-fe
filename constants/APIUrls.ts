@@ -37,3 +37,8 @@ export const JabatanAPI = {
 export const KepegawaianAPI = {
   GET_PEGAWAI_LIST: config.apiHost + '/pegawai/list',
 };
+
+export const PetaAPI = {
+  GET_PETA: config.apiHost + '/jabatan/peta/list',
+  POST_JABATAN_KEBUTUHAN: config.apiHost + '/jabatan/kebutuhan/update',
+};
