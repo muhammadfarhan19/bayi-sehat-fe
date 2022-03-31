@@ -27,8 +27,8 @@ export interface GetPetaReq {
 }
 
 export interface PostKebutuhanPetaReq {
-  jabatan_id: number,
-  jumlah: number
+  jabatan_id: number;
+  jumlah: number;
 }
 
 export type PostKebutuhanPetaRes =

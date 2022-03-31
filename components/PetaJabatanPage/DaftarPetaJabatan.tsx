@@ -1,26 +1,26 @@
-import { AdjustmentsIcon } from '@heroicons/react/solid';
-import { PetaAPI } from '../../constants/APIUrls';
-import { GetPetaReq, GetPetaRes, PetaData, PostKebutuhanPetaReq, PostKebutuhanPetaRes } from '../../types/PetaApi';
-import { callAPI } from '../../utils/Fetchers';
-import { Status } from '../../types/Common';
-import Pagination from '../shared/Pagination';
-import Loader from '../shared/Loader/Loader';
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { PetaAPI } from '../../constants/APIUrls';
+import { Status } from '../../types/Common';
+import { GetPetaReq, GetPetaRes, PetaData, PostKebutuhanPetaReq, PostKebutuhanPetaRes } from '../../types/PetaApi';
+import { callAPI } from '../../utils/Fetchers';
+import Loader from '../shared/Loader/Loader';
+import Pagination from '../shared/Pagination';
+
 export default function DaftarPetaJabatan() {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
-  const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
   const [throwError, setThrowError] = React.useState<string>();
   const [loaded, setLoaded] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false)
-  const [selected, setSelected] = React.useState({ keterisian: 0, selisih: 0, id: 0 })
-  const { handleSubmit, register, formState: { errors }, setError } = useForm<PostKebutuhanPetaReq>();
-  const toggleAdvancedFilter = () => {
-    setshowAdvancedFilter(!showAdvancedFilter);
-  };
+  const [loading, setLoading] = React.useState(false);
+  const [selected, setSelected] = React.useState({ keterisian: 0, selisih: 0, id: 0 });
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<PostKebutuhanPetaReq>();
 
   const [dataTable, setDataTable] = React.useState<PetaData>();
 
@@ -74,7 +74,6 @@ export default function DaftarPetaJabatan() {
 
   const Modal = () => {
     return (
-
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={setOpen}>
           <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
@@ -159,7 +158,7 @@ export default function DaftarPetaJabatan() {
                             </label>
                             <div className="mt-1">
                               <input
-                                {...register("jumlah", { min: 1 })}
+                                {...register('jumlah', { min: 1 })}
                                 type="number"
                                 name="jumlah"
                                 id="jumlah"
@@ -167,10 +166,8 @@ export default function DaftarPetaJabatan() {
                               />
                             </div>
                             {errors.jumlah && (
-                            <p className="mt-1 text-red-500 text-xs">
-                              Mohon masukkan jumlah minimal 1
-                            </p>
-                          )}
+                              <p className="mt-1 text-xs text-red-500">Mohon masukkan jumlah minimal 1</p>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -182,7 +179,7 @@ export default function DaftarPetaJabatan() {
                       className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
                       disabled={loading}
                     >
-                      {loading ? 'Processing':'Simpan'}
+                      {loading ? 'Processing' : 'Simpan'}
                     </button>
                   </div>
                 </div>
@@ -199,18 +196,22 @@ export default function DaftarPetaJabatan() {
     const updateKebutuhan = {
       // unit_kerja_id: 0,
       jabatan_id: +formData.jabatan_id,
-      jumlah: +formData.jumlah
-    }
+      jumlah: +formData.jumlah,
+    };
 
-    const kebutuhan = await callAPI<PostKebutuhanPetaReq, PostKebutuhanPetaRes>(PetaAPI.POST_JABATAN_KEBUTUHAN, updateKebutuhan, {
-      method: 'put',
-      withToken: true,
-      checkToken: true,
-    });
+    const kebutuhan = await callAPI<PostKebutuhanPetaReq, PostKebutuhanPetaRes>(
+      PetaAPI.POST_JABATAN_KEBUTUHAN,
+      updateKebutuhan,
+      {
+        method: 'put',
+        withToken: true,
+        checkToken: true,
+      }
+    );
 
     if (kebutuhan.status === 200 && kebutuhan.data?.status === Status.OK) {
       setLoading(false);
-      setOpen(false)
+      setOpen(false);
     } else {
       setLoading(false);
     }
@@ -231,51 +232,8 @@ export default function DaftarPetaJabatan() {
                 changeFilterState({ nama_jabatan: event.target.value });
               }}
             />
-            {/* <button
-              className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
-              onClick={toggleAdvancedFilter}
-            >
-              <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
-            </button> */}
           </div>
         </div>
-
-        {showAdvancedFilter && (
-          <div className="flex w-full flex-row gap-x-[16px]">
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
-              </select>
-            </div>
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Nama</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
-              </select>
-            </div>
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Tipe Jabatan</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
-              </select>
-            </div>
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Nama Jabatan</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
-              </select>
-            </div>
-          </div>
-        )}
       </div>
 
       {!loaded ? (
@@ -338,10 +296,14 @@ export default function DaftarPetaJabatan() {
                   className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                 >
                   <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
-                  <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.kelas_jabatan}</td>
+                  <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                    {data.kelas_jabatan}
+                  </td>
                   <td
                     className="cursor-pointer px-6 text-xs font-medium text-indigo-800"
-                    onClick={() => window.location.href = `/kepegawaian/daftar-jabatan?id=${data.id}&name=${data.jabatan}`}
+                    onClick={() =>
+                      (window.location.href = `/kepegawaian/daftar-jabatan?id=${data.id}&name=${data.jabatan}`)
+                    }
                   >
                     {data.jabatan}
                   </td>
@@ -352,7 +314,10 @@ export default function DaftarPetaJabatan() {
                     <button
                       type="button"
                       className="rounded-md bg-[#4F46E5] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-indigo-700 focus:outline-none"
-                      onClick={() => { setOpen(true); setSelected(data) }}
+                      onClick={() => {
+                        setOpen(true);
+                        setSelected(data);
+                      }}
                     >
                       Edit
                     </button>

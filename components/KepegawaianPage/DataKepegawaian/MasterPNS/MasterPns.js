@@ -204,7 +204,7 @@ export default function MasterPns() {
                         <button
                           type="button"
                           className="rounded-md bg-[#4F46E5] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-indigo-700 focus:outline-none"
-                          onClick={()=>window.location.href = `/kepegawaian/data-pegawai?userId=${data?.user_id}`}
+                          onClick={() => (window.location.href = `/kepegawaian/data-pegawai?userId=${data?.user_id}`)}
                         >
                           Lihat
                         </button>
