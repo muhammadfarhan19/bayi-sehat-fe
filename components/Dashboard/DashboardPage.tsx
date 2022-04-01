@@ -26,15 +26,6 @@ const options = {
   responsive: true,
 };
 
-const dummyGolongan = [
-  { id: 1, name: 'Direktorat Jenderal Pendidikan Tinggi' },
-  { id: 2, name: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi' },
-  { id: 3, name: 'Direktorat Pembelajaran dan Kemahasiswaan' },
-  { id: 4, name: 'Direktorat Kelembagaan' },
-  { id: 5, name: 'Direktorat Sumber Daya' },
-  { id: 6, name: 'Direktorat Riset Teknologi dan Pengabdian Masyarakat' },
-];
-
 const STATISTIC_ID_TOTAL_PEGAWAI = 100001;
 const STATISTIC_ID_GOLONGAN = 100002;
 const STATISTIC_ID_JENJANG_PENDIDIKAN = 100003;
@@ -44,13 +35,16 @@ type DataStatisticMultipleChartBar = Partial<StatisticMultipleBarChartData>;
 
 function DashboardPage() {
   const [throwError, setThrowError] = useState<string>('');
-  const [selectedDirectoratGolongan, setSelectedDirectoratGolongan] = useState(dummyGolongan[0]);
-  const [selectedDirectoratJenjangPendidikan, setSelectedDirectoratJenjangPendidikan] = useState(dummyGolongan[0]);
+  const [selectedDirectoratGolongan, setSelectedDirectoratGolongan] = useState<string>('');
+  const [selectedDirectoratJenjangPendidikan, setSelectedDirectoratJenjangPendidikan] = useState<string>('');
   const [dataStatisticTable, setDataStatisticTable] = useState<DataStatisticTable>({});
   const [dataStatisticGolongan, setDataStatisticGolongan] = useState<DataStatisticMultipleChartBar>({});
   const [dataStatisticJenjangPendidikan, setDataStatisticJenjangPendidikan] = useState<DataStatisticMultipleChartBar>(
     {}
   );
+
+  const [listDirectoratGolongan, setListDirectoratGolongan] = useState<Array<string>>();
+  const [listDirectoratJenjangPendidikan, setListDirectoratJenjangPendidikan] = useState<Array<string>>();
 
   React.useEffect(() => {
     getStatiscticData();
@@ -104,6 +98,21 @@ function DashboardPage() {
         setDataStatisticTable(dataStatisticTableRes);
         setDataStatisticGolongan(dataStatisticGolonganRes);
         setDataStatisticJenjangPendidikan(dataStatisticJenjangPendidikanRes);
+
+        const UniqueListGolongan = Array.from(new Set(dataStatisticGolonganRes?.multiple_bar_charts?.map(item => item["chart_title"])));
+        const UniqueListJenjangPendidikan = Array.from(new Set(dataStatisticJenjangPendidikanRes?.multiple_bar_charts?.map(item => item["chart_title"])));
+
+        if (!selectedDirectoratGolongan && UniqueListGolongan[0]) {
+          setListDirectoratGolongan(UniqueListGolongan);
+          setSelectedDirectoratGolongan(UniqueListGolongan[0]);
+        }
+
+        if (!selectedDirectoratJenjangPendidikan && UniqueListJenjangPendidikan[0]) {
+          setListDirectoratJenjangPendidikan(UniqueListJenjangPendidikan);
+          setSelectedDirectoratJenjangPendidikan(UniqueListJenjangPendidikan[0]);
+        }
+
+
       } else {
         setThrowError('Failed to fetch the data');
       }
@@ -129,13 +138,13 @@ function DashboardPage() {
 
   const GetStatisticGolonganByDirectorat = () => {
     return dataStatisticGolongan?.multiple_bar_charts?.find(
-      item => item.chart_title === selectedDirectoratGolongan.name
+      item => item.chart_title === selectedDirectoratGolongan
     );
   };
 
   const GetStatisticJenjangPendidikanByDirectorat = () => {
     return dataStatisticJenjangPendidikan?.multiple_bar_charts?.find(
-      item => item.chart_title === selectedDirectoratJenjangPendidikan.name
+      item => item.chart_title === selectedDirectoratJenjangPendidikan
     );
   };
 
@@ -215,7 +224,7 @@ function DashboardPage() {
                     <div className="relative mt-1">
                       <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
                         <span className="block truncate text-sm leading-5 text-gray-700">
-                          {selectedDirectoratGolongan.name}
+                          {selectedDirectoratGolongan}
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                           <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -230,23 +239,23 @@ function DashboardPage() {
                         leaveTo="opacity-0"
                       >
                         <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                          {dummyGolongan.map(person => (
+                          {listDirectoratGolongan?.map((d, i) => (
                             <Listbox.Option
-                              key={person.id}
+                              key={i}
                               className={({ active }) =>
                                 classNames(
                                   active ? 'bg-indigo-600 text-white' : 'text-gray-900',
                                   'relative cursor-default select-none py-2 pl-3 pr-9'
                                 )
                               }
-                              value={person}
+                              value={d}
                             >
                               {({ selected, active }) => (
                                 <>
                                   <span
                                     className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}
                                   >
-                                    {person.name}
+                                    {d}
                                   </span>
 
                                   {selected ? (
@@ -301,7 +310,7 @@ function DashboardPage() {
                     <div className="relative mt-1">
                       <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
                         <span className="block truncate text-sm leading-5 text-gray-700">
-                          {selectedDirectoratJenjangPendidikan.name}
+                          {selectedDirectoratJenjangPendidikan}
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                           <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -316,23 +325,23 @@ function DashboardPage() {
                         leaveTo="opacity-0"
                       >
                         <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                          {dummyGolongan.map(person => (
+                          {listDirectoratJenjangPendidikan?.map((d, i) => (
                             <Listbox.Option
-                              key={person.id}
+                              key={i}
                               className={({ active }) =>
                                 classNames(
                                   active ? 'bg-indigo-600 text-white' : 'text-gray-900',
                                   'relative cursor-default select-none py-2 pl-3 pr-9'
                                 )
                               }
-                              value={person}
+                              value={d}
                             >
                               {({ selected, active }) => (
                                 <>
                                   <span
                                     className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}
                                   >
-                                    {person.name}
+                                    {d}
                                   </span>
 
                                   {selected ? (

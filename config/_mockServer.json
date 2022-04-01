@@ -576,7 +576,7 @@
           "fallbackTo404": false
         }
       ],
-      "enabled": true,
+      "enabled": false,
       "randomResponse": false,
       "sequentialResponse": false
     }
