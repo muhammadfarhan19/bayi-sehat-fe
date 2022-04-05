@@ -24,8 +24,8 @@ export default function DetailJabatanPage() {
               { label: 'Tipe Jabatan', value: 'Jabatan Fungsional' },
             ].map((each, index) => (
               <tr key={index}>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{each.value}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
+                <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
               </tr>
             ))}
           </tbody>
@@ -82,7 +82,7 @@ export default function DetailJabatanPage() {
                         tab.name === selected
                           ? 'border-indigo-500 text-indigo-600'
                           : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                        'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+                        'border-b-2 py-4 px-1 text-sm font-medium'
                       )}
                     >
                       {tab.name}

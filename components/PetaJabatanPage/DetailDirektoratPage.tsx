@@ -205,12 +205,12 @@ export default function DetailDirektoratPage() {
                     key={dataIdx}
                     className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                   >
-                    <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
                     <td className=" px-6 text-xs font-medium text-gray-900"> {data.nama_jabatan}</td>
-                    <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.keterisian}</td>
-                    <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.kebutuhan}</td>
-                    <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.selisih}</td>
-                    <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.keterisian}</td>
+                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.kebutuhan}</td>
+                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.selisih}</td>
+                    <td className="px-6 py-4 text-xs font-medium text-gray-900">
                       <button
                         type="button"
                         className="rounded-md border-2 border-indigo-600 bg-white px-[11px] py-[7px] text-xs font-medium text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none"

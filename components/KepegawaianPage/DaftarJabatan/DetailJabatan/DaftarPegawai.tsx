@@ -112,17 +112,13 @@ function DaftarPegawai() {
                         key={dataIdx}
                         className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                       >
-                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
                           {PER_PAGE * (pageNumber - 1) + (dataIdx + 1)}
                         </td>
                         <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">{data.nip}</td>
-                        <td className="whitespace-nowrap px-6 text-xs font-medium text-gray-900">{data.name}</td>
-                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {data.unit_kerja}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {data.golongan}
-                        </td>
+                        <td className="px-6 text-xs font-medium text-gray-900">{data.name}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.unit_kerja}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.golongan}</td>
                       </tr>
                     ))}
                   </tbody>

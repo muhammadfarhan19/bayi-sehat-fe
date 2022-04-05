@@ -15,3 +15,12 @@ export const StatusPNSText: Record<StatusCpns, String> = {
   [StatusCpns.PNS]: 'PNS',
   [StatusCpns.PPNPN]: 'PPNPN',
 };
+
+export const JenisBerkas = {
+  skCpns: 'SK CPNS',
+  skPns: 'SK PNS',
+  foto: 'Foto',
+  ktp: 'KTP',
+  kartuPegawai: 'Kartu Pegawai',
+  others: 'Lainnya',
+};

@@ -35,8 +35,8 @@ function DataDiriPribadi() {
             { label: 'BPJS', value: dataApiRes.bpjs },
           ].map((each, index) => (
             <tr key={index}>
-              <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
-              <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{each.value}</td>
+              <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
+              <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
             </tr>
           ))}
         </tbody>

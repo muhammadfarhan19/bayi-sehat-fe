@@ -99,8 +99,12 @@ function DashboardPage() {
         setDataStatisticGolongan(dataStatisticGolonganRes);
         setDataStatisticJenjangPendidikan(dataStatisticJenjangPendidikanRes);
 
-        const UniqueListGolongan = Array.from(new Set(dataStatisticGolonganRes?.multiple_bar_charts?.map(item => item["chart_title"])));
-        const UniqueListJenjangPendidikan = Array.from(new Set(dataStatisticJenjangPendidikanRes?.multiple_bar_charts?.map(item => item["chart_title"])));
+        const UniqueListGolongan = Array.from(
+          new Set(dataStatisticGolonganRes?.multiple_bar_charts?.map(item => item['chart_title']))
+        );
+        const UniqueListJenjangPendidikan = Array.from(
+          new Set(dataStatisticJenjangPendidikanRes?.multiple_bar_charts?.map(item => item['chart_title']))
+        );
 
         if (!selectedDirectoratGolongan && UniqueListGolongan[0]) {
           setListDirectoratGolongan(UniqueListGolongan);
@@ -111,8 +115,6 @@ function DashboardPage() {
           setListDirectoratJenjangPendidikan(UniqueListJenjangPendidikan);
           setSelectedDirectoratJenjangPendidikan(UniqueListJenjangPendidikan[0]);
         }
-
-
       } else {
         setThrowError('Failed to fetch the data');
       }
@@ -137,9 +139,7 @@ function DashboardPage() {
   };
 
   const GetStatisticGolonganByDirectorat = () => {
-    return dataStatisticGolongan?.multiple_bar_charts?.find(
-      item => item.chart_title === selectedDirectoratGolongan
-    );
+    return dataStatisticGolongan?.multiple_bar_charts?.find(item => item.chart_title === selectedDirectoratGolongan);
   };
 
   const GetStatisticJenjangPendidikanByDirectorat = () => {
@@ -197,10 +197,10 @@ function DashboardPage() {
                       <tbody className="divide-y divide-gray-200 bg-white">
                         {dataStatisticTable?.table?.rows.map((row, index) => (
                           <tr key={index}>
-                            <td className="whitespace-nowrap px-6 py-4 text-xs text-gray-500">{index + 1}</td>
-                            <td className="whitespace-nowrap px-6 py-4 text-xs text-gray-500">{row[1]}</td>
-                            <td className="whitespace-nowrap px-6 py-4 text-center text-xs text-gray-500">{row[2]}</td>
-                            <td className="whitespace-nowrap px-6 py-4 text-center text-xs text-gray-500">{row[3]}</td>
+                            <td className="px-6 py-4 text-xs text-gray-500">{index + 1}</td>
+                            <td className="px-6 py-4 text-xs text-gray-500">{row[1]}</td>
+                            <td className="px-6 py-4 text-center text-xs text-gray-500">{row[2]}</td>
+                            <td className="px-6 py-4 text-center text-xs text-gray-500">{row[3]}</td>
                           </tr>
                         ))}
                       </tbody>

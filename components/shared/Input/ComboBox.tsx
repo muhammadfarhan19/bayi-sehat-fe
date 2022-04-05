@@ -4,7 +4,7 @@ import { ReactNode, useState } from 'react';
 
 import { classNames } from '../../../utils/Components';
 
-interface OptionType {
+export interface OptionType {
   text: string;
   value: string;
 }

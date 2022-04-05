@@ -295,10 +295,8 @@ export default function DaftarPetaJabatan() {
                   key={dataIdx}
                   className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                 >
-                  <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
-                  <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                    {data.kelas_jabatan}
-                  </td>
+                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.kelas_jabatan}</td>
                   <td
                     className="cursor-pointer px-6 text-xs font-medium text-indigo-800"
                     onClick={() =>
@@ -307,10 +305,10 @@ export default function DaftarPetaJabatan() {
                   >
                     {data.jabatan}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.keterisian}</td>
-                  <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.kebutuhan}</td>
-                  <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.selisih}</td>
-                  <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.keterisian}</td>
+                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.kebutuhan}</td>
+                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.selisih}</td>
+                  <td className="px-6 py-4 text-xs font-medium text-gray-900">
                     <button
                       type="button"
                       className="rounded-md bg-[#4F46E5] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-indigo-700 focus:outline-none"

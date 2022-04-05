@@ -6,6 +6,7 @@ import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
 import InProgressState from '../../../shared/InProgressState';
 import Loader from '../../../shared/Loader/Loader';
+import ArsipDigital from './ArsipDigital';
 import DataDiriPegawai from './DataDiriPegawai';
 import DataDiriPribadi from './DataDiriPribadi';
 
@@ -19,7 +20,7 @@ const tabs = [
 ];
 
 function DetailPegawai() {
-  const [selected, setSelected] = React.useState(tabs[0].name);
+  const [selected, setSelected] = React.useState(tabs[4].name);
   const personalPegawaiData = usePersonalData();
 
   if (!personalPegawaiData) {
@@ -68,7 +69,7 @@ function DetailPegawai() {
                       tab.name === selected
                         ? 'border-indigo-500 text-indigo-600'
                         : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                      'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+                      'border-b-2 py-4 px-1 text-xs font-medium'
                     )}
                   >
                     {tab.name}
@@ -82,7 +83,7 @@ function DetailPegawai() {
         {selected === tabs[1].name ? <DataDiriPribadi /> : null}
         {selected === tabs[2].name ? <InProgressState /> : null}
         {selected === tabs[3].name ? <InProgressState /> : null}
-        {selected === tabs[4].name ? <InProgressState /> : null}
+        {selected === tabs[4].name ? <ArsipDigital /> : null}
         {selected === tabs[5].name ? <InProgressState /> : null}
       </div>
     </>

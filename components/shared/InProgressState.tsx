@@ -3,9 +3,9 @@ import * as React from 'react';
 
 export default function InProgressState() {
   return (
-    <div className="mt-2 flex flex-col items-center">
-      <DesktopComputerIcon className="h-24 text-gray-600" />
-      <div className="font-semibold text-gray-600">- In Progress -</div>
+    <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+      <DesktopComputerIcon className="mx-auto h-12 w-12 text-gray-400" />
+      <span className="mt-2 block text-sm font-medium text-gray-900">- Under Construction -</span>
     </div>
   );
 }

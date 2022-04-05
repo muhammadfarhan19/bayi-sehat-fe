@@ -179,19 +179,15 @@ export default function MasterPpnpn() {
                       key={dataIdx}
                       className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                     >
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
-                      <td className="cursor-pointer whitespace-nowrap px-6 py-4 text-xs font-medium text-indigo-800">
-                        {data.nama}
-                      </td>
-                      <td className="whitespace-nowrap px-6 text-xs font-medium text-gray-900">{data.nip}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                        {data.unit_kerja}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.jabatan}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data.disiplin}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data?.aktif}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data?.kum}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800">{data.nama}</td>
+                      <td className="px-6 text-xs font-medium text-gray-900">{data.nip}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.unit_kerja}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jabatan}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.disiplin}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.aktif}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.kum}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
                         <button
                           type="button"
                           className="text-xs font-medium text-indigo-500 hover:text-indigo-700 focus:outline-none"

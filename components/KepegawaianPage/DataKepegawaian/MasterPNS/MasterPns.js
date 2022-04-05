@@ -15,6 +15,7 @@ export default function MasterPns() {
     tipe_jabatan: '',
     jabatan: '',
   });
+
   const unitKerja = [
     'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
     'Direktorat Pembelajaran dan Kemahasiswaan',
@@ -51,8 +52,6 @@ export default function MasterPns() {
     (async () => {
       const getData = await callAPI(handleUrl({}), '', {
         method: 'get',
-        withToken: true,
-        checkToken: true,
       });
       setList(getData?.data?.data?.list);
     })();
@@ -100,8 +99,10 @@ export default function MasterPns() {
                 onChange={e => search('unit_kerja', e.target.value)}
               >
                 <option value="">Semua</option>
-                {unitKerja.map(item => (
-                  <option value={item}>{item}</option>
+                {unitKerja.map((item, index) => (
+                  <option key={`options-${index}`} value={item}>
+                    {item}
+                  </option>
                 ))}
               </select>
             </div>
@@ -185,22 +186,18 @@ export default function MasterPns() {
                       key={dataIdx}
                       className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                     >
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
                       <td
-                        className="cursor-pointer whitespace-nowrap px-6 py-4 text-xs font-medium text-indigo-800"
+                        className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"
                         onClick={() => router.push(`/kepegawaian/data-pegawai?userId=${data.nip}`)}
                       >
                         {data.name}
                       </td>
-                      <td className="whitespace-nowrap px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                        {data?.unit_kerja}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                        {data?.golongan}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                      <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.golongan}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
                         <button
                           type="button"
                           className="rounded-md bg-[#4F46E5] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-indigo-700 focus:outline-none"
