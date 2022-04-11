@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { KepegawaianAPI } from '../../../../constants/APIUrls';
+import { GetPegawaiListData, GetPegawaiListReq, GetPegawaiListRes } from '../../../../types/api/KepegawaianAPI';
 import { Status } from '../../../../types/Common';
-import { GetPegawaiListData, GetPegawaiListReq, GetPegawaiListRes } from '../../../../types/KepegawaianAPI';
 import { callAPI } from '../../../../utils/Fetchers';
 import { getQueryString } from '../../../../utils/URLUtils';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';

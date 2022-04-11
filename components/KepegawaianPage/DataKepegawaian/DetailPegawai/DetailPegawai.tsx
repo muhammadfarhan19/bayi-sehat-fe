@@ -20,7 +20,7 @@ const tabs = [
 ];
 
 function DetailPegawai() {
-  const [selected, setSelected] = React.useState(tabs[4].name);
+  const [selected, setSelected] = React.useState(tabs[0].name);
   const personalPegawaiData = usePersonalData();
 
   if (!personalPegawaiData) {
@@ -51,6 +51,9 @@ function DetailPegawai() {
               name="tabs"
               className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               defaultValue={tabs[0].name}
+              onChange={event => {
+                setSelected(event.target.value);
+              }}
             >
               {tabs.map(tab => (
                 <option key={tab.name}>{tab.name}</option>
@@ -79,12 +82,14 @@ function DetailPegawai() {
             </div>
           </div>
         </div>
-        {selected === tabs[0].name ? <DataDiriPegawai /> : null}
-        {selected === tabs[1].name ? <DataDiriPribadi /> : null}
-        {selected === tabs[2].name ? <InProgressState /> : null}
-        {selected === tabs[3].name ? <InProgressState /> : null}
-        {selected === tabs[4].name ? <ArsipDigital /> : null}
-        {selected === tabs[5].name ? <InProgressState /> : null}
+        <div className="overflow-auto">
+          {selected === tabs[0].name ? <DataDiriPegawai /> : null}
+          {selected === tabs[1].name ? <DataDiriPribadi /> : null}
+          {selected === tabs[2].name ? <InProgressState /> : null}
+          {selected === tabs[3].name ? <InProgressState /> : null}
+          {selected === tabs[4].name ? <ArsipDigital /> : null}
+          {selected === tabs[5].name ? <InProgressState /> : null}
+        </div>
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import { Gender, Status, StatusCpns, StatusMenikah } from './Common';
+import { Gender, Status, StatusCpns, StatusMenikah } from '../Common';
 
 export interface GetUserProfileData {
   user_id: number;

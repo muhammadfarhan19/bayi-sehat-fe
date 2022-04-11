@@ -27,3 +27,8 @@ export interface Pagination {
   total_data: number;
   total_page: number;
 }
+
+export enum DocumentUploadType {
+  INTERNAL_SOURCE = 1,
+  EXTERNAL_SOURCE = 2,
+}

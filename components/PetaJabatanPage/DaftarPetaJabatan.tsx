@@ -3,8 +3,8 @@ import React, { Fragment } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { PetaAPI } from '../../constants/APIUrls';
+import { GetPetaReq, GetPetaRes, PetaData, PostKebutuhanPetaReq, PostKebutuhanPetaRes } from '../../types/api/PetaApi';
 import { Status } from '../../types/Common';
-import { GetPetaReq, GetPetaRes, PetaData, PostKebutuhanPetaReq, PostKebutuhanPetaRes } from '../../types/PetaApi';
 import { callAPI } from '../../utils/Fetchers';
 import Loader from '../shared/Loader/Loader';
 import Pagination from '../shared/Pagination';

@@ -1,11 +1,11 @@
 import { AdjustmentsIcon } from '@heroicons/react/solid';
 import React from 'react';
+import { useSWRConfig } from 'swr';
 
 import { JabatanAPI } from '../../../constants/APIUrls';
-import { Status } from '../../../types/Common';
-import { GetJabatanReq, GetJabatanRes, JabatanData } from '../../../types/JabatanAPI';
-import { callAPI } from '../../../utils/Fetchers';
+import { GetJabatanReq, JabatanData } from '../../../types/api/JabatanAPI';
 import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
+import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
@@ -13,18 +13,21 @@ import Pagination from '../../shared/Pagination';
 function DaftarJabatan() {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
-  const [throwError, setThrowError] = React.useState<string>();
-  const [loaded, setLoaded] = React.useState(false);
-  const [dataTable, setDataTable] = React.useState<JabatanData>();
-
   const [filterState, setFilterState] = React.useState<GetJabatanReq>({
     page: 1,
     per_page: 20,
   });
 
+  const { mutate } = useSWRConfig();
+  const { data: dataTable, isValidating } = useCommonApi<GetJabatanReq, JabatanData>(
+    JabatanAPI.GET_JABATAN,
+    filterState,
+    { method: 'GET' }
+  );
+
   React.useEffect(() => {
-    refreshDataTable(filterState);
-  }, []);
+    mutate(JabatanAPI.GET_JABATAN);
+  }, [filterState]);
 
   const changeFilterState = (inputState: Partial<GetJabatanReq>) => {
     const pageAffected = Object.keys(inputState).includes('page');
@@ -37,11 +40,10 @@ function DaftarJabatan() {
       newState.page = 1;
     }
 
-    setFilterState(newState);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    timeoutRef.current = setTimeout(() => refreshDataTable(newState), pageAffected ? 0 : 800);
+    timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
 
   const toggleAdvancedFilter = () => {
@@ -51,27 +53,6 @@ function DaftarJabatan() {
     }
     setshowAdvancedFilter(showState);
   };
-
-  const refreshDataTable = (apiReq: GetJabatanReq) => {
-    setLoaded(false);
-    callAPI<GetJabatanReq | null, GetJabatanRes>(JabatanAPI.GET_JABATAN, apiReq, {
-      method: 'GET',
-    }).then(res => {
-      if (res.status === 200 && res.data && res.data.status === Status.OK) {
-        const apiRes = res.data.data;
-        if (Object.keys(apiRes).length) {
-          setDataTable(apiRes);
-          setLoaded(true);
-        } else {
-          setThrowError('Data not found');
-        }
-      }
-    });
-  };
-
-  if (throwError) {
-    throw throwError;
-  }
 
   return (
     <>
@@ -130,7 +111,7 @@ function DaftarJabatan() {
           </div>
         )}
       </div>
-      {!loaded ? (
+      {isValidating ? (
         <div className="relative h-[150px] w-full divide-y divide-gray-200">
           <Loader />
         </div>

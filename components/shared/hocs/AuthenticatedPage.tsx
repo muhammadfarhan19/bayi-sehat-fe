@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { AuthAPI, RbacAPI } from '../../../constants/APIUrls';
 import { NavigationId } from '../../../constants/NavigationList';
-import { GetAuthInfoRes } from '../../../types/AuthAPI';
-import { PostRbacAuthorizeRes, PostRbacBulkAuthorizeReq } from '../../../types/RbacAPI';
+import { GetAuthInfoRes } from '../../../types/api/AuthAPI';
+import { PostRbacAuthorizeRes, PostRbacBulkAuthorizeReq } from '../../../types/api/RbacAPI';
 import { filterMenu } from '../../../utils/Components';
 import { removeCookie } from '../../../utils/CookieHandler';
 import { callAPI } from '../../../utils/Fetchers';

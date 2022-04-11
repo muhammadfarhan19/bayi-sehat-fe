@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { AuthAPI } from '../constants/APIUrls';
-import { PostAuthLoginReq, PostAuthLoginRes } from '../types/AuthAPI';
+import { PostAuthLoginReq, PostAuthLoginRes } from '../types/api/AuthAPI';
 import { Status } from '../types/Common';
 import { getCookie, setCookie } from '../utils/CookieHandler';
 import { callAPI } from '../utils/Fetchers';

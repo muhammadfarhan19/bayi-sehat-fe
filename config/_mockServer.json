@@ -579,6 +579,207 @@
       "enabled": false,
       "randomResponse": false,
       "sequentialResponse": false
+    },
+    {
+      "uuid": "07a7f477-00b0-4744-a34a-ba4853f4decb",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "arsip-digital/list",
+      "responses": [
+        {
+          "uuid": "ebc4b4ab-81e5-418b-894d-7ba7db1755cb",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": [\n    {\n      \"arsip_digital_id\": 8,\n      \"pegawai_id\": 1,\n      \"document_uuid\": \"59288b26-b498-11ec-b909-0242ac120002\",\n      \"jenis_berkas_id\": 1,\n      \"jenis_berkas_str\": \"Foto\",\n      \"document_name\": \"test.jpg\",\n      \"created_at\": \"2022-04-05 11:18:47\"\n    },\n    {\n      \"arsip_digital_id\": 9,\n      \"pegawai_id\": 1,\n      \"document_uuid\": \"59288b26-b498-11ec-b909-0242ac120002\",\n      \"jenis_berkas_id\": 1,\n      \"jenis_berkas_str\": \"Foto\",\n      \"document_name\": \"test.jpg\",\n      \"created_at\": \"2022-04-05 11:18:47\"\n    }\n  ]\n}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "2c4a540c-5dca-413e-a245-d79fb54781d9",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "arsip-digital/view",
+      "responses": [
+        {
+          "uuid": "7b22c2fc-8dd5-46c9-9319-beb0e843b626",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": {\n    \"arsip_digital_id\": 11,\n    \"pegawai_id\": 4,\n    \"document_uuid\": \"a8143d09-8842-49f6-a0fa-0b8b3efefdf4\",\n    \"jenis_berkas_id\": 1,\n    \"jenis_berkas_str\": \"Foto\",\n    \"document_name\": \"test\",\n    \"created_at\": \"2022-04-06 11:31:20\"\n  }\n}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "0e0a6b82-bb4e-4c77-941e-333d82349f07",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "arsip-digital/delete",
+      "responses": [
+        {
+          "uuid": "9ac5cb38-799b-4014-a688-f1e82c1dfba3",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": \"Success\"\n}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": true,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "427258c8-8874-4f47-adad-e89c39b4e26f",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "arsip-digital/insert",
+      "responses": [
+        {
+          "uuid": "20230647-d222-42ac-abea-74989d367d00",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": \"Success\"\n}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "0f6f7920-3cf8-406a-948f-eb9908fca8d5",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "arsip-digital/update",
+      "responses": [
+        {
+          "uuid": "7cd958a4-bee2-421d-bdf3-3d950faef2b4",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": \"Success\"\n}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "3b018a7a-c9cc-4797-8638-5e74e748044b",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "document",
+      "responses": [
+        {
+          "uuid": "a2a9779c-25a6-4bc0-981f-98eb94a43873",
+          "body": "",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "filePath": "../public/icon-512x512.png",
+          "sendFileAsBody": true,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
     }
   ],
   "proxyMode": true,

@@ -1,4 +1,4 @@
-import { Status } from './Common';
+import { Status } from '../Common';
 
 export interface PostAuthRefreshReq {
   refresh_token: string;

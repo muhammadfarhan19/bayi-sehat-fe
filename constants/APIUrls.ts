@@ -42,3 +42,20 @@ export const PetaAPI = {
   GET_PETA: config.apiHost + '/jabatan/peta/list',
   POST_JABATAN_KEBUTUHAN: config.apiHost + '/jabatan/kebutuhan/update',
 };
+
+export const ArsipDigitalAPI = {
+  GET_ARSIP_DIGITAL_LIST: config.apiHost + '/arsip-digital/list',
+  GET_ARSIP_DIGITAL_VIEW: config.apiHost + '/arsip-digital/view',
+  POST_ARSIP_DIGITAL_DELETE: config.apiHost + '/arsip-digital/delete',
+  POST_ARSIP_DIGITAL_INSERT: config.apiHost + '/arsip-digital/insert',
+  POST_ARSIP_DIGITAL_UPDATE: config.apiHost + '/arsip-digital/update',
+};
+
+export const MasterAPI = {
+  GET_MASTER_JENIS_BERKAS: config.apiHost + '/master/jenis-berkas',
+};
+
+export const DocumentAPI = {
+  POST_DOCUMENT_UPLOAD: config.apiHost + '/document/upload',
+  GET_DOCUMENT: config.apiHost + '/document',
+};

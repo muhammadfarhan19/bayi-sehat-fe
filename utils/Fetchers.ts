@@ -1,14 +1,15 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import { AuthAPI } from '../constants/APIUrls';
-import { PostAuthRefreshRes } from '../types/AuthAPI';
+import { PostAuthRefreshRes } from '../types/api/AuthAPI';
 import config from './Config';
 import { getCookie, removeCookie, setCookie } from './CookieHandler';
 
-interface CallAPIOptions {
+export interface CallAPIOptions {
   checkToken: boolean;
   method: Method;
   withToken: boolean;
   isMultipart: boolean;
+  isBlob: boolean;
 }
 
 interface CallAPI {
@@ -16,7 +17,7 @@ interface CallAPI {
 }
 
 export const callAPI: CallAPI = async (url, requestData, options) => {
-  const { checkToken = true, isMultipart = false, method = 'post', withToken = true } = options || {};
+  const { checkToken = true, isMultipart = false, method = 'post', withToken = true, isBlob = false } = options || {};
 
   const headers: {
     'Content-Type': string;
@@ -43,6 +44,11 @@ export const callAPI: CallAPI = async (url, requestData, options) => {
     timeout: config.apiTimeoutMs, // Timeout 15 seconds
     url,
   };
+
+  if (isBlob) {
+    axiosProps.responseType = 'blob';
+  }
+
   if (method.toLowerCase() === 'post' || method.toLowerCase() === 'put' || method.toLowerCase() === 'delete') {
     axiosProps.data = requestData;
   } else if (method.toLowerCase() === 'get') {

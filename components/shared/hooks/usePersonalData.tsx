@@ -4,7 +4,6 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { setAPIRes } from '../../../action/CommonAction';
 import { UserAPI } from '../../../constants/APIUrls';
 import { CommonState } from '../../../reducer/CommonReducer';
-import { Status } from '../../../types/Common';
 import {
   GetUserPersonalPegawaiData,
   GetUserPersonalPegawaiReq,
@@ -12,7 +11,8 @@ import {
   GetUserProfileData,
   GetUserProfileReq,
   GetUserProfileRes,
-} from '../../../types/UserAPI';
+} from '../../../types/api/UserAPI';
+import { Status } from '../../../types/Common';
 import { callAPI, callAPIParallel } from '../../../utils/Fetchers';
 import { getQueryString } from '../../../utils/URLUtils';
 

@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../../../action/CommonAction';
 import { SnackbarType } from '../../../reducer/CommonReducer';
 import { getAcceptedType, validateFile } from '../../../utils/Value';
-import CircleLoader from '../Loader/CircleLoader';
 
 const DEFAULT_MAX_FILE_SIZE = 10000000; // 10 MB
 
@@ -21,7 +20,10 @@ export interface UploadInputProps {
   children: (props: { loading: boolean }) => JSX.Element;
   defaultFiles?: FileObject[];
   handleUploadChange: (files: FileObject[]) => void;
-  uploadHandler: (files: File[]) => Promise<{ id: string }>;
+  uploadHandler: (
+    fileObject: File,
+    validationRes: ReturnType<typeof validateFile>
+  ) => Promise<{ id: string } | undefined>;
   multipleFile?: boolean;
 }
 
@@ -55,20 +57,21 @@ export default function UploadWrapper(props: UploadInputProps) {
   const handleFileChange = (event: React.BaseSyntheticEvent) => {
     try {
       const fileObject = event.target.files[0];
-      const { fileName, fileType, fileValid } = validateFile({
+      const validationRes = validateFile({
         allowedSize,
         allowedTypes,
         fileObject,
       });
+      const { fileName, fileType, fileValid } = validationRes;
 
       if (fileValid) {
         setLoading(true);
-        uploadHandler(fileObject).then(async res => {
+        uploadHandler(fileObject, validationRes).then(async res => {
           const reader = new FileReader();
           reader.readAsDataURL(fileObject);
           reader.onload = (eventReader: ProgressEvent<FileReader>) => {
             addFile({
-              id: res.id,
+              id: res?.id || '1',
               name: fileName,
               type: fileType,
               result: eventReader.target?.result,
@@ -104,11 +107,6 @@ export default function UploadWrapper(props: UploadInputProps) {
           className={'absolute inset-0 opacity-0'}
         />
         <span className={'relative z-10'}>{children({ loading })}</span>
-        {loading ? (
-          <span className={'absolute inset-0 z-10'}>
-            <CircleLoader />
-          </span>
-        ) : null}
       </span>
     </>
   );

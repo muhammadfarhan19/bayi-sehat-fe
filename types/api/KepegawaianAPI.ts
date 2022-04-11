@@ -1,4 +1,4 @@
-import { Pagination } from './Common';
+import { Pagination, Status } from '../Common';
 
 export interface GetPegawaiListReq {
   unit_kerja?: string;
@@ -10,7 +10,7 @@ export interface GetPegawaiListReq {
 }
 
 export interface GetPegawaiListRes {
-  status: string;
+  status: Status;
   data: GetPegawaiListData;
 }
 

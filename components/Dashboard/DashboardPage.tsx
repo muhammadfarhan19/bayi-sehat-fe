@@ -5,13 +5,13 @@ import React, { Fragment, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 import { StatisticAPI } from '../../constants/APIUrls';
-import { Status } from '../../types/Common';
 import {
   GetStatisticDataRes,
   GetStatisticReq,
   StatisticMultipleBarChartData,
   StatisticTableData,
-} from '../../types/StatisticAPI';
+} from '../../types/api/StatisticAPI';
+import { Status } from '../../types/Common';
 import { callAPI, callAPIParallel } from '../../utils/Fetchers';
 import { withErrorBoundary } from '../shared/hocs/ErrorBoundary';
 import Loader from '../shared/Loader/Loader';

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { JabatanAPI } from '../../../../constants/APIUrls';
-import { GetJabatanDetailReq, GetJabatanDetailRes, JabatanDetailData } from '../../../../types/JabatanAPI';
+import { GetJabatanDetailReq, GetJabatanDetailRes, JabatanDetailData } from '../../../../types/api/JabatanAPI';
 import { callAPI } from '../../../../utils/Fetchers';
 import { getQueryString } from '../../../../utils/URLUtils';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';

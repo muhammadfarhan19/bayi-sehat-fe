@@ -6,8 +6,8 @@ import { useDispatch } from 'react-redux';
 import { setModal } from '../action/CommonAction';
 import { UserAPI } from '../constants/APIUrls';
 import { ModalType } from '../reducer/CommonReducer';
+import { PutUserPasswordReq, PutUserPasswordRes } from '../types/api/UserAPI';
 import { Status } from '../types/Common';
-import { PutUserPasswordReq, PutUserPasswordRes } from '../types/UserAPI';
 import { callAPI } from '../utils/Fetchers';
 import { CircleProgress } from './shared/CircleProgress';
 

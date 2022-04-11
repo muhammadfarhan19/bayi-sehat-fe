@@ -1,4 +1,4 @@
-import { Action, Status } from './Common';
+import { Action, Status } from '../Common';
 
 export interface AuthorizeData {
   user_id: number;
