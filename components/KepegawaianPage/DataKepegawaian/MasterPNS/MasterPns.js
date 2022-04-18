@@ -118,15 +118,6 @@ export default function MasterPns() {
                 ))}
               </select>
             </div>
-            {/* <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Nama Jabatan</p>
-              <select
-                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                onChange={e => search('jabatan', e.target.value)}
-              >
-                <option value="">Semua</option>
-              </select>
-            </div> */}
           </div>
         )}
       </div>
@@ -203,7 +194,9 @@ export default function MasterPns() {
                         <button
                           type="button"
                           className="rounded-md bg-[#4F46E5] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-indigo-700 focus:outline-none"
-                          onClick={() => (window.location.href = `/kepegawaian/data-pegawai?userId=${data?.user_id}`)}
+                          onClick={() => {
+                            window.location.href = `/kepegawaian/data-pegawai?pegawai_id=${data?.pegawai_id}`;
+                          }}
                         >
                           Lihat
                         </button>

@@ -19,8 +19,8 @@ import { getQueryString } from '../../../utils/URLUtils';
 type ReturnResult = Partial<GetUserPersonalPegawaiData & GetUserProfileData>;
 
 export default function usePersonalData(): ReturnResult | null {
-  const { userId } = getQueryString<{ userId?: string }>();
-  const keyApiRes = [UserAPI.GET_USER_PERSONAL_PEGAWAI, UserAPI.GET_USER_PROFILE, JSON.stringify(userId)].join('_');
+  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
+  const keyApiRes = [UserAPI.GET_USER_PERSONAL_PEGAWAI, UserAPI.GET_USER_PROFILE, JSON.stringify(pegawai_id)].join('_');
 
   const dispatch = useDispatch();
   const dataPersonalReduxState = useSelector<{ common: CommonState }>(state => {
@@ -32,15 +32,13 @@ export default function usePersonalData(): ReturnResult | null {
   React.useEffect(() => {
     if (!dataPersonal) {
       (() => {
-        const apiReq = userId ? { user_id: Number(userId) } : null;
+        const apiReq = pegawai_id ? { pegawai_id: Number(pegawai_id) } : {};
 
         callAPIParallel(() => [
-          callAPI<GetUserProfileReq | null, GetUserProfileRes>(UserAPI.GET_USER_PROFILE, apiReq, { method: 'GET' }),
-          callAPI<GetUserPersonalPegawaiReq | null, GetUserPersonalPegawaiRes>(
-            UserAPI.GET_USER_PERSONAL_PEGAWAI,
-            apiReq,
-            { method: 'GET' }
-          ),
+          callAPI<GetUserProfileReq, GetUserProfileRes>(UserAPI.GET_USER_PROFILE, apiReq, { method: 'GET' }),
+          callAPI<GetUserPersonalPegawaiReq, GetUserPersonalPegawaiRes>(UserAPI.GET_USER_PERSONAL_PEGAWAI, apiReq, {
+            method: 'GET',
+          }),
         ]).then(res => {
           let userRes = {};
           if (res[0].status === 200 && res[0].data && res[0].data?.status === Status.OK) {

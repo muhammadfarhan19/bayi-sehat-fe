@@ -1,9 +1,9 @@
 import { AdjustmentsIcon } from '@heroicons/react/solid';
 import React from 'react';
-import { useSWRConfig } from 'swr';
 
-import { JabatanAPI } from '../../../constants/APIUrls';
+import { JabatanAPI, MasterAPI } from '../../../constants/APIUrls';
 import { GetJabatanReq, JabatanData } from '../../../types/api/JabatanAPI';
+import { JenisJabatanListData } from '../../../types/api/MasterAPI';
 import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
@@ -13,20 +13,29 @@ import Pagination from '../../shared/Pagination';
 function DaftarJabatan() {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
+  const [loaded, setLoaded] = React.useState(false);
   const [filterState, setFilterState] = React.useState<GetJabatanReq>({
     page: 1,
     per_page: 20,
   });
 
-  const { mutate } = useSWRConfig();
-  const { data: dataTable, isValidating } = useCommonApi<GetJabatanReq, JabatanData>(
-    JabatanAPI.GET_JABATAN,
-    filterState,
+  const {
+    data: dataTable,
+    isValidating,
+    mutate,
+  } = useCommonApi<GetJabatanReq, JabatanData>(JabatanAPI.GET_JABATAN, filterState, { method: 'GET' });
+
+  const { data: jenisJabatanList } = useCommonApi<null, JenisJabatanListData[]>(
+    MasterAPI.GET_JENIS_JABATAN_LIST,
+    null,
     { method: 'GET' }
   );
 
   React.useEffect(() => {
-    mutate(JabatanAPI.GET_JABATAN);
+    if (loaded) {
+      mutate();
+    }
+    setLoaded(true);
   }, [filterState]);
 
   const changeFilterState = (inputState: Partial<GetJabatanReq>) => {
@@ -88,11 +97,14 @@ function DaftarJabatan() {
                 }}
                 label={'Tipe Jabatan'}
                 defaultValue={{ text: 'Semua', value: '*' }}
-                options={[
-                  { text: 'Semua', value: '*' },
-                  { text: 'Struktural', value: '1' },
-                  { text: 'Fungsional', value: '2' },
-                ]}
+                options={(() => {
+                  const returnList = (jenisJabatanList || []).map(each => ({
+                    text: each.jenis_jabatan,
+                    value: String(each.id),
+                  }));
+                  returnList.unshift({ text: 'Semua', value: '*' });
+                  return returnList;
+                })()}
               />
             </div>
             <div className="w-[202px] pb-2">

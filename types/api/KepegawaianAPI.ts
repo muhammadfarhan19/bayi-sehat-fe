@@ -1,7 +1,7 @@
 import { Pagination, Status } from '../Common';
 
 export interface GetPegawaiListReq {
-  unit_kerja?: string;
+  unit_kerja_id?: string;
   nama?: string;
   tipe_jabatan?: string;
   jabatan: string;
@@ -16,13 +16,14 @@ export interface GetPegawaiListRes {
 
 export interface GetPegawaiListData {
   list: {
-    user_id: number;
-    nip: string;
-    name: string;
-    unit_kerja: string;
     golongan: string;
-    tipe_jabatan: string;
     jabatan: string;
+    name: string;
+    nip: string;
+    pegawai_id: number;
+    tipe_jabatan: string;
+    unit_kerja: string;
+    user_id: number;
   }[];
   pagination: Pagination;
 }

@@ -52,6 +52,7 @@ export const ArsipDigitalAPI = {
 };
 
 export const MasterAPI = {
+  GET_JENIS_JABATAN_LIST: config.apiHost + '/master/jenis-jabatan',
   GET_MASTER_JENIS_BERKAS: config.apiHost + '/master/jenis-berkas',
 };
 

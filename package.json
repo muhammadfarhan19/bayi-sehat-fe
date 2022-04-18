@@ -12,7 +12,7 @@
     "lint": "next lint --fix",
     "mock-server:start": "mockoon-cli start --data config/_mockServer.json",
     "mock-server:stop": "mockoon-cli stop 'all'",
-    "prepare": "husky install"
+    "postinstall": "husky install"
   },
   "dependencies": {
     "@headlessui/react": "^1.5.0",

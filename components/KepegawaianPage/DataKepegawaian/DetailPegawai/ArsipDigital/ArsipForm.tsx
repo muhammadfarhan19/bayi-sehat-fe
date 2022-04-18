@@ -4,11 +4,9 @@ import { XIcon } from '@heroicons/react/solid';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { useSWRConfig } from 'swr';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { ArsipDigitalAPI, DocumentAPI } from '../../../../../constants/APIUrls';
-import { JenisBerkas } from '../../../../../constants/Resource';
+import { ArsipDigitalAPI, MasterAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
   ArsipDigitalDetailData,
@@ -18,11 +16,11 @@ import {
   PostArsipDigitalUpdateReq,
   PostArsipDigitalUpdateRes,
 } from '../../../../../types/api/ArsipDigitalAPI';
-import { PostDocumentUploadReq, PostDocumentUploadRes } from '../../../../../types/api/DocumentAPI';
+import { MasterJenisBerkasData } from '../../../../../types/api/MasterAPI';
 import { DocumentUploadType, Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
-import { validateFile } from '../../../../../utils/Value';
+import { getQueryString } from '../../../../../utils/URLUtils';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
@@ -45,15 +43,19 @@ interface UploadFormProps {
 
 export default function ArsipForm(props: UploadFormProps) {
   const dispatch = useDispatch();
-  const { open, setOpen, selectedId, onSuccess } = props;
   const personalData = usePersonalData();
+  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
+  const { open, setOpen, selectedId, onSuccess } = props;
 
-  const { mutate } = useSWRConfig();
   const { data } = useCommonApi<GetArsipDigitalDetailReq, ArsipDigitalDetailData>(
     ArsipDigitalAPI.GET_ARSIP_DIGITAL_VIEW,
     { arsip_digital_id: Number(selectedId) },
-    { method: 'GET' }
+    { method: 'GET' },
+    { skipCall: !selectedId, revalidateOnMount: true }
   );
+  const { data: jenisBerkas } = useCommonApi<null, MasterJenisBerkasData[]>(MasterAPI.GET_MASTER_JENIS_BERKAS, null, {
+    method: 'GET',
+  });
 
   const {
     control,
@@ -64,15 +66,15 @@ export default function ArsipForm(props: UploadFormProps) {
   } = useForm<FormState>({
     defaultValues: {
       nama_berkas: selectedId ? data?.document_name : undefined,
-      jenis_berkas: JenisBerkas.others,
     },
   });
 
+  // SET default value jenis berkas
   React.useEffect(() => {
-    if (selectedId) {
-      mutate(ArsipDigitalAPI.GET_ARSIP_DIGITAL_VIEW);
+    if (jenisBerkas && jenisBerkas.length) {
+      setValue('jenis_berkas', String(jenisBerkas[jenisBerkas.length - 1].jenis_berkas_id));
     }
-  }, [selectedId]);
+  }, [jenisBerkas]);
 
   const toggleModal = () => {
     setOpen(!open);
@@ -84,22 +86,22 @@ export default function ArsipForm(props: UploadFormProps) {
       resSubmit = await callAPI<PostArsipDigitalUpdateReq, PostArsipDigitalUpdateRes>(
         ArsipDigitalAPI.POST_ARSIP_DIGITAL_UPDATE,
         {
+          ...(pegawai_id ? { pegawai_id: Number(pegawai_id) } : {}),
           arsip_digital_id: Number(selectedId),
           document_name: formData.nama_berkas,
           document_uuid: formData.file_id,
-          jenis_berkas_id: 1,
-          pegawai_id: Number(personalData?.user_id),
+          jenis_berkas_id: DocumentUploadType.INTERNAL_SOURCE,
         },
         { method: 'post' }
       );
     } else {
       resSubmit = await callAPI<PostArsipDigitalInsertReq, PostArsipDigitalInsertRes>(
-        ArsipDigitalAPI.POST_ARSIP_DIGITAL_UPDATE,
+        ArsipDigitalAPI.POST_ARSIP_DIGITAL_INSERT,
         {
+          ...(pegawai_id ? { pegawai_id: Number(pegawai_id) } : {}),
           document_name: formData.nama_berkas,
-          document_uuid: '1',
-          jenis_berkas_id: 1,
-          pegawai_id: Number(personalData?.user_id),
+          document_uuid: formData.file_id,
+          jenis_berkas_id: DocumentUploadType.INTERNAL_SOURCE,
         },
         { method: 'post' }
       );
@@ -109,7 +111,7 @@ export default function ArsipForm(props: UploadFormProps) {
       dispatch(
         setSnackbar({
           show: true,
-          message: 'Data tersimpan.',
+          message: 'Data berhasil tersimpan.',
           type: SnackbarType.INFO,
         })
       );
@@ -119,40 +121,11 @@ export default function ArsipForm(props: UploadFormProps) {
       dispatch(
         setSnackbar({
           show: true,
-          message: 'Gagal menyimpan data.',
+          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
           type: SnackbarType.ERROR,
         })
       );
     }
-  };
-
-  const uploadHandler = async (fileObject: File, validationRes: ReturnType<typeof validateFile>) => {
-    const bodyRequest: PostDocumentUploadReq = {
-      document_type: DocumentUploadType.INTERNAL_SOURCE,
-      file_name: validationRes.fileName,
-      file_path: '/',
-      file: fileObject,
-      title: validationRes.fileName,
-    };
-
-    const formdata = new FormData();
-    Object.keys(bodyRequest).forEach(each => {
-      const key = each as keyof typeof bodyRequest;
-      if (bodyRequest[key] instanceof File) {
-        formdata.append(key, bodyRequest[key] as File, validationRes.fileName);
-      } else {
-        formdata.append(key, String(bodyRequest[key]));
-      }
-    });
-
-    const uploadRes = await callAPI<FormData, PostDocumentUploadRes>(DocumentAPI.POST_DOCUMENT_UPLOAD, formdata, {
-      isMultipart: true,
-      method: 'post',
-    });
-    if (uploadRes.status === 200 && uploadRes.data?.status === Status.OK) {
-      return { id: String(uploadRes.data.data.document_id) };
-    }
-    throw 'failed to upload';
   };
 
   return (
@@ -243,26 +216,39 @@ export default function ArsipForm(props: UploadFormProps) {
                   </div>
 
                   <div className="mt-5 sm:col-span-6">
-                    <Controller
-                      control={control}
-                      name="jenis_berkas"
-                      render={({ field: { onChange, value } }) => (
-                        <AutoComplete
-                          onChange={value => {
-                            onChange(value.value);
-                          }}
-                          label={'Jenis Berkas'}
-                          defaultValue={{ text: value, value: value }}
-                          options={Object.keys(JenisBerkas).map(each => {
-                            const key = each as keyof typeof JenisBerkas;
-                            return {
-                              text: JenisBerkas[key],
-                              value: JenisBerkas[key],
-                            };
-                          })}
-                        />
-                      )}
-                    />
+                    {jenisBerkas && (jenisBerkas || []).length ? (
+                      <Controller
+                        control={control}
+                        name="jenis_berkas"
+                        render={({ field: { onChange, value } }) =>
+                          value ? (
+                            <AutoComplete
+                              onChange={value => {
+                                onChange(value.value);
+                              }}
+                              label={'Jenis Berkas'}
+                              defaultValue={(() => {
+                                const selectedJenisBerkas = jenisBerkas.filter(
+                                  each => String(each.jenis_berkas_id) === value
+                                )[0];
+                                return {
+                                  text: selectedJenisBerkas.jenis_berkas,
+                                  value: String(selectedJenisBerkas.jenis_berkas_id),
+                                };
+                              })()}
+                              options={jenisBerkas.map(each => {
+                                return {
+                                  text: each.jenis_berkas,
+                                  value: String(each.jenis_berkas_id),
+                                };
+                              })}
+                            />
+                          ) : (
+                            <React.Fragment />
+                          )
+                        }
+                      />
+                    ) : null}
                   </div>
 
                   <div className="mt-5 sm:col-span-6">
@@ -272,12 +258,11 @@ export default function ArsipForm(props: UploadFormProps) {
                       rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
                       render={({ field: { onChange, value } }) => (
                         <UploadWrapper
-                          allowedTypes={['pdf']}
+                          allowedTypes={['pdf', 'jpg', 'jpeg', 'png']}
                           handleUploadChange={(files: FileObject[]) => {
                             setValue('file_id', files[0].id);
                             onChange(files[0].name);
                           }}
-                          uploadHandler={uploadHandler}
                         >
                           {({ loading }) => (
                             <div
@@ -288,7 +273,7 @@ export default function ArsipForm(props: UploadFormProps) {
                             >
                               <div>
                                 <div className="text-sm text-gray-600">{value || 'Bukti Arsip'}</div>
-                                <div className="text-xs text-gray-400">(Pdf)</div>
+                                <div className="text-xs text-gray-400">(jpg,jpeg,png,pdf)</div>
                               </div>
                               <button
                                 disabled={loading}

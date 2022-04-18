@@ -8,17 +8,23 @@ export interface PostDocumentUploadReq {
   file_path: string;
 }
 
-export interface PostDocumentUploadRes {
-  status: Status;
-  data: {
-    document_id: number;
-    document_uuid: string;
-    title: string;
-    jenis_document: number;
-    file_name: string;
-    file_path: string;
-  };
-}
+export type PostDocumentUploadRes =
+  | {
+      status: Status;
+      data: {
+        document_id: number;
+        document_uuid: string;
+        title: string;
+        jenis_document: number;
+        file_name: string;
+        file_path: string;
+      };
+    }
+  | {
+      status: Status.BAD_REQUEST;
+      error_message: 'FILE_TYPE_NOT_VALID' | 'FILE_EXCEED_MAX_SIZE';
+      data: null;
+    };
 
 export interface GetDocumentReq {
   uuid: string;

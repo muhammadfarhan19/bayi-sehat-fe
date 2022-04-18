@@ -1,7 +1,6 @@
 import { PlusIcon } from '@heroicons/react/outline';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { useSWRConfig } from 'swr';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
 import { ArsipDigitalAPI } from '../../../../../constants/APIUrls';
@@ -15,9 +14,9 @@ import {
 import { Status } from '../../../../../types/Common';
 import { formatDate } from '../../../../../utils/DateUtil';
 import { callAPI } from '../../../../../utils/Fetchers';
+import { getQueryString } from '../../../../../utils/URLUtils';
 import ConfirmDialog from '../../../../shared/ConfirmDialog';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
-import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import ArsipForm from './ArsipForm';
 
 type ListArsipProps = {
@@ -27,13 +26,12 @@ type ListArsipProps = {
 export default function ListArsip(props: ListArsipProps) {
   const dispatch = useDispatch();
   const { onShowDetail } = props;
+  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const [confirmId, setConfirmId] = React.useState(0);
 
-  const personalData = usePersonalData();
-  const { mutate } = useSWRConfig();
-  const { data: arsipDigital } = useCommonApi<GetArsipDigitalListReq, ArsipDigitalListData[]>(
+  const { data: arsipDigital, mutate } = useCommonApi<GetArsipDigitalListReq, ArsipDigitalListData[]>(
     ArsipDigitalAPI.GET_ARSIP_DIGITAL_LIST,
-    { user_id: personalData?.user_id || 0 },
+    pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
     { method: 'GET' }
   );
 
@@ -72,7 +70,7 @@ export default function ListArsip(props: ListArsipProps) {
     }
     dispatch(setSnackbar(snackbarProps));
     setConfirmId(0);
-    mutate(ArsipDigitalAPI.GET_ARSIP_DIGITAL_LIST);
+    mutate();
   };
 
   return (
@@ -83,7 +81,7 @@ export default function ListArsip(props: ListArsipProps) {
         </div>
         <button
           type="button"
-          className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200"
+          className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
           onClick={() => handleShowForm(!formModalState.open)}
         >
           <PlusIcon className="mr-1 h-4" />
@@ -167,7 +165,7 @@ export default function ListArsip(props: ListArsipProps) {
       </div>
       {formModalState.open ? (
         <ArsipForm
-          onSuccess={() => mutate(ArsipDigitalAPI.GET_ARSIP_DIGITAL_LIST)}
+          onSuccess={() => mutate()}
           open={formModalState.open}
           setOpen={(open: boolean) => handleShowForm(open)}
           selectedId={formModalState?.selectedId}

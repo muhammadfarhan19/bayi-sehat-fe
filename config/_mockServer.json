@@ -601,7 +601,7 @@
           "fallbackTo404": false
         }
       ],
-      "enabled": true,
+      "enabled": false,
       "randomResponse": false,
       "sequentialResponse": false
     },
@@ -626,7 +626,7 @@
           "fallbackTo404": false
         }
       ],
-      "enabled": true,
+      "enabled": false,
       "randomResponse": false,
       "sequentialResponse": false
     },
@@ -668,7 +668,7 @@
           "fallbackTo404": false
         }
       ],
-      "enabled": true,
+      "enabled": false,
       "randomResponse": false,
       "sequentialResponse": false
     },
@@ -710,7 +710,7 @@
           "fallbackTo404": false
         }
       ],
-      "enabled": true,
+      "enabled": false,
       "randomResponse": false,
       "sequentialResponse": false
     },
@@ -752,7 +752,7 @@
           "fallbackTo404": false
         }
       ],
-      "enabled": true,
+      "enabled": false,
       "randomResponse": false,
       "sequentialResponse": false
     },
@@ -777,7 +777,7 @@
           "fallbackTo404": false
         }
       ],
-      "enabled": true,
+      "enabled": false,
       "randomResponse": false,
       "sequentialResponse": false
     }

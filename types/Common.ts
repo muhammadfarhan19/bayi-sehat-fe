@@ -1,5 +1,7 @@
 export type Action = 'read' | 'write';
 
+export type AcceptedType = 'pdf' | 'jpg' | 'jpeg' | 'png';
+
 export enum Status {
   BAD_REQUEST = 'BAD_REQUEST',
   ERROR_DB = 'ERROR_DB',

@@ -30,7 +30,7 @@ export interface GetUserPersonalPegawaiData {
 }
 
 export type GetUserProfileReq = {
-  user_id: number;
+  pegawai_id?: number;
 };
 
 export type GetUserProfileRes =
@@ -48,7 +48,7 @@ export type GetUserProfileRes =
     };
 
 export type GetUserPersonalPegawaiReq = {
-  user_id: number;
+  pegawai_id?: number;
 };
 
 export interface GetUserPersonalPegawaiRes {

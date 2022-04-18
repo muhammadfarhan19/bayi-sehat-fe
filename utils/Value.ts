@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { MimeType } from '../constants/Utils';
+import { AcceptedType } from '../types/Common';
 
 export const encrypt = (text: string) => {
   return axios
@@ -8,7 +9,7 @@ export const encrypt = (text: string) => {
     .catch(() => '');
 };
 
-export const getAcceptedType = (argType: string) => {
+export const getAcceptedType = (argType: AcceptedType) => {
   const type = argType.toLowerCase();
   if (['jpeg', 'jpg'].includes(type)) {
     return MimeType.JPG;

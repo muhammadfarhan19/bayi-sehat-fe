@@ -1,7 +1,7 @@
 import { Status } from '../Common';
 
 export interface GetArsipDigitalListReq {
-  user_id: number;
+  pegawai_id?: number;
 }
 
 export interface GetArsipDigitalListRes {
@@ -39,7 +39,7 @@ export interface ArsipDigitalDetailData {
 }
 
 export interface PostArsipDigitalInsertReq {
-  pegawai_id: number;
+  pegawai_id?: number;
   document_uuid: string;
   jenis_berkas_id: number;
   document_name: string;
@@ -52,7 +52,7 @@ export interface PostArsipDigitalInsertRes {
 
 export interface PostArsipDigitalUpdateReq {
   arsip_digital_id: number;
-  pegawai_id: number;
+  pegawai_id?: number;
   document_uuid: string;
   jenis_berkas_id: number;
   document_name: string;
