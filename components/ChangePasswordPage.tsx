@@ -70,11 +70,11 @@ export default function ChangePasswordPage() {
 
         <div className="relative mx-2 mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <div className="mb-6 text-center font-semibold text-gray-600">Change Your Password</div>
+            <div className="mb-6 text-center font-semibold text-gray-600">Ubah Kata Sandi</div>
             <form className="space-y-6" onSubmit={handleSubmit(submitHandler)}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Old Password
+                  Kata Sandi Lama
                 </label>
                 <div className="mt-1">
                   <input
@@ -89,7 +89,7 @@ export default function ChangePasswordPage() {
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  New Password
+                  Kata Sandi Baru
                 </label>
                 <div className="mt-1">
                   <input
@@ -104,7 +104,7 @@ export default function ChangePasswordPage() {
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Confirm New Password
+                  Konfirmasi Kata Sandi Baru
                 </label>
                 <div className="mt-1">
                   <input
@@ -134,7 +134,7 @@ export default function ChangePasswordPage() {
                   className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200"
                 >
                   {loading ? <CircleProgress /> : null}
-                  Change Your Password
+                  Ubah Kata Sandi
                 </button>
               </div>
             </form>

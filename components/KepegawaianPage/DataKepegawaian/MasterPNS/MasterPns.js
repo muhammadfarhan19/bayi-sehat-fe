@@ -8,6 +8,8 @@ import { callAPI } from '../../../../utils/Fetchers';
 export default function MasterPns() {
   const router = useRouter();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
+  const [unitKerja, setUnitKerja] = React.useState([]);
+  const [tipeJabatan, setTipeJabatan] = React.useState([]);
   const [list, setList] = React.useState([]);
   const [filter, setFilter] = React.useState({
     nama: '',
@@ -16,14 +18,6 @@ export default function MasterPns() {
     jabatan: '',
   });
 
-  const unitKerja = [
-    'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    'Direktorat Pembelajaran dan Kemahasiswaan',
-    'Direktorat Jenderal Pendidikan Tinggi',
-    'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    'Direktorat Pembelajaran dan Kemahasiswaan',
-  ];
-
   const toggleAdvancedFilter = () => {
     setshowAdvancedFilter(!showAdvancedFilter);
   };
@@ -31,7 +25,7 @@ export default function MasterPns() {
   const handleUrl = ({ unit_kerja = '', nama = '', tipe_jabatan = '', jabatan = '' }) => {
     let url =
       config.apiHost +
-      `/pegawai/list?unit_kerja=${unit_kerja}&nama=${nama}&tipe_jabatan=${tipe_jabatan}&jabatan=${jabatan}&page=1&per_page=20`;
+      `/pegawai/list?unit_kerja_id=${unit_kerja}&nama=${nama}&tipe_jabatan=${tipe_jabatan}&jabatan=${jabatan}&page=1&per_page=20`;
 
     return url;
   };
@@ -50,10 +44,14 @@ export default function MasterPns() {
 
   React.useEffect(() => {
     (async () => {
-      const getData = await callAPI(handleUrl({}), '', {
-        method: 'get',
-      });
+      const [getData, getFilterUnitKerja, getTipeJabatan] = await Promise.all([
+        callAPI(handleUrl({}), '', { method: 'get' }),
+        callAPI(`${config.apiHost}/unit-kerja/list/direktorat`, '', { method: 'get' }),
+        callAPI(`${config.apiHost}/master/jenis-jabatan`, '', { method: 'get' }),
+      ]);
       setList(getData?.data?.data?.list);
+      setUnitKerja(getFilterUnitKerja?.data?.data);
+      setTipeJabatan(getTipeJabatan?.data?.data);
     })();
   }, []);
 
@@ -100,8 +98,8 @@ export default function MasterPns() {
               >
                 <option value="">Semua</option>
                 {unitKerja.map((item, index) => (
-                  <option key={`options-${index}`} value={item}>
-                    {item}
+                  <option key={`options-${index}`} value={item?.unit_kerja_id}>
+                    {item?.name}
                   </option>
                 ))}
               </select>
@@ -113,10 +111,14 @@ export default function MasterPns() {
                 onChange={e => search('tipe_jabatan', e.target.value)}
               >
                 <option value="">Semua</option>
-                <option value="Struktural">Struktural</option>
+                {tipeJabatan.map((item, index) => (
+                  <option key={`options-${index}`} value={item?.tipe_jabatan}>
+                    {item?.jenis_jabatan}
+                  </option>
+                ))}
               </select>
             </div>
-            <div className="w-[202px] pb-2">
+            {/* <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Nama Jabatan</p>
               <select
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -124,7 +126,7 @@ export default function MasterPns() {
               >
                 <option value="">Semua</option>
               </select>
-            </div>
+            </div> */}
           </div>
         )}
       </div>
