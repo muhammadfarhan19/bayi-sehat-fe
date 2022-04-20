@@ -6,6 +6,7 @@ export const NavigationId = {
   BERANDA: 15,
   KEPEGAWAIAN: 6,
   KEUANGAN: 14,
+  KEPANGKATAN: 17,
 };
 
 export const UserNavigationList: Navigation[] = [
@@ -55,6 +56,11 @@ export const NavigationList: Navigation[] = [
             href: '/kepegawaian/peta-jabatan',
           },
         ],
+      },
+      {
+        id: NavigationId.KEPEGAWAIAN,
+        name: 'Kepangkatan',
+        href: '/kepegawaian/kepangkatan',
       },
     ],
   },
