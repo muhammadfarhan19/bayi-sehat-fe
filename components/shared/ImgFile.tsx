@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { DocumentAPI } from '../../constants/APIUrls';
-import { GetDocumentReq, GetDocumentRes } from '../../types/api/DocumentAPI';
+import { GetDocumentRes } from '../../types/api/DocumentAPI';
 import { callAPI } from '../../utils/Fetchers';
 import CircleLoader from './Loader/CircleLoader';
 
@@ -15,11 +15,10 @@ export default function ImgFile(props: ImgFileProps) {
   React.useEffect(() => {
     (async () => {
       if (uuid) {
-        const fileRes = await callAPI<GetDocumentReq, GetDocumentRes>(
-          DocumentAPI.GET_DOCUMENT,
-          { uuid },
-          { method: 'get', isBlob: true }
-        );
+        const fileRes = await callAPI<null, GetDocumentRes>(DocumentAPI.GET_DOCUMENT.replace(':uuid', uuid), null, {
+          method: 'get',
+          isBlob: true,
+        });
 
         if (fileRes.status === 200 && fileRes.data instanceof Blob) {
           setFileUrl(window.URL.createObjectURL(fileRes.data));

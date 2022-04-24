@@ -13,7 +13,9 @@ function DataKepangkatan() {
         <LeftMenu />
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <section aria-labelledby="section-1-title">
-            <div className="rounded-lg bg-white shadow"><Kepangkatan /></div>
+            <div className="rounded-lg bg-white shadow">
+              <Kepangkatan />
+            </div>
           </section>
         </div>
       </div>

@@ -1,32 +1,33 @@
 import { Gender, Status, StatusCpns, StatusMenikah } from '../Common';
 
 export interface GetUserProfileData {
-  user_id: number;
+  alamat: string;
+  bpjs: string;
+  email: string;
   jenis_kelamin: Gender;
-  status_menikah: StatusMenikah;
   jumlah_anak: number;
   ktp: string;
-  email: string;
-  alamat: string;
   npwp: string;
-  bpjs: string;
+  status_menikah: StatusMenikah;
+  user_id: number;
 }
 
 export interface GetUserPersonalPegawaiData {
-  user_id: number;
-  nip: string;
-  nama: string;
-  tempat_lahir: string;
-  tanggal_lahir: string;
-  tmt_cpns: string;
-  status_cpns: StatusCpns;
-  jabatan: string;
-  unit_kerja: string;
   golongan: string;
-  tmt_golongan: string;
+  jabatan: string;
   karpeg: string;
   masa_kerja: string;
+  nama: string;
+  nip: string;
   pangkat: string;
+  pegawai_id: number;
+  status_cpns: StatusCpns;
+  tanggal_lahir: string;
+  tempat_lahir: string;
+  tmt_cpns: string;
+  tmt_golongan: string;
+  unit_kerja: string;
+  user_id: number;
 }
 
 export type GetUserProfileReq = {
@@ -57,9 +58,9 @@ export interface GetUserPersonalPegawaiRes {
 }
 
 export interface PutUserPasswordReq {
-  old_password: string;
-  new_password: string;
   confirm_new_password: string;
+  new_password: string;
+  old_password: string;
 }
 
 export interface PutUserPasswordRes {

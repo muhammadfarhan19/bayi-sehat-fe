@@ -8,7 +8,7 @@ import { NavigationId } from '../../../constants/NavigationList';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function DataPegawai() {
-  const { userId } = getQueryString();
+  const { pegawai_id } = getQueryString();
 
   return (
     <MainLayout>
@@ -17,7 +17,7 @@ function DataPegawai() {
 
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <section aria-labelledby="section-1-title">
-            <div>{typeof userId === 'undefined' ? <DataKepegawaian /> : <DetailPegawai />}</div>
+            <div>{typeof pegawai_id === 'undefined' ? <DataKepegawaian /> : <DetailPegawai />}</div>
           </section>
         </div>
       </div>

@@ -58,5 +58,5 @@ export const MasterAPI = {
 
 export const DocumentAPI = {
   POST_DOCUMENT_UPLOAD: config.apiHost + '/document/upload',
-  GET_DOCUMENT: config.apiHost + '/document',
+  GET_DOCUMENT: config.apiHost + '/document/:uuid',
 };

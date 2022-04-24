@@ -26,10 +26,6 @@ export type PostDocumentUploadRes =
       data: null;
     };
 
-export interface GetDocumentReq {
-  uuid: string;
-}
-
 export type GetDocumentRes =
   | {
       status: Status;

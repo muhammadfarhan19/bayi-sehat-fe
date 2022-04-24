@@ -51,6 +51,7 @@ export default function useCommonApi<TReq, TReturn>(
   };
   if (swrOptions?.revalidateOnMount) {
     useSwrOptions.revalidateOnMount = swrOptions?.revalidateOnMount;
+    useSwrOptions.dedupingInterval = 0;
   }
 
   return useSWR<DataType<TReturn>, string, string>(apiUrl, fetcher, useSwrOptions);

@@ -20,12 +20,12 @@ import { MasterJenisBerkasData } from '../../../../../types/api/MasterAPI';
 import { DocumentUploadType, Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
-import { getQueryString } from '../../../../../utils/URLUtils';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import AutoComplete from '../../../../shared/Input/ComboBox';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
+import Loader from '../../../../shared/Loader/Loader';
 
 interface FormState {
   nama_berkas: string;
@@ -44,10 +44,9 @@ interface UploadFormProps {
 export default function ArsipForm(props: UploadFormProps) {
   const dispatch = useDispatch();
   const personalData = usePersonalData();
-  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const { open, setOpen, selectedId, onSuccess } = props;
 
-  const { data } = useCommonApi<GetArsipDigitalDetailReq, ArsipDigitalDetailData>(
+  const { data, isValidating } = useCommonApi<GetArsipDigitalDetailReq, ArsipDigitalDetailData>(
     ArsipDigitalAPI.GET_ARSIP_DIGITAL_VIEW,
     { arsip_digital_id: Number(selectedId) },
     { method: 'GET' },
@@ -63,11 +62,7 @@ export default function ArsipForm(props: UploadFormProps) {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<FormState>({
-    defaultValues: {
-      nama_berkas: selectedId ? data?.document_name : undefined,
-    },
-  });
+  } = useForm<FormState>();
 
   // SET default value jenis berkas
   React.useEffect(() => {
@@ -75,6 +70,17 @@ export default function ArsipForm(props: UploadFormProps) {
       setValue('jenis_berkas', String(jenisBerkas[jenisBerkas.length - 1].jenis_berkas_id));
     }
   }, [jenisBerkas]);
+
+  // SET default value jenis berkas
+  React.useEffect(() => {
+    if (data && data.document_uuid) {
+      setValue('file_id', data.document_uuid);
+      setValue('file_name', data.document_name);
+      setValue('nama_berkas', data.document_name);
+    }
+  }, [data]);
+
+  if (isValidating) return <Loader />;
 
   const toggleModal = () => {
     setOpen(!open);
@@ -86,7 +92,7 @@ export default function ArsipForm(props: UploadFormProps) {
       resSubmit = await callAPI<PostArsipDigitalUpdateReq, PostArsipDigitalUpdateRes>(
         ArsipDigitalAPI.POST_ARSIP_DIGITAL_UPDATE,
         {
-          ...(pegawai_id ? { pegawai_id: Number(pegawai_id) } : {}),
+          pegawai_id: Number(personalData?.pegawai_id),
           arsip_digital_id: Number(selectedId),
           document_name: formData.nama_berkas,
           document_uuid: formData.file_id,
@@ -98,7 +104,7 @@ export default function ArsipForm(props: UploadFormProps) {
       resSubmit = await callAPI<PostArsipDigitalInsertReq, PostArsipDigitalInsertRes>(
         ArsipDigitalAPI.POST_ARSIP_DIGITAL_INSERT,
         {
-          ...(pegawai_id ? { pegawai_id: Number(pegawai_id) } : {}),
+          pegawai_id: Number(personalData?.pegawai_id),
           document_name: formData.nama_berkas,
           document_uuid: formData.file_id,
           jenis_berkas_id: DocumentUploadType.INTERNAL_SOURCE,

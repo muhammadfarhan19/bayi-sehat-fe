@@ -182,7 +182,7 @@ export default function MasterPns() {
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
                       <td
                         className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"
-                        onClick={() => router.push(`/kepegawaian/data-pegawai?userId=${data.nip}`)}
+                        onClick={() => router.push(`/kepegawaian/data-pegawai?pegawai_id=${data.pegawai_id}`)}
                       >
                         {data.name}
                       </td>
