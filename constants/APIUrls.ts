@@ -60,3 +60,11 @@ export const DocumentAPI = {
   POST_DOCUMENT_UPLOAD: config.apiHost + '/document/upload',
   GET_DOCUMENT: config.apiHost + '/document/:uuid',
 };
+
+export const RiwayatDiklatAPI = {
+  GET_RIWAYAT_DIKLAT_LIST: config.apiHost + '/diklat/list',
+  GET_RIWAYAT_DIKLAT_DETAIL: config.apiHost + '/diklat/detail',
+  POST_RIWAYAT_DIKLAT_DELETE: config.apiHost + '/diklat/delete',
+  POST_RIWAYAT_DIKLAT_INSERT: config.apiHost + '/diklat/insert',
+  POST_RIWAYAT_DIKLAT_UPDATE: config.apiHost + '/diklat/update',
+};

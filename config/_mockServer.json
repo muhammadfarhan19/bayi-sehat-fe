@@ -581,6 +581,182 @@
       "sequentialResponse": false
     },
     {
+      "uuid": "0bdee5b0-0e8d-4694-8bc3-e0c255751ced",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "diklat/list",
+      "responses": [
+        {
+          "uuid": "bcfbcba1-68d5-4093-a21f-5265a2133970",
+          "body": "{\n\t\"status\": \"OK\",\n\t\"data\": [\n\t  {\n\t\t\t\"riwayat_id\": 2,\n\t\t\t\"pegawai_id\": 1,\n\t\t\t\"jenis_diklat_id\": 2,\n\t\t\t\"jenis_diklat_str\": \"SEPADA\",\n\t\t\t\"nama_diklat\": \"Test\",\n\t\t\t\"penyelenggara\": \"Penyel\",\n\t\t\t\"no_sertifikat\": \"1122\",\n\t\t\t\"lokasi\": \"\",\n\t\t\t\"keterangan\": \"\",\n\t\t\t\"tgl_awal_acara\": \"2022-04-20\",\n\t\t\t\"tgl_akhir_acara\": \"2022-04-23\",\n\t\t\t\"files\": null,\n\t\t\t\"created_at\": \"\",\n\t\t\t\"created_by\": \"\"\n\t  }\n\t]\n}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "731ddf63-661c-4a50-a73b-37734b5e7f8e",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "diklat/detail",
+      "responses": [
+        {
+          "uuid": "ba5e7d0f-0995-4d7a-81b7-a1740ef261dd",
+          "body": "{\n\t\"status\": \"OK\",\n\t\"data\": {\n\t\t\"riwayat_id\": 1,\n\t\t\"pegawai_id\": 1,\n\t\t\"jenis_diklat_id\": 1,\n\t\t\"jenis_diklat_str\": \"DIKLAT PRAJABATAN\",\n\t\t\"nama_diklat\": \"Test\",\n\t\t\"penyelenggara\": \"Penyel\",\n\t\t\"no_sertifikat\": \"1122\",\n\t\t\"lokasi\": \"Jakarta\",\n\t\t\"keterangan\": \"OKOK\",\n\t\t\"tgl_awal_acara\": \"2022-04-20\",\n\t\t\"tgl_akhir_acara\": \"2022-04-23\",\n\t\t\"files\": [\n\t\t\t{\n\t\t\t\t\"document_uuid\": \"aaaa\",\n\t\t\t\t\"document_name\": \"bbbb\"\n\t\t\t}\n\t\t],\n\t\t\"created_at\": \"2022-04-20T23:05:48Z\",\n\t\t\"created_by\": \"system\"\n\t}\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "6dad63a5-f091-4152-9d9a-2beaa15782f2",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "diklat/insert",
+      "responses": [
+        {
+          "uuid": "be57d601-06e3-4b1c-9d1c-745f770e6ed0",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": \"Success\"\n}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "4e2bd863-9410-46a0-9339-c201a1646719",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "diklat/update",
+      "responses": [
+        {
+          "uuid": "accc9f87-e076-48f2-b667-fededa6606c4",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": \"Success\"\n}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "50baa80e-966e-4187-a018-829ed172d95a",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "diklat/delete",
+      "responses": [
+        {
+          "uuid": "aec114bd-4d6f-4f72-a07e-ade6f4b465c2",
+          "body": "{\n  \"status\": \"OK\",\n  \"data\": \"Success\"\n}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "access-control-allow-headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": true,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
       "uuid": "07a7f477-00b0-4744-a34a-ba4853f4decb",
       "documentation": "",
       "method": "get",

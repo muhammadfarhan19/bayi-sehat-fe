@@ -1,12 +1,24 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
+import { RiwayatDiklatAPI } from '../../../../../constants/APIUrls';
+import { GetRiwayatDiklatDetailReq, RiwayatDiklatDetailData } from '../../../../../types/api/RiwayatDiklatAPI';
+import useCommonApi from '../../../../shared/hooks/useCommonApi';
+import ImgFile from '../../../../shared/ImgFile';
+
 type ListDigitalProps = {
   riwayatDiklatId?: number;
   onBack: () => void;
 };
 
 export default function DetailDiklat(props: ListDigitalProps) {
-  const { onBack } = props;
+  const { riwayatDiklatId, onBack } = props;
+
+  const { data } = useCommonApi<GetRiwayatDiklatDetailReq, RiwayatDiklatDetailData>(
+    RiwayatDiklatAPI.GET_RIWAYAT_DIKLAT_DETAIL,
+    { id: Number(riwayatDiklatId) },
+    { method: 'GET' }
+  );
+
   return (
     <>
       <div className="my-3 inline-flex cursor-pointer items-center" onClick={onBack}>
@@ -19,15 +31,15 @@ export default function DetailDiklat(props: ListDigitalProps) {
           <thead></thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {[
-              { label: 'Jenis Diklat/Pelatihan', value: 'DIKLAT PIM VI' },
-              { label: 'Nama Diklat/Pelatihan/Seminar', value: 'Pendidikan dan Pelatihan Kepemimpinan Tingkat IV' },
-              { label: 'Penyelenggara', value: 'Pusat Pendidikan Pelatihan Kemenristekdikti' },
-              { label: 'No Sertifikat', value: '00012702/DIKLATPIM TK.IV/LAN-KEMENRISTEKDIKTI/2018' },
-              { label: 'Lokasi', value: 'Serpong, Tangerang Selatan' },
-              { label: 'Keterangan', value: 'LULUS (Memuaskan)' },
-              { label: 'Tanggal Awal Acara', value: '2018/04/29' },
-              { label: 'Tanggal Akhir Acara', value: '2018/12/22' },
-              { label: 'Bukti SK', value: '' },
+              { label: 'Jenis Diklat/Pelatihan', value: data?.jenis_diklat_str },
+              { label: 'Nama Diklat/Pelatihan/Seminar', value: data?.nama_diklat },
+              { label: 'Penyelenggara', value: data?.penyelenggara },
+              { label: 'No Sertifikat', value: data?.no_sertifikat },
+              { label: 'Lokasi', value: data?.lokasi },
+              { label: 'Keterangan', value: data?.keterangan },
+              { label: 'Tanggal Awal Acara', value: data?.tgl_awal_acara },
+              { label: 'Tanggal Akhir Acara', value: data?.tgl_akhir_acara },
+              { label: 'Bukti SK', value: data?.files?.[0]?.document_name },
             ].map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
@@ -39,7 +51,7 @@ export default function DetailDiklat(props: ListDigitalProps) {
       </div>
       <div>
         <div className="relative mt-4 flex w-full flex-col items-center rounded-lg border-2 border-solid border-gray-300 p-4">
-          img
+          <ImgFile uuid={data?.files?.[0]?.document_uuid} />
         </div>
       </div>
     </>
