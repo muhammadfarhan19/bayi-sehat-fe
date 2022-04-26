@@ -10,6 +10,7 @@ import ArsipDigital from './ArsipDigital';
 import DataDiriPegawai from './DataDiriPegawai';
 import DataDiriPribadi from './DataDiriPribadi';
 import RiwayatDiklat from './RiwayatDiklat';
+import RiwayatPendidikan from './RiwayatPendidikan';
 
 const tabs = [
   { name: 'Data Diri Pegawai', href: '#' },
@@ -87,7 +88,7 @@ function DetailPegawai() {
         <div className="overflow-auto">
           {selected === tabs[0].name ? <DataDiriPegawai /> : null}
           {selected === tabs[1].name ? <DataDiriPribadi /> : null}
-          {selected === tabs[2].name ? <InProgressState /> : null}
+          {selected === tabs[2].name ? <RiwayatPendidikan /> : null}
           {selected === tabs[3].name ? <RiwayatDiklat /> : null}
           {selected === tabs[4].name ? <InProgressState /> : null}
           {selected === tabs[5].name ? <ArsipDigital /> : null}
