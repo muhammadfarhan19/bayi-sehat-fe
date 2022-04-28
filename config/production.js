@@ -1,7 +1,7 @@
 module.exports = {
-  apiHost: 'https://intra.dikti.info/api',
+  apiHost: 'http://103.56.191.231/api',
   environment: 'production',
   cookieSecure: true,
-  apiTimeoutMs: 15000, // 10 seconds
+  apiTimeoutMs: 15000, // 15 seconds
   tokenExpiredMs: 300000, // 5 Minutes
 };
