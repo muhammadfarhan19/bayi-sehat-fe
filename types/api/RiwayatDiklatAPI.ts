@@ -62,7 +62,8 @@ export interface PostRiwayatDiklatInsertReq {
   keterangan: string;
   tgl_awal_acara: string;
   tgl_akhir_acara: string;
-  document: DocumentData[];
+  files: DocumentData[];
+
 }
 
 export interface PostRiwayatDiklatInsertRes {
@@ -71,6 +72,7 @@ export interface PostRiwayatDiklatInsertRes {
 }
 
 export interface PostRiwayatDiklatUpdateReq {
+  riwayat_id: number;
   pegawai_id?: number;
   jenis_diklat_id: number;
   nama_diklat: string;
@@ -80,7 +82,7 @@ export interface PostRiwayatDiklatUpdateReq {
   keterangan: string;
   tgl_awal_acara: string;
   tgl_akhir_acara: string;
-  document: DocumentData[];
+  files: DocumentData[];
 }
 
 export interface DocumentData {

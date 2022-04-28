@@ -90,6 +90,7 @@ export default function DiklatForm(props: UploadFormProps) {
       resSubmit = await callAPI<PostRiwayatDiklatUpdateReq, PostRiwayatDiklatUpdateRes>(
         RiwayatDiklatAPI.POST_RIWAYAT_DIKLAT_UPDATE,
         {
+          riwayat_id: Number(selectedId),
           pegawai_id: Number(personalData?.pegawai_id),
           jenis_diklat_id: Number(formData.jenis_diklat_id),
           nama_diklat: formData.nama_diklat,
@@ -99,14 +100,14 @@ export default function DiklatForm(props: UploadFormProps) {
           keterangan: formData.keterangan,
           tgl_awal_acara: formData.tgl_awal_acara,
           tgl_akhir_acara: formData.tgl_akhir_acara,
-          document: [
+          files: [
             {
               document_uuid: formData.file_id,
               document_name: formData.file_name,
             },
           ],
         },
-        { method: 'post' }
+        { method: 'put' }
       );
     } else {
       resSubmit = await callAPI<PostRiwayatDiklatInsertReq, PostRiwayatDiklatInsertRes>(
@@ -121,7 +122,7 @@ export default function DiklatForm(props: UploadFormProps) {
           keterangan: formData.keterangan,
           tgl_awal_acara: formData.tgl_awal_acara,
           tgl_akhir_acara: formData.tgl_akhir_acara,
-          document: [
+          files: [
             {
               document_uuid: formData.file_id,
               document_name: formData.file_name,

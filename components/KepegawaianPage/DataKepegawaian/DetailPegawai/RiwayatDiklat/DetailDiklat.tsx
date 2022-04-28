@@ -12,11 +12,12 @@ type ListDigitalProps = {
 
 export default function DetailDiklat(props: ListDigitalProps) {
   const { riwayatDiklatId, onBack } = props;
-
   const { data } = useCommonApi<GetRiwayatDiklatDetailReq, RiwayatDiklatDetailData>(
     RiwayatDiklatAPI.GET_RIWAYAT_DIKLAT_DETAIL,
     { id: Number(riwayatDiklatId) },
-    { method: 'GET' }
+    { method: 'GET' },
+    { skipCall: !riwayatDiklatId, revalidateOnMount: true }
+
   );
 
   return (

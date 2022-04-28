@@ -23,7 +23,7 @@ type ListDiklatProps = {
   onShowDetail: (id: number) => void;
 };
 
-export default function ListArsip(props: ListDiklatProps) {
+export default function ListDiklat(props: ListDiklatProps) {
   const [confirmId, setConfirmId] = React.useState(0);
   const { onShowDetail } = props;
   const dispatch = useDispatch();
@@ -134,9 +134,7 @@ export default function ListArsip(props: ListDiklatProps) {
                   {format(new Date(each.tgl_awal_acara), 'dd MMM yyyy')} -{' '}
                   {format(new Date(each.tgl_akhir_acara), 'dd MMM yyyy')}{' '}
                 </td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  Pusat Pendidikan Pelatihan Kemenristekdikti
-                </td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.penyelenggara}</td>
                 <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
                   <div className="flex justify-between">
                     <button
