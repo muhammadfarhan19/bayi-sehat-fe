@@ -17,7 +17,7 @@ import {
   PostArsipDigitalUpdateRes,
 } from '../../../../../types/api/ArsipDigitalAPI';
 import { MasterJenisBerkasData } from '../../../../../types/api/MasterAPI';
-import { DocumentUploadType, Status } from '../../../../../types/Common';
+import { Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
@@ -96,7 +96,7 @@ export default function ArsipForm(props: UploadFormProps) {
           arsip_digital_id: Number(selectedId),
           document_name: formData.nama_berkas,
           document_uuid: formData.file_id,
-          jenis_berkas_id: DocumentUploadType.INTERNAL_SOURCE,
+          jenis_berkas_id: Number(formData.jenis_berkas),
         },
         { method: 'post' }
       );
@@ -107,7 +107,7 @@ export default function ArsipForm(props: UploadFormProps) {
           pegawai_id: Number(personalData?.pegawai_id),
           document_name: formData.nama_berkas,
           document_uuid: formData.file_id,
-          jenis_berkas_id: DocumentUploadType.INTERNAL_SOURCE,
+          jenis_berkas_id: Number(formData.jenis_berkas),
         },
         { method: 'post' }
       );

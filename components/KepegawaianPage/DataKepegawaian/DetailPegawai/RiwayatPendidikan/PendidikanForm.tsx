@@ -43,7 +43,7 @@ const dataDummy = {
   ijazah_terakhir: 1,
   bukti_SK: 'test.pdf',
   document_uuid: 'ba5e7d0f-0995-4d7a-81b7-a1740ef261dd',
-}
+};
 
 export default function PendidikanForm(props: UploadFormProps) {
   const { open, setOpen, selectedId, onSuccess } = props;
@@ -168,9 +168,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                       <option value={3}>SMA</option>
                       <option value={4}>S1</option>
                     </select>
-                    {errors.jenjang && (
-                      <p className="mt-1 text-xs text-red-500">{errors.jenjang.message}</p>
-                    )}
+                    {errors.jenjang && <p className="mt-1 text-xs text-red-500">{errors.jenjang.message}</p>}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
@@ -182,7 +180,9 @@ export default function PendidikanForm(props: UploadFormProps) {
                       name="nama_institusi"
                       type="text"
                     />
-                    {errors.nama_institusi && <p className="mt-1 text-xs text-red-500">{errors.nama_institusi.message}</p>}
+                    {errors.nama_institusi && (
+                      <p className="mt-1 text-xs text-red-500">{errors.nama_institusi.message}</p>
+                    )}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
@@ -194,9 +194,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                       name="prodi"
                       type="text"
                     />
-                    {errors.prodi && (
-                      <p className="mt-1 text-xs text-red-500">{errors.prodi.message}</p>
-                    )}
+                    {errors.prodi && <p className="mt-1 text-xs text-red-500">{errors.prodi.message}</p>}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
@@ -208,9 +206,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                       name="no_ijazah"
                       type="text"
                     />
-                    {errors.no_ijazah && (
-                      <p className="mt-1 text-xs text-red-500">{errors.no_ijazah.message}</p>
-                    )}
+                    {errors.no_ijazah && <p className="mt-1 text-xs text-red-500">{errors.no_ijazah.message}</p>}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
@@ -225,9 +221,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                       <option value={1}>YA</option>
                       <option value={2}>TIDAK</option>
                     </select>
-                    {errors.ijazah_cpns && (
-                      <p className="mt-1 text-xs text-red-500">{errors.ijazah_cpns.message}</p>
-                    )}
+                    {errors.ijazah_cpns && <p className="mt-1 text-xs text-red-500">{errors.ijazah_cpns.message}</p>}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
@@ -258,9 +252,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                       name="tgl_lulus"
                       type="date"
                     />
-                    {errors.tgl_lulus && (
-                      <p className="mt-1 text-xs text-red-500">{errors.tgl_lulus.message}</p>
-                    )}
+                    {errors.tgl_lulus && <p className="mt-1 text-xs text-red-500">{errors.tgl_lulus.message}</p>}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">

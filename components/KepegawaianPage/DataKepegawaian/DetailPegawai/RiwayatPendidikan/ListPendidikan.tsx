@@ -11,28 +11,32 @@ type ListPendidikanProps = {
   onShowDetail: (id: number) => void;
 };
 
-const riwayatPendidikan = [{
-  id: 1,
-  jenjang: 'S3',
-  lembaga: 'Universitas Brawijaya',
-  prodi: 'Ilmu Pertanian',
-  tgl_lulus: '2016-08-19',
-  no_ijazah: '188/UB/PPS/S3/2006',
-}, {
-  id: 2,
-  jenjang: 'S3',
-  lembaga: 'Universitas Brawijaya',
-  prodi: 'Ilmu Pertanian',
-  tgl_lulus: '2016-08-19',
-  no_ijazah: '188/UB/PPS/S3/2006',
-}, {
-  id: 3,
-  jenjang: 'S3',
-  lembaga: 'Universitas Brawijaya',
-  prodi: 'Ilmu Pertanian',
-  tgl_lulus: '2016-08-19',
-  no_ijazah: '188/UB/PPS/S3/2006',
-},]
+const riwayatPendidikan = [
+  {
+    id: 1,
+    jenjang: 'S3',
+    lembaga: 'Universitas Brawijaya',
+    prodi: 'Ilmu Pertanian',
+    tgl_lulus: '2016-08-19',
+    no_ijazah: '188/UB/PPS/S3/2006',
+  },
+  {
+    id: 2,
+    jenjang: 'S3',
+    lembaga: 'Universitas Brawijaya',
+    prodi: 'Ilmu Pertanian',
+    tgl_lulus: '2016-08-19',
+    no_ijazah: '188/UB/PPS/S3/2006',
+  },
+  {
+    id: 3,
+    jenjang: 'S3',
+    lembaga: 'Universitas Brawijaya',
+    prodi: 'Ilmu Pertanian',
+    tgl_lulus: '2016-08-19',
+    no_ijazah: '188/UB/PPS/S3/2006',
+  },
+];
 
 export default function ListArsip(props: ListPendidikanProps) {
   const [confirmId, setConfirmId] = React.useState(0);
@@ -60,7 +64,6 @@ export default function ListArsip(props: ListPendidikanProps) {
     dispatch(setSnackbar(snackbarProps));
     setConfirmId(0);
   };
-
 
   return (
     <>
@@ -167,7 +170,9 @@ export default function ListArsip(props: ListPendidikanProps) {
       </div>
       {formModalState.open ? (
         <PendidikanForm
-          onSuccess={() => { console.log('') }}
+          onSuccess={() => {
+            console.log('');
+          }}
           open={formModalState.open}
           setOpen={(open: boolean) => handleShowForm(open)}
           selectedId={formModalState?.selectedId}

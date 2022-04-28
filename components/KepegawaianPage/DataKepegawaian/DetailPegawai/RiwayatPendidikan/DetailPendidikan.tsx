@@ -18,7 +18,7 @@ const data = {
   ijazah_terakhir: 'YA',
   bukti_SK: 'test.pdf',
   document_uuid: '7e5996c7-e35e-4154-9973-57f74832d680',
-}
+};
 
 export default function DetailPendidikan(props: ListDigitalProps) {
   const { onBack } = props;
