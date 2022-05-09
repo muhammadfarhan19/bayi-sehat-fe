@@ -146,7 +146,7 @@ export default function UploadWrapper(props: UploadInputProps) {
           onChange={handleFileChange}
           className={'absolute inset-0 opacity-0'}
         />
-        <span className={'relative z-10'}>{children({ loading })}</span>
+        <span className={'relative'}>{children({ loading })}</span>
       </span>
     </>
   );

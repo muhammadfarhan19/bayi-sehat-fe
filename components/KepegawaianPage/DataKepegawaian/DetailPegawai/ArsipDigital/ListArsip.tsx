@@ -76,9 +76,7 @@ export default function ListArsip(props: ListArsipProps) {
   return (
     <>
       <div className="my-3 flex items-center">
-        <div className="flex flex-1 pr-2 text-sm text-gray-500">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, Praesent vulputate, est quis iaculis tempus.
-        </div>
+        <div className="flex flex-1 pr-2 text-sm text-gray-500">{/* TODO: Wait for wording */}</div>
         <button
           type="button"
           className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"

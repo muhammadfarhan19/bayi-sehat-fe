@@ -1,17 +1,21 @@
 import * as React from 'react';
 
 import { DocumentAPI } from '../../constants/APIUrls';
+import { MimeType } from '../../constants/Utils';
 import { GetDocumentRes } from '../../types/api/DocumentAPI';
 import { callAPI } from '../../utils/Fetchers';
 import CircleLoader from './Loader/CircleLoader';
 
 interface ImgFileProps {
   uuid?: string;
+  children?: React.ReactNode;
 }
 
-export default function ImgFile(props: ImgFileProps) {
-  const { uuid } = props;
+export default function FileLoader(props: ImgFileProps) {
+  const { children, uuid } = props;
   const [fileUrl, setFileUrl] = React.useState('');
+  const [isImg, setIsImg] = React.useState(false);
+
   React.useEffect(() => {
     (async () => {
       if (uuid) {
@@ -23,6 +27,10 @@ export default function ImgFile(props: ImgFileProps) {
         if (fileRes.status === 200 && fileRes.data instanceof Blob) {
           setFileUrl(window.URL.createObjectURL(fileRes.data));
         }
+
+        if ([MimeType.JPG, MimeType.PNG].includes(fileRes.headers['content-type'])) {
+          setIsImg(true);
+        }
       }
     })();
   }, [uuid]);
@@ -31,5 +39,13 @@ export default function ImgFile(props: ImgFileProps) {
     return <CircleLoader />;
   }
 
-  return <img src={fileUrl} />;
+  if (isImg) {
+    return <img src={fileUrl} />;
+  }
+
+  return (
+    <a target={'_blank'} href={fileUrl}>
+      {children || 'Download file'}
+    </a>
+  );
 }

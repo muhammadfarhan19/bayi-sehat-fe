@@ -1,6 +1,6 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
-import ImgFile from '../../../../shared/ImgFile';
+import ImgFile from '../../../../shared/FileLoader';
 
 type ListDigitalProps = {
   riwayatPendidikanId?: number;

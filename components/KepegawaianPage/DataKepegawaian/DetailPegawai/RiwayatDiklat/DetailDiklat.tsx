@@ -2,8 +2,8 @@ import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import { RiwayatDiklatAPI } from '../../../../../constants/APIUrls';
 import { GetRiwayatDiklatDetailReq, RiwayatDiklatDetailData } from '../../../../../types/api/RiwayatDiklatAPI';
+import ImgFile from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
-import ImgFile from '../../../../shared/ImgFile';
 
 type ListDigitalProps = {
   riwayatDiklatId?: number;
@@ -17,7 +17,6 @@ export default function DetailDiklat(props: ListDigitalProps) {
     { id: Number(riwayatDiklatId) },
     { method: 'GET' },
     { skipCall: !riwayatDiklatId, revalidateOnMount: true }
-
   );
 
   return (

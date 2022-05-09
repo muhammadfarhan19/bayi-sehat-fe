@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { classNames } from '../../../../../utils/Components';
 import { withErrorBoundary } from '../../../../shared/hocs/ErrorBoundary';
 import DetailArsip from './DetailArsip';
 import ListArsip from './ListArsip';
@@ -9,13 +10,14 @@ function ArsipDigital() {
 
   return (
     <>
-      {arsipDigitalId === 0 ? (
+      <div className={classNames(arsipDigitalId ? 'hidden' : '')}>
         <ListArsip
           onShowDetail={(id: number) => {
             setArsipDigitalId(id);
           }}
         />
-      ) : (
+      </div>
+      {!!arsipDigitalId && (
         <DetailArsip
           arsipDigitalId={arsipDigitalId}
           onBack={() => {

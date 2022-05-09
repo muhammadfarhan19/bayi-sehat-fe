@@ -222,39 +222,43 @@ export default function ArsipForm(props: UploadFormProps) {
                   </div>
 
                   <div className="mt-5 sm:col-span-6">
-                    {jenisBerkas && (jenisBerkas || []).length ? (
-                      <Controller
-                        control={control}
-                        name="jenis_berkas"
-                        render={({ field: { onChange, value } }) =>
-                          value ? (
-                            <AutoComplete
-                              onChange={value => {
-                                onChange(value.value);
-                              }}
-                              label={'Jenis Berkas'}
-                              defaultValue={(() => {
-                                const selectedJenisBerkas = jenisBerkas.filter(
+                    <Controller
+                      control={control}
+                      name="jenis_berkas"
+                      render={({ field: { onChange, value } }) =>
+                        value ? (
+                          <AutoComplete
+                            onChange={value => {
+                              onChange(value.value);
+                            }}
+                            label={'Jenis Berkas'}
+                            defaultValue={(() => {
+                              if ((jenisBerkas || []).length) {
+                                const selectedJenisBerkas = (jenisBerkas || [])?.filter(
                                   each => String(each.jenis_berkas_id) === value
                                 )[0];
                                 return {
                                   text: selectedJenisBerkas.jenis_berkas,
                                   value: String(selectedJenisBerkas.jenis_berkas_id),
                                 };
-                              })()}
-                              options={jenisBerkas.map(each => {
-                                return {
-                                  text: each.jenis_berkas,
-                                  value: String(each.jenis_berkas_id),
-                                };
-                              })}
-                            />
-                          ) : (
-                            <React.Fragment />
-                          )
-                        }
-                      />
-                    ) : null}
+                              }
+                            })()}
+                            options={(jenisBerkas || [])?.map(each => {
+                              return {
+                                text: each.jenis_berkas,
+                                value: String(each.jenis_berkas_id),
+                              };
+                            })}
+                          />
+                        ) : (
+                          <input
+                            className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                            disabled={true}
+                            placeholder={'Jenis Berkas'}
+                          />
+                        )
+                      }
+                    />
                   </div>
 
                   <div className="mt-5 sm:col-span-6">
@@ -302,7 +306,7 @@ export default function ArsipForm(props: UploadFormProps) {
                       type="submit"
                       className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                      Tambah
+                      Simpan
                     </button>
                   </div>
                 </form>

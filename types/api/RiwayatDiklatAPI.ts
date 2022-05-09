@@ -63,7 +63,6 @@ export interface PostRiwayatDiklatInsertReq {
   tgl_awal_acara: string;
   tgl_akhir_acara: string;
   files: DocumentData[];
-
 }
 
 export interface PostRiwayatDiklatInsertRes {
