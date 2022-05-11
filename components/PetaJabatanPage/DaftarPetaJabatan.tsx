@@ -14,11 +14,13 @@ export default function DaftarPetaJabatan() {
   const [throwError, setThrowError] = React.useState<string>();
   const [loaded, setLoaded] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [update, setUpdate] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [selected, setSelected] = React.useState({ keterisian: 0, selisih: 0, id: 0 });
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors },
   } = useForm<PostKebutuhanPetaReq>();
 
@@ -29,9 +31,13 @@ export default function DaftarPetaJabatan() {
     per_page: 20,
   });
 
+
   React.useEffect(() => {
     refreshDataTable(filterState);
-  }, []);
+    reset({
+      jumlah: undefined
+    })
+  }, [update]);
 
   const refreshDataTable = (apiReq: GetPetaReq) => {
     setLoaded(false);
@@ -212,6 +218,7 @@ export default function DaftarPetaJabatan() {
     if (kebutuhan.status === 200 && kebutuhan.data?.status === Status.OK) {
       setLoading(false);
       setOpen(false);
+      setUpdate(!update);
     } else {
       setLoading(false);
     }
@@ -295,7 +302,7 @@ export default function DaftarPetaJabatan() {
                   key={dataIdx}
                   className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                 >
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                  <td className="px-6 py-4 text-xs font-medium text-gray-900">  {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}</td>
                   <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.kelas_jabatan}</td>
                   <td
                     className="cursor-pointer px-6 text-xs font-medium text-indigo-800"
