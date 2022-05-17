@@ -28,7 +28,7 @@ export default function FileLoader(props: ImgFileProps) {
           setFileUrl(window.URL.createObjectURL(fileRes.data));
         }
 
-        if ([MimeType.JPG, MimeType.PNG].includes(fileRes.headers['content-type'])) {
+        if ([MimeType.JPG, MimeType.PNG].includes(fileRes?.headers?.['content-type'] || '')) {
           setIsImg(true);
         }
       }

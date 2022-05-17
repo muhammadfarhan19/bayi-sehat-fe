@@ -18,7 +18,7 @@ type ListPendidikanProps = {
 export default function ListArsip(props: ListPendidikanProps) {
   const [confirmId, setConfirmId] = React.useState(0);
   // const { onShowDetail } = props;
-  console.log(props)
+  console.log(props);
   const dispatch = useDispatch();
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
 
