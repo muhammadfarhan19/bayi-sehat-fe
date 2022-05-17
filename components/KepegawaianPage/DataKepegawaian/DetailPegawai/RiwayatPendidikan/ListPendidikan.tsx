@@ -3,45 +3,23 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
+import { RiwayatPendidikanAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
+import { GetRiwayatPendidikanListReq, RiwayatPendidikanListData } from '../../../../../types/api/PendidikanAPI';
+import { getQueryString } from '../../../../../utils/URLUtils';
 import ConfirmDialog from '../../../../shared/ConfirmDialog';
+import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import PendidikanForm from './PendidikanForm';
 
 type ListPendidikanProps = {
   onShowDetail: (id: number) => void;
 };
 
-const riwayatPendidikan = [
-  {
-    id: 1,
-    jenjang: 'S3',
-    lembaga: 'Universitas Brawijaya',
-    prodi: 'Ilmu Pertanian',
-    tgl_lulus: '2016-08-19',
-    no_ijazah: '188/UB/PPS/S3/2006',
-  },
-  {
-    id: 2,
-    jenjang: 'S3',
-    lembaga: 'Universitas Brawijaya',
-    prodi: 'Ilmu Pertanian',
-    tgl_lulus: '2016-08-19',
-    no_ijazah: '188/UB/PPS/S3/2006',
-  },
-  {
-    id: 3,
-    jenjang: 'S3',
-    lembaga: 'Universitas Brawijaya',
-    prodi: 'Ilmu Pertanian',
-    tgl_lulus: '2016-08-19',
-    no_ijazah: '188/UB/PPS/S3/2006',
-  },
-];
-
 export default function ListArsip(props: ListPendidikanProps) {
   const [confirmId, setConfirmId] = React.useState(0);
-  const { onShowDetail } = props;
+  // const { onShowDetail } = props;
   const dispatch = useDispatch();
+  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
 
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: string }>({
     open: false,
@@ -64,6 +42,12 @@ export default function ListArsip(props: ListPendidikanProps) {
     dispatch(setSnackbar(snackbarProps));
     setConfirmId(0);
   };
+
+  const { data: riwayatPendidikan } = useCommonApi<GetRiwayatPendidikanListReq, RiwayatPendidikanListData[]>(
+    RiwayatPendidikanAPI.GET_RIWAYAT_PENDIDIKAN_LIST,
+    pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
+    { method: 'GET' }
+  );
 
   return (
     <>
@@ -133,15 +117,15 @@ export default function ListArsip(props: ListPendidikanProps) {
             {(riwayatPendidikan || []).map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenjang}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.lembaga}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.prodi}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.tgl_lulus}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenjang_name}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.pt_name}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.prodi_name}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.tanggal_lulus}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.no_ijazah}</td>
                 <td className="w-[220px] py-4 text-sm text-gray-500">
                   <div className="flex justify-between">
                     <button
-                      onClick={() => onShowDetail(each.id)}
+                      // onClick={() => onShowDetail(each.pegawai_id)}
                       type="button"
                       className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200"
                     >
@@ -150,14 +134,14 @@ export default function ListArsip(props: ListPendidikanProps) {
                     <button
                       type="button"
                       className="inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                      onClick={() => handleShowForm(!formModalState.open, String(each.id))}
+                      // onClick={() => handleShowForm(!formModalState.open, String(each.id))}
                     >
                       Edit
                     </button>
                     <button
                       type="button"
                       className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
-                      onClick={() => setConfirmId(each.id)}
+                      // onClick={() => setConfirmId(each.id)}
                     >
                       Hapus
                     </button>

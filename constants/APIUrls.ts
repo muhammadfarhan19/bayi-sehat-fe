@@ -68,3 +68,7 @@ export const RiwayatDiklatAPI = {
   POST_RIWAYAT_DIKLAT_INSERT: config.apiHost + '/diklat/insert',
   POST_RIWAYAT_DIKLAT_UPDATE: config.apiHost + '/diklat/update',
 };
+
+export const RiwayatPendidikanAPI = {
+  GET_RIWAYAT_PENDIDIKAN_LIST: config.apiHost + '/pendidikan/list',
+};
