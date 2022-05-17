@@ -1,5 +1,5 @@
 module.exports = {
-  apiHost: 'http://103.56.191.231/api',
+  apiHost: 'https://intradikti.kemdikbud.go.id/api',
   environment: 'production',
   cookieSecure: true,
   apiTimeoutMs: 15000, // 15 seconds
