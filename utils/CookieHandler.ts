@@ -17,8 +17,8 @@ export const getCookie = (name: CookieName) => {
 };
 
 export const setCookie = (name: CookieName, value: string | number, options: CookieOption = {}) => {
-  const rememberMe = Cookies.get('rememberme', { sameSite: true, secure: config.cookieSecure });
-  const cookieOption = { ...options, sameSite: true, secure: config.cookieSecure };
+  const rememberMe = Cookies.get('rememberme', { sameSite: 'Strict', secure: config.cookieSecure });
+  const cookieOption = { ...options, sameSite: 'Strict', secure: config.cookieSecure };
   if (rememberMe === 1) {
     cookieOption.expires = 30;
   }
@@ -26,5 +26,5 @@ export const setCookie = (name: CookieName, value: string | number, options: Coo
 };
 
 export const removeCookie = (name: CookieName, options: CookieOption = {}) => {
-  Cookies.remove(name, { ...options, sameSite: true, secure: config.cookieSecure });
+  Cookies.remove(name, { ...options, sameSite: 'Strict', secure: config.cookieSecure });
 };
