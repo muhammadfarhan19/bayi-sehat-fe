@@ -97,7 +97,7 @@ export default function LeftMenu() {
               </a>
             </div>
           ) : (
-            <Disclosure defaultOpen={item.current} as="div" key={item.name}>
+            <Disclosure defaultOpen={true} as="div" key={item.name}>
               {({ open }) => (
                 <>
                   <Disclosure.Button
