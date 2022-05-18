@@ -10,14 +10,17 @@ export interface GetRiwayatPendidikanListRes {
 }
 
 export interface RiwayatPendidikanListData {
+  riwayat_id: number;
   pegawai_id: number;
-  pt_id: number;
-  pt_name: string;
-  prodi_id: number;
-  jenjang_id: string;
-  jenjang_name: string;
-  prodi_name: string;
+  jenjang_id: number;
+  jenjang_str: string;
+  prodi: string;
+  pt: string;
   tanggal_lulus: string;
   no_ijazah: string;
-  files: string;
+  is_ijazah_terakhir: boolean;
+  is_ijazah_cpns: boolean;
+  files: any[];
+  created_at: string;
+  created_by: string;
 }

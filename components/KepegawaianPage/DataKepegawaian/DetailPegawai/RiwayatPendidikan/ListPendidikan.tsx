@@ -115,9 +115,9 @@ export default function ListArsip(props: ListPendidikanProps) {
             {(riwayatPendidikan || []).map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenjang_name}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.pt_name}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.prodi_name}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenjang_str}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.pt}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.prodi}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.tanggal_lulus}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.no_ijazah}</td>
                 <td className="w-[220px] py-4 text-sm text-gray-500">
