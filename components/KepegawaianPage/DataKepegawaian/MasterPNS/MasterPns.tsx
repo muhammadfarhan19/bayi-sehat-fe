@@ -2,58 +2,61 @@ import { AdjustmentsIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import config from '../../../../utils/Config';
-import { callAPI } from '../../../../utils/Fetchers';
+import { KepegawaianAPI, MasterAPI, UnitKerjaAPI } from '../../../../constants/APIUrls';
+import { GetPegawaiListData, GetPegawaiListReq } from '../../../../types/api/KepegawaianAPI';
+import { JenisJabatanListData } from '../../../../types/api/MasterAPI';
+import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
+import useCommonApi from '../../../shared/hooks/useCommonApi';
+import Loader from '../../../shared/Loader/Loader';
+import Pagination from '../../../shared/Pagination';
 
 export default function MasterPns() {
   const router = useRouter();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
-  const [unitKerja, setUnitKerja] = React.useState([]);
-  const [tipeJabatan, setTipeJabatan] = React.useState([]);
-  const [list, setList] = React.useState([]);
-  const [filter, setFilter] = React.useState({
+  const [loaded, setLoaded] = React.useState(false);
+  const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     nama: '',
-    unit_kerja: '',
+    unit_kerja_id: '',
     tipe_jabatan: '',
     jabatan: '',
+    page: 1,
+    per_page: 20,
   });
+
+  const {
+    data: pegawaiList,
+    isValidating,
+    mutate,
+  } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(KepegawaianAPI.GET_PEGAWAI_LIST, filter, { method: 'GET' });
+
+  const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
+    UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
+    null,
+    { method: 'GET' }
+  );
+
+  const { data: jenisJabatanList } = useCommonApi<null, JenisJabatanListData[]>(
+    MasterAPI.GET_JENIS_JABATAN_LIST,
+    null,
+    { method: 'GET' }
+  );
+
+  React.useEffect(() => {
+    if (loaded) {
+      mutate();
+    }
+    setLoaded(true);
+  }, [filter]);
 
   const toggleAdvancedFilter = () => {
     setshowAdvancedFilter(!showAdvancedFilter);
   };
 
-  const handleUrl = ({ unit_kerja = '', nama = '', tipe_jabatan = '', jabatan = '' }) => {
-    let url =
-      config.apiHost +
-      `/pegawai/list?unit_kerja_id=${unit_kerja}&nama=${nama}&tipe_jabatan=${tipe_jabatan}&jabatan=${jabatan}&page=1&per_page=20`;
-
-    return url;
-  };
-
-  const search = async (type, value) => {
+  const search = async <T extends keyof typeof filter>(type: T, value: typeof filter[T]) => {
     const newState = { ...filter };
     newState[type] = value;
     setFilter(newState);
-    const getData = await callAPI(handleUrl(newState), '', {
-      method: 'get',
-      withToken: true,
-      checkToken: true,
-    });
-    setList(getData?.data?.data?.list);
   };
-
-  React.useEffect(() => {
-    (async () => {
-      const [getData, getFilterUnitKerja, getTipeJabatan] = await Promise.all([
-        callAPI(handleUrl({}), '', { method: 'get' }),
-        callAPI(`${config.apiHost}/unit-kerja/list/direktorat`, '', { method: 'get' }),
-        callAPI(`${config.apiHost}/master/jenis-jabatan`, '', { method: 'get' }),
-      ]);
-      setList(getData?.data?.data?.list);
-      setUnitKerja(getFilterUnitKerja?.data?.data);
-      setTipeJabatan(getTipeJabatan?.data?.data);
-    })();
-  }, []);
 
   return (
     <>
@@ -87,17 +90,16 @@ export default function MasterPns() {
             </div>
           </div>
         </div>
-
         {showAdvancedFilter && (
           <div className="flex w-full flex-row gap-x-[16px]">
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
               <select
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                onChange={e => search('unit_kerja', e.target.value)}
+                onChange={e => search('unit_kerja_id', e.target.value)}
               >
                 <option value="">Semua</option>
-                {unitKerja.map((item, index) => (
+                {(unitKerjaList || []).map((item, index) => (
                   <option key={`options-${index}`} value={item?.unit_kerja_id}>
                     {item?.name}
                   </option>
@@ -111,7 +113,7 @@ export default function MasterPns() {
                 onChange={e => search('tipe_jabatan', e.target.value)}
               >
                 <option value="">Semua</option>
-                {tipeJabatan.map((item, index) => (
+                {(jenisJabatanList || []).map((item, index) => (
                   <option key={`options-${index}`} value={item?.tipe_jabatan}>
                     {item?.jenis_jabatan}
                   </option>
@@ -121,11 +123,14 @@ export default function MasterPns() {
           </div>
         )}
       </div>
-
-      <div className="flex">
-        <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-          <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-            <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+      {isValidating ? (
+        <div className="relative h-[150px] w-full divide-y divide-gray-200">
+          <Loader />
+        </div>
+      ) : (
+        <div className="flex">
+          <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+            <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
               <table className="w-full table-auto rounded-lg bg-gray-100">
                 <thead className="bg-gray-50">
                   <tr>
@@ -174,12 +179,14 @@ export default function MasterPns() {
                   </tr>
                 </thead>
                 <tbody>
-                  {list?.map((data, dataIdx) => (
+                  {(pegawaiList?.list || []).map((data, dataIdx) => (
                     <tr
                       key={dataIdx}
                       className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                     >
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                        {filter.per_page * (filter.page - 1) + (dataIdx + 1)}
+                      </td>
                       <td
                         className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"
                         onClick={() => router.push(`/kepegawaian/data-pegawai?pegawai_id=${data.pegawai_id}`)}
@@ -205,10 +212,18 @@ export default function MasterPns() {
                   ))}
                 </tbody>
               </table>
+              <Pagination
+                onChange={value => {
+                  search('page', value);
+                }}
+                totalData={pegawaiList ? pegawaiList?.pagination.total_data : 0}
+                perPage={filter.per_page}
+                page={filter.page}
+              />
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

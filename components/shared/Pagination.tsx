@@ -1,4 +1,9 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+import {
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/solid';
 import * as React from 'react';
 
 import { classNames } from '../../utils/Components';
@@ -24,7 +29,7 @@ export default function Pagination(props: PaginationProps) {
     if (high > 0) renderNumber.push(String(high));
   }
 
-  const handleNavigate = (type: 'next' | 'previous' | 'index', index?: number) => () => {
+  const handleNavigate = (type: 'next' | 'previous' | 'index' | 'first' | 'last', index?: number) => () => {
     let nextPage = Number(page);
     if (type === 'next' && nextPage + 1 <= totalPage) {
       nextPage++;
@@ -32,6 +37,10 @@ export default function Pagination(props: PaginationProps) {
       nextPage--;
     } else if (type === 'index' && index !== undefined) {
       nextPage = index;
+    } else if (type === 'first' && index !== 1) {
+      nextPage = 1;
+    } else if (type === 'last' && index !== totalPage) {
+      nextPage = totalPage;
     } else {
       return;
     }
@@ -67,8 +76,15 @@ export default function Pagination(props: PaginationProps) {
         <div>
           <nav className="relative z-0 inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
             <a
-              onClick={handleNavigate('previous')}
+              onClick={handleNavigate('first')}
               className="relative inline-flex cursor-pointer items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50"
+            >
+              <span className="sr-only">First</span>
+              <ChevronDoubleLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </a>
+            <a
+              onClick={handleNavigate('previous')}
+              className="relative inline-flex cursor-pointer items-center border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50"
             >
               <span className="sr-only">Previous</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
@@ -98,10 +114,17 @@ export default function Pagination(props: PaginationProps) {
             )}
             <a
               onClick={handleNavigate('next')}
-              className="relative inline-flex cursor-pointer items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50"
+              className="relative inline-flex cursor-pointer items-center border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50"
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </a>
+            <a
+              onClick={handleNavigate('last')}
+              className="relative inline-flex cursor-pointer items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50"
+            >
+              <span className="sr-only">Last</span>
+              <ChevronDoubleRightIcon className="h-5 w-5" aria-hidden="true" />
             </a>
           </nav>
         </div>

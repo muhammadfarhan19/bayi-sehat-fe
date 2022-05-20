@@ -23,6 +23,7 @@ export const RbacAPI = {
 
 export const UnitKerjaAPI = {
   POST_UNIT_KERJA_INSERT: config.apiHost + '/unit-kerja/insert',
+  GET_UNIT_KERJA_LIST_DIREKTORAT: config.apiHost + '/unit-kerja/list/direktorat',
 };
 
 export const StatisticAPI = {

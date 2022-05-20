@@ -24,7 +24,7 @@ function DataDiriPegawai() {
           {[
             { label: 'Unit Kerja', value: dataPersonal.unit_kerja },
             { label: 'NIP/NIP Lama', value: dataPersonal.nip },
-            { label: 'Tempat, Tanggal Lahir', value: dataPersonal.tanggal_lahir },
+            { label: 'Tempat, Tanggal Lahir', value: `${dataPersonal.tempat_lahir}, ${dataPersonal.tanggal_lahir}` },
             { label: 'TMT CPNS', value: dataPersonal.tmt_cpns },
             {
               label: 'Status CPNS/PNS',
