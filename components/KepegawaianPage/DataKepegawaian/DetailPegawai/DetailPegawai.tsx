@@ -17,8 +17,8 @@ const tabs = [
   { name: 'Data Diri Pribadi', href: '#' },
   { name: 'Riwayat Pendidikan', href: '#' },
   { name: 'Riwayat Diklat', href: '#' },
-  { name: 'Riwayat Jabatan', href: '#' },
   { name: 'Arsip Digital', href: '#' },
+  { name: 'Riwayat Jabatan', href: '#' },
   { name: 'Tanda Tangan Digital', href: '#' },
 ];
 
