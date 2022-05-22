@@ -5,9 +5,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
+import { RiwayatPendidikanAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
+import { GetRiwayatPendidikanDetailReq, PostRiwayatPendidikanInsertReq, PostRiwayatPendidikanInsertRes, PostRiwayatPendidikanUpdateReq, PostRiwayatPendidikanUpdateRes, RiwayatPendidikanDetailData } from '../../../../../types/api/PendidikanAPI';
+import { Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
+import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
+import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
 
@@ -22,28 +27,15 @@ interface FormState {
   pegawai_id: number;
   file_id: string;
   file_name: string;
-  jenjang: number;
+  jenjang: any;
   nama_institusi: string;
   prodi: string;
   no_ijazah: string;
-  ijazah_cpns: number;
-  ijazah_terakhir: number;
+  ijazah_cpns: string;
+  ijazah_terakhir: string;
   tgl_lulus: string;
   document_uuid: string;
 }
-
-const dataDummy = {
-  id: 1,
-  jenjang: 1,
-  lembaga: 'Universitas Brawijaya',
-  prodi: 'Ilmu Pertanian',
-  tgl_lulus: '2016-08-19',
-  no_ijazah: '188/UB/PPS/S3/2006',
-  ijazah_cpns: 1,
-  ijazah_terakhir: 1,
-  bukti_SK: 'test.pdf',
-  document_uuid: 'ba5e7d0f-0995-4d7a-81b7-a1740ef261dd',
-};
 
 export default function PendidikanForm(props: UploadFormProps) {
   const { open, setOpen, selectedId, onSuccess } = props;
@@ -61,33 +53,94 @@ export default function PendidikanForm(props: UploadFormProps) {
     setValue,
   } = useForm<FormState>();
 
-  const data = {};
+  const { data } = useCommonApi<GetRiwayatPendidikanDetailReq, RiwayatPendidikanDetailData>(
+    RiwayatPendidikanAPI.GET_RIWAYAT_PENDIDIKAN_DETAIL,
+    { id: Number(selectedId) },
+    { method: 'GET' },
+    { skipCall: !selectedId, revalidateOnMount: true }
+  );
 
   React.useEffect(() => {
-    if (selectedId) {
-      setValue('file_id', dataDummy.document_uuid);
-      setValue('file_name', dataDummy.document_uuid);
-      setValue('jenjang', dataDummy.jenjang);
-      setValue('nama_institusi', dataDummy.lembaga);
-      setValue('prodi', dataDummy.prodi);
-      setValue('no_ijazah', dataDummy.no_ijazah);
-      setValue('ijazah_cpns', dataDummy.ijazah_cpns);
-      setValue('ijazah_terakhir', dataDummy.ijazah_terakhir);
-      setValue('tgl_lulus', dataDummy.tgl_lulus);
+    if (data && data?.files[0]?.document_uuid) {
+      setValue('file_id', data.files[0].document_uuid);
+      setValue('file_name', data.files[0].document_name);
+      setValue('jenjang', data.jenjang_id);
+      setValue('nama_institusi', data.pt);
+      setValue('prodi', data.prodi);
+      setValue('no_ijazah', data.no_ijazah);
+      setValue('ijazah_cpns', data.is_ijazah_cpns === true ? '1' : '2'),
+      setValue('ijazah_terakhir', data.is_ijazah_terakhir === true ? '1' : '2'),
+      setValue('tgl_lulus', data.tanggal_lulus);
     }
   }, [data]);
 
-  const submitHandler = async () => {
-    dispatch(
-      setSnackbar({
-        show: true,
-        message: 'Data berhasil tersimpan.',
-        type: SnackbarType.INFO,
-      })
-    );
-    onSuccess();
-    setOpen(!open);
-  };
+  const submitHandler = async (formData: FormState) => {
+    let resSubmit;
+    if (selectedId) {
+      resSubmit = await callAPI<PostRiwayatPendidikanUpdateReq, PostRiwayatPendidikanUpdateRes>(
+        RiwayatPendidikanAPI.POST_RIWAYAT_PENDIDIKAN_UPDATE,
+        {
+          riwayat_id: Number(selectedId),
+          pegawai_id: Number(personalData?.pegawai_id),
+          jenjang_id: Number(formData.jenjang),
+          prodi: formData.prodi,
+          pt: formData.nama_institusi,
+          tanggal_lulus: formData.tgl_lulus,
+          no_ijazah: formData.no_ijazah,
+          is_ijazah_cpns: formData.ijazah_cpns === '1' ? true : false,
+          is_ijazah_terakhir: formData.ijazah_cpns === '1' ? true : false,
+          files: [
+            {
+              document_uuid: formData.file_id,
+              document_name: formData.file_name,
+            },
+          ],
+        },
+        { method: 'put' }
+      );
+    } else {
+      resSubmit = await callAPI<PostRiwayatPendidikanInsertReq, PostRiwayatPendidikanInsertRes>(
+        RiwayatPendidikanAPI.POST_RIWAYAT_PENDIDIKAN_INSERT,
+        {
+          pegawai_id: Number(personalData?.pegawai_id),
+          jenjang_id: Number(formData.jenjang),
+          prodi: formData.prodi,
+          pt: formData.nama_institusi,
+          tanggal_lulus: formData.tgl_lulus,
+          no_ijazah: formData.no_ijazah,
+          is_ijazah_cpns: formData.ijazah_cpns === '1' ? true : false,
+          is_ijazah_terakhir: formData.ijazah_terakhir === '1' ? true : false,
+          files: [
+            {
+              document_uuid: formData.file_id,
+              document_name: formData.file_name,
+            },
+          ],
+        },
+        { method: 'post' }
+      );
+    }
+
+    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Data berhasil tersimpan.',
+          type: SnackbarType.INFO,
+        })
+      );
+      onSuccess();
+      setOpen(!open);
+    } else {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
+          type: SnackbarType.ERROR,
+        })
+      );
+    }
+  }
 
   return (
     <Transition appear show={open} as={React.Fragment}>
@@ -163,10 +216,22 @@ export default function PendidikanForm(props: UploadFormProps) {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       <option value={''}>Silahkan Pilih</option>
-                      <option value={1}>SD</option>
-                      <option value={2}>SMP</option>
-                      <option value={3}>SMA</option>
-                      <option value={4}>S1</option>
+                      <option value={'11'}>Profesi</option>
+                      <option value={'1'}>S3</option>
+                      <option value={'13'}>S3-Terapan</option>
+                      <option value={'2'}>S2</option>
+                      <option value={'12'}>S2-Terapan</option>
+                      <option value={'3'}>S1</option>
+                      <option value={'14'}>Sp-1</option>
+                      <option value={'15'}>Sp-2</option>
+                      <option value={'10'}>D4</option>
+                      <option value={'4'}>D3</option>
+                      <option value={'9'}>D2</option>
+                      <option value={'6'}>D1</option>
+                      <option value={'5'}>SMA</option>
+                      <option value={'8'}>SMK</option>
+                      <option value={'16'}>SMP</option>
+                      <option value={'7'}>SD</option>
                     </select>
                     {errors.jenjang && <p className="mt-1 text-xs text-red-500">{errors.jenjang.message}</p>}
                   </div>

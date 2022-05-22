@@ -72,4 +72,8 @@ export const RiwayatDiklatAPI = {
 
 export const RiwayatPendidikanAPI = {
   GET_RIWAYAT_PENDIDIKAN_LIST: config.apiHost + '/pendidikan/list',
+  GET_RIWAYAT_PENDIDIKAN_DETAIL: config.apiHost + '/pendidikan/detail',
+  POST_RIWAYAT_PENDIDIKAN_DELETE: config.apiHost + '/pendidikan/delete',
+  POST_RIWAYAT_PENDIDIKAN_INSERT: config.apiHost + '/pendidikan/insert',
+  POST_RIWAYAT_PENDIDIKAN_UPDATE: config.apiHost + '/pendidikan/update',
 };

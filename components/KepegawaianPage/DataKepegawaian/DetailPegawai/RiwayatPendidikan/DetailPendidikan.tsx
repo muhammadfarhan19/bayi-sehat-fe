@@ -1,27 +1,23 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
+import { RiwayatPendidikanAPI } from '../../../../../constants/APIUrls';
+import { GetRiwayatPendidikanDetailReq, RiwayatPendidikanDetailData } from '../../../../../types/api/PendidikanAPI';
 import ImgFile from '../../../../shared/FileLoader';
+import useCommonApi from '../../../../shared/hooks/useCommonApi';
 
 type ListDigitalProps = {
   riwayatPendidikanId?: number;
   onBack: () => void;
 };
 
-const data = {
-  id: 1,
-  jenjang: 'S3',
-  lembaga: 'Universitas Brawijaya',
-  prodi: 'Ilmu Pertanian',
-  tgl_lulus: '2016-08-19',
-  no_ijazah: '188/UB/PPS/S3/2006',
-  ijazah_cpns: 'YA',
-  ijazah_terakhir: 'YA',
-  bukti_SK: 'test.pdf',
-  document_uuid: '7e5996c7-e35e-4154-9973-57f74832d680',
-};
-
 export default function DetailPendidikan(props: ListDigitalProps) {
-  const { onBack } = props;
+  const { riwayatPendidikanId, onBack } = props;
+  const { data } = useCommonApi<GetRiwayatPendidikanDetailReq, RiwayatPendidikanDetailData>(
+    RiwayatPendidikanAPI.GET_RIWAYAT_PENDIDIKAN_DETAIL,
+    { id: Number(riwayatPendidikanId) },
+    { method: 'GET' },
+    { skipCall: !riwayatPendidikanId, revalidateOnMount: true }
+  );
 
   return (
     <>
@@ -35,14 +31,12 @@ export default function DetailPendidikan(props: ListDigitalProps) {
           <thead></thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {[
-              { label: 'Jenjang', value: data?.jenjang },
-              { label: 'Nama Institusi', value: data?.lembaga },
+              { label: 'Jenjang', value: data?.jenjang_str },
+              { label: 'Nama Institusi', value: data?.pt },
               { label: 'Prodi/Jurusan', value: data?.prodi },
               { label: 'No Ijazah', value: data?.no_ijazah },
-              { label: 'Ijazah CPNS', value: data?.ijazah_cpns },
-              { label: 'Ijazah Terakhir', value: data?.ijazah_terakhir },
-              { label: 'Tanggal Lulus', value: data?.tgl_lulus },
-              { label: 'Bukti SK', value: data?.bukti_SK },
+              { label: 'Tanggal Lulus', value: data?.tanggal_lulus },
+              { label: 'Bukti SK', value: data?.files?.[0]?.document_name },
             ].map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
@@ -54,7 +48,7 @@ export default function DetailPendidikan(props: ListDigitalProps) {
       </div>
       <div>
         <div className="relative mt-4 flex w-full flex-col items-center rounded-lg border-2 border-solid border-gray-300 p-4">
-          <ImgFile uuid={data?.document_uuid} />
+          <ImgFile uuid={data?.files?.[0]?.document_uuid} />
         </div>
       </div>
     </>
