@@ -6,7 +6,12 @@ import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../../../../../action/CommonAction';
 import { RiwayatPendidikanAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
-import { GetRiwayatPendidikanListReq, PostRiwayatPendidikanDeleteReq, PostRiwayatPendidikanDeleteRes, RiwayatPendidikanListData } from '../../../../../types/api/PendidikanAPI';
+import {
+  GetRiwayatPendidikanListReq,
+  PostRiwayatPendidikanDeleteReq,
+  PostRiwayatPendidikanDeleteRes,
+  RiwayatPendidikanListData,
+} from '../../../../../types/api/PendidikanAPI';
 import { Status } from '../../../../../types/Common';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { getQueryString } from '../../../../../utils/URLUtils';
@@ -136,7 +141,9 @@ export default function ListArsip(props: ListPendidikanProps) {
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenjang_str}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.pt}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.prodi}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{format(new Date(each.tanggal_lulus), 'dd MMM yyyy')}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  {format(new Date(each.tanggal_lulus), 'dd MMM yyyy')}
+                </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.no_ijazah}</td>
                 <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
                   <div className="flex justify-between">
@@ -150,7 +157,7 @@ export default function ListArsip(props: ListPendidikanProps) {
                     <button
                       type="button"
                       className="inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                    onClick={() => handleShowForm(!formModalState.open, String(each.riwayat_id))}
+                      onClick={() => handleShowForm(!formModalState.open, String(each.riwayat_id))}
                     >
                       Edit
                     </button>

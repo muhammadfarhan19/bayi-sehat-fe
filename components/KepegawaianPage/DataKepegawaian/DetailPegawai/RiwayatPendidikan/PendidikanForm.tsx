@@ -7,7 +7,14 @@ import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../../../../../action/CommonAction';
 import { RiwayatPendidikanAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
-import { GetRiwayatPendidikanDetailReq, PostRiwayatPendidikanInsertReq, PostRiwayatPendidikanInsertRes, PostRiwayatPendidikanUpdateReq, PostRiwayatPendidikanUpdateRes, RiwayatPendidikanDetailData } from '../../../../../types/api/PendidikanAPI';
+import {
+  GetRiwayatPendidikanDetailReq,
+  PostRiwayatPendidikanInsertReq,
+  PostRiwayatPendidikanInsertRes,
+  PostRiwayatPendidikanUpdateReq,
+  PostRiwayatPendidikanUpdateRes,
+  RiwayatPendidikanDetailData,
+} from '../../../../../types/api/PendidikanAPI';
 import { Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
@@ -27,7 +34,7 @@ interface FormState {
   pegawai_id: number;
   file_id: string;
   file_name: string;
-  jenjang: any;
+  jenjang: number;
   nama_institusi: string;
   prodi: string;
   no_ijazah: string;
@@ -69,8 +76,8 @@ export default function PendidikanForm(props: UploadFormProps) {
       setValue('prodi', data.prodi);
       setValue('no_ijazah', data.no_ijazah);
       setValue('ijazah_cpns', data.is_ijazah_cpns === true ? '1' : '2'),
-      setValue('ijazah_terakhir', data.is_ijazah_terakhir === true ? '1' : '2'),
-      setValue('tgl_lulus', data.tanggal_lulus);
+        setValue('ijazah_terakhir', data.is_ijazah_terakhir === true ? '1' : '2'),
+        setValue('tgl_lulus', data.tanggal_lulus);
     }
   }, [data]);
 
@@ -140,7 +147,7 @@ export default function PendidikanForm(props: UploadFormProps) {
         })
       );
     }
-  }
+  };
 
   return (
     <Transition appear show={open} as={React.Fragment}>
