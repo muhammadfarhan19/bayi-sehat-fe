@@ -36,7 +36,7 @@ export default function DetailPendidikan(props: ListDigitalProps) {
               { label: 'Prodi/Jurusan', value: data?.prodi },
               { label: 'No Ijazah', value: data?.no_ijazah },
               { label: 'Tanggal Lulus', value: data?.tanggal_lulus },
-              { label: 'Bukti SK', value: data?.files?.[0]?.document_name },
+              { label: 'Bukti Ijazah', value: data?.files?.[0]?.document_name },
             ].map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
