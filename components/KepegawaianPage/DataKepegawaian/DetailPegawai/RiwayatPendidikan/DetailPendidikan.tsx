@@ -4,6 +4,7 @@ import { RiwayatPendidikanAPI } from '../../../../../constants/APIUrls';
 import { GetRiwayatPendidikanDetailReq, RiwayatPendidikanDetailData } from '../../../../../types/api/PendidikanAPI';
 import ImgFile from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
+import Loader from '../../../../shared/Loader/Loader';
 
 type ListDigitalProps = {
   riwayatPendidikanId?: number;
@@ -12,12 +13,16 @@ type ListDigitalProps = {
 
 export default function DetailPendidikan(props: ListDigitalProps) {
   const { riwayatPendidikanId, onBack } = props;
-  const { data } = useCommonApi<GetRiwayatPendidikanDetailReq, RiwayatPendidikanDetailData>(
+  const { data, isValidating } = useCommonApi<GetRiwayatPendidikanDetailReq, RiwayatPendidikanDetailData>(
     RiwayatPendidikanAPI.GET_RIWAYAT_PENDIDIKAN_DETAIL,
     { id: Number(riwayatPendidikanId) },
     { method: 'GET' },
     { skipCall: !riwayatPendidikanId, revalidateOnMount: true }
   );
+
+  if (isValidating) {
+    return <Loader />;
+  }
 
   return (
     <>
