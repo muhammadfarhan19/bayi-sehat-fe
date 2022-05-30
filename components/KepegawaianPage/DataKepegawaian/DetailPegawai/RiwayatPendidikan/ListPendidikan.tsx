@@ -19,21 +19,19 @@ import { callAPI } from '../../../../../utils/Fetchers';
 import { getQueryString } from '../../../../../utils/URLUtils';
 import ConfirmDialog from '../../../../shared/ConfirmDialog';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
-import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import PendidikanForm from './PendidikanForm';
 
 type ListPendidikanProps = {
   onShowDetail: (id: number) => void;
+  userId?: number;
 };
 
 export default function ListArsip(props: ListPendidikanProps) {
-  const { onShowDetail } = props;
-  const [confirmId, setConfirmId] = React.useState(0);
-
   const dispatch = useDispatch();
-  const personalPegawaiData = usePersonalData();
-  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
 
+  const { onShowDetail, userId = 0 } = props;
+  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
+  const [confirmId, setConfirmId] = React.useState(0);
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: string }>({
     open: false,
     selectedId: undefined,
@@ -82,10 +80,10 @@ export default function ListArsip(props: ListPendidikanProps) {
     RbacAPI.POST_RBAC_BULK_AUTHORIZE,
     {
       bulk_request: [
-        { action: 'read', resource_id: Permissions.ViewPendidikan, user_id: Number(personalPegawaiData?.user_id) },
-        { action: 'read', resource_id: Permissions.EditPendidikan, user_id: Number(personalPegawaiData?.user_id) },
-        { action: 'read', resource_id: Permissions.AddPendidikan, user_id: Number(personalPegawaiData?.user_id) },
-        { action: 'read', resource_id: Permissions.DeletePendidikan, user_id: Number(personalPegawaiData?.user_id) },
+        { action: 'read', resource_id: Permissions.ViewPendidikan, user_id: userId },
+        { action: 'read', resource_id: Permissions.EditPendidikan, user_id: userId },
+        { action: 'read', resource_id: Permissions.AddPendidikan, user_id: userId },
+        { action: 'read', resource_id: Permissions.DeletePendidikan, user_id: userId },
       ],
     },
     { method: 'POST' }

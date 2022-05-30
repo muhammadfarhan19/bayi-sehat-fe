@@ -18,7 +18,8 @@ import { getQueryString } from '../../../utils/URLUtils';
 
 type ReturnResult = Partial<GetUserPersonalPegawaiData & GetUserProfileData>;
 
-export default function usePersonalData(): ReturnResult | null {
+export default function usePersonalData(props?: { useQueryString?: boolean }): ReturnResult | null {
+  const useQueryString = props?.useQueryString || true;
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const keyApiRes = [UserAPI.GET_USER_PERSONAL_PEGAWAI, UserAPI.GET_USER_PROFILE, JSON.stringify(pegawai_id)].join('_');
 
@@ -32,7 +33,10 @@ export default function usePersonalData(): ReturnResult | null {
   React.useEffect(() => {
     if (!dataPersonal) {
       (() => {
-        const apiReq = pegawai_id ? { pegawai_id: Number(pegawai_id) } : {};
+        let apiReq = {};
+        if (useQueryString) {
+          apiReq = pegawai_id ? { pegawai_id: Number(pegawai_id) } : {};
+        }
 
         callAPIParallel(() => [
           callAPI<GetUserProfileReq, GetUserProfileRes>(UserAPI.GET_USER_PROFILE, apiReq, { method: 'GET' }),
