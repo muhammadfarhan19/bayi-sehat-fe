@@ -4,7 +4,8 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { RiwayatPendidikanAPI } from '../../../../../constants/APIUrls';
+import { RbacAPI, RiwayatPendidikanAPI } from '../../../../../constants/APIUrls';
+import { NavigationId } from '../../../../../constants/NavigationList';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
   GetRiwayatPendidikanListReq,
@@ -12,11 +13,13 @@ import {
   PostRiwayatPendidikanDeleteRes,
   RiwayatPendidikanListData,
 } from '../../../../../types/api/PendidikanAPI';
+import { AuthorizeData, PostRbacBulkAuthorizeReq } from '../../../../../types/api/RbacAPI';
 import { Status } from '../../../../../types/Common';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { getQueryString } from '../../../../../utils/URLUtils';
 import ConfirmDialog from '../../../../shared/ConfirmDialog';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
+import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import PendidikanForm from './PendidikanForm';
 
 type ListPendidikanProps = {
@@ -24,9 +27,11 @@ type ListPendidikanProps = {
 };
 
 export default function ListArsip(props: ListPendidikanProps) {
-  const [confirmId, setConfirmId] = React.useState(0);
   const { onShowDetail } = props;
+  const [confirmId, setConfirmId] = React.useState(0);
+
   const dispatch = useDispatch();
+  const personalPegawaiData = usePersonalData();
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
 
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: string }>({
@@ -73,18 +78,31 @@ export default function ListArsip(props: ListPendidikanProps) {
     { method: 'GET' }
   );
 
+  const { data: rbac } = useCommonApi<PostRbacBulkAuthorizeReq, AuthorizeData[]>(
+    RbacAPI.POST_RBAC_BULK_AUTHORIZE,
+    {
+      bulk_request: [
+        { action: 'read', resource_id: NavigationId.KEPEGAWAIAN, user_id: Number(personalPegawaiData?.user_id) },
+      ],
+    },
+    { method: 'POST' }
+  );
+  const isActionAuthorize = !!rbac?.[0]?.is_authorized;
+
   return (
     <>
       <div className="my-3 flex items-center">
         <div className="flex flex-1 pr-2 text-sm text-gray-500">{/* TODO: Wait for wording */}</div>
-        <button
-          type="button"
-          className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
-          onClick={() => handleShowForm(!formModalState.open)}
-        >
-          <PlusIcon className="mr-1 h-4" />
-          Tambah Riwayat Pendidikan
-        </button>
+        {isActionAuthorize && (
+          <button
+            type="button"
+            className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
+            onClick={() => handleShowForm(!formModalState.open)}
+          >
+            <PlusIcon className="mr-1 h-4" />
+            Tambah Riwayat Pendidikan
+          </button>
+        )}
       </div>
       <div className="overflow-auto">
         <table className="min-w-full divide-y divide-gray-200">
@@ -154,20 +172,24 @@ export default function ListArsip(props: ListPendidikanProps) {
                     >
                       Lihat
                     </button>
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                      onClick={() => handleShowForm(!formModalState.open, String(each.riwayat_id))}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
-                      onClick={() => setConfirmId(each.riwayat_id)}
-                    >
-                      Hapus
-                    </button>
+                    {isActionAuthorize && (
+                      <>
+                        <button
+                          type="button"
+                          className="inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                          onClick={() => handleShowForm(!formModalState.open, String(each.riwayat_id))}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                          onClick={() => setConfirmId(each.riwayat_id)}
+                        >
+                          Hapus
+                        </button>
+                      </>
+                    )}
                   </div>
                 </td>
               </tr>
