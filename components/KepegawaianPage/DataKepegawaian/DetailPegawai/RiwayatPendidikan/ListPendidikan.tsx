@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
 import { RbacAPI, RiwayatPendidikanAPI } from '../../../../../constants/APIUrls';
-import { NavigationId } from '../../../../../constants/NavigationList';
+import { Permissions } from '../../../../../constants/Permission';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
   GetRiwayatPendidikanListReq,
@@ -82,18 +82,24 @@ export default function ListArsip(props: ListPendidikanProps) {
     RbacAPI.POST_RBAC_BULK_AUTHORIZE,
     {
       bulk_request: [
-        { action: 'read', resource_id: NavigationId.KEPEGAWAIAN, user_id: Number(personalPegawaiData?.user_id) },
+        { action: 'read', resource_id: Permissions.ViewPendidikan, user_id: Number(personalPegawaiData?.user_id) },
+        { action: 'read', resource_id: Permissions.EditPendidikan, user_id: Number(personalPegawaiData?.user_id) },
+        { action: 'read', resource_id: Permissions.AddPendidikan, user_id: Number(personalPegawaiData?.user_id) },
+        { action: 'read', resource_id: Permissions.DeletePendidikan, user_id: Number(personalPegawaiData?.user_id) },
       ],
     },
     { method: 'POST' }
   );
-  const isActionAuthorize = !!rbac?.[0]?.is_authorized;
+  const allowViewPendidikan = !!rbac?.[0]?.is_authorized;
+  const allowEditPendidikan = !!rbac?.[1]?.is_authorized;
+  const allowAddPendidikan = !!rbac?.[2]?.is_authorized;
+  const allowDeletePendidikan = !!rbac?.[3]?.is_authorized;
 
   return (
     <>
       <div className="my-3 flex items-center">
         <div className="flex flex-1 pr-2 text-sm text-gray-500">{/* TODO: Wait for wording */}</div>
-        {isActionAuthorize && (
+        {allowAddPendidikan && (
           <button
             type="button"
             className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
@@ -165,30 +171,32 @@ export default function ListArsip(props: ListPendidikanProps) {
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.no_ijazah}</td>
                 <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
                   <div className="flex justify-between">
-                    <button
-                      onClick={() => onShowDetail(each.riwayat_id)}
-                      type="button"
-                      className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200"
-                    >
-                      Lihat
-                    </button>
-                    {isActionAuthorize && (
-                      <>
-                        <button
-                          type="button"
-                          className="inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                          onClick={() => handleShowForm(!formModalState.open, String(each.riwayat_id))}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
-                          onClick={() => setConfirmId(each.riwayat_id)}
-                        >
-                          Hapus
-                        </button>
-                      </>
+                    {allowViewPendidikan && (
+                      <button
+                        onClick={() => onShowDetail(each.riwayat_id)}
+                        type="button"
+                        className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200"
+                      >
+                        Lihat
+                      </button>
+                    )}
+                    {allowEditPendidikan && (
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                        onClick={() => handleShowForm(!formModalState.open, String(each.riwayat_id))}
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {allowDeletePendidikan && (
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                        onClick={() => setConfirmId(each.riwayat_id)}
+                      >
+                        Hapus
+                      </button>
                     )}
                   </div>
                 </td>
