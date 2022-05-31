@@ -324,8 +324,11 @@ function Kepangkatan() {
                         className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                       >
                         <td className="font-regular px-6 text-xs text-gray-500">{data.nip}</td>
-                        <td className="font-regular px-6 text-xs text-indigo-600">
-                          <a href={`#`}>{data.name}</a>
+                        <td className="cursor-pointer px-6 text-xs font-regular text-indigo-800"
+                          onClick={() =>
+                            (window.location.href = `/kepegawaian/kepangkatan?id=${dataIdx}`)
+                          }>
+                          {data.name}
                         </td>
                         <td className="font-regular px-6 text-xs text-gray-500">{data.unit}</td>
                         <td className="font-regular px-6 py-4 text-xs text-gray-500">{data.gol}</td>
