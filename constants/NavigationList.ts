@@ -62,6 +62,22 @@ export const NavigationList: Navigation[] = [
         name: 'Kepangkatan',
         href: '/kepegawaian/kepangkatan',
       },
+      {
+        id: NavigationId.KEPEGAWAIAN,
+        name: 'Dinas',
+        childMenu: [
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Rekap Dinas',
+            href: '/kepegawaian/rekap-dinas',
+          },
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Data Dinas Pegawai',
+            href: '/kepegawaian/data-dinas-pegawai',
+          },
+        ],
+      },
     ],
   },
 ];
