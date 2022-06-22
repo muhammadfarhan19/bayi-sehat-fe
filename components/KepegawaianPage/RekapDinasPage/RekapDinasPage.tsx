@@ -175,7 +175,7 @@ function RekapDinasPage() {
                   <tbody>
                     <tr className="bg-white hover:bg-gray-100">
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">1</td>
-                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900 underline underline-offset-1">
+                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900 underline underline-offset-1" onClick={()=>window.location.href = '/kepegawaian/rekap-dinas?id=1'}>
                         4070/E1/TI.02.00/2021
                       </td>
                       <td className="px-6 text-xs font-medium text-gray-900">Rapat Sosialisasi PKKM</td>
@@ -185,7 +185,7 @@ function RekapDinasPage() {
                     </tr>
                     <tr className="bg-gray-50 hover:bg-gray-100">
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">2</td>
-                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900 underline underline-offset-1">
+                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900 underline underline-offset-1" onClick={()=>window.location.href = '/kepegawaian/rekap-dinas?id=1'}>
                         4070/E1/TI.02.00/2021
                       </td>
                       <td className="px-6 text-xs font-medium text-gray-900">Rapat Sosialisasi PKKM</td>
