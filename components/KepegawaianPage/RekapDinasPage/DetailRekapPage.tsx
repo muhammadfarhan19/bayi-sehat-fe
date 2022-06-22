@@ -12,7 +12,6 @@ function DetailRekapPage() {
           <div>Kembali</div>
         </a>
         <div className="px-6 pb-6">
-
           <div className="flex flex-col">
             <p className="text-[24px] font-medium text-gray-900">Pendataan Dinas</p>
             <p className="text-[16px] font-[400] text-[#6B7280]">
@@ -32,7 +31,10 @@ function DetailRekapPage() {
                     { label: 'Tanggal Dinas', value: '13 Juni 2022 - 16 Juni 2022' },
                     { label: 'Jenis Dinas', value: 'Dinas SPPD' },
                     { label: 'Lokasi Dinas', value: 'Margo Depok' },
-                    { label: 'Isi Penugasan', value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sagittis semper in.' },
+                    {
+                      label: 'Isi Penugasan',
+                      value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sagittis semper in.',
+                    },
                   ].map((each, index) => (
                     <tr key={index}>
                       <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
@@ -75,10 +77,7 @@ function DetailRekapPage() {
             </div>
           </div>
         </div>
-
       </div>
-
-
     </>
   );
 }

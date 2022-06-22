@@ -3,21 +3,28 @@ import React from 'react';
 
 import { classNames } from '../../../utils/Components';
 
-function AddRekapPage(props: any) {
-  console.log(props)
+interface FormProps {
+  type: string;
+  id: string;
+}
+
+function AddRekapPage(props: FormProps) {
+  console.log(props);
 
   return (
     <>
       <div className="rounded-lg bg-white shadow">
-        {props?.type === 'edit' &&
+        {props?.type === 'edit' && (
           <a href="/kepegawaian/rekap-dinas?id=1" className="flex flex-row items-center gap-x-2 py-6 px-6">
             <ChevronLeftIcon className="h-5 w-5" />
             <div>Kembali</div>
           </a>
-        }
-        <div className={classNames(props?.type === 'add' ? "py-6":"pb-6","px-6")}>
+        )}
+        <div className={classNames(props?.type === 'add' ? 'py-6' : 'pb-6', 'px-6')}>
           <div className="flex flex-col">
-            <p className="text-[24px] font-medium text-gray-900">{props?.type === 'add' ? 'Pendataan Dinas' : 'Data Dinas'}</p>
+            <p className="text-[24px] font-medium text-gray-900">
+              {props?.type === 'add' ? 'Pendataan Dinas' : 'Data Dinas'}
+            </p>
             <p className="text-[16px] font-[400] text-[#6B7280]">
               Isi data dibawah ini berdasarkan informasi yang tercantum pada surat tugas
             </p>
@@ -266,4 +273,4 @@ function AddRekapPage(props: any) {
   );
 }
 
-export default AddRekapPage
+export default AddRekapPage;
