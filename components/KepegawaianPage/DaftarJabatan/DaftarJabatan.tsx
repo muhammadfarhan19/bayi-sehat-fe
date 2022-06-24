@@ -18,10 +18,11 @@ function DaftarJabatan() {
     per_page: 20,
   });
 
-  const {
-    data: dataTable,
-    isValidating,
-  } = useCommonApi<GetJabatanReq, JabatanData>(JabatanAPI.GET_JABATAN, filterState, { method: 'GET' });
+  const { data: dataTable, isValidating } = useCommonApi<GetJabatanReq, JabatanData>(
+    JabatanAPI.GET_JABATAN,
+    filterState,
+    { method: 'GET' }
+  );
 
   const { data: jenisJabatanList } = useCommonApi<null, JenisJabatanListData[]>(
     MasterAPI.GET_JENIS_JABATAN_LIST,

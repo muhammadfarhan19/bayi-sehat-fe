@@ -17,7 +17,9 @@ export default function DetailDinas() {
     return <Loader />;
   }
 
-  const handleBack = () => {};
+  const handleBack = () => {
+    window.location.href = `/dinas/pegawai`;
+  };
 
   return (
     <>
@@ -44,7 +46,7 @@ export default function DetailDinas() {
       </div>
 
       <div className="mt-6 overflow-hidden rounded-lg bg-white shadow">
-        <h3 className="text-xl font-semibold tracking-wider text-gray-700 px-6 py-4 border-b-[1px]">Jadwal Dinas</h3>
+        <h3 className="border-b-[1px] px-6 py-4 text-xl font-semibold tracking-wider text-gray-700">Jadwal Dinas</h3>
         <DinasCalendar />
       </div>
     </>

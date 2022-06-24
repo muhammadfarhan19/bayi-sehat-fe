@@ -1,4 +1,3 @@
-import { DataDinasPegawai } from '../../../../components/DinasPage/DataPegawai/DataDinasPegawai';
 import DetailDinas from '../../../../components/DinasPage/DataPegawai/DetailDinas';
 import { withAuthenticatedPage } from '../../../../components/shared/hocs/AuthenticatedPage';
 import { withReduxPage } from '../../../../components/shared/hocs/ReduxPage';
