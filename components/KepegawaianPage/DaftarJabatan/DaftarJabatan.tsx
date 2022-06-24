@@ -13,7 +13,6 @@ import Pagination from '../../shared/Pagination';
 function DaftarJabatan() {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
-  const [loaded, setLoaded] = React.useState(false);
   const [filterState, setFilterState] = React.useState<GetJabatanReq>({
     page: 1,
     per_page: 20,
@@ -22,7 +21,6 @@ function DaftarJabatan() {
   const {
     data: dataTable,
     isValidating,
-    mutate,
   } = useCommonApi<GetJabatanReq, JabatanData>(JabatanAPI.GET_JABATAN, filterState, { method: 'GET' });
 
   const { data: jenisJabatanList } = useCommonApi<null, JenisJabatanListData[]>(
@@ -30,13 +28,6 @@ function DaftarJabatan() {
     null,
     { method: 'GET' }
   );
-
-  React.useEffect(() => {
-    if (loaded) {
-      mutate();
-    }
-    setLoaded(true);
-  }, [filterState]);
 
   const changeFilterState = (inputState: Partial<GetJabatanReq>) => {
     const pageAffected = Object.keys(inputState).includes('page');

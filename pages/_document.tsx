@@ -24,7 +24,7 @@ class MyDocument extends Document {
           <meta property="og:title" content={meta.title} />
           <meta property="og:image" content={meta.image} />
         </Head>
-        <body className="h-full">
+        <body className="h-full bg-slate-50">
           <Main />
           <NextScript />
         </body>

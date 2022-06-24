@@ -89,7 +89,7 @@ export default function LeftMenu() {
                     ? 'bg-gray-100 text-gray-900'
                     : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                   index === 0 ? 'rounded-t-md' : '',
-                  index === navigation.length - 1 ? 'rounded-b-md' : '',
+                  index === filteredNavigation.length - 1 ? 'rounded-b-md' : '',
                   'group flex w-full items-center border-b-2 border-b-gray-100 py-3 pl-7 pr-2 text-sm font-medium'
                 )}
               >
@@ -103,7 +103,7 @@ export default function LeftMenu() {
                   <Disclosure.Button
                     className={classNames(
                       index === 0 ? 'rounded-t-md' : '',
-                      index === navigation.length - 1 ? 'rounded-b-md' : '',
+                      index === filteredNavigation.length - 1 ? 'rounded-b-md' : '',
                       'group flex w-full items-center justify-between border-b-2 border-b-gray-100 bg-white py-3 pl-7 pr-2 text-left text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                     )}
                   >

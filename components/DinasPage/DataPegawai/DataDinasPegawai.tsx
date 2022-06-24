@@ -2,16 +2,18 @@ import { AdjustmentsIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { KepegawaianAPI, MasterAPI, UnitKerjaAPI } from '../../../../constants/APIUrls';
-import { GetPegawaiListData, GetPegawaiListReq } from '../../../../types/api/KepegawaianAPI';
-import { JenisJabatanListData } from '../../../../types/api/MasterAPI';
-import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
-import useCommonApi from '../../../shared/hooks/useCommonApi';
-import Loader from '../../../shared/Loader/Loader';
-import Pagination from '../../../shared/Pagination';
+import { KepegawaianAPI, MasterAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
+import { GetPegawaiListData, GetPegawaiListReq } from '../../../types/api/KepegawaianAPI';
+import { JenisJabatanListData } from '../../../types/api/MasterAPI';
+import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
+import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
+import useCommonApi from '../../shared/hooks/useCommonApi';
+import Loader from '../../shared/Loader/Loader';
+import Pagination from '../../shared/Pagination';
 
-export default function MasterPns() {
+export function DataDinasPegawai() {
   const router = useRouter();
+  const inputTimeout = React.useRef(0);
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
@@ -41,16 +43,20 @@ export default function MasterPns() {
   };
 
   const search = async <T extends keyof typeof filter>(type: T, value: typeof filter[T]) => {
-    const newState = { ...filter };
-    newState[type] = value;
-    setFilter(newState);
+    if (inputTimeout.current) {
+      clearTimeout(inputTimeout.current);
+    }
+
+    inputTimeout.current = window.setTimeout(() => {
+      setFilter({ ...filter, [type]: value });
+    }, 500);
   };
 
   return (
-    <>
+    <div className="overflow-hidden rounded-lg bg-white shadow">
       <div className="px-6">
         <div className="flex flex-row py-6">
-          <p className="text-lg font-medium text-gray-900">Data Pegawai</p>
+          <p className="text-lg font-medium text-gray-900">Data Dinas Pegawai</p>
           <div className="ml-auto flex">
             <input
               type="text"
@@ -108,6 +114,15 @@ export default function MasterPns() {
                 ))}
               </select>
             </div>
+            <div className="w-[202px] pb-2">
+              <p className="mb-[4px] text-[14px] font-normal">Nama Jabatan</p>
+              <input
+                type="text"
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="Nama Jabatan"
+                onChange={e => search('jabatan', e.target.value)}
+              />
+            </div>
           </div>
         )}
       </div>
@@ -158,12 +173,6 @@ export default function MasterPns() {
                     >
                       Jabatan
                     </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Aksi
-                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -177,7 +186,7 @@ export default function MasterPns() {
                       </td>
                       <td
                         className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"
-                        onClick={() => router.push(`/kepegawaian/data-pegawai?pegawai_id=${data.pegawai_id}`)}
+                        onClick={() => router.push(`/dinas/pegawai/detail?id=${data.pegawai_id}`)}
                       >
                         {data.name}
                       </td>
@@ -185,17 +194,6 @@ export default function MasterPns() {
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.golongan}</td>
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                        <button
-                          type="button"
-                          className="rounded-md bg-[#4F46E5] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-indigo-700 focus:outline-none"
-                          onClick={() => {
-                            window.location.href = `/kepegawaian/data-pegawai?pegawai_id=${data?.pegawai_id}`;
-                          }}
-                        >
-                          Lihat
-                        </button>
-                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -212,6 +210,8 @@ export default function MasterPns() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
+
+export default withErrorBoundary(DataDinasPegawai);

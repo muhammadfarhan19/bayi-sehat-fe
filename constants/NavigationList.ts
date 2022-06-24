@@ -74,7 +74,7 @@ export const NavigationList: Navigation[] = [
           {
             id: NavigationId.KEPEGAWAIAN,
             name: 'Data Dinas Pegawai',
-            href: '/kepegawaian/data-dinas-pegawai',
+            href: '/dinas/pegawai',
           },
         ],
       },

@@ -4,7 +4,7 @@ export interface GetPegawaiListReq {
   unit_kerja_id?: string;
   nama?: string;
   tipe_jabatan?: string;
-  jabatan: string;
+  jabatan?: string;
   page: number;
   per_page: number;
 }
