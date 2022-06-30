@@ -11,6 +11,7 @@ export const UserAPI = {
   GET_USER_PERSONAL_PEGAWAI: config.apiHost + '/user/personal-pegawai',
   GET_USER_PROFILE: config.apiHost + '/user/profile',
   PUT_USER_PASSWORD: config.apiHost + '/user/password',
+  POST_USER_UPDATE_PROFILE: config.apiHost + '/user/update-profile',
 };
 
 export const RbacAPI = {

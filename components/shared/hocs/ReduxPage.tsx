@@ -47,7 +47,8 @@ export const withReduxPage =
       return (
         <Provider store={store}>
           <NotificationBar />
-          <Component {...(props as never)} />
+          {/* @ts-ignore */}
+          <Component {...props} />
           <ModalDialog />
         </Provider>
       );

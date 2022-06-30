@@ -41,6 +41,14 @@ function DataDiriPribadi() {
           ))}
         </tbody>
       </table>
+      <div className="flex flex-auto flex-col items-end">
+        <a
+          href="/updateprofile"
+          className="ml-1 inline-flex items-center rounded-md border border-indigo-600 bg-indigo-600 p-2 px-3 text-sm text-white hover:bg-indigo-700 focus:outline-none"
+        >
+          Edit
+        </a>
+      </div>
     </>
   );
 }

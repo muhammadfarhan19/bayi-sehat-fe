@@ -68,3 +68,20 @@ export interface PutUserPasswordRes {
   data: null | string;
   error_message?: string;
 }
+
+export interface PostUserProfileReq {
+  pegawai_id: number;
+  status_menikah: StatusMenikah;
+  jumlah_anak: number;
+  nik: string;
+  email: string;
+  alamat: string;
+  npwp: string;
+  bpjs: string;
+}
+
+export interface PostUserProfileRes {
+  status: Status;
+  data: null | string;
+  error_message?: string;
+}

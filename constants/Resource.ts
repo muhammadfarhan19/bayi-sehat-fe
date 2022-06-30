@@ -3,7 +3,8 @@ import { StatusMenikah, Gender, StatusCpns } from '../types/Common';
 export const StatusMenikahText: Record<StatusMenikah, string> = {
   [StatusMenikah.MARRIED]: 'Menikah',
   [StatusMenikah.NOT_MARRIED]: 'Belum menikah',
-  [StatusMenikah.DIVORCE]: 'Bercerai',
+  [StatusMenikah.DIVORCE_ALIVE]: 'Cerai - hidup',
+  [StatusMenikah.DIVORCE_DEATH]: 'Cerai - meninggal',
 };
 
 export const GenderText: Record<Gender, string> = {

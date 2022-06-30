@@ -70,7 +70,8 @@ export const withErrorBoundary: WithErrorBoundary = Component => {
 
     return (
       <ErrorBoundary errorHandler={handleError}>
-        <Component {...(props as never)} />
+        {/* @ts-ignore */}
+        <Component {...props} />
       </ErrorBoundary>
     );
   };

@@ -10,9 +10,10 @@ export enum Status {
 }
 
 export enum StatusMenikah {
-  MARRIED = 1,
-  NOT_MARRIED = 2,
-  DIVORCE = 3,
+  NOT_MARRIED = 1,
+  MARRIED = 2,
+  DIVORCE_ALIVE = 3,
+  DIVORCE_DEATH = 4,
 }
 
 export enum Gender {
