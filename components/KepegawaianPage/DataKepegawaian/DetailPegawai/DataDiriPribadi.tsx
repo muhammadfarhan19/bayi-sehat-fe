@@ -43,7 +43,7 @@ function DataDiriPribadi() {
       </table>
       <div className="flex flex-auto flex-col items-end">
         <a
-          href="/updateprofile"
+          href={`/updateprofile?pegawai_id=${dataApiRes?.pegawai_id}`}
           className="ml-1 inline-flex items-center rounded-md border border-indigo-600 bg-indigo-600 p-2 px-3 text-sm text-white hover:bg-indigo-700 focus:outline-none"
         >
           Edit

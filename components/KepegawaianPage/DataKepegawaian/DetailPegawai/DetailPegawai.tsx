@@ -2,6 +2,7 @@ import { UserCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
 
 import { classNames } from '../../../../utils/Components';
+import { getQueryString } from '../../../../utils/URLUtils';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
 import InProgressState from '../../../shared/InProgressState';
@@ -23,7 +24,8 @@ const tabs = [
 ];
 
 function DetailPegawai() {
-  const [selected, setSelected] = React.useState(tabs[0].name);
+  const { tabName = tabs[0].name } = getQueryString<{ tabName: string }>();
+  const [selected, setSelected] = React.useState(tabName);
   const personalPegawaiData = usePersonalData();
 
   if (!personalPegawaiData) {

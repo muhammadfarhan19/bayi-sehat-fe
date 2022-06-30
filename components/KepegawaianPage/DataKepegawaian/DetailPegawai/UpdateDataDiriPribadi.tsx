@@ -9,15 +9,14 @@ import { UserAPI } from '../../../../constants/APIUrls';
 import { GenderText, StatusMenikahText } from '../../../../constants/Resource';
 import { SnackbarType } from '../../../../reducer/CommonReducer';
 import {
-  GetUserPersonalPegawaiData,
-  GetUserPersonalPegawaiReq,
   GetUserProfileData,
   GetUserProfileReq,
   PostUserProfileReq,
   PostUserProfileRes,
 } from '../../../../types/api/UserAPI';
-import { Gender, Status, StatusMenikah } from '../../../../types/Common';
+import { Status, StatusMenikah } from '../../../../types/Common';
 import { callAPI } from '../../../../utils/Fetchers';
+import { getQueryString } from '../../../../utils/URLUtils';
 import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
@@ -25,16 +24,11 @@ import Loader from '../../../shared/Loader/Loader';
 export default function UpdateDataDiriPribadi() {
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
+  const { pegawai_id } = getQueryString<{ pegawai_id: string }>();
 
   const { data, isValidating } = useCommonApi<GetUserProfileReq, GetUserProfileData>(
     UserAPI.GET_USER_PROFILE,
-    {},
-    { method: 'GET' }
-  );
-
-  const { data: personalPegawai } = useCommonApi<GetUserPersonalPegawaiReq, GetUserPersonalPegawaiData>(
-    UserAPI.GET_USER_PERSONAL_PEGAWAI,
-    {},
+    { pegawai_id: Number(pegawai_id) },
     { method: 'GET' }
   );
 
@@ -63,7 +57,7 @@ export default function UpdateDataDiriPribadi() {
   }
 
   const handleBack = () => {
-    window.location.href = `/`;
+    window.location.href = `/?pegawai_id=${pegawai_id}&tabName=Data%20Diri%20Pribadi`;
   };
 
   const submitHandler = async (formData: PostUserProfileReq) => {
@@ -71,15 +65,18 @@ export default function UpdateDataDiriPribadi() {
 
     const updateRes = await callAPI<PostUserProfileReq, PostUserProfileRes>(UserAPI.POST_USER_UPDATE_PROFILE, {
       ...formData,
-      pegawai_id: personalPegawai?.pegawai_id || 0,
+      pegawai_id: Number(pegawai_id),
       jumlah_anak: Number(formData.jumlah_anak),
       status_menikah: Number(formData.status_menikah),
     });
 
-    setLoading(false);
     if (updateRes.status === 200 && updateRes.data?.status === Status.OK) {
       dispatch(setSnackbar({ show: true, type: SnackbarType.INFO, message: 'Berhasil mengubah data diri anda.' }));
+      setTimeout(() => {
+        handleBack();
+      }, 500);
     } else {
+      setLoading(false);
       dispatch(
         setSnackbar({
           show: true,
@@ -97,21 +94,21 @@ export default function UpdateDataDiriPribadi() {
           <ChevronLeftIcon className="mr-0.5 h-8" />
           <span className="tracking-wide text-gray-600">Kembali</span>
         </div>
-        <div className="mb-4 px-7 py-1">
+        <div className="mt-5 mb-6 px-7 py-1">
           <h3 className="text-xl font-semibold tracking-wider text-gray-700">Data Dinas Pegawai</h3>
         </div>
         <form className="space-y-6" onSubmit={handleSubmit(submitHandler)}>
           <div className="flex flex-row items-center px-7">
-            <div className="text-l basis-[200px] tracking-wider text-gray-700">Jenis Kelamin</div>
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Jenis Kelamin</div>
             <input
-              value={GenderText[data?.jenis_kelamin as unknown as Gender]}
+              value={data?.jenis_kelamin ? GenderText[data.jenis_kelamin] : ''}
               type="text"
               disabled
               className="shadow-s block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 disabled:bg-gray-200 sm:text-sm"
             />
           </div>
           <div className="flex flex-row items-center px-7">
-            <div className="text-l basis-[200px] tracking-wider text-gray-700">Status Menikah</div>
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Status Menikah</div>
             <Controller
               control={control}
               name="status_menikah"
@@ -133,7 +130,7 @@ export default function UpdateDataDiriPribadi() {
             />
           </div>
           <div className="flex flex-row items-center px-7">
-            <div className="text-l basis-[200px] tracking-wider text-gray-700">Jumlah Anak</div>
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Jumlah Anak</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('jumlah_anak', { required: true })}
@@ -150,7 +147,7 @@ export default function UpdateDataDiriPribadi() {
             </div>
           </div>
           <div className="flex flex-row items-center px-7">
-            <div className="text-l basis-[200px] tracking-wider text-gray-700">NIK</div>
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">NIK</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('nik', { required: true })}
@@ -167,7 +164,7 @@ export default function UpdateDataDiriPribadi() {
             </div>
           </div>
           <div className="flex flex-row items-center px-7">
-            <div className="text-l basis-[200px] tracking-wider text-gray-700">Email</div>
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Email</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('email', { required: true })}
@@ -184,7 +181,7 @@ export default function UpdateDataDiriPribadi() {
             </div>
           </div>
           <div className="flex flex-row items-center px-7">
-            <div className="text-l basis-[200px] tracking-wider text-gray-700">Alamat</div>
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Alamat</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('alamat', { required: true })}
@@ -201,7 +198,7 @@ export default function UpdateDataDiriPribadi() {
             </div>
           </div>
           <div className="flex flex-row items-center px-7">
-            <div className="text-l basis-[200px] tracking-wider text-gray-700">NPWP</div>
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">NPWP</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('npwp', { required: true })}
@@ -218,7 +215,7 @@ export default function UpdateDataDiriPribadi() {
             </div>
           </div>
           <div className="flex flex-row items-center px-7">
-            <div className="text-l basis-[200px] tracking-wider text-gray-700">BPJS</div>
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">BPJS</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('bpjs', { required: true })}
