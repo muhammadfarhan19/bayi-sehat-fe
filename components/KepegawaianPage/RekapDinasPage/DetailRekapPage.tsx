@@ -1,9 +1,25 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import React from 'react';
 
-import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
+import { RekapDinasAPI } from '../../../constants/APIUrls';
+import { GetRekapDetailReq, RekapDetailData } from '../../../types/api/RekapDinasAPI';
+import { classNames } from '../../../utils/Components';
+import useCommonApi from '../../shared/hooks/useCommonApi';
 
-function DetailRekapPage() {
+interface DetailProps {
+  dinas_id: string;
+}
+
+function DetailRekapPage(props: DetailProps) {
+  const { dinas_id } = props;
+  const { data } = useCommonApi<GetRekapDetailReq, RekapDetailData>(
+    RekapDinasAPI.GET_DINAS_DETAIL,
+    { dinas_id: Number(dinas_id) },
+    { method: 'GET' }
+  );
+
+  console.log(data);
+
   return (
     <>
       <div className="rounded-lg bg-white shadow">
@@ -25,15 +41,15 @@ function DetailRekapPage() {
                 <thead></thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {[
-                    { label: 'Unit Kerja', value: 'Sekretariat Diektorat Jenderal Pendidikan Tinggi' },
-                    { label: 'Nomor Surat ', value: '4070/E1/TI.02.00/2021' },
-                    { label: 'Tanggal Surat', value: '13 Juni 2022' },
-                    { label: 'Tanggal Dinas', value: '13 Juni 2022 - 16 Juni 2022' },
-                    { label: 'Jenis Dinas', value: 'Dinas SPPD' },
-                    { label: 'Lokasi Dinas', value: 'Margo Depok' },
+                    { label: 'Unit Kerja', value: data?.unit_kerja_str },
+                    { label: 'Nomor Surat ', value: data?.no_sp },
+                    { label: 'Tanggal Surat', value: data?.tgl_surat },
+                    { label: 'Tanggal Dinas', value: data?.tgl_mulai + ' - ' + data?.tgl_selesai },
+                    { label: 'Jenis Dinas', value: data?.jenis_dinas },
+                    { label: 'Lokasi Dinas', value: data?.lokasi },
                     {
                       label: 'Isi Penugasan',
-                      value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sagittis semper in.',
+                      value: data?.isi_penugasan,
                     },
                   ].map((each, index) => (
                     <tr key={index}>
@@ -43,15 +59,26 @@ function DetailRekapPage() {
                   ))}
                   <tr>
                     <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">Pegawai</td>
-                    <td className="py-4 px-4">
-                      <div className="flex flex-col gap-y-[8px]">
-                        <p className="px-2 text-[16px]">Widodo Arjuna - 198607122010121007</p>
-                        <p className="px-2 text-[14px] font-[400] text-[#6B7280]">Direktorat Kelembagaan</p>
-                        <div className="flex flex-row">
-                          <p className="px-2 text-[16px] font-[500] text-[#10B981]">Available,</p>
-                          <p className="text-[16px] font-[500]"> 13 Juni 2022 - 16 Juni 2022 </p>
+                    <td className="px-4">
+                      {data?.pegawai?.map(each => (
+                        <div className="my-4 flex flex-col gap-y-[8px]">
+                          <p className="px-2 text-[16px]">{each.nama_pegawai}</p>
+                          <p className="px-2 text-[14px] font-[400] text-[#6B7280]">{each.unit_kerja_str}</p>
+                          <div className="flex flex-row">
+                            <p
+                              className={classNames(
+                                each.flag === 1 ? 'text-[#10B981]' : 'text-red-500',
+                                'px-2 text-[16px] font-[500]'
+                              )}
+                            >
+                              {each.flag === 1 ? 'Available' : 'Not Available'}
+                            </p>
+                            <p className="text-[16px] font-[500]">
+                              {each.tgl_mulai} - {each.tgl_selesai}
+                            </p>
+                          </div>
                         </div>
-                      </div>
+                      ))}
                     </td>
                   </tr>
                 </tbody>
@@ -82,4 +109,4 @@ function DetailRekapPage() {
   );
 }
 
-export default withErrorBoundary(DetailRekapPage);
+export default DetailRekapPage;

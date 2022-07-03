@@ -78,3 +78,12 @@ export const RiwayatPendidikanAPI = {
   POST_RIWAYAT_PENDIDIKAN_INSERT: config.apiHost + '/pendidikan/insert',
   POST_RIWAYAT_PENDIDIKAN_UPDATE: config.apiHost + '/pendidikan/update',
 };
+
+export const RekapDinasAPI = {
+  GET_DINAS_PEGAWAI_AVAILABILITY: config.apiHost + 'dinas/pegawai/availability',
+  GET_DINAS_PEGAWAI_GETDINAS: config.apiHost + '/dinas/pegawai/get-dinas',
+  GET_DINAS_LIST: config.apiHost + '/dinas/list',
+  POST_DINAS_INSERT: config.apiHost + '/dinas/insert',
+  GET_DINAS_DETAIL: config.apiHost + '/dinas/detail',
+  POST_DINAS_UPDATE: config.apiHost + '/dinas/update',
+};

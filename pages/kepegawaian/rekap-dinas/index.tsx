@@ -9,7 +9,7 @@ import { NavigationId } from '../../../constants/NavigationList';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function RekapDinas() {
-  const { id, type } = getQueryString<{ id: string; type: string }>();
+  const { dinas_id, type } = getQueryString<{ dinas_id: string; type: string }>();
 
   return (
     <MainLayout>
@@ -19,11 +19,11 @@ function RekapDinas() {
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <section aria-labelledby="section-1-title">
             {typeof type !== 'undefined' ? (
-              <AddRekapPage type={type} id={id} />
-            ) : typeof id === 'undefined' ? (
+              <AddRekapPage type={type} dinas_id={dinas_id} />
+            ) : typeof dinas_id === 'undefined' ? (
               <RekapDinasPage />
             ) : (
-              <DetailRekapPage />
+              <DetailRekapPage dinas_id={dinas_id} />
             )}
           </section>
         </div>
