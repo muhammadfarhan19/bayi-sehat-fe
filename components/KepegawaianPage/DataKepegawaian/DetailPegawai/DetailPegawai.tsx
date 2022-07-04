@@ -11,6 +11,7 @@ import ArsipDigital from './ArsipDigital';
 import DataDiriPegawai from './DataDiriPegawai';
 import DataDiriPribadi from './DataDiriPribadi';
 import RiwayatDiklat from './RiwayatDiklat';
+import RiwayatGolongan from './RiwayatGolongan';
 import RiwayatPendidikan from './RiwayatPendidikan';
 
 const tabs = [
@@ -19,6 +20,7 @@ const tabs = [
   { name: 'Riwayat Pendidikan', href: '#' },
   { name: 'Riwayat Diklat', href: '#' },
   { name: 'Arsip Digital', href: '#' },
+  { name: 'Riwayat Golongan', href: '#' },
   { name: 'Riwayat Jabatan', href: '#' },
   { name: 'Tanda Tangan Digital', href: '#' },
 ];
@@ -93,8 +95,9 @@ function DetailPegawai() {
           {selected === tabs[2].name ? <RiwayatPendidikan /> : null}
           {selected === tabs[3].name ? <RiwayatDiklat /> : null}
           {selected === tabs[4].name ? <ArsipDigital /> : null}
-          {selected === tabs[5].name ? <InProgressState /> : null}
+          {selected === tabs[5].name ? <RiwayatGolongan /> : null}
           {selected === tabs[6].name ? <InProgressState /> : null}
+          {selected === tabs[7].name ? <InProgressState /> : null}
         </div>
       </div>
     </>

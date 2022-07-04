@@ -35,6 +35,7 @@ function DataDiriPegawai() {
             { label: 'TMT Golongan', value: dataPersonal.tmt_golongan },
             { label: 'Pangkat', value: dataPersonal.pangkat },
             { label: 'Masa Kerja', value: dataPersonal.masa_kerja },
+            { label: 'Masa Kerja Kepangkatan', value: dataPersonal.masa_kerja_kepangkatan },
             { label: 'Karpeg', value: dataPersonal.karpeg },
           ].map((each, index) => (
             <tr key={index}>

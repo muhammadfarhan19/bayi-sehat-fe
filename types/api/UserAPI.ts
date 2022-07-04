@@ -17,6 +17,7 @@ export interface GetUserPersonalPegawaiData {
   jabatan: string;
   karpeg: string;
   masa_kerja: string;
+  masa_kerja_kepangkatan: string;
   nama: string;
   nip: string;
   pangkat: string;

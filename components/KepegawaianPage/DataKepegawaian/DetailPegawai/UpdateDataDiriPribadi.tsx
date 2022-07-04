@@ -95,7 +95,7 @@ export default function UpdateDataDiriPribadi() {
           <span className="tracking-wide text-gray-600">Kembali</span>
         </div>
         <div className="mt-5 mb-6 px-7 py-1">
-          <h3 className="text-xl font-semibold tracking-wider text-gray-700">Data Dinas Pegawai</h3>
+          <h3 className="text-xl font-semibold tracking-wider text-gray-700">Data Diri Pribadi</h3>
         </div>
         <form className="space-y-6" onSubmit={handleSubmit(submitHandler)}>
           <div className="flex flex-row items-center px-7">
