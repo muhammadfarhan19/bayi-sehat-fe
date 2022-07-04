@@ -64,14 +64,14 @@ function DetailRekapPage(props: DetailProps) {
                         <div className="my-4 flex flex-col gap-y-[8px]">
                           <p className="px-2 text-[16px]">{each.nama_pegawai}</p>
                           <p className="px-2 text-[14px] font-[400] text-[#6B7280]">{each.unit_kerja_str}</p>
-                          <div className="flex flex-row">
+                           <div className="flex flex-row">
                             <p
                               className={classNames(
-                                each.flag === 1 ? 'text-[#10B981]' : 'text-red-500',
+                                each.flag === 2 ? 'text-[#10B981]' : 'text-red-500',
                                 'px-2 text-[16px] font-[500]'
                               )}
                             >
-                              {each.flag === 1 ? 'Available' : 'Not Available'}
+                              {each.flag === 2 ? 'Available' : 'Not Available'}
                             </p>
                             <p className="text-[16px] font-[500]">
                               {each.tgl_mulai} - {each.tgl_selesai}
