@@ -68,3 +68,21 @@ export interface PegawaiData {
   tgl_selesai: string;
   flag: number;
 }
+
+export interface GetAvailabilityReq {
+  pegawai_id: number;
+  tgl_mulai?: string;
+  tgl_selesai?: string;
+}
+
+export interface AvailabilityData {
+  data: {
+    tgl_available: string[];
+    flag: number;
+  };
+}
+
+export interface GetAvailabilityRes {
+  status: string;
+  data: AvailabilityData;
+}

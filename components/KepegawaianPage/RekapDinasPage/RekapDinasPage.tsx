@@ -65,6 +65,9 @@ function RekapDinasPage() {
                 type="text"
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="Cari Penugasan"
+                onChange={e => {
+                  changeFilterState({ isi_penugasan: e.target.value === '' ? undefined : e.target.value });
+                }}
               />
               <div className="flex w-full">
                 <button
@@ -190,6 +193,12 @@ function RekapDinasPage() {
                         >
                           Jenis Dinas
                         </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Isi Penugasan
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -214,6 +223,7 @@ function RekapDinasPage() {
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_mulai}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_selesai}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jenis_dinas}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.isi_penugasan}</td>
                         </tr>
                       ))}
                     </tbody>

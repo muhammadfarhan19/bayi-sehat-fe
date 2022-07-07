@@ -18,8 +18,6 @@ function DetailRekapPage(props: DetailProps) {
     { method: 'GET' }
   );
 
-  console.log(data);
-
   return (
     <>
       <div className="rounded-lg bg-white shadow">
@@ -29,10 +27,7 @@ function DetailRekapPage(props: DetailProps) {
         </a>
         <div className="px-6 pb-6">
           <div className="flex flex-col">
-            <p className="text-[24px] font-medium text-gray-900">Pendataan Dinas</p>
-            <p className="text-[16px] font-[400] text-[#6B7280]">
-              Isi data dibawah ini berdasarkan informasi yang tercantum pada surat tugas
-            </p>
+            <p className="text-[24px] font-medium text-gray-900">Data Dinas</p>
           </div>
 
           <div className="mt-[32px] w-full">
@@ -62,18 +57,27 @@ function DetailRekapPage(props: DetailProps) {
                     <td className="px-4">
                       {data?.pegawai?.map(each => (
                         <div className="my-4 flex flex-col gap-y-[8px]">
-                          <p className="px-2 text-[16px]">{each.nama_pegawai}</p>
-                          <p className="px-2 text-[14px] font-[400] text-[#6B7280]">{each.unit_kerja_str}</p>
-                           <div className="flex flex-row">
+                          <p className="px-2 text-[14px]">{each.nama_pegawai}</p>
+                          <p className="px-2 text-[12px] text-[#6B7280]">{each.unit_kerja_str}</p>
+                          <div className="flex flex-row">
                             <p
                               className={classNames(
-                                each.flag === 2 ? 'text-[#10B981]' : 'text-red-500',
-                                'px-2 text-[16px] font-[500]'
+                                each?.flag === 0
+                                  ? 'text-[#DC2626]'
+                                  : each?.flag === 1
+                                  ? 'text-yellow-400'
+                                  : 'text-[#10B981]',
+                                'px-2 text-[14px]'
                               )}
                             >
-                              {each.flag === 2 ? 'Available' : 'Not Available'}
+                              {each?.flag === 0
+                                ? 'Not Available'
+                                : each?.flag === 1
+                                ? 'Partialy Available'
+                                : 'Available'}
+                              ,
                             </p>
-                            <p className="text-[16px] font-[500]">
+                            <p className="text-[14px]">
                               {each.tgl_mulai} - {each.tgl_selesai}
                             </p>
                           </div>
@@ -87,11 +91,7 @@ function DetailRekapPage(props: DetailProps) {
           </div>
           <div className="mt-[3rem] flex w-full">
             <div className="ml-auto flex flex-row gap-x-[12px]">
-              <button
-                type="button"
-                className="rounded-[6px] bg-[#9CA3AF] py-[9px] px-[17px] text-[14px] text-gray-50"
-                onClick={() => (window.location.href = '/kepegawaian/rekap-dinas')}
-              >
+              <button type="button" className="rounded-[6px] bg-[#9CA3AF] py-[9px] px-[17px] text-[14px] text-gray-50">
                 Hapus
               </button>
               <button
