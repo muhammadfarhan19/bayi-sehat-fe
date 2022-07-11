@@ -2,57 +2,43 @@ import { Dialog, Transition } from '@headlessui/react';
 import { UploadIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
 import * as React from 'react';
+import DatePicker from 'react-datepicker';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { ArsipDigitalAPI, MasterAPI } from '../../../../../constants/APIUrls';
+import { MasterAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
-import {
-  ArsipDigitalDetailData,
-  GetArsipDigitalDetailReq,
-  PostArsipDigitalInsertReq,
-  PostArsipDigitalInsertRes,
-  PostArsipDigitalUpdateReq,
-  PostArsipDigitalUpdateRes,
-} from '../../../../../types/api/ArsipDigitalAPI';
-import { MasterJenisBerkasData } from '../../../../../types/api/MasterAPI';
-import { Status } from '../../../../../types/Common';
-import { classNames } from '../../../../../utils/Components';
-import { callAPI } from '../../../../../utils/Fetchers';
+import { JenisJabatanListData } from '../../../../../types/api/MasterAPI';
+import { classNames, composeListDefaultValue } from '../../../../../utils/Components';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import AutoComplete from '../../../../shared/Input/ComboBox';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
-import Loader from '../../../../shared/Loader/Loader';
 
 interface FormState {
-  nama_berkas: string;
-  jenis_berkas: string;
-  file_id: string;
+  tipe_jabatan: string;
+  nama_jabatan: string;
+  kumulatif: string;
+  tmt: number;
   file_name: string;
+  file_id: string;
 }
 
-interface ArsipFormProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  selectedId?: string;
+interface UploadFormProps {
   onSuccess: () => void;
+  open: boolean;
+  selectedId?: string;
+  setOpen: (open: boolean) => void;
 }
 
-export default function ArsipForm(props: ArsipFormProps) {
+export default function JabatanForm(props: UploadFormProps) {
   const dispatch = useDispatch();
   const personalData = usePersonalData();
-  const { open, setOpen, selectedId, onSuccess } = props;
+  const { onSuccess, open, selectedId, setOpen } = props;
 
-  const { data, isValidating } = useCommonApi<GetArsipDigitalDetailReq, ArsipDigitalDetailData>(
-    ArsipDigitalAPI.GET_ARSIP_DIGITAL_VIEW,
-    { arsip_digital_id: Number(selectedId) },
-    { method: 'GET' },
-    { skipCall: !selectedId, revalidateOnMount: true }
-  );
-  const { data: jenisBerkas } = useCommonApi<null, MasterJenisBerkasData[]>(MasterAPI.GET_MASTER_JENIS_BERKAS, null, {
+  const { data: jenisJabatan } = useCommonApi<null, JenisJabatanListData[]>(MasterAPI.GET_JENIS_JABATAN_LIST, null, {
     method: 'GET',
   });
 
@@ -62,76 +48,33 @@ export default function ArsipForm(props: ArsipFormProps) {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<FormState>();
+  } = useForm<FormState>({
+    defaultValues: {
+      tmt: Date.now(),
+    },
+  });
 
   // SET default value jenis berkas
   React.useEffect(() => {
-    if (jenisBerkas && jenisBerkas.length) {
-      setValue('jenis_berkas', String(jenisBerkas[jenisBerkas.length - 1].jenis_berkas_id));
+    if (jenisJabatan && jenisJabatan.length) {
+      setValue('tipe_jabatan', String(jenisJabatan[jenisJabatan.length - 1].id));
     }
-  }, [jenisBerkas]);
-
-  // SET default value jenis berkas
-  React.useEffect(() => {
-    if (data && data.document_uuid) {
-      setValue('file_id', data.document_uuid);
-      setValue('file_name', data.document_name);
-      setValue('nama_berkas', data.document_name);
-    }
-  }, [data]);
-
-  if (isValidating) return <Loader />;
+  }, [jenisJabatan]);
 
   const toggleModal = () => {
     setOpen(!open);
   };
 
-  const submitHandler = async (formData: FormState) => {
-    let resSubmit;
-    if (selectedId) {
-      resSubmit = await callAPI<PostArsipDigitalUpdateReq, PostArsipDigitalUpdateRes>(
-        ArsipDigitalAPI.POST_ARSIP_DIGITAL_UPDATE,
-        {
-          pegawai_id: Number(personalData?.pegawai_id),
-          arsip_digital_id: Number(selectedId),
-          document_name: formData.nama_berkas,
-          document_uuid: formData.file_id,
-          jenis_berkas_id: Number(formData.jenis_berkas),
-        },
-        { method: 'post' }
-      );
-    } else {
-      resSubmit = await callAPI<PostArsipDigitalInsertReq, PostArsipDigitalInsertRes>(
-        ArsipDigitalAPI.POST_ARSIP_DIGITAL_INSERT,
-        {
-          pegawai_id: Number(personalData?.pegawai_id),
-          document_name: formData.nama_berkas,
-          document_uuid: formData.file_id,
-          jenis_berkas_id: Number(formData.jenis_berkas),
-        },
-        { method: 'post' }
-      );
-    }
-
-    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
-      dispatch(
-        setSnackbar({
-          show: true,
-          message: 'Data berhasil tersimpan.',
-          type: SnackbarType.INFO,
-        })
-      );
-      onSuccess();
-      setOpen(!open);
-    } else {
-      dispatch(
-        setSnackbar({
-          show: true,
-          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
-          type: SnackbarType.ERROR,
-        })
-      );
-    }
+  const submitHandler = async () => {
+    dispatch(
+      setSnackbar({
+        show: true,
+        message: 'Data berhasil tersimpan.',
+        type: SnackbarType.INFO,
+      })
+    );
+    onSuccess();
+    setOpen(!open);
   };
 
   return (
@@ -167,7 +110,7 @@ export default function ArsipForm(props: ArsipFormProps) {
               <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <Dialog.Title as="div" className="flex justify-between">
                   <h3 className="text-lg font-medium leading-6 text-gray-900">
-                    {selectedId ? 'Ubah' : 'Tambah'} Arsip Digital
+                    {selectedId ? 'Ubah' : 'Tambah'} Riwayat Jabatan
                   </h3>
                   <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
                 </Dialog.Title>
@@ -200,55 +143,21 @@ export default function ArsipForm(props: ArsipFormProps) {
                       />
                     </div>
                   </div>
-                  <div className="mt-5 sm:col-span-6">
-                    <label htmlFor="nama_berkas" className="block text-sm font-medium text-gray-700">
-                      Nama Berkas
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        {...register('nama_berkas', { required: 'Mohon masukkan nama berkas.' })}
-                        autoComplete={'off'}
-                        className={classNames(
-                          'block w-full rounded-md shadow-sm sm:text-sm',
-                          errors.nama_berkas
-                            ? 'ring-red-500 focus:border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
-                        )}
-                        name="nama_berkas"
-                        type="text"
-                      />
-                      {errors.nama_berkas && <p className="mt-1 text-xs text-red-500">{errors.nama_berkas.message}</p>}
-                    </div>
-                  </div>
 
                   <div className="mt-5 sm:col-span-6">
                     <Controller
                       control={control}
-                      name="jenis_berkas"
+                      name="tipe_jabatan"
                       render={({ field: { onChange, value } }) =>
                         value ? (
                           <AutoComplete
-                            onChange={value => {
-                              onChange(value.value);
-                            }}
+                            onChange={value => onChange(value.value)}
                             label={'Jenis Berkas'}
-                            defaultValue={(() => {
-                              if ((jenisBerkas || []).length) {
-                                const selectedJenisBerkas = (jenisBerkas || [])?.filter(
-                                  each => String(each.jenis_berkas_id) === value
-                                )[0];
-                                return {
-                                  text: selectedJenisBerkas.jenis_berkas,
-                                  value: String(selectedJenisBerkas.jenis_berkas_id),
-                                };
-                              }
-                            })()}
-                            options={(jenisBerkas || [])?.map(each => {
-                              return {
-                                text: each.jenis_berkas,
-                                value: String(each.jenis_berkas_id),
-                              };
-                            })}
+                            defaultValue={composeListDefaultValue(jenisJabatan!, 'id', 'jenis_jabatan', value)}
+                            options={(jenisJabatan || [])?.map(each => ({
+                              text: each.jenis_jabatan,
+                              value: String(each.id),
+                            }))}
                           />
                         ) : (
                           <input
@@ -260,7 +169,70 @@ export default function ArsipForm(props: ArsipFormProps) {
                       }
                     />
                   </div>
-
+                  <div className="mt-5 sm:col-span-6">
+                    <label className="block text-sm font-medium text-gray-700">Nama Jabatan</label>
+                    <div className="mt-1">
+                      <input
+                        {...register('nama_jabatan', { required: 'Mohon masukkan nama jabatan.' })}
+                        autoComplete={'off'}
+                        className={classNames(
+                          'block w-full rounded-md shadow-sm sm:text-sm',
+                          errors.nama_jabatan
+                            ? 'ring-red-500 focus:border-red-500 focus:ring-red-500'
+                            : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
+                        )}
+                        type="text"
+                      />
+                      {errors.nama_jabatan && (
+                        <p className="mt-1 text-xs text-red-500">{errors.nama_jabatan.message}</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-5 sm:col-span-6">
+                    <label className="block text-sm font-medium text-gray-700">KUMULATIF</label>
+                    <div className="mt-1">
+                      <input
+                        {...register('kumulatif', { required: 'Mohon masukkan informasi kumulatif.' })}
+                        autoComplete={'off'}
+                        className={classNames(
+                          'block w-full rounded-md shadow-sm sm:text-sm',
+                          errors.kumulatif
+                            ? 'ring-red-500 focus:border-red-500 focus:ring-red-500'
+                            : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
+                        )}
+                        type="text"
+                      />
+                      {errors.kumulatif && <p className="mt-1 text-xs text-red-500">{errors.kumulatif.message}</p>}
+                    </div>
+                  </div>
+                  <div className="mt-5 sm:col-span-6">
+                    <label className="block text-sm font-medium text-gray-700">TMT</label>
+                    <div className="mt-1">
+                      <Controller
+                        control={control}
+                        name={'tmt'}
+                        rules={{ required: 'Mohon masukkan tmt.' }}
+                        render={({ field: { onChange, value } }) => (
+                          <DatePicker
+                            showYearDropdown
+                            selected={new Date(value)}
+                            onChange={(date: Date) => onChange(date.getTime())}
+                            customInput={
+                              <input
+                                type="text"
+                                className={classNames(
+                                  'block w-full rounded-md shadow-sm sm:text-sm',
+                                  errors.tmt
+                                    ? 'ring-red-500 focus:border-red-500 focus:ring-red-500'
+                                    : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
+                                )}
+                              />
+                            }
+                          />
+                        )}
+                      ></Controller>
+                    </div>
+                  </div>
                   <div className="mt-5 sm:col-span-6">
                     <Controller
                       control={control}
@@ -268,7 +240,7 @@ export default function ArsipForm(props: ArsipFormProps) {
                       rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
                       render={({ field: { onChange, value } }) => (
                         <UploadWrapper
-                          allowedTypes={['pdf', 'jpg', 'jpeg', 'png']}
+                          allowedTypes={['pdf']}
                           handleUploadChange={(files: FileObject[]) => {
                             setValue('file_id', files[0].id);
                             onChange(files[0].name);
@@ -282,8 +254,8 @@ export default function ArsipForm(props: ArsipFormProps) {
                               )}
                             >
                               <div>
-                                <div className="text-sm text-gray-600">{value || 'Bukti Arsip'}</div>
-                                <div className="text-xs text-gray-400">(jpg,jpeg,png,pdf)</div>
+                                <div className="text-sm text-gray-600">{value || 'Surat Keputusan'}</div>
+                                <div className="text-xs text-gray-400">(pdf)</div>
                               </div>
                               <button
                                 disabled={loading}

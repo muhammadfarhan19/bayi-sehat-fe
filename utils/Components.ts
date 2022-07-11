@@ -38,3 +38,18 @@ export function filterMenu(allowedMap?: Record<number, boolean>): Navigation[] {
     return NavigationList;
   }
 }
+
+export const composeListDefaultValue = <T extends Array<any>>(
+  list: T,
+  valueField: keyof Flatten<T>,
+  textField: keyof Flatten<T>,
+  value: any
+) => {
+  if ((list || []).length) {
+    const selectedValue = (list || [])?.filter(each => String(each[valueField]) === String(value))[0];
+    return {
+      text: selectedValue?.[textField],
+      value: selectedValue?.[valueField],
+    };
+  }
+};

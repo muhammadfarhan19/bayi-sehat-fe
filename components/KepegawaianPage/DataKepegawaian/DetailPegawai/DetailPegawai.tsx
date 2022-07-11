@@ -12,6 +12,7 @@ import DataDiriPegawai from './DataDiriPegawai';
 import DataDiriPribadi from './DataDiriPribadi';
 import RiwayatDiklat from './RiwayatDiklat';
 import RiwayatGolongan from './RiwayatGolongan';
+import RiwayatJabatan from './RiwayatJabatan';
 import RiwayatPendidikan from './RiwayatPendidikan';
 
 const tabs = [
@@ -96,7 +97,7 @@ function DetailPegawai() {
           {selected === tabs[3].name ? <RiwayatDiklat /> : null}
           {selected === tabs[4].name ? <ArsipDigital /> : null}
           {selected === tabs[5].name ? <RiwayatGolongan /> : null}
-          {selected === tabs[6].name ? <InProgressState /> : null}
+          {selected === tabs[6].name ? <RiwayatJabatan /> : null}
           {selected === tabs[7].name ? <InProgressState /> : null}
         </div>
       </div>
