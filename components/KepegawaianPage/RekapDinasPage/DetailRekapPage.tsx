@@ -97,7 +97,7 @@ function DetailRekapPage(props: DetailProps) {
               <button
                 type="button"
                 className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-[14px] text-gray-50"
-                onClick={() => (window.location.href = '/kepegawaian/rekap-dinas?id=1&type=edit')}
+                onClick={() => (window.location.href = `/kepegawaian/rekap-dinas?dinas_id=${data?.dinas_id}&type=edit`)}
               >
                 Edit
               </button>

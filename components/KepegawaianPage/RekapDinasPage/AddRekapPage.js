@@ -16,6 +16,7 @@ import AutoCompletePegawai from '../../shared/Input/AutoCompletePegawai';
 import UploadWrapper from '../../shared/Input/UploadWrapper';
 
 function AddRekapPage(props) {
+  const { dinas_id, type } = props;
   const [listPegawai, setListPegawai] = React.useState([]);
   const [listDeletedPegawai, setListDeletedPegawai] = React.useState([]);
   const [throwError, setThrowError] = React.useState('');
@@ -41,6 +42,8 @@ function AddRekapPage(props) {
   const { data: unitKerjaList } = useCommonApi(UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT, null, { method: 'GET' });
 
   const submitHandler = async formData => {
+    let post,
+      data = '';
     setLoad(true);
     let pegawai = [];
     listPegawai.map(data => {
@@ -53,28 +56,55 @@ function AddRekapPage(props) {
       pegawai.push(dataPegawai);
     });
 
-    let data = {
-      dinas: {
-        no_sp: formData.no_sp,
-        unit_kerja_id: parseInt(formData.unit_kerja_id),
-        tgl_surat: formData.tgl_surat + ' 00:00:00',
-        jenis_dinas: parseInt(formData.jenis_dinas),
-        tgl_mulai: formData.tgl_mulai + ' 00:00:00',
-        tgl_selesai: formData.tgl_selesai + ' 00:00:00',
-        lokasi: formData.lokasi,
-        isi_penugasan: formData.isi_penugasan,
-        surat_tugas: [
-          {
-            document_uuid: formData.document_uuid,
-            document_name: formData.document_name,
-          },
-        ],
-      },
-      dinas_pegawai: pegawai,
-    };
+    if (type === 'edit') {
+      data = {
+        dinas: {
+          dinas_id: Number(dinas_id),
+          no_sp: formData.no_sp,
+          unit_kerja_id: parseInt(formData.unit_kerja_id),
+          tgl_surat: formData.tgl_surat + ' 00:00:00',
+          jenis_dinas: parseInt(formData.jenis_dinas),
+          tgl_mulai: formData.tgl_mulai + ' 00:00:00',
+          tgl_selesai: formData.tgl_selesai + ' 00:00:00',
+          lokasi: formData.lokasi,
+          isi_penugasan: formData.isi_penugasan,
+          surat_tugas: [
+            {
+              document_uuid: formData.document_uuid,
+              document_name: formData.document_name,
+            },
+          ],
+        },
+        dinas_pegawai: pegawai,
+      };
+    } else {
+      data = {
+        dinas: {
+          no_sp: formData.no_sp,
+          unit_kerja_id: parseInt(formData.unit_kerja_id),
+          tgl_surat: formData.tgl_surat + ' 00:00:00',
+          jenis_dinas: parseInt(formData.jenis_dinas),
+          tgl_mulai: formData.tgl_mulai + ' 00:00:00',
+          tgl_selesai: formData.tgl_selesai + ' 00:00:00',
+          lokasi: formData.lokasi,
+          isi_penugasan: formData.isi_penugasan,
+          surat_tugas: [
+            {
+              document_uuid: formData.document_uuid,
+              document_name: formData.document_name,
+            },
+          ],
+        },
+        dinas_pegawai: pegawai,
+      };
+    }
 
     try {
-      const post = await callAPI(RekapDinasAPI.POST_DINAS_INSERT, data);
+      {
+        type === 'edit'
+          ? (post = await callAPI(RekapDinasAPI.POST_DINAS_UPDATE, data))
+          : (post = await callAPI(RekapDinasAPI.POST_DINAS_INSERT, data));
+      }
       if (post.status === 200) {
         window.location.href = '/kepegawaian/rekap-dinas';
       }
@@ -331,6 +361,53 @@ function AddRekapPage(props) {
     }
   }, [watch('tgl_mulai'), watch('tgl_selesai')]);
 
+  React.useEffect(() => {
+    (async () => {
+      if (type === 'edit') {
+        const detailForm = await callAPI(RekapDinasAPI.GET_DINAS_DETAIL, { dinas_id: dinas_id }, { method: 'get' });
+
+        if (detailForm.status === 200) {
+          let newState = [...listPegawai];
+          setValue('unit_kerja_id', await getIdUnitKerja(detailForm?.data?.data?.unit_kerja_str));
+          setValue('no_sp', detailForm?.data?.data?.no_sp);
+          setValue('tgl_surat', detailForm?.data?.data?.tgl_surat);
+          setValue('jenis_dinas', detailForm?.data?.data?.jenis_dinas === 'Dinas SPPD' ? 1 : 2);
+          setValue('tgl_mulai', detailForm?.data?.data?.tgl_mulai);
+          setValue('tgl_selesai', detailForm?.data?.data?.tgl_selesai);
+          setValue('lokasi', detailForm?.data?.data?.lokasi);
+          setValue('isi_penugasan', detailForm?.data?.data?.isi_penugasan);
+          setValue('document_uuid', detailForm?.data?.data?.surat_tugas?.[0]?.document_uuid);
+          setValue('document_name', detailForm?.data?.data?.surat_tugas?.[0]?.document_name);
+
+          {
+            detailForm?.data?.data?.pegawai.map(each => {
+              let dataPegawai = {
+                pegawai_id: each.pegawai_id,
+                nama: each.nama_pegawai,
+                nip: each.nip,
+                unit_kerja: each.unit_kerja_str,
+                flag: each.flag,
+                tgl_available: [each.tgl_mulai, each.tgl_selesai],
+              };
+              newState.push(dataPegawai);
+            });
+          }
+          setListPegawai(newState);
+        }
+      }
+    })();
+  }, []);
+
+  const getIdUnitKerja = async name => {
+    let id = 0;
+    const { data: unit_kerja } = await callAPI(UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT, null, { method: 'GET' });
+    if (unit_kerja.status === 'OK') {
+      const getId = unit_kerja?.data?.filter(each => each.name === name);
+      id = getId?.[0]?.unit_kerja_id;
+    }
+    return id;
+  };
+
   if (throwError) {
     throw throwError;
   }
@@ -361,8 +438,9 @@ function AddRekapPage(props) {
                 <label className="block text-sm font-medium text-gray-700">Unit Organisasi</label>
                 <div className="pt-1 sm:col-span-2 sm:mt-0">
                   <select
-                    className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                    className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                     {...register('unit_kerja_id', { required: 'Silahkan masukan nama diklat.' })}
+                    disabled={type === 'edit' ? true : false}
                   >
                     <option value="">Semua</option>
                     {(unitKerjaList || []).map((item, index) => (
@@ -385,6 +463,7 @@ function AddRekapPage(props) {
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="no_sp"
                     type="text"
+                    disabled={type === 'edit' ? true : false}
                   />
                   {errors.no_sp && <p className="mt-1 text-xs text-red-500">{errors.no_sp.message}</p>}
                 </div>
@@ -400,6 +479,7 @@ function AddRekapPage(props) {
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="tgl_surat"
                     type="date"
+                    disabled={type === 'edit' ? true : false}
                   />
                   {errors.tgl_surat && <p className="mt-1 text-xs text-red-500">{errors.tgl_surat.message}</p>}
                 </div>
@@ -411,7 +491,8 @@ function AddRekapPage(props) {
                   <select
                     {...register('jenis_dinas', { required: 'Silahkan masukan nama diklat.' })}
                     name="jenis_dinas"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    className="mt-1  block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                    disabled={type === 'edit' ? true : false}
                   >
                     <option value={''}>Silahkan Pilih</option>
                     <option value={1}>Dinas SPPD</option>
