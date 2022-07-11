@@ -147,8 +147,8 @@ function RekapDinasPage() {
           <div className="flex">
             <div className="my-[24px] overflow-x-auto sm:mx-0 ">
               <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-                <div className="overflow-hidden sm:rounded-lg">
-                  <table className="w-full table-fixed rounded-lg bg-gray-100">
+                <div className=" sm:rounded-lg">
+                  <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
                     <thead className="bg-gray-50">
                       <tr>
                         <th

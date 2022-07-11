@@ -17,9 +17,7 @@ export default function AutoCompletePegawai(props) {
   const { data: pegawaiList } = useCommonApi(KepegawaianAPI.GET_PEGAWAI_LIST, filter, { method: 'GET' });
 
   const handleOnChange = comboBoxValue => {
-    // const dataValue = comboBoxValue.split('|')
     onChange(comboBoxValue);
-    // setSelectedValue(dataValue[0]);
   };
 
   const search = async (type, value) => {
@@ -56,7 +54,11 @@ export default function AutoCompletePegawai(props) {
               >
                 {({ active, selected }) => (
                   <>
-                    <span className={classNames('block truncate', selected ? 'font-semibold' : '')}>{each.name}</span>
+                    <span className={classNames('block truncate', selected ? 'font-semibold' : '')}>
+                      {each.name}
+                      {' - '}
+                      {each.unit_kerja}
+                    </span>
                     {selected && (
                       <span
                         className={classNames(

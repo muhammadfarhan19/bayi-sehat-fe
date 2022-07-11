@@ -194,7 +194,7 @@ function AddRekapPage(props) {
                       </label>
                       <div className="mt-1">
                         <input
-                          {...register('tanggal_mulai', { required: 'Silahkan masukan isi penugasan.' })}
+                          {...register('tanggal_mulai')}
                           className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                           name="tanggal_mulai"
                           type="date"
@@ -207,7 +207,7 @@ function AddRekapPage(props) {
                       </label>
                       <div className="mt-1">
                         <input
-                          {...register('tanggal_selesai', { required: 'Silahkan masukan isi penugasan.' })}
+                          {...register('tanggal_selesai')}
                           className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                           name="tanggal_selesai"
                           type="date"
@@ -426,7 +426,21 @@ function AddRekapPage(props) {
                   <label className="block text-sm font-medium text-gray-700">Tanggal Mulai Dinas</label>
                   <div className="pt-1 sm:col-span-2 sm:mt-0">
                     <input
-                      {...register('tgl_mulai', { required: 'Silahkan masukan tanggal mulai dinas.' })}
+                      {...register('tgl_mulai', {
+                        validate: {
+                          required: value => {
+                            if (value === '') {
+                              return 'Silahkan masukan tanggal mulai dinas.';
+                            } else if (watch('tgl_selesai') !== '') {
+                              if (value > watch('tgl_selesai')) {
+                                return 'Tanggal mulai tidak boleh lebih besar dari tanggal selesai';
+                              }
+                            } else {
+                              return true;
+                            }
+                          },
+                        },
+                      })}
                       className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                       name="tgl_mulai"
                       type="date"
@@ -438,7 +452,21 @@ function AddRekapPage(props) {
                   <label className="block text-sm font-medium text-gray-700">Tanggal Selesai Dinas</label>
                   <div className="pt-1 sm:col-span-2 sm:mt-0">
                     <input
-                      {...register('tgl_selesai', { required: 'Silahkan masukan tanggal selesai dinas.' })}
+                      {...register('tgl_selesai', {
+                        validate: {
+                          required: value => {
+                            if (value === '') {
+                              return 'Silahkan masukan tanggal selesai dinas.';
+                            } else if (watch('tgl_mulai') !== '') {
+                              if (value < watch('tgl_mulai')) {
+                                return 'Tanggal selesai tidak boleh lebih kecil dari tanggal mulai';
+                              }
+                            } else {
+                              return true;
+                            }
+                          },
+                        },
+                      })}
                       className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                       name="tgl_selesai"
                       type="date"
