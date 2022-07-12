@@ -254,6 +254,7 @@ export default function ArsipForm(props: ArsipFormProps) {
                           <input
                             className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                             disabled={true}
+                            type="text"
                             placeholder={'Jenis Berkas'}
                           />
                         )

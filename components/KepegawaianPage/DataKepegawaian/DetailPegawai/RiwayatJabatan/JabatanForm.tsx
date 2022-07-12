@@ -7,8 +7,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { MasterAPI } from '../../../../../constants/APIUrls';
+import { JabatanAPI, MasterAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
+import { GetJabatanReq, JabatanData } from '../../../../../types/api/JabatanAPI';
 import { JenisJabatanListData } from '../../../../../types/api/MasterAPI';
 import { classNames, composeListDefaultValue } from '../../../../../utils/Components';
 import { CircleProgress } from '../../../../shared/CircleProgress';
@@ -37,10 +38,8 @@ export default function JabatanForm(props: UploadFormProps) {
   const dispatch = useDispatch();
   const personalData = usePersonalData();
   const { onSuccess, open, selectedId, setOpen } = props;
-
-  const { data: jenisJabatan } = useCommonApi<null, JenisJabatanListData[]>(MasterAPI.GET_JENIS_JABATAN_LIST, null, {
-    method: 'GET',
-  });
+  const [queryJabatan, setQueryJabatan] = React.useState('');
+  const debounce = React.useRef<number>(0);
 
   const {
     control,
@@ -53,6 +52,16 @@ export default function JabatanForm(props: UploadFormProps) {
       tmt: Date.now(),
     },
   });
+
+  const { data: jenisJabatan } = useCommonApi<null, JenisJabatanListData[]>(MasterAPI.GET_JENIS_JABATAN_LIST, null, {
+    method: 'GET',
+  });
+
+  const { data: daftarJabatan } = useCommonApi<GetJabatanReq, JabatanData>(
+    JabatanAPI.GET_JABATAN,
+    { page: 1, per_page: 20, jabatan: queryJabatan },
+    { method: 'GET' }
+  );
 
   // SET default value jenis berkas
   React.useEffect(() => {
@@ -163,6 +172,7 @@ export default function JabatanForm(props: UploadFormProps) {
                           <input
                             className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                             disabled={true}
+                            type="text"
                             placeholder={'Jenis Berkas'}
                           />
                         )
@@ -170,23 +180,30 @@ export default function JabatanForm(props: UploadFormProps) {
                     />
                   </div>
                   <div className="mt-5 sm:col-span-6">
-                    <label className="block text-sm font-medium text-gray-700">Nama Jabatan</label>
-                    <div className="mt-1">
-                      <input
-                        {...register('nama_jabatan', { required: 'Mohon masukkan nama jabatan.' })}
-                        autoComplete={'off'}
-                        className={classNames(
-                          'block w-full rounded-md shadow-sm sm:text-sm',
-                          errors.nama_jabatan
-                            ? 'ring-red-500 focus:border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
-                        )}
-                        type="text"
-                      />
-                      {errors.nama_jabatan && (
-                        <p className="mt-1 text-xs text-red-500">{errors.nama_jabatan.message}</p>
+                    <Controller
+                      control={control}
+                      name="nama_jabatan"
+                      render={({ field: { onChange } }) => (
+                        <AutoComplete
+                          onChange={value => onChange(value.value)}
+                          label={'Nama Jabatan'}
+                          defaultValue={{ text: '', value: '' }}
+                          onQueryChange={queryText => {
+                            if (debounce.current) {
+                              clearTimeout(debounce.current);
+                            }
+                            debounce.current = window.setTimeout(() => {
+                              setQueryJabatan(queryText);
+                            }, 500);
+                          }}
+                          options={(daftarJabatan?.list || []).map(each => ({
+                            text: each.name,
+                            value: String(each.jabatan_id),
+                          }))}
+                        />
                       )}
-                    </div>
+                    />
+                    {errors.nama_jabatan && <p className="mt-1 text-xs text-red-500">{errors.nama_jabatan.message}</p>}
                   </div>
                   <div className="mt-5 sm:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">KUMULATIF</label>

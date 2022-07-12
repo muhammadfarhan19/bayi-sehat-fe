@@ -1,6 +1,6 @@
 import { Combobox } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
-import { ReactNode, useState } from 'react';
+import { ChangeEvent, ReactNode, useState } from 'react';
 
 import { classNames } from '../../../utils/Components';
 
@@ -14,10 +14,11 @@ interface AutoCompleteProps {
   label: string | ReactNode;
   onChange: (value: OptionType) => void;
   options: OptionType[];
+  onQueryChange?: (value: string) => void;
 }
 
 export default function AutoComplete(props: AutoCompleteProps) {
-  const { defaultValue, label, onChange, options } = props;
+  const { defaultValue, label, onChange, onQueryChange, options } = props;
   const [query, setQuery] = useState('');
   const [selectedValue, setSelectedValue] = useState<OptionType | undefined>(defaultValue);
 
@@ -33,13 +34,21 @@ export default function AutoComplete(props: AutoCompleteProps) {
     setSelectedValue(comboBoxValue);
   };
 
+  const handleQueryChanged = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (onQueryChange && typeof onQueryChange === 'function') {
+      onQueryChange(value);
+    }
+    setQuery(value);
+  };
+
   return (
     <Combobox as="div" value={selectedValue} onChange={handleOnChange}>
       <Combobox.Label className="block text-sm font-medium text-gray-700">{label}</Combobox.Label>
       <div className="relative mt-1">
         <Combobox.Input
           className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-          onChange={event => setQuery(event.target.value)}
+          onChange={handleQueryChanged}
           displayValue={(optionDisplay: OptionType) => optionDisplay.text}
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
