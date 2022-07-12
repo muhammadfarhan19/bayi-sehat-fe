@@ -36,6 +36,8 @@ function AddRekapPage(props) {
     handleSubmit,
     formState: { errors },
     setValue,
+    setError,
+    clearErrors,
     watch,
   } = useForm();
 
@@ -44,6 +46,7 @@ function AddRekapPage(props) {
   const submitHandler = async formData => {
     let post,
       data = '';
+
     setLoad(true);
     let pegawai = [];
     listPegawai.map(data => {
@@ -107,8 +110,16 @@ function AddRekapPage(props) {
       }
       if (post.status === 200) {
         window.location.href = '/kepegawaian/rekap-dinas';
+      } else {
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: 'Gagal menyimpan data. Pegawai tidak tersedia.',
+            type: SnackbarType.ERROR,
+          })
+        );
       }
-      setLoad(true);
+      setLoad(false);
     } catch (e) {
       dispatch(
         setSnackbar({
@@ -117,7 +128,7 @@ function AddRekapPage(props) {
           type: SnackbarType.ERROR,
         })
       );
-      setLoad(true);
+      setLoad(false);
     }
   };
 
@@ -225,6 +236,8 @@ function AddRekapPage(props) {
                       <div className="mt-1">
                         <input
                           {...register('tanggal_mulai')}
+                          min={watch('tgl_mulai')}
+                          max={watch('tgl_selesai')}
                           className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                           name="tanggal_mulai"
                           type="date"
@@ -238,6 +251,8 @@ function AddRekapPage(props) {
                       <div className="mt-1">
                         <input
                           {...register('tanggal_selesai')}
+                          min={watch('tgl_mulai')}
+                          max={watch('tgl_selesai')}
                           className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                           name="tanggal_selesai"
                           type="date"
@@ -439,7 +454,7 @@ function AddRekapPage(props) {
                 <div className="pt-1 sm:col-span-2 sm:mt-0">
                   <select
                     className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-                    {...register('unit_kerja_id', { required: 'Silahkan masukan nama diklat.' })}
+                    {...register('unit_kerja_id', { required: 'Silahkan masukan unit organisasi.' })}
                     disabled={type === 'edit' ? true : false}
                   >
                     <option value="">Semua</option>
@@ -475,7 +490,21 @@ function AddRekapPage(props) {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('tgl_surat', { required: 'Silahkan masukan tanggal surat.' })}
+                    {...register('tgl_surat', {
+                      validate: {
+                        required: value => {
+                          if (value === '') {
+                            return 'Silahkan masukan tanggal surat.';
+                          } else if (watch('tgl_mulai') !== '') {
+                            if (value > watch('tgl_mulai')) {
+                              return 'Tanggal surat tidak boleh lebih besar dari tanggal mulai dinas';
+                            }
+                          } else {
+                            return true;
+                          }
+                        },
+                      },
+                    })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="tgl_surat"
                     type="date"
@@ -639,6 +668,7 @@ function AddRekapPage(props) {
                   <AutoCompletePegawai
                     onChange={value => {
                       getAvail(value);
+                      clearErrors('pegawai');
                     }}
                   />
                 ) : (
@@ -653,6 +683,7 @@ function AddRekapPage(props) {
                     />
                   </>
                 )}
+                {errors.pegawai && <p className="mt-1 text-xs text-red-500">Silahkan masukan minimal 1 pegawai</p>}
               </div>
             </div>
 
@@ -730,6 +761,9 @@ function AddRekapPage(props) {
                   disabled={load}
                   type="submit"
                   className="inline-flex rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-[14px] text-gray-50"
+                  onClick={() => {
+                    listPegawai.length === 0 && setError('pegawai', { type: 'required' });
+                  }}
                 >
                   {load ? <CircleProgress /> : null}
                   Simpan
