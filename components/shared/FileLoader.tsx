@@ -9,10 +9,11 @@ import CircleLoader from './Loader/CircleLoader';
 interface ImgFileProps {
   uuid?: string;
   children?: React.ReactNode;
+  asLink?: boolean;
 }
 
 export default function FileLoader(props: ImgFileProps) {
-  const { children, uuid } = props;
+  const { children, uuid, asLink = false } = props;
   const [fileUrl, setFileUrl] = React.useState('');
   const [isImg, setIsImg] = React.useState(false);
 
@@ -39,7 +40,7 @@ export default function FileLoader(props: ImgFileProps) {
     return <CircleLoader />;
   }
 
-  if (isImg) {
+  if (isImg && !asLink) {
     return <img src={fileUrl} />;
   }
 

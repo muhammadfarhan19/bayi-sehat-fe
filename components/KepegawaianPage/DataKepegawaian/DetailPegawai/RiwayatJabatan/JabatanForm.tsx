@@ -1,26 +1,29 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { UploadIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
+import { format } from 'date-fns';
 import * as React from 'react';
-import DatePicker from 'react-datepicker';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
 import { JabatanAPI, MasterAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
-import { GetJabatanReq, JabatanData } from '../../../../../types/api/JabatanAPI';
+import { GetJabatanReq, JabatanData, UpdateJabatanReq, UpdateJabatanRes } from '../../../../../types/api/JabatanAPI';
 import { JenisJabatanListData } from '../../../../../types/api/MasterAPI';
+import { Status } from '../../../../../types/Common';
 import { classNames, composeListDefaultValue } from '../../../../../utils/Components';
+import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import AutoComplete from '../../../../shared/Input/ComboBox';
+import DatePicker from '../../../../shared/Input/DatePicker';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
 
 interface FormState {
   tipe_jabatan: string;
-  nama_jabatan: string;
+  jabatan_id: string;
   kumulatif: string;
   tmt: number;
   file_name: string;
@@ -35,6 +38,7 @@ interface UploadFormProps {
 }
 
 export default function JabatanForm(props: UploadFormProps) {
+  const dataApiRes = usePersonalData();
   const dispatch = useDispatch();
   const personalData = usePersonalData();
   const { onSuccess, open, selectedId, setOpen } = props;
@@ -74,16 +78,45 @@ export default function JabatanForm(props: UploadFormProps) {
     setOpen(!open);
   };
 
-  const submitHandler = async () => {
-    dispatch(
-      setSnackbar({
-        show: true,
-        message: 'Data berhasil tersimpan.',
-        type: SnackbarType.INFO,
-      })
+  const submitHandler = async (formData: FormState) => {
+    const resSubmit = await callAPI<UpdateJabatanReq, UpdateJabatanRes>(
+      JabatanAPI.UPDATE_JABATAN,
+      {
+        pegawai_id: dataApiRes?.pegawai_id || 0,
+        jabatan_id: Number(formData.jabatan_id),
+        unit_kerja_id: Number(formData.tipe_jabatan),
+        tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
+        tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
+        angka_kredit: Number(formData.kumulatif),
+        surat_keputusan: [
+          {
+            document_uuid: formData.file_id,
+            document_name: formData.file_name,
+          },
+        ],
+      },
+      { method: 'post' }
     );
-    onSuccess();
-    setOpen(!open);
+
+    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Data berhasil tersimpan.',
+          type: SnackbarType.INFO,
+        })
+      );
+      onSuccess();
+      setOpen(!open);
+    } else {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
+          type: SnackbarType.ERROR,
+        })
+      );
+    }
   };
 
   return (
@@ -182,7 +215,7 @@ export default function JabatanForm(props: UploadFormProps) {
                   <div className="mt-5 sm:col-span-6">
                     <Controller
                       control={control}
-                      name="nama_jabatan"
+                      name="jabatan_id"
                       render={({ field: { onChange } }) => (
                         <AutoComplete
                           onChange={value => onChange(value.value)}
@@ -203,7 +236,7 @@ export default function JabatanForm(props: UploadFormProps) {
                         />
                       )}
                     />
-                    {errors.nama_jabatan && <p className="mt-1 text-xs text-red-500">{errors.nama_jabatan.message}</p>}
+                    {errors.jabatan_id && <p className="mt-1 text-xs text-red-500">{errors.jabatan_id.message}</p>}
                   </div>
                   <div className="mt-5 sm:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">KUMULATIF</label>
@@ -231,7 +264,10 @@ export default function JabatanForm(props: UploadFormProps) {
                         rules={{ required: 'Mohon masukkan tmt.' }}
                         render={({ field: { onChange, value } }) => (
                           <DatePicker
+                            peekNextMonth
+                            showMonthDropdown
                             showYearDropdown
+                            dropdownMode="select"
                             selected={new Date(value)}
                             onChange={(date: Date) => onChange(date.getTime())}
                             customInput={

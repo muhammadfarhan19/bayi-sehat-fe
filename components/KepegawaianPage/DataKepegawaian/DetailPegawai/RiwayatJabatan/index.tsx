@@ -1,23 +1,22 @@
 import { PlusIcon } from '@heroicons/react/solid';
 import * as React from 'react';
 
-import { RiwayatDiklatAPI } from '../../../../../constants/APIUrls';
-import { GetRiwayatDiklatListReq, RiwayatDiklatListData } from '../../../../../types/api/RiwayatDiklatAPI';
-import { getQueryString } from '../../../../../utils/URLUtils';
+import { JabatanAPI } from '../../../../../constants/APIUrls';
+import { RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
+import FileLoader from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import { PDFIcon } from '../../../../shared/icons/PDFIcon';
 import JabatanForm from './JabatanForm';
 
 export default function RiwayatJabatan() {
-  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: string }>({
     open: false,
     selectedId: undefined,
   });
 
-  const { data: riwayatDiklat, mutate } = useCommonApi<GetRiwayatDiklatListReq, RiwayatDiklatListData[]>(
-    RiwayatDiklatAPI.GET_RIWAYAT_DIKLAT_LIST,
-    pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
+  const { data: riwayatJabatan, mutate } = useCommonApi<null, RiwayatJabatanData[]>(
+    JabatanAPI.GET_RIWAYAT_JABATAN,
+    null,
     { method: 'GET' }
   );
 
@@ -87,20 +86,22 @@ export default function RiwayatJabatan() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {(riwayatDiklat || []).map((each, index) => (
+            {(riwayatJabatan || []).map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nama_diklat}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{'III/a'}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{'1'}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{'22 September 2002'}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{'0 TAHUN 0 BULAN'}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenis_jabatan}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nama_jabatan}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.kumulatif}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.tmt}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.masa_kerja}</td>
                 <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
-                  <a href="#" className="flex items-center text-blue-600 underline hover:text-blue-500">
-                    <PDFIcon />
-                    <span className="w-1" />
-                    {'Surat Keputusan'}
-                  </a>
+                  <FileLoader uuid={each?.files?.[0]?.document_uuid}>
+                    <>
+                      <PDFIcon />
+                      <span className="flex w-1 items-center text-blue-600 underline hover:text-blue-500" />
+                      {'Surat Keputusan'}
+                    </>
+                  </FileLoader>
                 </td>
               </tr>
             ))}

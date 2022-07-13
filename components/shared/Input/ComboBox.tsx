@@ -47,6 +47,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
       <Combobox.Label className="block text-sm font-medium text-gray-700">{label}</Combobox.Label>
       <div className="relative mt-1">
         <Combobox.Input
+          autoComplete="off"
           className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
           onChange={handleQueryChanged}
           displayValue={(optionDisplay: OptionType) => optionDisplay.text}
