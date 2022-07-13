@@ -7,7 +7,7 @@ import MonthPicker from './MonthPicker';
 export default function DinasCalendar() {
   return (
     <div className="lg:flex lg:h-full lg:flex-col">
-      <header className="relative z-20 flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none">
+      <header className="relative z-10 flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none">
         <h1 className="text-lg font-semibold text-gray-900">
           <MonthPicker />
         </h1>

@@ -89,3 +89,7 @@ export const RekapDinasAPI = {
   GET_DINAS_DETAIL: config.apiHost + '/dinas/detail',
   POST_DINAS_UPDATE: config.apiHost + '/dinas/update',
 };
+
+export const KepangkatanAPI = {
+  GET_KEPANGKATAN_LIST: config.apiHost + '/kepangkatan/list',
+};

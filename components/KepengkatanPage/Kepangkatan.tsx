@@ -1,7 +1,10 @@
 import { AdjustmentsIcon } from '@heroicons/react/solid';
 import React from 'react';
 
+import { KepangkatanAPI } from '../../constants/APIUrls';
+import { GetKepangkatanList, Kepangkatan } from '../../types/api/KepangkatanAPI';
 import { withErrorBoundary } from '../shared/hocs/ErrorBoundary';
+import useCommonApi from '../shared/hooks/useCommonApi';
 import AutoComplete from '../shared/Input/ComboBox';
 import Loader from '../shared/Loader/Loader';
 import Pagination from '../shared/Pagination';
@@ -142,6 +145,16 @@ const dummyList = [
 
 function Kepangkatan() {
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
+  const [filterState] = React.useState({
+    page: 1,
+    per_page: 4,
+  });
+
+  const { data: dataTable, isValidating } = useCommonApi<Kepangkatan, GetKepangkatanList>(
+    KepangkatanAPI.GET_KEPANGKATAN_LIST,
+    filterState,
+    { method: 'GET' }
+  );
 
   const toggleAdvancedFilter = () => {
     const showState = !showAdvancedFilter;
@@ -255,7 +268,7 @@ function Kepangkatan() {
           </>
         )}
       </div>
-      {!dummyList ? (
+      {isValidating ? (
         <div className="relative h-[150px] w-full divide-y divide-gray-200">
           <Loader />
         </div>
@@ -317,8 +330,9 @@ function Kepangkatan() {
                       </th>
                     </tr>
                   </thead>
+
                   <tbody>
-                    {dummyList.map((data, dataIdx) => (
+                    {(dataTable?.list || []).map((data, dataIdx) => (
                       <tr
                         key={dataIdx}
                         className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
@@ -330,17 +344,21 @@ function Kepangkatan() {
                         >
                           {data.name}
                         </td>
-                        <td className="font-regular px-6 text-xs text-gray-500">{data.unit}</td>
-                        <td className="font-regular px-6 py-4 text-xs text-gray-500">{data.gol}</td>
-                        <td className="font-regular px-6 py-4 text-xs text-gray-500">{data.tmt_mk_awal}</td>
-                        <td className="font-regular px-6 text-xs text-gray-500">{data.tmt_mk_baru}</td>
+                        <td className="font-regular px-6 text-xs text-gray-500">{data.unit_kerja}</td>
+                        <td className="font-regular px-6 py-4 text-xs text-gray-500">{data.golongan} </td>
+                        <td className="font-regular px-6 py-4 text-xs text-gray-500">
+                          {data.tmt_mk_awal} {data.tmt_mk_awal_period}
+                        </td>
+                        <td className="font-regular px-6 text-xs text-gray-500">
+                          {data.tmt_mk_baru} {data.tmt_mk_baru_period}
+                        </td>
                         <td className="font-regular px-6 py-4 text-xs text-gray-500">{data.notes}</td>
                         <td className="font-regular px-6 py-4 text-xs text-gray-500">
                           <a
                             href={`#`}
                             className="rounded-[4px] bg-indigo-600 px-[11px] py-[7px] text-xs font-medium text-gray-50 focus:outline-none"
                           >
-                            {data.pegajuan}
+                            {/* {data.pegajuan} */}
                           </a>
                         </td>
                       </tr>

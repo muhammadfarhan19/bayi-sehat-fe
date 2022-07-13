@@ -57,6 +57,7 @@ function DetailRekapPage(props: DetailProps) {
                     <td className="px-4">
                       {data?.pegawai?.map(each => (
                         <div className="my-4 flex flex-col gap-y-[8px]">
+
                           <p className="px-2 text-[14px]">{each.nama_pegawai}</p>
                           <p className="px-2 text-[12px] text-[#6B7280]">{each.unit_kerja_str}</p>
                           <div className="flex flex-row">
