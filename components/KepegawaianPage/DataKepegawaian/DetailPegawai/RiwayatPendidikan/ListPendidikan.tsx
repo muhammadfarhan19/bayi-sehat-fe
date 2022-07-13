@@ -122,7 +122,7 @@ export default function ListArsip(props: ListPendidikanProps) {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Jejang
+                Jenjang
               </th>
               <th
                 scope="col"
@@ -146,7 +146,13 @@ export default function ListArsip(props: ListPendidikanProps) {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                No Ijazah
+                Ijazah Terakhir
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Ijazah CPNS
               </th>
               <th
                 scope="col"
@@ -166,7 +172,10 @@ export default function ListArsip(props: ListPendidikanProps) {
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   {format(new Date(each.tanggal_lulus), 'dd MMM yyyy')}
                 </td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.no_ijazah}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  {each.is_ijazah_terakhir ? 'Ya' : 'Tidak'}
+                </td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.is_ijazah_cpns ? 'Ya' : 'Tidak'}</td>
                 <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
                   <div className="flex justify-between">
                     {allowViewPendidikan && (
