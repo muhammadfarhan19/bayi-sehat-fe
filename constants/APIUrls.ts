@@ -88,6 +88,7 @@ export const RekapDinasAPI = {
   POST_DINAS_INSERT: config.apiHost + '/dinas/insert',
   GET_DINAS_DETAIL: config.apiHost + '/dinas/detail',
   POST_DINAS_UPDATE: config.apiHost + '/dinas/update',
+  GET_DINAS_PEGAWAI_REKAP: config.apiHost + '/dinas/pegawai/rekap',
   POST_DINAS_DELETE: config.apiHost + '/dinas/delete',
 };
 

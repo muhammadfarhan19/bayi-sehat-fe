@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+
 import { AuthAPI } from '../constants/APIUrls';
 import { PostAuthRefreshRes } from '../types/api/AuthAPI';
 import config from './Config';

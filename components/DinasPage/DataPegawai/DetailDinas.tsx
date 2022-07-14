@@ -17,6 +17,7 @@ export default function DetailDinas() {
     },
   };
 
+  
   if (isValidating) {
     return <Loader />;
   }
@@ -58,10 +59,10 @@ export default function DetailDinas() {
           >
             Download Jadwal Dinas
           </button>
-          {formModalState && <JadwalDinas open={formModalState} setOpen={() => setFormModalState(!formModalState)} />}
         </div>
         <DinasCalendar />
       </div>
+      {formModalState && <JadwalDinas open={formModalState} setOpen={() => setFormModalState(!formModalState)} />}
     </>
   );
 }

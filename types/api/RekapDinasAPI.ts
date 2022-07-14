@@ -69,6 +69,17 @@ export interface PegawaiData {
   flag: number;
 }
 
+
+export interface JadwalDinasPegawai{
+  pegawai_id : number,
+  tgl_mulai: string,
+  tgl_selesai:string
+}
+
+export interface JadwalDinasStatus{
+  status:Status
+}
+
 export interface GetAvailabilityReq {
   pegawai_id: number;
   tgl_mulai?: string;
