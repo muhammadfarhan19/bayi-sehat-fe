@@ -5,11 +5,11 @@ import { classNames } from '../../../../utils/Components';
 import { getQueryString } from '../../../../utils/URLUtils';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
-import InProgressState from '../../../shared/InProgressState';
 import Loader from '../../../shared/Loader/Loader';
 import ArsipDigital from './ArsipDigital';
 import DataDiriPegawai from './DataDiriPegawai';
 import DataDiriPribadi from './DataDiriPribadi';
+import RiwayatBelajar from './RiwayatBelajar';
 import RiwayatDiklat from './RiwayatDiklat';
 import RiwayatGolongan from './RiwayatGolongan';
 import RiwayatJabatan from './RiwayatJabatan';
@@ -23,7 +23,7 @@ const tabs = [
   { name: 'Arsip Digital', href: '#' },
   { name: 'Riwayat Golongan', href: '#' },
   { name: 'Riwayat Jabatan', href: '#' },
-  { name: 'Tanda Tangan Digital', href: '#' },
+  { name: 'Riwayat Belajar', href: '#' },
 ];
 
 function DetailPegawai() {
@@ -98,7 +98,7 @@ function DetailPegawai() {
           {selected === tabs[4].name ? <ArsipDigital /> : null}
           {selected === tabs[5].name ? <RiwayatGolongan /> : null}
           {selected === tabs[6].name ? <RiwayatJabatan /> : null}
-          {selected === tabs[7].name ? <InProgressState /> : null}
+          {selected === tabs[7].name ? <RiwayatBelajar /> : null}
         </div>
       </div>
     </>
