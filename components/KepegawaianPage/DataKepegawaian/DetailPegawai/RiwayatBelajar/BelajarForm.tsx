@@ -2,11 +2,9 @@ import { Dialog, Transition } from '@headlessui/react';
 import { UploadIcon, XIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
+
 import { RiwayatDiklatAPI } from '../../../../../constants/APIUrls';
-import {
-  GetRiwayatDiklatDetailReq,
-  RiwayatDiklatDetailData,
-} from '../../../../../types/api/RiwayatDiklatAPI';
+import { GetRiwayatDiklatDetailReq, RiwayatDiklatDetailData } from '../../../../../types/api/RiwayatDiklatAPI';
 import { classNames } from '../../../../../utils/Components';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
@@ -121,7 +119,6 @@ export default function BelajartForm(props: UploadFormProps) {
     //     { method: 'post' }
     //   );
     // }
-
     // if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
     //   dispatch(
     //     setSnackbar({
@@ -261,9 +258,7 @@ export default function BelajartForm(props: UploadFormProps) {
                       name="institusi"
                       type="text"
                     />
-                    {errors.institusi && (
-                      <p className="mt-1 text-xs text-red-500">{errors.institusi.message}</p>
-                    )}
+                    {errors.institusi && <p className="mt-1 text-xs text-red-500">{errors.institusi.message}</p>}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
@@ -275,9 +270,7 @@ export default function BelajartForm(props: UploadFormProps) {
                       name="prodi"
                       type="text"
                     />
-                    {errors.prodi && (
-                      <p className="mt-1 text-xs text-red-500">{errors.prodi.message}</p>
-                    )}
+                    {errors.prodi && <p className="mt-1 text-xs text-red-500">{errors.prodi.message}</p>}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
@@ -303,9 +296,7 @@ export default function BelajartForm(props: UploadFormProps) {
                       name="kota"
                       type="text"
                     />
-                    {errors.kota && (
-                      <p className="mt-1 text-xs text-red-500">{errors.kota.message}</p>
-                    )}
+                    {errors.kota && <p className="mt-1 text-xs text-red-500">{errors.kota.message}</p>}
                   </div>
                 </div>
 
@@ -323,9 +314,7 @@ export default function BelajartForm(props: UploadFormProps) {
                       <option value={1}>Dalam Negeri</option>
                       <option value={2}>Luar Negeri</option>
                     </select>
-                    {errors.lokasi && (
-                      <p className="mt-1 text-xs text-red-500">{errors.lokasi.message}</p>
-                    )}
+                    {errors.lokasi && <p className="mt-1 text-xs text-red-500">{errors.lokasi.message}</p>}
                   </div>
                 </div>
 
@@ -343,9 +332,7 @@ export default function BelajartForm(props: UploadFormProps) {
                       <option value={1}>Baru</option>
                       <option value={2}>Perpanjganan</option>
                     </select>
-                    {errors.baru && (
-                      <p className="mt-1 text-xs text-red-500">{errors.baru.message}</p>
-                    )}
+                    {errors.baru && <p className="mt-1 text-xs text-red-500">{errors.baru.message}</p>}
                   </div>
                 </div>
 

@@ -17,7 +17,6 @@ export default function DetailDinas() {
     },
   };
 
-  
   if (isValidating) {
     return <Loader />;
   }

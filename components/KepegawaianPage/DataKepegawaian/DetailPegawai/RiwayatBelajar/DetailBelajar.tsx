@@ -1,4 +1,5 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
+
 import ImgFile from '../../../../shared/FileLoader';
 
 type ListDigitalProps = {
@@ -9,7 +10,6 @@ type ListDigitalProps = {
 export default function DetailBelajar(props: ListDigitalProps) {
   const { onBack } = props;
 
-
   const data = {
     jenis: 'TUGAS BELAJAR',
     baru: 'BARU',
@@ -18,7 +18,7 @@ export default function DetailBelajar(props: ListDigitalProps) {
     prodi: 'Ilmu Hukum',
     waktu: '2011-09-01 s.d. 2013-08-31',
     bukti: '1-s2.0-S0272638618310618-mmc1.pdf',
-  }
+  };
 
   return (
     <>

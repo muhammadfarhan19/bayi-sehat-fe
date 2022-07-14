@@ -1,5 +1,6 @@
 import { PlusIcon } from '@heroicons/react/outline';
 import React from 'react';
+
 import ConfirmDialog from '../../../../shared/ConfirmDialog';
 import BelajarForm from './BelajarForm';
 
@@ -23,16 +24,18 @@ export default function ListBelajar(props: ListBelajarProps) {
     });
   };
 
-  const data = [{
-    belajar_id: 1,
-    jenis: 'TUGAS BELAJAR',
-    baru: 'BARU',
-    jenjang: 'S-2',
-    lembaga: 'Universitas Indonesia',
-    prodi: 'Ilmu Hukum',
-    waktu: '2011-09-01 s.d. 2013-08-31',
-    bukti: '1-s2.0-S0272638618310618-mmc1.pdf',
-  }]
+  const data = [
+    {
+      belajar_id: 1,
+      jenis: 'TUGAS BELAJAR',
+      baru: 'BARU',
+      jenjang: 'S-2',
+      lembaga: 'Universitas Indonesia',
+      prodi: 'Ilmu Hukum',
+      waktu: '2011-09-01 s.d. 2013-08-31',
+      bukti: '1-s2.0-S0272638618310618-mmc1.pdf',
+    },
+  ];
 
   return (
     <>
@@ -116,7 +119,7 @@ export default function ListBelajar(props: ListBelajarProps) {
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenjang}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.lembaga}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.prodi}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#6B7280]">{each.waktu}</td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">{each.waktu}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.bukti}</td>
                 <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
                   <div className="flex justify-between">
@@ -145,7 +148,7 @@ export default function ListBelajar(props: ListBelajarProps) {
         open={!!confirmId}
         message="Anda yakin ingin menghapus data ini?"
         onClose={() => setConfirmId(0)}
-        onConfirm={()=>console.log('confirm')}
+        onConfirm={() => console.log('confirm')}
       />
     </>
   );

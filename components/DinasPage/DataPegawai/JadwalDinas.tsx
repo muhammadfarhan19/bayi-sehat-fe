@@ -6,6 +6,7 @@ import React from 'react';
 import { RekapDinasAPI } from '../../../constants/APIUrls';
 import { JadwalDinasPegawai, JadwalDinasStatus } from '../../../types/api/RekapDinasAPI';
 import { callAPI } from '../../../utils/Fetchers';
+import { getQueryString } from '../../../utils/URLUtils';
 
 interface DownloadJadwal {
   open: boolean;
@@ -17,10 +18,6 @@ const initialValue = {
   dateEnd: format(new Date(), 'yyyy-MM-dd'),
 };
 
-
-  
-
-
 export default function JadwalDinas(props: DownloadJadwal) {
   const [dateDownload, setDateDownload] = React.useState(initialValue);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,38 +27,33 @@ export default function JadwalDinas(props: DownloadJadwal) {
       [name]: value,
     });
   };
-  
+
   const dateStarted = React.useRef<HTMLInputElement>(null);
   const dateEnded = React.useRef<HTMLInputElement>(null);
   const { open, setOpen } = props;
   const toggleView = () => setOpen(!open);
   const minDate = format(addMonths(new Date(dateDownload.dateStart), 3), 'yyyy-MM-dd');
 
-  const pageUrl = window.location.href
-  const paramSplit = pageUrl.split('?')[1]
-  // @ts-ignore: Object is possibly 'null'.
-  const queryString : number | string = paramSplit.match(/(\d+)/)[0] 
-
-
-
-   const jadwalDownload = () => {
-    callAPI<JadwalDinasPegawai,JadwalDinasStatus>(
+  const { id } = getQueryString<{ id: string }>();
+  const jadwalDownload = () => {
+    callAPI<JadwalDinasPegawai, JadwalDinasStatus>(
       RekapDinasAPI.GET_DINAS_PEGAWAI_REKAP,
-      {pegawai_id: Number(queryString), 
-        tgl_mulai: dateDownload.dateStart,
-        tgl_selesai:dateDownload.dateEnd},
-      {isBlob: true, method:'GET'}
-     ).then((response) => {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `Rekap Dinas_${dateDownload.dateEnd + dateDownload.dateStart}.xlsx`); 
-      document.body.appendChild(link);
-      link.click();
-  }).catch(err => alert(err.message))} 
-
-
-
+      { pegawai_id: Number(id), tgl_mulai: dateDownload.dateStart, tgl_selesai: dateDownload.dateEnd },
+      { isBlob: true, method: 'GET' }
+    )
+      .then(response => {
+        let url = '';
+        if (response.status === 200 && response.data instanceof Blob) {
+          url = window.URL.createObjectURL(response.data);
+        }
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `Rekap Dinas_${dateDownload.dateEnd + dateDownload.dateStart}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch(err => alert(err.message));
+  };
 
   return (
     <Transition appear show={open} as={React.Fragment}>
@@ -131,13 +123,14 @@ export default function JadwalDinas(props: DownloadJadwal) {
                   <p className="text-[10px]  font-normal text-red-500">*Periode download maksimal 3 bulan</p>
                 </div>
 
-                <form method='get' className="flex justify-end">
-                  <a 
-                  onClick={() =>{
-                    jadwalDownload()
-                    toggleView()
-                  }}
-                  className="flex rounded-[4px] bg-indigo-600 px-3 py-2 text-sm font-medium text-white focus:outline-none">
+                <form method="get" className="flex justify-end">
+                  <a
+                    onClick={() => {
+                      jadwalDownload();
+                      toggleView();
+                    }}
+                    className="flex rounded-[4px] bg-indigo-600 px-3 py-2 text-sm font-medium text-white focus:outline-none"
+                  >
                     Download
                   </a>
                 </form>
