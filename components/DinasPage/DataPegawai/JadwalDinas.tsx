@@ -12,6 +12,10 @@ interface DownloadJadwal {
   setOpen: (open: boolean) => void;
 }
 
+const initialValue = {
+  dateStart: format(new Date(), 'yyyy-MM-dd'),
+  dateEnd: format(new Date(), 'yyyy-MM-dd'),
+};
 
 
   
@@ -57,11 +61,6 @@ export default function JadwalDinas(props: DownloadJadwal) {
   }).catch(err => alert(err.message))} 
 
 
-
-
-export default function JadwalDinas(props: DownloadJadwal) {
-  const { open, setOpen } = props;
-  const toggleView = () => setOpen(!open);
 
 
   return (
