@@ -88,19 +88,28 @@ export default function RiwayatJabatan() {
           <tbody className="divide-y divide-gray-200 bg-white">
             {(riwayatJabatan || []).map((each, index) => (
               <tr key={index}>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenis_jabatan}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  <div className="whitespace-nowrap">{index + 1}</div>
+                </td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  <div className="whitespace-nowrap">{each.jenis_jabatan}</div>
+                </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nama_jabatan}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.kumulatif}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.tmt}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.masa_kerja}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  <div className="whitespace-nowrap">{each.kumulatif}</div>
+                </td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  <div className="whitespace-nowrap">{each.tmt}</div>
+                </td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  <div className="whitespace-nowrap">{each.masa_kerja}</div>
+                </td>
                 <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
                   <FileLoader uuid={each?.files?.[0]?.document_uuid}>
-                    <>
+                    <div className="flex items-center">
                       <PDFIcon />
-                      <span className="flex w-1 items-center text-blue-600 underline hover:text-blue-500" />
-                      {'Surat Keputusan'}
-                    </>
+                      <span className="ml-1 whitespace-nowrap text-blue-500 underline">{'Surat Keputusan'} </span>
+                    </div>
                   </FileLoader>
                 </td>
               </tr>

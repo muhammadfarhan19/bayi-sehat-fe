@@ -170,7 +170,7 @@ export default function ListArsip(props: ListPendidikanProps) {
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.pt}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.prodi}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  {format(new Date(each.tanggal_lulus), 'dd MMM yyyy')}
+                  <div className="whitespace-nowrap">{format(new Date(each.tanggal_lulus), 'dd MMM yyyy')}</div>
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   {each.is_ijazah_terakhir ? 'Ya' : 'Tidak'}
