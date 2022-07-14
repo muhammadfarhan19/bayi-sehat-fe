@@ -54,7 +54,9 @@ function DetailRekapPage(props: DetailProps) {
     }
     dispatch(setSnackbar(snackbarProps));
     setConfirmId(0);
-    window.location.href = '/kepegawaian/rekap-dinas';
+    setTimeout(() => {
+      window.location.href = '/kepegawaian/rekap-dinas';
+    }, 2000);
   };
 
   return (
