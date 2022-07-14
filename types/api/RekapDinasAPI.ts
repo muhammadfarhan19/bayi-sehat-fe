@@ -86,3 +86,12 @@ export interface GetAvailabilityRes {
   status: string;
   data: AvailabilityData;
 }
+
+export interface PostDinasDeleteReq {
+  dinas_id: number;
+}
+
+export interface PostDinasDeleteRes {
+  status: Status;
+  data: string;
+}

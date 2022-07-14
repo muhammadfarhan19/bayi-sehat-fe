@@ -88,6 +88,7 @@ export const RekapDinasAPI = {
   POST_DINAS_INSERT: config.apiHost + '/dinas/insert',
   GET_DINAS_DETAIL: config.apiHost + '/dinas/detail',
   POST_DINAS_UPDATE: config.apiHost + '/dinas/update',
+  POST_DINAS_DELETE: config.apiHost + '/dinas/delete',
 };
 
 export const KepangkatanAPI = {

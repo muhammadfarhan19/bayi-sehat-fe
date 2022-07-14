@@ -1,9 +1,15 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { setSnackbar } from '../../../action/CommonAction';
 
 import { RekapDinasAPI } from '../../../constants/APIUrls';
-import { GetRekapDetailReq, RekapDetailData } from '../../../types/api/RekapDinasAPI';
+import { SnackbarType } from '../../../reducer/CommonReducer';
+import { GetRekapDetailReq, PostDinasDeleteReq, PostDinasDeleteRes, RekapDetailData } from '../../../types/api/RekapDinasAPI';
+import { Status } from '../../../types/Common';
 import { classNames } from '../../../utils/Components';
+import { callAPI } from '../../../utils/Fetchers';
+import ConfirmDialog from '../../shared/ConfirmDialog';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 
 interface DetailProps {
@@ -11,12 +17,40 @@ interface DetailProps {
 }
 
 function DetailRekapPage(props: DetailProps) {
+  const dispatch = useDispatch()
   const { dinas_id } = props;
+  const [confirmId, setConfirmId] = React.useState(0);
   const { data } = useCommonApi<GetRekapDetailReq, RekapDetailData>(
     RekapDinasAPI.GET_DINAS_DETAIL,
     { dinas_id: Number(dinas_id) },
     { method: 'GET' }
   );
+
+  const handleConfirm = async () => {
+    const resDelete = await callAPI<PostDinasDeleteReq, PostDinasDeleteRes>(
+      RekapDinasAPI.POST_DINAS_DELETE,
+      { dinas_id: confirmId },
+      { method: 'post' }
+    );
+
+    let snackbarProps;
+    if (resDelete.status === 200 && resDelete.data?.status === Status.OK) {
+      snackbarProps = {
+        show: true,
+        message: 'Data terhapus.',
+        type: SnackbarType.INFO,
+      };
+    } else {
+      snackbarProps = {
+        show: true,
+        message: 'Gagal menghapus data.',
+        type: SnackbarType.ERROR,
+      };
+    }
+    dispatch(setSnackbar(snackbarProps));
+    setConfirmId(0);
+    window.location.href = '/kepegawaian/rekap-dinas'
+  };
 
   return (
     <>
@@ -66,16 +100,16 @@ function DetailRekapPage(props: DetailProps) {
                                 each?.flag === 0
                                   ? 'text-[#DC2626]'
                                   : each?.flag === 1
-                                  ? 'text-yellow-400'
-                                  : 'text-[#10B981]',
+                                    ? 'text-yellow-400'
+                                    : 'text-[#10B981]',
                                 'px-2 text-[14px]'
                               )}
                             >
                               {each?.flag === 0
                                 ? 'Not Available'
                                 : each?.flag === 1
-                                ? 'Partialy Available'
-                                : 'Available'}
+                                  ? 'Partialy Available'
+                                  : 'Available'}
                               ,
                             </p>
                             <p className="text-[14px]">
@@ -92,7 +126,11 @@ function DetailRekapPage(props: DetailProps) {
           </div>
           <div className="mt-[3rem] flex w-full">
             <div className="ml-auto flex flex-row gap-x-[12px]">
-              <button type="button" className="rounded-[6px] bg-[#9CA3AF] py-[9px] px-[17px] text-[14px] text-gray-50">
+              <button
+                type="button"
+                className="rounded-[6px] bg-[#9CA3AF] py-[9px] px-[17px] text-[14px] text-gray-50"
+                onClick={() => setConfirmId(Number(data?.dinas_id))}
+              >
                 Hapus
               </button>
               <button
@@ -106,6 +144,12 @@ function DetailRekapPage(props: DetailProps) {
           </div>
         </div>
       </div>
+      <ConfirmDialog
+        open={!!confirmId}
+        message="Anda yakin ingin menghapus data ini?"
+        onClose={() => setConfirmId(0)}
+        onConfirm={handleConfirm}
+      />
     </>
   );
 }
