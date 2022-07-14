@@ -1,11 +1,16 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setSnackbar } from '../../../action/CommonAction';
 
+import { setSnackbar } from '../../../action/CommonAction';
 import { RekapDinasAPI } from '../../../constants/APIUrls';
 import { SnackbarType } from '../../../reducer/CommonReducer';
-import { GetRekapDetailReq, PostDinasDeleteReq, PostDinasDeleteRes, RekapDetailData } from '../../../types/api/RekapDinasAPI';
+import {
+  GetRekapDetailReq,
+  PostDinasDeleteReq,
+  PostDinasDeleteRes,
+  RekapDetailData,
+} from '../../../types/api/RekapDinasAPI';
 import { Status } from '../../../types/Common';
 import { classNames } from '../../../utils/Components';
 import { callAPI } from '../../../utils/Fetchers';
@@ -17,7 +22,7 @@ interface DetailProps {
 }
 
 function DetailRekapPage(props: DetailProps) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { dinas_id } = props;
   const [confirmId, setConfirmId] = React.useState(0);
   const { data } = useCommonApi<GetRekapDetailReq, RekapDetailData>(
@@ -49,7 +54,7 @@ function DetailRekapPage(props: DetailProps) {
     }
     dispatch(setSnackbar(snackbarProps));
     setConfirmId(0);
-    window.location.href = '/kepegawaian/rekap-dinas'
+    window.location.href = '/kepegawaian/rekap-dinas';
   };
 
   return (
@@ -91,7 +96,6 @@ function DetailRekapPage(props: DetailProps) {
                     <td className="px-4">
                       {data?.pegawai?.map(each => (
                         <div className="my-4 flex flex-col gap-y-[8px]">
-
                           <p className="px-2 text-[14px]">{each.nama_pegawai}</p>
                           <p className="px-2 text-[12px] text-[#6B7280]">{each.unit_kerja_str}</p>
                           <div className="flex flex-row">
@@ -100,16 +104,16 @@ function DetailRekapPage(props: DetailProps) {
                                 each?.flag === 0
                                   ? 'text-[#DC2626]'
                                   : each?.flag === 1
-                                    ? 'text-yellow-400'
-                                    : 'text-[#10B981]',
+                                  ? 'text-yellow-400'
+                                  : 'text-[#10B981]',
                                 'px-2 text-[14px]'
                               )}
                             >
                               {each?.flag === 0
                                 ? 'Not Available'
                                 : each?.flag === 1
-                                  ? 'Partialy Available'
-                                  : 'Available'}
+                                ? 'Partialy Available'
+                                : 'Available'}
                               ,
                             </p>
                             <p className="text-[14px]">
