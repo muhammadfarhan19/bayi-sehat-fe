@@ -3,4 +3,5 @@ export const Permissions = {
   EditPendidikan: 20,
   AddPendidikan: 21,
   DeletePendidikan: 22,
+  KepegawaianAdmin: 6,
 };

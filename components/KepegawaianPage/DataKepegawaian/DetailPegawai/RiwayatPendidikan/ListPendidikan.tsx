@@ -86,7 +86,8 @@ export default function ListArsip(props: ListPendidikanProps) {
         { action: 'read', resource_id: Permissions.DeletePendidikan, user_id: userId },
       ],
     },
-    { method: 'POST' }
+    { method: 'POST' },
+    { revalidateOnMount: true }
   );
   const allowViewPendidikan = !!rbac?.[0]?.is_authorized;
   const allowEditPendidikan = !!rbac?.[1]?.is_authorized;

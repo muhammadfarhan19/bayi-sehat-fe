@@ -81,7 +81,7 @@ export const withAuthenticatedPage: WithAuthenticatedPage =
 
       return (
         <AuthorizedMenuContext.Provider value={authPageState.navigation}>
-          <Component {...(props as never)} />
+          <Component {...(props as any)} />
         </AuthorizedMenuContext.Provider>
       );
     }

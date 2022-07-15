@@ -1,14 +1,19 @@
 import { PlusIcon } from '@heroicons/react/solid';
 import * as React from 'react';
 
-import { JabatanAPI } from '../../../../../constants/APIUrls';
+import { JabatanAPI, RbacAPI } from '../../../../../constants/APIUrls';
+import { Permissions } from '../../../../../constants/Permission';
 import { RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
+import { AuthorizeData, PostRbacBulkAuthorizeReq } from '../../../../../types/api/RbacAPI';
+import { formatDate } from '../../../../../utils/DateUtil';
 import FileLoader from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
+import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import { PDFIcon } from '../../../../shared/icons/PDFIcon';
 import JabatanForm from './JabatanForm';
 
 export default function RiwayatJabatan() {
+  const dataApiRes = usePersonalData();
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: string }>({
     open: false,
     selectedId: undefined,
@@ -24,19 +29,31 @@ export default function RiwayatJabatan() {
     setFormModalState({ ...formModalState, open });
   };
 
+  const { data: rbac } = useCommonApi<PostRbacBulkAuthorizeReq, AuthorizeData[]>(
+    RbacAPI.POST_RBAC_BULK_AUTHORIZE,
+    {
+      bulk_request: [{ action: 'read', resource_id: Permissions.KepegawaianAdmin, user_id: dataApiRes?.user_id || 0 }],
+    },
+    { method: 'POST' },
+    { revalidateOnMount: true }
+  );
+  const allowKepegawaianAdmin = !!rbac?.[0]?.is_authorized;
+
   return (
     <>
-      <div className="my-3 flex items-center">
-        <div className="flex flex-1 pr-2 text-sm text-gray-500">{/* TODO: Wait for wording */}</div>
-        <button
-          type="button"
-          className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
-          onClick={() => handleShowForm(!formModalState.open)}
-        >
-          <PlusIcon className="mr-1 h-4" />
-          Update Jabatan
-        </button>
-      </div>
+      {allowKepegawaianAdmin && (
+        <div className="my-3 flex items-center">
+          <div className="flex flex-1 pr-2 text-sm text-gray-500">{/* TODO: Wait for wording */}</div>
+          <button
+            type="button"
+            className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
+            onClick={() => handleShowForm(!formModalState.open)}
+          >
+            <PlusIcon className="mr-1 h-4" />
+            Update Jabatan
+          </button>
+        </div>
+      )}
       <div className="overflow-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -99,7 +116,7 @@ export default function RiwayatJabatan() {
                   <div className="whitespace-nowrap">{each.kumulatif}</div>
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  <div className="whitespace-nowrap">{each.tmt}</div>
+                  <div className="whitespace-nowrap">{formatDate(new Date(each.tmt), 'yyyy-MM-dd')}</div>
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   <div className="whitespace-nowrap">{each.masa_kerja}</div>
@@ -117,12 +134,14 @@ export default function RiwayatJabatan() {
           </tbody>
         </table>
       </div>
-      <JabatanForm
-        onSuccess={() => mutate()}
-        open={formModalState.open}
-        setOpen={(open: boolean) => handleShowForm(open)}
-        selectedId={formModalState?.selectedId}
-      />
+      {allowKepegawaianAdmin && (
+        <JabatanForm
+          onSuccess={() => mutate()}
+          open={formModalState.open}
+          setOpen={(open: boolean) => handleShowForm(open)}
+          selectedId={formModalState?.selectedId}
+        />
+      )}
     </>
   );
 }
