@@ -1,19 +1,18 @@
 import { PlusIcon } from '@heroicons/react/solid';
 import * as React from 'react';
 
-import { JabatanAPI, RbacAPI } from '../../../../../constants/APIUrls';
+import { JabatanAPI, RbacAPI, UserAPI } from '../../../../../constants/APIUrls';
 import { Permissions } from '../../../../../constants/Permission';
 import { RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
 import { AuthorizeData, PostRbacBulkAuthorizeReq } from '../../../../../types/api/RbacAPI';
+import { GetUserProfileData, GetUserProfileReq } from '../../../../../types/api/UserAPI';
 import { formatDate } from '../../../../../utils/DateUtil';
 import FileLoader from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
-import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import { PDFIcon } from '../../../../shared/icons/PDFIcon';
 import JabatanForm from './JabatanForm';
 
 export default function RiwayatJabatan() {
-  const dataApiRes = usePersonalData();
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: string }>({
     open: false,
     selectedId: undefined,
@@ -29,13 +28,19 @@ export default function RiwayatJabatan() {
     setFormModalState({ ...formModalState, open });
   };
 
+  const { data: userProfile, isValidating: userProfileLoading } = useCommonApi<GetUserProfileReq, GetUserProfileData>(
+    UserAPI.GET_USER_PROFILE,
+    {},
+    { method: 'GET' }
+  );
+
   const { data: rbac } = useCommonApi<PostRbacBulkAuthorizeReq, AuthorizeData[]>(
     RbacAPI.POST_RBAC_BULK_AUTHORIZE,
     {
-      bulk_request: [{ action: 'read', resource_id: Permissions.KepegawaianAdmin, user_id: dataApiRes?.user_id || 0 }],
+      bulk_request: [{ action: 'read', resource_id: Permissions.KepegawaianAdmin, user_id: userProfile?.user_id || 0 }],
     },
     { method: 'POST' },
-    { revalidateOnMount: true }
+    { revalidateOnMount: true, skipCall: userProfileLoading }
   );
   const allowKepegawaianAdmin = !!rbac?.[0]?.is_authorized;
 
