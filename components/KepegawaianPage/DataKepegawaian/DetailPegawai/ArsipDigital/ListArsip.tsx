@@ -96,12 +96,12 @@ export default function ListArsip(props: ListArsipProps) {
               >
                 No
               </th>
-              <th
+              {/* <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
                 Nama Berkas
-              </th>
+              </th> */}
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -126,7 +126,7 @@ export default function ListArsip(props: ListArsipProps) {
             {(arsipDigital || []).map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.document_name}</td>
+                {/* <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.document_name}</td> */}
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenis_berkas_str}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   {formatDate(new Date(each.created_at))}
