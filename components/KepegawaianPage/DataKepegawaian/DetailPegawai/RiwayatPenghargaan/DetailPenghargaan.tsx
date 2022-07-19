@@ -1,6 +1,5 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
-
 import { RiwayatPenghargaan } from '../../../../../constants/APIUrls';
 import { GetRiwayatPenghargaanDetailReq, PenghargaanList } from '../../../../../types/api/RiwayatPenghargaanAPI';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
@@ -19,7 +18,6 @@ export default function DetailPenghargaan(props: DetailPenghargaanProps) {
     { method: 'GET' },
     { skipCall: !riwayatPenghargaanId, revalidateOnMount: true }
   );
-  
 
   return (
     <>

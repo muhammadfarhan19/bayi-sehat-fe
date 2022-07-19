@@ -100,6 +100,6 @@ export const RiwayatPenghargaan = {
   GET_RIWAYAT_PENGHARGAAN_LIST: config.apiHost + '/riwayat-penghargaan/list',
   POST_RIWAYAT_PENGHARGAAN_INSERT: config.apiHost + '/riwayat-penghargaan/insert',
   GET_RIWAYAT_PENGHARGAAN_DETAIl: config.apiHost + '/riwayat-penghargaan/detail',
-  POST_RIWAYAT_PENGHARGAAN_UPDATE: config.apiHost + '/riwayat-penghargaan/insert',
+  POST_RIWAYAT_PENGHARGAAN_UPDATE: config.apiHost + '/riwayat-penghargaan/update',
   POST_RIWAYAT_PENGHARGAAN_DELETE: config.apiHost + '/riwayat-penghargaan/delete',
 };

@@ -9,6 +9,7 @@ import { RiwayatPenghargaan } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import { PostArsipDigitalUpdateRes } from '../../../../../types/api/ArsipDigitalAPI';
 import {
+  PenghargaanList,
   PostPenghargaanInsertReq,
   PostPenghargaanInsertRes,
   PostPenghargaanUpdateReq,
@@ -25,6 +26,7 @@ interface UploadFormProps {
   setOpen: (open: boolean) => void;
   selectedId?: number;
   onSuccess: () => void;
+  data: PenghargaanList[] | undefined | null;
 }
 
 interface FormState {
@@ -41,12 +43,14 @@ interface FormState {
 }
 
 export default function PendidikanForm(props: UploadFormProps) {
-  const { open, setOpen, selectedId, onSuccess } = props;
+  const { open, setOpen, selectedId, onSuccess, data } = props;
   const dispatch = useDispatch();
   const personalData = usePersonalData();
   const toggleModal = () => {
     setOpen(!open);
   };
+
+  console.log(data);
 
   const {
     control,
@@ -55,8 +59,6 @@ export default function PendidikanForm(props: UploadFormProps) {
     formState: { errors },
     setValue,
   } = useForm<FormState>();
-
-  //updatelater
 
   const submitHandler = async (formData: FormState) => {
     let resSubmit;
@@ -79,7 +81,7 @@ export default function PendidikanForm(props: UploadFormProps) {
             },
           ],
         },
-        { method: 'put' }
+        { method: 'post' }
       );
     } else {
       resSubmit = await callAPI<PostPenghargaanInsertReq, PostPenghargaanInsertRes>(
@@ -191,6 +193,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                   <label className="block text-sm font-medium text-gray-700">Tingkat Penghargaan</label>
                   <div className="mt-1 sm:col-span-2 sm:mt-0">
                     <select
+                      defaultValue={selectedId ? data?.map(data => data.tingkat_penghargaan) : undefined}
                       {...register('tingkat_penghargaan', { required: 'Silahkan Pilih tingkat penghargaan' })}
                       name="tingkat_penghargaan"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -217,6 +220,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                       name="nama_penghargaan"
                       type="text"
+                      defaultValue={selectedId ? data?.map(data => data.nama_penghargaan) : undefined}
                     />
                     {errors.nama_penghargaan && (
                       <p className="mt-1 text-xs text-red-500">{errors.nama_penghargaan.message}</p>
@@ -227,6 +231,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                   <label className="block text-sm font-medium text-gray-700">Penyelenggara</label>
                   <div className="mt-1">
                     <input
+                      defaultValue={selectedId ? data?.map(data => data.penyelenggara) : undefined}
                       {...register('penyelenggara', { required: 'Silahkan masukan nama penyelenggara.' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                       name="penyelenggara"
@@ -241,6 +246,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                   <label className="block text-sm font-medium text-gray-700">Keterangan</label>
                   <div className="mt-1">
                     <input
+                      defaultValue={selectedId ? data?.map(data => data.keterangan) : undefined}
                       {...register('keterangan', { required: 'Silahkan masukan keterangan.' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                       name="keterangan"
@@ -253,6 +259,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                   <label className="block text-sm font-medium text-gray-700">Nomor Penghargaan</label>
                   <div className="mt-1 sm:col-span-2 sm:mt-0">
                     <input
+                      defaultValue={selectedId ? data?.map(data => data.no_penghargaan) : undefined}
                       {...register('no_penghargaan', { required: 'Silahkan masukan nomor penghargaan.' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                       name="no_penghargaan"
@@ -269,6 +276,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                   </label>
                   <div className="mt-1">
                     <input
+                      defaultValue={selectedId ? data?.map(data => data.tgl_penghargaan) : undefined}
                       {...register('tgl_penghargaan', { required: 'Silahkan masukan tanggal penghargaan.' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                       name="tgl_penghargaan"

@@ -27,6 +27,7 @@ export default function ListPenghargaan(props: ListPenghargaanProps) {
   const personalData = usePersonalData();
   const dispatch = useDispatch();
   const [confirmId, setConfirmId] = React.useState(0);
+
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: number }>({
     open: false,
     selectedId: undefined,
@@ -37,6 +38,8 @@ export default function ListPenghargaan(props: ListPenghargaanProps) {
     { pegawai_id: personalData?.pegawai_id },
     { method: 'GET' }
   );
+
+  const filterData = riwayatPenghargaan?.filter(data => formModalState?.selectedId === data.riwayat_id);
 
   const handleShowForm = (open: boolean, selectedId?: number) => {
     setFormModalState({
@@ -141,7 +144,9 @@ export default function ListPenghargaan(props: ListPenghargaanProps) {
                     <button
                       type="button"
                       className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                      onClick={() => handleShowForm(!formModalState.open, each.riwayat_id)}
+                      onClick={() => {
+                        handleShowForm(!formModalState.open, each.riwayat_id);
+                      }}
                     >
                       Edit
                     </button>
@@ -161,6 +166,7 @@ export default function ListPenghargaan(props: ListPenghargaanProps) {
       </div>
       {formModalState.open ? (
         <PenghargaanForm
+          data={filterData}
           onSuccess={() => mutate()}
           open={formModalState.open}
           setOpen={(open: boolean) => handleShowForm(open)}

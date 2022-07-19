@@ -5,7 +5,6 @@ import ListPenghargaan from './ListPenghargaan';
 
 export default function RiwayatPenghargaan() {
   const [riwayatPenghargaanId, setRiwayatPenghargaanId] = React.useState(0);
-  console.log(riwayatPenghargaanId);
 
   return (
     <>
