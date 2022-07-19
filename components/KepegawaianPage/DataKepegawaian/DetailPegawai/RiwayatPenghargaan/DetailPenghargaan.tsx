@@ -1,11 +1,25 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
+
+import { RiwayatPenghargaan } from '../../../../../constants/APIUrls';
+import { GetRiwayatPenghargaanDetailReq, PenghargaanList } from '../../../../../types/api/RiwayatPenghargaanAPI';
+import useCommonApi from '../../../../shared/hooks/useCommonApi';
+
 type DetailPenghargaanProps = {
+  riwayatPenghargaanId?: number;
   onBack: () => void;
 };
 
+
 export default function DetailPenghargaan(props: DetailPenghargaanProps) {
-  const { onBack } = props;
+  const { onBack, riwayatPenghargaanId } = props;
+  const { data: riwayatDetail } = useCommonApi<GetRiwayatPenghargaanDetailReq, PenghargaanList>(
+    RiwayatPenghargaan.GET_RIWAYAT_PENGHARGAAN_LIST,
+    { id: Number(riwayatPenghargaanId) },
+    { method: 'GET' },
+    { skipCall: !riwayatPenghargaanId, revalidateOnMount: true }
+  );
+  
 
   return (
     <>
@@ -19,13 +33,14 @@ export default function DetailPenghargaan(props: DetailPenghargaanProps) {
           <thead></thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {[
-              { label: 'Penghargaan', value: 'Penghargaan' },
-              { label: 'Tingkat Penghargaan', value: 'Internasional' },
-              { label: 'Penyelenggara', value: 'Kemenristek' },
-              { label: 'Tanggal Penghargaan', value: 'Feb, 27 2018' },
-              { label: 'Keterangan Penghargaan', value: 'Sains' },
-              { label: 'No Penghargaan', value: 'BCD/111-00-99' },
-              { label: 'Dokumen', value: 'File_Penghargaan_BCD/111-00-99' },
+              { label: 'Penghargaan', value: riwayatDetail?.nama_penghargaan },
+              { label: 'Tingkat Penghargaan', value: riwayatDetail?.tingkat_penghargaan },
+              { label: 'Penyelenggara', value: riwayatDetail?.penyelenggara },
+              { label: 'Tanggal Penghargaan', value: riwayatDetail?.tgl_penghargaan },
+              { label: 'Keterangan Penghargaan', value: riwayatDetail?.keterangan },
+              { label: 'No Penghargaan', value: riwayatDetail?.no_penghargaan },
+              // data?.files?.[0]?.document_name
+              // { label: 'Dokumen', value: data?.bukti_penghargaan },
             ].map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>

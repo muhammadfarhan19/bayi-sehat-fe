@@ -1,9 +1,5 @@
 import { Status } from '../Common';
 
-// export interface KepangkatanData {
-
-// }
-
 export interface GetKepangkatanList {
   status: Status;
   list: [

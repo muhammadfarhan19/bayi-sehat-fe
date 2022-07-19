@@ -1,20 +1,126 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
+import { UploadIcon, XIcon } from '@heroicons/react/outline';
 import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
+import { setSnackbar } from '../../../../../action/CommonAction';
+import { RiwayatPenghargaan } from '../../../../../constants/APIUrls';
+import { SnackbarType } from '../../../../../reducer/CommonReducer';
+import { PostArsipDigitalUpdateRes } from '../../../../../types/api/ArsipDigitalAPI';
+import {
+  PostPenghargaanInsertReq,
+  PostPenghargaanInsertRes,
+  PostPenghargaanUpdateReq,
+} from '../../../../../types/api/RiwayatPenghargaanAPI';
+import { Status } from '../../../../../types/Common';
+import { classNames } from '../../../../../utils/Components';
+import { callAPI } from '../../../../../utils/Fetchers';
+import { CircleProgress } from '../../../../shared/CircleProgress';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
+import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
 
 interface UploadFormProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   selectedId?: number;
+  onSuccess: () => void;
+}
+
+interface FormState {
+  pegawai_id: number;
+  nama_penghargaan: string;
+  tingkat_penghargaan: string;
+  penyelenggara: string;
+  keterangan: string;
+  no_penghargaan: string;
+  tgl_penghargaan: string;
+  document_uuid: string;
+  file_id: string;
+  file_name: string;
 }
 
 export default function PendidikanForm(props: UploadFormProps) {
-  const { open, setOpen, selectedId } = props;
+  const { open, setOpen, selectedId, onSuccess } = props;
+  const dispatch = useDispatch();
   const personalData = usePersonalData();
   const toggleModal = () => {
     setOpen(!open);
+  };
+
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<FormState>();
+
+  //updatelater
+
+  const submitHandler = async (formData: FormState) => {
+    let resSubmit;
+    if (selectedId) {
+      resSubmit = await callAPI<PostPenghargaanUpdateReq, PostArsipDigitalUpdateRes>(
+        RiwayatPenghargaan.POST_RIWAYAT_PENGHARGAAN_UPDATE,
+        {
+          riwayat_id: Number(selectedId),
+          pegawai_id: Number(personalData?.pegawai_id),
+          nama_penghargaan: formData.nama_penghargaan,
+          tingkat_penghargaan: formData.tingkat_penghargaan,
+          penyelenggara: formData.penyelenggara,
+          keterangan: formData.keterangan,
+          no_penghargaan: formData.no_penghargaan,
+          tgl_penghargaan: formData.tgl_penghargaan,
+          bukti_penghargaan: [
+            {
+              document_uuid: formData.file_id,
+              document_name: formData.file_name,
+            },
+          ],
+        },
+        { method: 'put' }
+      );
+    } else {
+      resSubmit = await callAPI<PostPenghargaanInsertReq, PostPenghargaanInsertRes>(
+        RiwayatPenghargaan.POST_RIWAYAT_PENGHARGAAN_INSERT,
+        {
+          pegawai_id: Number(personalData?.pegawai_id),
+          nama_penghargaan: formData.nama_penghargaan,
+          tingkat_penghargaan: formData.tingkat_penghargaan,
+          penyelenggara: formData.penyelenggara,
+          keterangan: formData.keterangan,
+          no_penghargaan: formData.no_penghargaan,
+          tgl_penghargaan: formData.tgl_penghargaan,
+          bukti_penghargaan: [
+            {
+              document_uuid: formData.file_id,
+              document_name: formData.file_name,
+            },
+          ],
+        },
+        { method: 'post' }
+      );
+    }
+    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Data berhasil tersimpan.',
+          type: SnackbarType.INFO,
+        })
+      );
+      onSuccess();
+      setOpen(!open);
+    } else {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
+          type: SnackbarType.ERROR,
+        })
+      );
+    }
   };
 
   return (
@@ -48,11 +154,11 @@ export default function PendidikanForm(props: UploadFormProps) {
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
               <Dialog.Title as="div" className="flex justify-between">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  {selectedId ? 'Tambah' : 'Ubah'} Riwayat Penghargaan
+                  {selectedId ? 'Ubah' : 'Tambah'} Riwayat Penghargaan
                 </h3>
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
-              <form>
+              <form onSubmit={handleSubmit(submitHandler)}>
                 <div className="mt-5 sm:col-span-6">
                   <label htmlFor="nip" className="block text-sm font-medium text-gray-700">
                     NIP
@@ -77,6 +183,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                       disabled={true}
                       name="nama"
                       type="text"
+                      value={personalData?.nama}
                     />
                   </div>
                 </div>
@@ -84,7 +191,8 @@ export default function PendidikanForm(props: UploadFormProps) {
                   <label className="block text-sm font-medium text-gray-700">Tingkat Penghargaan</label>
                   <div className="mt-1 sm:col-span-2 sm:mt-0">
                     <select
-                      name="jenjang"
+                      {...register('tingkat_penghargaan', { required: 'Silahkan Pilih tingkat penghargaan' })}
+                      name="tingkat_penghargaan"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       <option value={''}>Silahkan Pilih</option>
@@ -96,46 +204,63 @@ export default function PendidikanForm(props: UploadFormProps) {
                       <option value={'3'}>Unit Kerja</option>
                       <option value={'14'}>Lainnya</option>
                     </select>
+                    {errors.tingkat_penghargaan && (
+                      <p className="mt-1 text-xs text-red-500">{errors.tingkat_penghargaan.message}</p>
+                    )}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
                   <label className="block text-sm font-medium text-gray-700">Nama Penghargaaan</label>
                   <div className="mt-1">
                     <input
+                      {...register('nama_penghargaan', { required: 'Silahkan masukan nama penghargaan' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="nama_institusi"
+                      name="nama_penghargaan"
                       type="text"
                     />
+                    {errors.nama_penghargaan && (
+                      <p className="mt-1 text-xs text-red-500">{errors.nama_penghargaan.message}</p>
+                    )}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
                   <label className="block text-sm font-medium text-gray-700">Penyelenggara</label>
                   <div className="mt-1">
                     <input
+                      {...register('penyelenggara', { required: 'Silahkan masukan nama penyelenggara.' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="prodi"
+                      name="penyelenggara"
                       type="text"
                     />
+                    {errors.penyelenggara && (
+                      <p className="mt-1 text-xs text-red-500">{errors.penyelenggara.message}</p>
+                    )}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
                   <label className="block text-sm font-medium text-gray-700">Keterangan</label>
                   <div className="mt-1">
                     <input
+                      {...register('keterangan', { required: 'Silahkan masukan keterangan.' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="no_ijazah"
+                      name="keterangan"
                       type="text"
                     />
+                    {errors.keterangan && <p className="mt-1 text-xs text-red-500">{errors.keterangan.message}</p>}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
                   <label className="block text-sm font-medium text-gray-700">Nomor Penghargaan</label>
                   <div className="mt-1 sm:col-span-2 sm:mt-0">
                     <input
+                      {...register('no_penghargaan', { required: 'Silahkan masukan nomor penghargaan.' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="no_ijazah"
+                      name="no_penghargaan"
                       type="text"
                     />
+                    {errors.no_penghargaan && (
+                      <p className="mt-1 text-xs text-red-500">{errors.no_penghargaan.message}</p>
+                    )}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
@@ -144,19 +269,61 @@ export default function PendidikanForm(props: UploadFormProps) {
                   </label>
                   <div className="mt-1">
                     <input
+                      {...register('tgl_penghargaan', { required: 'Silahkan masukan tanggal penghargaan.' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="tgl_lulus"
+                      name="tgl_penghargaan"
                       type="date"
                     />
+                    {errors.tgl_penghargaan && (
+                      <p className="mt-1 text-xs text-red-500">{errors.tgl_penghargaan.message}</p>
+                    )}
                   </div>
                 </div>
-                <div className="px-10 pt-5 ">Upload File:</div>
+                <div className="mt-5 sm:col-span-6">
+                  <Controller
+                    control={control}
+                    name={'file_name'}
+                    rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
+                    render={({ field: { onChange, value } }) => (
+                      <UploadWrapper
+                        allowedTypes={['pdf']}
+                        handleUploadChange={(files: FileObject[]) => {
+                          setValue('file_id', files[0].id);
+                          onChange(files[0].name);
+                        }}
+                      >
+                        {({ loading }) => (
+                          <div
+                            className={classNames(
+                              'flex items-center justify-between border-[1px] p-3',
+                              errors.file_name ? 'border-red-500' : ''
+                            )}
+                          >
+                            <div>
+                              <div className="text-sm text-gray-600">{value || 'Bukti Penghargaan'}</div>
+                              <div className="text-xs text-gray-400">(pdf)</div>
+                            </div>
+                            <button
+                              disabled={loading}
+                              type="button"
+                              className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                            >
+                              {loading ? <CircleProgress /> : null}
+                              <UploadIcon className="mr-1 h-4" />
+                              Upload
+                            </button>
+                          </div>
+                        )}
+                      </UploadWrapper>
+                    )}
+                  ></Controller>
+                </div>
                 <div className="mt-5">
                   <button
                     type="submit"
                     className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
-                    {selectedId ? 'Tambah' : 'Ubah'} Riwayat Penghargaan
+                    {selectedId ? 'Ubah' : 'Tambah'} Riwayat Penghargaan
                   </button>
                 </div>
               </form>

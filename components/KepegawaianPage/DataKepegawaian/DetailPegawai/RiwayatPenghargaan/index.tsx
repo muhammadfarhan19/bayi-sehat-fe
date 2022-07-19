@@ -5,17 +5,18 @@ import ListPenghargaan from './ListPenghargaan';
 
 export default function RiwayatPenghargaan() {
   const [riwayatPenghargaanId, setRiwayatPenghargaanId] = React.useState(0);
+  console.log(riwayatPenghargaanId);
 
   return (
     <>
       {riwayatPenghargaanId === 0 ? (
         <ListPenghargaan
-          onShowDetail={() => {
-            setRiwayatPenghargaanId(2);
+          onShowDetail={(id: number) => {
+            setRiwayatPenghargaanId(id);
           }}
         />
       ) : (
-        <DetailPenghargaan onBack={() => setRiwayatPenghargaanId(0)} />
+        <DetailPenghargaan riwayatPenghargaanId={riwayatPenghargaanId} onBack={() => setRiwayatPenghargaanId(0)} />
       )}
     </>
   );
