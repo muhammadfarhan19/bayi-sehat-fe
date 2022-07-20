@@ -81,6 +81,11 @@ export const RiwayatPendidikanAPI = {
   POST_RIWAYAT_PENDIDIKAN_UPDATE: config.apiHost + '/pendidikan/update',
 };
 
+export const GolonganAPI = {
+  GET_RIWAYAT_GOLONGAN_LIST: config.apiHost + '/riwayat-golongan/list',
+  UPDATE_SURAT_KEPUTUSAN: config.apiHost + '/riwayat-golongan/update-surat-keputusan',
+};
+
 export const RekapDinasAPI = {
   GET_DINAS_PEGAWAI_AVAILABILITY: config.apiHost + '/dinas/pegawai/availability',
   GET_DINAS_PEGAWAI_GETDINAS: config.apiHost + '/dinas/pegawai/get-dinas',

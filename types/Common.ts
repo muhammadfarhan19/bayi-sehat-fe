@@ -26,12 +26,17 @@ export enum StatusCpns {
   PPNPN = 2,
 }
 
-export interface Pagination {
-  total_data: number;
-  total_page: number;
-}
-
 export enum DocumentUploadType {
   INTERNAL_SOURCE = 1,
   EXTERNAL_SOURCE = 2,
+}
+
+export interface File {
+  document_uuid: string;
+  document_name: string;
+}
+
+export interface Pagination {
+  total_data: number;
+  total_page: number;
 }
