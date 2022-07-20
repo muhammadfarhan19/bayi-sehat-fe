@@ -1,7 +1,21 @@
 import { PlusIcon } from '@heroicons/react/outline';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
+import { setSnackbar } from '../../../../../action/CommonAction';
+import { RiwayatBelajarAPI } from '../../../../../constants/APIUrls';
+import { SnackbarType } from '../../../../../reducer/CommonReducer';
+import {
+  GetRiwayatBelajarListReq,
+  PostRiwayatBelajarDeleteReq,
+  PostRiwayatBelajarDeleteRes,
+  RiwayatBelajarListData,
+} from '../../../../../types/api/RiwayatBelajarAPI';
+import { Status } from '../../../../../types/Common';
+import { callAPI } from '../../../../../utils/Fetchers';
+import { getQueryString } from '../../../../../utils/URLUtils';
 import ConfirmDialog from '../../../../shared/ConfirmDialog';
+import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import BelajarForm from './BelajarForm';
 
 type ListBelajarProps = {
@@ -11,6 +25,8 @@ type ListBelajarProps = {
 export default function ListBelajar(props: ListBelajarProps) {
   const [confirmId, setConfirmId] = React.useState(0);
   const { onShowDetail } = props;
+  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
+  const dispatch = useDispatch();
 
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: string }>({
     open: false,
@@ -24,18 +40,37 @@ export default function ListBelajar(props: ListBelajarProps) {
     });
   };
 
-  const data = [
-    {
-      belajar_id: 1,
-      jenis: 'TUGAS BELAJAR',
-      baru: 'BARU',
-      jenjang: 'S-2',
-      lembaga: 'Universitas Indonesia',
-      prodi: 'Ilmu Hukum',
-      waktu: '2011-09-01 s.d. 2013-08-31',
-      bukti: '1-s2.0-S0272638618310618-mmc1.pdf',
-    },
-  ];
+  const handleConfirm = async () => {
+    const resDelete = await callAPI<PostRiwayatBelajarDeleteReq, PostRiwayatBelajarDeleteRes>(
+      RiwayatBelajarAPI.POST_RIWAYAT_BELAJAR_DELETE,
+      { riwayat_id: confirmId },
+      { method: 'post' }
+    );
+
+    let snackbarProps;
+    if (resDelete.status === 200 && resDelete.data?.status === Status.OK) {
+      snackbarProps = {
+        show: true,
+        message: 'Data terhapus.',
+        type: SnackbarType.INFO,
+      };
+    } else {
+      snackbarProps = {
+        show: true,
+        message: 'Gagal menghapus data.',
+        type: SnackbarType.ERROR,
+      };
+    }
+    dispatch(setSnackbar(snackbarProps));
+    setConfirmId(0);
+    mutate();
+  };
+
+  const { data: riwayatBelajar, mutate } = useCommonApi<GetRiwayatBelajarListReq, RiwayatBelajarListData[]>(
+    RiwayatBelajarAPI.GET_RIWAYAT_BELAJAR_LIST,
+    pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
+    { method: 'GET' }
+  );
 
   return (
     <>
@@ -70,12 +105,6 @@ export default function ListBelajar(props: ListBelajarProps) {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Baru/Perpanjangan
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-              >
                 Jenjang
               </th>
               <th
@@ -94,14 +123,20 @@ export default function ListBelajar(props: ListBelajarProps) {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Waktu
+                Tanggal Mulai
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Bukti
+                Tanggal Selesai
               </th>
+              {/* <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Bukti
+              </th> */}
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -111,24 +146,41 @@ export default function ListBelajar(props: ListBelajarProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {(data || []).map((each, index) => (
+            {(riwayatBelajar || []).map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenis}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.baru}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenis_belajar}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.jenjang}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.lembaga}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nama_institusi}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.prodi}</td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">{each.waktu}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.bukti}</td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  {each.waktu.split(' - ')?.[0] || '-'}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  {each.waktu.split(' - ')?.[1] || '-'}
+                </td>
                 <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
                   <div className="flex justify-between">
                     <button
-                      onClick={() => onShowDetail(each.belajar_id)}
+                      onClick={() => onShowDetail(each.riwayat_id)}
                       type="button"
                       className="mr-2 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200"
                     >
                       Lihat
+                    </button>
+                    <button
+                      type="button"
+                      className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                      onClick={() => handleShowForm(!formModalState.open, String(each.riwayat_id))}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="mr-2 inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                      onClick={() => setConfirmId(each.riwayat_id)}
+                    >
+                      Hapus
                     </button>
                   </div>
                 </td>
@@ -139,6 +191,7 @@ export default function ListBelajar(props: ListBelajarProps) {
       </div>
       {formModalState.open ? (
         <BelajarForm
+          onSuccess={() => mutate()}
           open={formModalState.open}
           setOpen={(open: boolean) => handleShowForm(open)}
           selectedId={formModalState?.selectedId}
@@ -148,7 +201,7 @@ export default function ListBelajar(props: ListBelajarProps) {
         open={!!confirmId}
         message="Anda yakin ingin menghapus data ini?"
         onClose={() => setConfirmId(0)}
-        onConfirm={() => console.log('confirm')}
+        onConfirm={handleConfirm}
       />
     </>
   );

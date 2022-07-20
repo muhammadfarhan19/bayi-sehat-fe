@@ -71,7 +71,7 @@ export interface PostRiwayatDiklatInsertRes {
 }
 
 export interface PostRiwayatDiklatUpdateReq {
-  riwayat_id: number;
+  riwayat_id?: number;
   pegawai_id?: number;
   jenis_diklat_id: number;
   nama_diklat: string;

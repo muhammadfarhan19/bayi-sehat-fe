@@ -2,10 +2,22 @@ import { Dialog, Transition } from '@headlessui/react';
 import { UploadIcon, XIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
-import { RiwayatDiklatAPI } from '../../../../../constants/APIUrls';
-import { GetRiwayatDiklatDetailReq, RiwayatDiklatDetailData } from '../../../../../types/api/RiwayatDiklatAPI';
+import { setSnackbar } from '../../../../../action/CommonAction';
+import { RiwayatBelajarAPI } from '../../../../../constants/APIUrls';
+import { SnackbarType } from '../../../../../reducer/CommonReducer';
+import {
+  GetRiwayatBelajarDetailReq,
+  PostRiwayatBelajarInsertReq,
+  PostRiwayatBelajarInsertRes,
+  PostRiwayatBelajarUpdateReq,
+  PostRiwayatBelajarUpdateRes,
+  RiwayatBelajarDetailData,
+} from '../../../../../types/api/RiwayatBelajarAPI';
+import { Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
+import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
@@ -15,27 +27,30 @@ interface UploadFormProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   selectedId?: string;
-  // onSuccess: () => void;
+  onSuccess: () => void;
 }
 
-// interface FormState {
-//   pegawai_id: number;
-//   file_id: string;
-//   file_name: string;
-//   jenis_diklat_id: number;
-//   nama_diklat: string;
-//   penyelenggara: string;
-//   no_sertifikat: string;
-//   lokasi: string;
-//   keterangan: string;
-//   tgl_awal_acara: string;
-//   tgl_akhir_acara: string;
-//   document_uuid: string;
-//   document_name: string;
-// }
+interface FormState {
+  pegawai_id: number;
+  file_id: string;
+  file_name: string;
+  jenis_belajar: string;
+  jenjang_id: number;
+  nama_institusi: string;
+  prodi: string;
+  sumber_biaya: string;
+  kota: string;
+  lokasi: number;
+  status_riwayat_belajar: number;
+  tahun_mulai: string;
+  tahun_selesai: string;
+  document_uuid: string;
+  document_name: string;
+}
 
 export default function BelajartForm(props: UploadFormProps) {
-  const { open, setOpen, selectedId } = props;
+  const { open, setOpen, selectedId, onSuccess } = props;
+  const dispatch = useDispatch();
   const personalData = usePersonalData();
   const toggleModal = () => {
     setOpen(!open);
@@ -47,97 +62,104 @@ export default function BelajartForm(props: UploadFormProps) {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+    watch,
+  } = useForm<FormState>();
 
-  const { data } = useCommonApi<GetRiwayatDiklatDetailReq, RiwayatDiklatDetailData>(
-    RiwayatDiklatAPI.GET_RIWAYAT_DIKLAT_DETAIL,
-    { id: Number(selectedId) },
+  const { data } = useCommonApi<GetRiwayatBelajarDetailReq, RiwayatBelajarDetailData>(
+    RiwayatBelajarAPI.GET_RIWAYAT_BELAJAR_DETAIl,
+    { riwayat_id: Number(selectedId) },
     { method: 'GET' },
     { skipCall: !selectedId, revalidateOnMount: true }
   );
 
   React.useEffect(() => {
     if (data && data?.files[0]?.document_uuid) {
-      setValue('file_id', data.files[0].document_uuid);
-      setValue('file_name', data.files[0].document_uuid);
-      setValue('jenis_diklat_id', data.jenis_diklat_id);
-      setValue('nama_diklat', data.nama_diklat);
-      setValue('penyelenggara', data.penyelenggara);
-      setValue('no_sertifikat', data.no_sertifikat);
-      setValue('lokasi', data.lokasi);
-      setValue('tgl_awal_acara', data.tgl_awal_acara);
-      setValue('tgl_akhir_acara', data.tgl_akhir_acara);
-      setValue('keterangan', data.keterangan);
+      setValue('file_id', data?.files[0]?.document_uuid);
+      setValue('file_name', data?.files[0]?.document_name);
+      setValue('jenis_belajar', String(data?.jenis_belajar));
+      setValue('jenjang_id', data?.jenjang_id);
+      setValue('nama_institusi', data?.nama_institusi);
+      setValue('prodi', data?.prodi);
+      setValue('sumber_biaya', data?.sumber_biaya);
+      setValue('kota', data?.kota);
+      setValue('lokasi', data?.lokasi);
+      setValue('status_riwayat_belajar', data?.status_riwayat_belajar);
+      setValue('tahun_mulai', data?.tahun_mulai);
+      setValue('tahun_selesai', data?.tahun_selesai);
     }
   }, [data]);
 
-  const submitHandler = async () => {
-    // let resSubmit;
-    // if (selectedId) {
-    //   resSubmit = await callAPI<PostRiwayatDiklatUpdateReq, PostRiwayatDiklatUpdateRes>(
-    //     RiwayatDiklatAPI.POST_RIWAYAT_DIKLAT_UPDATE,
-    //     {
-    //       riwayat_id: Number(selectedId),
-    //       pegawai_id: Number(personalData?.pegawai_id),
-    //       jenis_diklat_id: Number(formData.jenis_diklat_id),
-    //       nama_diklat: formData.nama_diklat,
-    //       penyelenggara: formData.penyelenggara,
-    //       no_sertifikat: formData.no_sertifikat,
-    //       lokasi: formData.lokasi,
-    //       keterangan: formData.keterangan,
-    //       tgl_awal_acara: formData.tgl_awal_acara,
-    //       tgl_akhir_acara: formData.tgl_akhir_acara,
-    //       files: [
-    //         {
-    //           document_uuid: formData.file_id,
-    //           document_name: formData.file_name,
-    //         },
-    //       ],
-    //     },
-    //     { method: 'put' }
-    //   );
-    // } else {
-    //   resSubmit = await callAPI<PostRiwayatDiklatInsertReq, PostRiwayatDiklatInsertRes>(
-    //     RiwayatDiklatAPI.POST_RIWAYAT_DIKLAT_INSERT,
-    //     {
-    //       pegawai_id: Number(personalData?.pegawai_id),
-    //       jenis_diklat_id: Number(formData.jenis_diklat_id),
-    //       nama_diklat: formData.nama_diklat,
-    //       penyelenggara: formData.penyelenggara,
-    //       no_sertifikat: formData.no_sertifikat,
-    //       lokasi: formData.lokasi,
-    //       keterangan: formData.keterangan,
-    //       tgl_awal_acara: formData.tgl_awal_acara,
-    //       tgl_akhir_acara: formData.tgl_akhir_acara,
-    //       files: [
-    //         {
-    //           document_uuid: formData.file_id,
-    //           document_name: formData.file_name,
-    //         },
-    //       ],
-    //     },
-    //     { method: 'post' }
-    //   );
-    // }
-    // if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
-    //   dispatch(
-    //     setSnackbar({
-    //       show: true,
-    //       message: 'Data berhasil tersimpan.',
-    //       type: SnackbarType.INFO,
-    //     })
-    //   );
-    //   onSuccess();
-    //   setOpen(!open);
-    // } else {
-    //   dispatch(
-    //     setSnackbar({
-    //       show: true,
-    //       message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
-    //       type: SnackbarType.ERROR,
-    //     })
-    //   );
-    // }
+  const submitHandler = async (formData: FormState) => {
+    let resSubmit;
+    if (selectedId) {
+      resSubmit = await callAPI<PostRiwayatBelajarUpdateReq, PostRiwayatBelajarUpdateRes>(
+        RiwayatBelajarAPI.POST_RIWAYAT_BELAJAR_UPDATE,
+        {
+          riwayat_id: Number(selectedId),
+          pegawai_id: Number(personalData?.pegawai_id),
+          jenis_belajar: Number(formData.jenis_belajar),
+          jenjang_id: Number(formData.jenjang_id),
+          nama_institusi: formData.nama_institusi,
+          prodi: formData.prodi,
+          sumber_biaya: formData.sumber_biaya,
+          kota: formData.kota,
+          lokasi: Number(formData.lokasi),
+          status_riwayat_belajar: Number(formData.status_riwayat_belajar),
+          tahun_mulai: formData.tahun_mulai,
+          tahun_selesai: formData.tahun_selesai,
+          files: [
+            {
+              document_uuid: formData.file_id,
+              document_name: formData.file_name,
+            },
+          ],
+        },
+        { method: 'put' }
+      );
+    } else {
+      resSubmit = await callAPI<PostRiwayatBelajarInsertReq, PostRiwayatBelajarInsertRes>(
+        RiwayatBelajarAPI.POST_RIWAYAT_BELAJAR_INSERT,
+        {
+          pegawai_id: Number(personalData?.pegawai_id),
+          jenis_belajar: Number(formData.jenis_belajar),
+          jenjang_id: Number(formData.jenjang_id),
+          nama_institusi: formData.nama_institusi,
+          prodi: formData.prodi,
+          sumber_biaya: formData.sumber_biaya,
+          kota: formData.kota,
+          lokasi: Number(formData.lokasi),
+          status_riwayat_belajar: Number(formData.status_riwayat_belajar),
+          tahun_mulai: formData.tahun_mulai,
+          tahun_selesai: formData.tahun_selesai,
+          files: [
+            {
+              document_uuid: formData.file_id,
+              document_name: formData.file_name,
+            },
+          ],
+        },
+        { method: 'post' }
+      );
+    }
+    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Data berhasil tersimpan.',
+          type: SnackbarType.INFO,
+        })
+      );
+      onSuccess();
+      setOpen(!open);
+    } else {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
+          type: SnackbarType.ERROR,
+        })
+      );
+    }
   };
 
   return (
@@ -209,24 +231,24 @@ export default function BelajartForm(props: UploadFormProps) {
                   <label className="block text-sm font-medium text-gray-700">Jenis Belajar</label>
                   <div className="mt-1 sm:col-span-2 sm:mt-0">
                     <select
-                      {...register('jenis_belajar_id', { required: 'Silahkan pilih jenis belajar.' })}
-                      name="jenis_belajar_id"
+                      {...register('jenis_belajar', { required: 'Silahkan pilih jenis belajar.' })}
+                      name="jenis_belajar"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       <option value={''}>Silahkan Pilih</option>
                       <option value={1}>Tugas Belajar</option>
                       <option value={2}>Izin Belajar</option>
                     </select>
-                    {errors.jenis_belajar_id && (
-                      <p className="mt-1 text-xs text-red-500">{errors.jenis_belajar_id.message}</p>
+                    {errors.jenis_belajar && (
+                      <p className="mt-1 text-xs text-red-500">{errors.jenis_belajar.message}</p>
                     )}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
                   <label className="block text-sm font-medium text-gray-700">Jenjang</label>
                   <select
-                    {...register('jenjang', { required: 'Silahkan pilih jenjang pendidikan.' })}
-                    name="jenjang"
+                    {...register('jenjang_id', { required: 'Silahkan pilih jenjang pendidikan.' })}
+                    name="jenjang_id"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   >
                     <option value={''}>Silahkan Pilih</option>
@@ -247,18 +269,20 @@ export default function BelajartForm(props: UploadFormProps) {
                     <option value={'16'}>SMP</option>
                     <option value={'7'}>SD</option>
                   </select>
-                  {errors.jenjang && <p className="mt-1 text-xs text-red-500">{errors.jenjang.message}</p>}
+                  {errors.jenjang_id && <p className="mt-1 text-xs text-red-500">{errors.jenjang_id.message}</p>}
                 </div>
                 <div className="mt-5 sm:col-span-6">
                   <label className="block text-sm font-medium text-gray-700">Nama Institusi</label>
                   <div className="mt-1">
                     <input
-                      {...register('institusi', { required: 'Silahkan masukan nama institusi.' })}
+                      {...register('nama_institusi', { required: 'Silahkan masukan nama institusi.' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="institusi"
+                      name="nama_institusi"
                       type="text"
                     />
-                    {errors.institusi && <p className="mt-1 text-xs text-red-500">{errors.institusi.message}</p>}
+                    {errors.nama_institusi && (
+                      <p className="mt-1 text-xs text-red-500">{errors.nama_institusi.message}</p>
+                    )}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
@@ -286,7 +310,7 @@ export default function BelajartForm(props: UploadFormProps) {
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="tgl_awal_acara" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="kota" className="block text-sm font-medium text-gray-700">
                     Kota
                   </label>
                   <div className="mt-1">
@@ -319,50 +343,82 @@ export default function BelajartForm(props: UploadFormProps) {
                 </div>
 
                 <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="lokasi" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="status_riwayat_belajar" className="block text-sm font-medium text-gray-700">
                     Baru / Perpanjangan
                   </label>
                   <div className="mt-1 sm:col-span-2 sm:mt-0">
                     <select
-                      {...register('baru', { required: 'Silahkan pilih baru/perpanjangan.' })}
-                      name="baru"
+                      {...register('status_riwayat_belajar', { required: 'Silahkan pilih baru/perpanjangan.' })}
+                      name="status_riwayat_belajar"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       <option value={''}>Silahkan Pilih</option>
-                      <option value={1}>Baru</option>
-                      <option value={2}>Perpanjganan</option>
+                      <option value={1}>Perpanjangan</option>
+                      <option value={2}>Baru</option>
                     </select>
-                    {errors.baru && <p className="mt-1 text-xs text-red-500">{errors.baru.message}</p>}
+                    {errors.status_riwayat_belajar && (
+                      <p className="mt-1 text-xs text-red-500">{errors.status_riwayat_belajar.message}</p>
+                    )}
                   </div>
                 </div>
 
                 <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="tgl_awal" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="tahun_mulai" className="block text-sm font-medium text-gray-700">
                     Tanggal Awal
                   </label>
                   <div className="mt-1">
                     <input
-                      {...register('tgl_awal', { required: 'Silahkan masukan tanggal awal.' })}
+                      {...register('tahun_mulai', {
+                        validate: {
+                          required: value => {
+                            if (value === '') {
+                              return 'Silahkan masukan tanggal awal.';
+                            } else if (watch('tahun_selesai') !== '') {
+                              if (value > watch('tahun_selesai')) {
+                                return 'Tanggal awal tidak boleh lebih besar dari tanggal akhir.';
+                              }
+                            } else {
+                              return true;
+                            }
+                          },
+                        },
+                      })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="tgl_awal"
+                      name="tahun_mulai"
                       type="date"
                     />
-                    {errors.tgl_awal && <p className="mt-1 text-xs text-red-500">{errors.tgl_awal.message}</p>}
+                    {errors.tahun_mulai && <p className="mt-1 text-xs text-red-500">{errors.tahun_mulai.message}</p>}
                   </div>
                 </div>
 
                 <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="tgl_akhir" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="tahun_selesai" className="block text-sm font-medium text-gray-700">
                     Tanggal Akhir
                   </label>
                   <div className="mt-1">
                     <input
-                      {...register('tgl_akhir', { required: 'Silahkan masukan tanggal akhir.' })}
+                      {...register('tahun_selesai', {
+                        validate: {
+                          required: value => {
+                            if (value === '') {
+                              return 'Silahkan masukan tanggal akhir';
+                            } else if (watch('tahun_mulai') !== '') {
+                              if (value < watch('tahun_mulai')) {
+                                return 'Tanggal akhir tidak boleh lebih kecil dari tanggal awal.';
+                              }
+                            } else {
+                              return true;
+                            }
+                          },
+                        },
+                      })}
                       className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="tgl_akhir"
+                      name="tahun_selesai"
                       type="date"
                     />
-                    {errors.tgl_akhir && <p className="mt-1 text-xs text-red-500">{errors.tgl_akhir.message}</p>}
+                    {errors.tahun_selesai && (
+                      <p className="mt-1 text-xs text-red-500">{errors.tahun_selesai.message}</p>
+                    )}
                   </div>
                 </div>
 

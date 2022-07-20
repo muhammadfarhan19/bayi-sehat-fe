@@ -108,3 +108,11 @@ export const RiwayatPenghargaan = {
   POST_RIWAYAT_PENGHARGAAN_UPDATE: config.apiHost + '/riwayat-penghargaan/update',
   POST_RIWAYAT_PENGHARGAAN_DELETE: config.apiHost + '/riwayat-penghargaan/delete',
 };
+
+export const RiwayatBelajarAPI = {
+  GET_RIWAYAT_BELAJAR_LIST: config.apiHost + '/riwayat-belajar/list',
+  POST_RIWAYAT_BELAJAR_INSERT: config.apiHost + '/riwayat-belajar/insert',
+  GET_RIWAYAT_BELAJAR_DETAIl: config.apiHost + '/riwayat-belajar/detail',
+  POST_RIWAYAT_BELAJAR_UPDATE: config.apiHost + '/riwayat-belajar/update',
+  POST_RIWAYAT_BELAJAR_DELETE: config.apiHost + '/riwayat-belajar/delete',
+};
