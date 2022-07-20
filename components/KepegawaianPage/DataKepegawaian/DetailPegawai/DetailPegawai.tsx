@@ -19,13 +19,13 @@ import RiwayatPenghargaan from './RiwayatPenghargaan';
 const tabs = [
   { name: 'Data Diri Pegawai', href: '#' },
   { name: 'Data Diri Pribadi', href: '#' },
-  { name: 'Riwayat Pendidikan', href: '#' },
-  { name: 'Riwayat Diklat', href: '#' },
-  { name: 'Arsip Digital', href: '#' },
   { name: 'Riwayat Golongan', href: '#' },
   { name: 'Riwayat Jabatan', href: '#' },
-  { name: 'Riwayat Belajar', href: '#' },
+  { name: 'Riwayat Pendidikan', href: '#' },
+  { name: 'Riwayat Diklat', href: '#' },
   { name: 'Riwayat Penghargaan', href: '#' },
+  { name: 'Riwayat Belajar', href: '#' },
+  { name: 'Arsip Digital', href: '#' },
 ];
 
 function DetailPegawai() {
@@ -95,13 +95,13 @@ function DetailPegawai() {
         <div className="overflow-auto">
           {selected === tabs[0].name ? <DataDiriPegawai /> : null}
           {selected === tabs[1].name ? <DataDiriPribadi /> : null}
-          {selected === tabs[2].name ? <RiwayatPendidikan /> : null}
-          {selected === tabs[3].name ? <RiwayatDiklat /> : null}
-          {selected === tabs[4].name ? <ArsipDigital /> : null}
-          {selected === tabs[5].name ? <RiwayatGolongan /> : null}
-          {selected === tabs[6].name ? <RiwayatJabatan /> : null}
+          {selected === tabs[2].name ? <RiwayatGolongan /> : null}
+          {selected === tabs[3].name ? <RiwayatJabatan /> : null}
+          {selected === tabs[4].name ? <RiwayatPendidikan /> : null}
+          {selected === tabs[5].name ? <RiwayatDiklat /> : null}
+          {selected === tabs[6].name ? <RiwayatPenghargaan /> : null}
           {selected === tabs[7].name ? <RiwayatBelajar /> : null}
-          {selected === tabs[8].name ? <RiwayatPenghargaan /> : null}
+          {selected === tabs[8].name ? <ArsipDigital /> : null}
         </div>
       </div>
     </>

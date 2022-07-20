@@ -1,23 +1,27 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
+import React from 'react';
 
 import { RiwayatPenghargaan } from '../../../../../constants/APIUrls';
-import { GetRiwayatPenghargaanDetailReq, PenghargaanList } from '../../../../../types/api/RiwayatPenghargaanAPI';
+import { GetRiwayatPenghargaanListReq, PenghargaanList } from '../../../../../types/api/RiwayatPenghargaanAPI';
+import ImgFile from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
+import usePersonalData from '../../../../shared/hooks/usePersonalData';
 
 type DetailPenghargaanProps = {
   riwayatPenghargaanId?: number;
   onBack: () => void;
 };
 
-
 export default function DetailPenghargaan(props: DetailPenghargaanProps) {
   const { onBack, riwayatPenghargaanId } = props;
-  const { data: riwayatDetail } = useCommonApi<GetRiwayatPenghargaanDetailReq, PenghargaanList>(
+  const personalData = usePersonalData();
+  const { data: riwayatDetail } = useCommonApi<GetRiwayatPenghargaanListReq, PenghargaanList[]>(
     RiwayatPenghargaan.GET_RIWAYAT_PENGHARGAAN_LIST,
-    { id: Number(riwayatPenghargaanId) },
+    { pegawai_id: personalData?.pegawai_id },
     { method: 'GET' },
     { skipCall: !riwayatPenghargaanId, revalidateOnMount: true }
   );
+  const filterData = riwayatDetail?.find(data => data.riwayat_id === riwayatPenghargaanId);
 
   return (
     <>
@@ -31,14 +35,13 @@ export default function DetailPenghargaan(props: DetailPenghargaanProps) {
           <thead></thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {[
-              { label: 'Penghargaan', value: riwayatDetail?.nama_penghargaan },
-              { label: 'Tingkat Penghargaan', value: riwayatDetail?.tingkat_penghargaan },
-              { label: 'Penyelenggara', value: riwayatDetail?.penyelenggara },
-              { label: 'Tanggal Penghargaan', value: riwayatDetail?.tgl_penghargaan },
-              { label: 'Keterangan Penghargaan', value: riwayatDetail?.keterangan },
-              { label: 'No Penghargaan', value: riwayatDetail?.no_penghargaan },
-              // data?.files?.[0]?.document_name
-              // { label: 'Dokumen', value: data?.bukti_penghargaan },
+              { label: 'Penghargaan', value: filterData?.nama_penghargaan },
+              { label: 'Tingkat Penghargaan', value: filterData?.tingkat_penghargaan },
+              { label: 'Penyelenggara', value: filterData?.penyelenggara },
+              { label: 'Tanggal Penghargaan', value: filterData?.tgl_penghargaan },
+              { label: 'Keterangan Penghargaan', value: filterData?.keterangan },
+              { label: 'No Penghargaan', value: filterData?.no_penghargaan },
+              { label: 'Dokumen', value: filterData?.bukti_penghargaan.map(data => data.document_name) },
             ].map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
@@ -50,7 +53,7 @@ export default function DetailPenghargaan(props: DetailPenghargaanProps) {
       </div>
       <div>
         <div className="relative mt-4 flex w-full flex-col items-center rounded-lg border-2 border-solid border-gray-300 p-4">
-          Download File
+          <ImgFile uuid={filterData?.bukti_penghargaan[0].document_uuid} />
         </div>
       </div>
     </>

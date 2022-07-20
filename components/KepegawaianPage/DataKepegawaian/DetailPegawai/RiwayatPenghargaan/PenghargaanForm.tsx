@@ -50,7 +50,6 @@ export default function PendidikanForm(props: UploadFormProps) {
     setOpen(!open);
   };
 
-
   const {
     control,
     register,

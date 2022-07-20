@@ -95,6 +95,12 @@ export default function ListPenghargaan(props: ListPenghargaanProps) {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
+                No
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
                 Penghargaan
               </th>
               <th
@@ -126,6 +132,7 @@ export default function ListPenghargaan(props: ListPenghargaanProps) {
           <tbody className="divide-y divide-gray-200 bg-white">
             {(riwayatPenghargaan || []).map((each, index) => (
               <tr key={index}>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nama_penghargaan}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.tingkat_penghargaan}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.penyelenggara}</td>
