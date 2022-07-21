@@ -7,36 +7,6 @@ export default function MasterPpnpn() {
     setshowAdvancedFilter(!showAdvancedFilter);
   };
 
-  const dataTable = [
-    {
-      nama: 'Prof. Ir. Nizam, M.Sc., DIC. Ph.D.',
-      nip: '0001002003004005',
-      unit_kerja: 'SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI',
-      jabatan: 'Direktur Jenderal Pendidikan Tinggi',
-      disiplin: 'Tidak di hukum',
-      aktif: 'Aktif',
-      kum: '1',
-    },
-    {
-      nama: 'Prof. Ir. Nizam, M.Sc., DIC. Ph.D.',
-      nip: '0001002003004005',
-      unit_kerja: 'SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI',
-      jabatan: 'Direktur Jenderal Pendidikan Tinggi',
-      disiplin: 'Tidak di hukum',
-      aktif: 'Aktif',
-      kum: '1',
-    },
-    {
-      nama: 'Prof. Ir. Nizam, M.Sc., DIC. Ph.D.',
-      nip: '0001002003004005',
-      unit_kerja: 'SEKRETARIAT DIREKTORAT JENDERAL PENDIDIKAN TINGGI',
-      jabatan: 'Direktur Jenderal Pendidikan Tinggi',
-      disiplin: 'Tidak di hukum',
-      aktif: 'Aktif',
-      kum: '1',
-    },
-  ];
-
   return (
     <>
       <div className="px-6">
@@ -78,32 +48,20 @@ export default function MasterPpnpn() {
               <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
               <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                 <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
-              </select>
-            </div>
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Nama</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
+                <option value="10">Sekretariat Ditjen Pendidikan Tinggi, Riset, dan Teknologi</option>
+                <option value="10">Direktorat Sumber Daya</option>
+                <option value="10">Direktorat Pembelajaran dan Kemahasiswaan</option>
+                <option value="10">Direktorat Kelembagaan</option>
+                <option value="10">Direktorat Riset, Teknologi, dan Pengabdian Kepada Masyarakat</option>
               </select>
             </div>
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Tipe Jabatan</p>
               <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                 <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
-              </select>
-            </div>
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Nama Jabatan</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="10">Semua</option>
-                <option value="20">Lorem Ipsum</option>
-                <option value="30">Lorem Ipsum</option>
+                <option value="10"> Jabatan Administrasi</option>
+                <option value="10">Jabatan Fungsional</option>
+                <option value="10">Jabatan Pimpinan Tinggi</option>
               </select>
             </div>
           </div>
@@ -174,7 +132,7 @@ export default function MasterPpnpn() {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataTable.map((data, dataIdx) => (
+                  {/* {dataTable.map((data, dataIdx) => (
                     <tr
                       key={dataIdx}
                       className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
@@ -196,7 +154,7 @@ export default function MasterPpnpn() {
                         </button>
                       </td>
                     </tr>
-                  ))}
+                  ))} */}
                 </tbody>
               </table>
             </div>
