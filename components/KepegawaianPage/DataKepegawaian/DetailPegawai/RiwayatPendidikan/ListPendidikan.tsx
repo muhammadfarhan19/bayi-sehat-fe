@@ -18,6 +18,7 @@ import { Status } from '../../../../../types/Common';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { getQueryString } from '../../../../../utils/URLUtils';
 import ConfirmDialog from '../../../../shared/ConfirmDialog';
+import useCheckUserAuth from '../../../../shared/hooks/useCheckUserAuth';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import PendidikanForm from './PendidikanForm';
 
@@ -31,6 +32,7 @@ export default function ListArsip(props: ListPendidikanProps) {
 
   const { onShowDetail, userId = 0 } = props;
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
+  const { checkCreator } = useCheckUserAuth({ queryStringKey: 'pegawai_id' });
   const [confirmId, setConfirmId] = React.useState(0);
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: string }>({
     open: false,
@@ -188,23 +190,28 @@ export default function ListArsip(props: ListPendidikanProps) {
                         Lihat
                       </button>
                     )}
-                    {allowEditPendidikan && (
-                      <button
-                        type="button"
-                        className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                        onClick={() => handleShowForm(!formModalState.open, String(each.riwayat_id))}
-                      >
-                        Edit
-                      </button>
-                    )}
-                    {allowDeletePendidikan && (
-                      <button
-                        type="button"
-                        className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
-                        onClick={() => setConfirmId(each.riwayat_id)}
-                      >
-                        Hapus
-                      </button>
+                    {/** If user is the creator then allow it to update and delete, if its Admin then just allow it */}
+                    {checkCreator(each.created_by) && (
+                      <>
+                        {allowEditPendidikan && (
+                          <button
+                            type="button"
+                            className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                            onClick={() => handleShowForm(!formModalState.open, String(each.riwayat_id))}
+                          >
+                            Edit
+                          </button>
+                        )}
+                        {allowDeletePendidikan && (
+                          <button
+                            type="button"
+                            className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                            onClick={() => setConfirmId(each.riwayat_id)}
+                          >
+                            Hapus
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 </td>

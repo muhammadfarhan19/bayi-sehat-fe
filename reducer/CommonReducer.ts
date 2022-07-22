@@ -14,6 +14,7 @@ export enum SnackbarType {
 
 export interface CommonState {
   apiRes: Record<string, object>;
+  userId: string;
   modal: {
     show: boolean;
     type: ModalType;
@@ -30,6 +31,7 @@ export interface CommonState {
 
 const initialState: CommonState = {
   apiRes: {},
+  userId: '',
   modal: {
     show: false,
     type: ModalType.INFO,
@@ -65,6 +67,11 @@ export default function commonReducer(state = initialState, action: CommonAction
         ...state.snackbar,
         ...action.snackbar,
       };
+      return newState;
+    }
+    case CommonActionType.SET_USER_INFO: {
+      const newState = { ...state };
+      newState.userId = action.userId;
       return newState;
     }
     default:

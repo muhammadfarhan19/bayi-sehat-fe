@@ -67,7 +67,6 @@ export default function JabatanForm(props: UploadFormProps) {
     { method: 'GET' }
   );
 
-  // SET default value jenis berkas
   React.useEffect(() => {
     if (jenisJabatan && jenisJabatan.length) {
       setValue('tipe_jabatan', String(jenisJabatan[jenisJabatan.length - 1].id));
@@ -194,7 +193,7 @@ export default function JabatanForm(props: UploadFormProps) {
                         value ? (
                           <AutoComplete
                             onChange={value => onChange(value.value)}
-                            label={'Jenis Berkas'}
+                            label={'Jenis Jabatan'}
                             defaultValue={composeListDefaultValue(jenisJabatan!, 'id', 'jenis_jabatan', value)}
                             options={(jenisJabatan || [])?.map(each => ({
                               text: each.jenis_jabatan,
@@ -206,7 +205,7 @@ export default function JabatanForm(props: UploadFormProps) {
                             className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                             disabled={true}
                             type="text"
-                            placeholder={'Jenis Berkas'}
+                            placeholder={'Jenis Jabatan'}
                           />
                         )
                       }

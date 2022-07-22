@@ -23,12 +23,14 @@ export type PostAuthRefreshRes =
 export type GetAuthInfoRes =
   | {
       status: Status.OK;
-      data: {
-        user_id: number;
-        session_uuid: string;
-      } | null;
+      data: AuthInfoData | null;
     }
   | { status: Status.UNAUTHENTICATED; data: null };
+
+export interface AuthInfoData {
+  user_id: number;
+  session_uuid: string;
+}
 
 export interface PostAuthLoginReq {
   nip: string;

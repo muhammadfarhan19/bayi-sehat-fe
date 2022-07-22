@@ -1,6 +1,5 @@
 import { Navigation } from '../components/shared/MainLayout/NavigationProps';
 import { NavigationList } from '../constants/NavigationList';
-import { getQueryString } from './URLUtils';
 
 export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
