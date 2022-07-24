@@ -167,12 +167,6 @@ function RekapDinasPage() {
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                         >
-                          Isi Penugasan
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
                           Unit Kerja
                         </th>
                         <th
@@ -218,7 +212,6 @@ function RekapDinasPage() {
                           >
                             {data.no_sp}
                           </td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.isi_penugasan}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.unit_kerja_str}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_mulai}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_selesai}</td>
