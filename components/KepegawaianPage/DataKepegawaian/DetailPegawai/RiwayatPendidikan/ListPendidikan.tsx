@@ -149,6 +149,12 @@ export default function ListArsip(props: ListPendidikanProps) {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
+                Sinkronisasi BKN
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
                 Ijazah Terakhir
               </th>
               <th
@@ -174,6 +180,9 @@ export default function ListArsip(props: ListPendidikanProps) {
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.prodi}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   <div className="whitespace-nowrap">{format(new Date(each.tanggal_lulus), 'dd MMM yyyy')}</div>
+                </td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  {each.verified_by_bkn ? 'Ya' : 'Tidak'}
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   {each.is_ijazah_terakhir ? 'Ya' : 'Tidak'}

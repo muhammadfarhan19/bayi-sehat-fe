@@ -1,5 +1,7 @@
+import { Status } from '../Common';
+
 export interface GetMasterJenisBerkasRes {
-  status: string;
+  status: Status;
   data: MasterJenisBerkasData[];
 }
 
@@ -9,7 +11,7 @@ export interface MasterJenisBerkasData {
 }
 
 export interface GetJenisJabatanListRes {
-  status: string;
+  status: Status;
   data: JenisJabatanListData[];
 }
 
@@ -17,4 +19,15 @@ export interface JenisJabatanListData {
   id: number;
   tipe_jabatan: string;
   jenis_jabatan: string;
+}
+
+export interface GetPendidikanEligibleJenjangRes {
+  status: Status;
+  data: PendidikanEligibleJenjangData;
+}
+
+export interface PendidikanEligibleJenjangData {
+  jenjang_id: number;
+  jenjang: string;
+  kode_jenjang: number;
 }

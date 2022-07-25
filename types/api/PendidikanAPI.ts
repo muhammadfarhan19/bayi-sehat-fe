@@ -20,6 +20,7 @@ export interface RiwayatPendidikanListData {
   no_ijazah: string;
   is_ijazah_terakhir: boolean;
   is_ijazah_cpns: boolean;
+  verified_by_bkn: string;
   files: any[];
   created_at: string;
   created_by: string;

@@ -20,7 +20,9 @@ import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
+import useJenjangPendidikan from '../../../../shared/hooks/useJenjangPendidikan';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
+import AutoComplete from '../../../../shared/Input/ComboBox';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
 
 interface UploadFormProps {
@@ -59,6 +61,8 @@ export default function PendidikanForm(props: UploadFormProps) {
     formState: { errors },
     setValue,
   } = useForm<FormState>();
+
+  const jenjangPendidikan = useJenjangPendidikan();
 
   const { data } = useCommonApi<GetRiwayatPendidikanDetailReq, RiwayatPendidikanDetailData>(
     RiwayatPendidikanAPI.GET_RIWAYAT_PENDIDIKAN_DETAIL,
@@ -215,31 +219,22 @@ export default function PendidikanForm(props: UploadFormProps) {
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Jenjang</label>
                   <div className="mt-1 sm:col-span-2 sm:mt-0">
-                    <select
-                      {...register('jenjang', { required: 'Silahkan pilih jenjang pendidikan.' })}
+                    <Controller
+                      control={control}
+                      rules={{ required: 'Mohon pilih jenjang yang ingin disimpan.' }}
                       name="jenjang"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    >
-                      <option value={''}>Silahkan Pilih</option>
-                      <option value={'11'}>Profesi</option>
-                      <option value={'1'}>S3</option>
-                      <option value={'13'}>S3-Terapan</option>
-                      <option value={'2'}>S2</option>
-                      <option value={'12'}>S2-Terapan</option>
-                      <option value={'3'}>S1</option>
-                      <option value={'14'}>Sp-1</option>
-                      <option value={'15'}>Sp-2</option>
-                      <option value={'10'}>D4</option>
-                      <option value={'4'}>D3</option>
-                      <option value={'9'}>D2</option>
-                      <option value={'6'}>D1</option>
-                      <option value={'5'}>SMA</option>
-                      <option value={'8'}>SMK</option>
-                      <option value={'16'}>SMP</option>
-                      <option value={'7'}>SD</option>
-                    </select>
+                      render={({ field: { onChange } }) => (
+                        <AutoComplete
+                          onChange={value => onChange(value.value)}
+                          label={'Jenjang'}
+                          options={(jenjangPendidikan || [])?.map(each => ({
+                            text: each.jenjang,
+                            value: String(each.jenjang_id),
+                          }))}
+                        />
+                      )}
+                    />
                     {errors.jenjang && <p className="mt-1 text-xs text-red-500">{errors.jenjang.message}</p>}
                   </div>
                 </div>
