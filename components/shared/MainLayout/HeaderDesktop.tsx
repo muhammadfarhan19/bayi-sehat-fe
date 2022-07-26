@@ -7,6 +7,7 @@ import { UserProfileAPI } from '../../../constants/APIUrls';
 import { GetPhotoProfileRes } from '../../../types/api/ProfilePhotoAPI';
 import { callAPI } from '../../../utils/Fetchers';
 import useCommonApi from '../hooks/useCommonApi';
+import usePersonalData from '../hooks/usePersonalData';
 import HeaderMobile from './HeaderMobile';
 import MenuDropdown from './MenuDropdown';
 import { NavigationProps } from './NavigationProps';
@@ -18,25 +19,28 @@ function classNames(...classes: string[]) {
 export default function HeaderDesktop(props: NavigationProps) {
   const { navigation, userNavigation } = props;
   const [img, setImg] = React.useState('');
+  const personalPegawaiData = usePersonalData();
 
   const { data: profile } = useCommonApi<null, GetPhotoProfileRes>(UserProfileAPI.USER_PHOTO, null, { method: 'GET' });
 
   const photos = () => {
-    callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${profile?.uuid_foto}`, null, { method: 'GET', isBlob: true }).then(
-      res => {
-        let url = '';
-        if (res.status === 200 && res.data instanceof Blob) {
-          url = window.URL.createObjectURL(res.data);
-          setImg(url);
+    if (personalPegawaiData?.user_id === profile?.user_id) {
+      callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${profile?.uuid_foto}`, null, { method: 'GET', isBlob: true }).then(
+        res => {
+          let url = '';
+          if (res.status === 200 && res.data instanceof Blob) {
+            url = window.URL.createObjectURL(res.data);
+            setImg(url);
+          }
         }
-      }
-    );
+      );
+    }
   };
 
   React.useEffect(() => {
     const unSubscribe = photos();
     return () => unSubscribe;
-  }, [profile?.uuid_foto]);
+  }, [profile?.user_id === personalPegawaiData?.user_id]);
 
   return (
     <>

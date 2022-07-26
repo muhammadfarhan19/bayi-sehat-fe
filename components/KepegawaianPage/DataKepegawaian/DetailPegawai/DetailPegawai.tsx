@@ -1,3 +1,5 @@
+import { Dialog, Transition } from '@headlessui/react';
+import { XIcon } from '@heroicons/react/outline';
 import { UserCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
 
@@ -37,6 +39,7 @@ const tabs = [
 function DetailPegawai() {
   const { tabName = tabs[0].name } = getQueryString<{ tabName: string }>();
   const [selected, setSelected] = React.useState(tabName);
+  const [showImage, setShowImage] = React.useState(false);
   const personalPegawaiData = usePersonalData();
 
   const [img, setImg] = React.useState('');
@@ -44,21 +47,23 @@ function DetailPegawai() {
   const { data: profile } = useCommonApi<null, GetPhotoProfileRes>(UserProfileAPI.USER_PHOTO, null, { method: 'GET' });
 
   const photos = () => {
-    callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${profile?.uuid_foto}`, null, { method: 'GET', isBlob: true }).then(
-      res => {
-        let url = '';
-        if (res.status === 200 && res.data instanceof Blob) {
-          url = window.URL.createObjectURL(res.data);
-          setImg(url);
+    if (personalPegawaiData?.user_id === profile?.user_id) {
+      callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${profile?.uuid_foto}`, null, { method: 'GET', isBlob: true }).then(
+        res => {
+          let url = '';
+          if (res.status === 200 && res.data instanceof Blob) {
+            url = window.URL.createObjectURL(res.data);
+            setImg(url);
+          }
         }
-      }
-    );
+      );
+    }
   };
 
   React.useEffect(() => {
     const unSubscribe = photos();
     return () => unSubscribe;
-  }, [profile?.uuid_foto]);
+  }, [profile?.user_id === personalPegawaiData?.user_id]);
 
   if (!personalPegawaiData) {
     return (
@@ -72,7 +77,7 @@ function DetailPegawai() {
     <>
       <div className="flex flex-row gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
         {img.length >= 1 ? (
-          <img className="h-[88px] w-[88px] rounded-full" src={img} alt="" />
+          <img onClick={() => setShowImage(!showImage)} className="h-[88px] w-[88px] rounded-full" src={img} alt="" />
         ) : (
           <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
         )}
@@ -133,9 +138,47 @@ function DetailPegawai() {
           {selected === tabs[6].name ? <RiwayatPenghargaan /> : null}
           {selected === tabs[7].name ? <RiwayatBelajar /> : null}
           {selected === tabs[8].name ? <RiwayatKeluarga /> : null}
-          {selected === tabs[0].name ? <ArsipDigital /> : null}
+          {selected === tabs[9].name ? <ArsipDigital /> : null}
         </div>
       </div>
+      {showImage && (
+        <Transition appear show={showImage} as={React.Fragment}>
+          <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={() => setShowImage(!showImage)}>
+            <div className="min-h-screen px-4 text-center">
+              <Transition.Child
+                as={React.Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Dialog.Overlay className="fixed inset-0 backdrop-brightness-50" />
+              </Transition.Child>
+              <span className="inline-block h-screen align-middle" aria-hidden="true">
+                &#8203;
+              </span>
+              <Transition.Child
+                as={React.Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <div className="my-8 inline-block w-full max-w-xs transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title as="div" className="flex justify-center">
+                    <img className="h-[250px] w-[250px] rounded-full" src={img} alt="" />
+                    <XIcon className="h-5 cursor-pointer" onClick={() => setShowImage(!showImage)} />
+                  </Dialog.Title>
+                </div>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition>
+      )}
     </>
   );
 }
