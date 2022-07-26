@@ -3,6 +3,10 @@ import { BellIcon, ChevronDownIcon, MenuIcon, XIcon } from '@heroicons/react/out
 import { UserCircleIcon } from '@heroicons/react/solid';
 import * as React from 'react';
 
+import { UserProfileAPI } from '../../../constants/APIUrls';
+import { GetPhotoProfileRes } from '../../../types/api/ProfilePhotoAPI';
+import { callAPI } from '../../../utils/Fetchers';
+import useCommonApi from '../hooks/useCommonApi';
 import HeaderMobile from './HeaderMobile';
 import MenuDropdown from './MenuDropdown';
 import { NavigationProps } from './NavigationProps';
@@ -12,7 +16,27 @@ function classNames(...classes: string[]) {
 }
 
 export default function HeaderDesktop(props: NavigationProps) {
-  const { navigation, user, userNavigation } = props;
+  const { navigation, userNavigation } = props;
+  const [img, setImg] = React.useState('');
+
+  const { data: profile } = useCommonApi<null, GetPhotoProfileRes>(UserProfileAPI.USER_PHOTO, null, { method: 'GET' });
+
+  const photos = () => {
+    callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${profile?.uuid_foto}`, null, { method: 'GET', isBlob: true }).then(
+      res => {
+        let url = '';
+        if (res.status === 200 && res.data instanceof Blob) {
+          url = window.URL.createObjectURL(res.data);
+          setImg(url);
+        }
+      }
+    );
+  };
+
+  React.useEffect(() => {
+    const unSubscribe = photos();
+    return () => unSubscribe;
+  }, [profile?.uuid_foto]);
 
   return (
     <>
@@ -43,8 +67,8 @@ export default function HeaderDesktop(props: NavigationProps) {
                   {/* Profile dropdown */}
                   <MenuDropdown navigation={userNavigation}>
                     <span className="sr-only">Open user menu</span>
-                    {user.imageUrl ? (
-                      <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                    {img.length >= 1 ? (
+                      <img className="h-8 w-8 rounded-full" src={img} alt="" />
                     ) : (
                       <UserCircleIcon className="h-8 w-8 rounded-full fill-white" />
                     )}

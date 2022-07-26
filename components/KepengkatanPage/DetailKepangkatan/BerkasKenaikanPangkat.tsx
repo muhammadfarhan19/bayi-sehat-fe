@@ -25,7 +25,7 @@ function BerkasKenaikanPangkat() {
     <>
       <section aria-labelledby="section-1-title">
         <div className="rounded-lg bg-white shadow">
-          <a href="/kepegawaian/daftar-jabatan" className="flex flex-row items-center gap-x-2 py-6 px-6">
+          <a href="/kepegawaian/kepangkatan" className="flex flex-row items-center gap-x-2 py-6 px-6">
             <ChevronLeftIcon className="h-8 w-8" />
             <div>Kembali</div>
           </a>

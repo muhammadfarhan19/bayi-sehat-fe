@@ -1,9 +1,13 @@
 import { UserCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
 
+import { UserProfileAPI } from '../../../../constants/APIUrls';
+import { GetPhotoProfileRes } from '../../../../types/api/ProfilePhotoAPI';
 import { classNames } from '../../../../utils/Components';
+import { callAPI } from '../../../../utils/Fetchers';
 import { getQueryString } from '../../../../utils/URLUtils';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
+import useCommonApi from '../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
 import Loader from '../../../shared/Loader/Loader';
 import ArsipDigital from './ArsipDigital';
@@ -13,6 +17,7 @@ import RiwayatBelajar from './RiwayatBelajar';
 import RiwayatDiklat from './RiwayatDiklat';
 import RiwayatGolongan from './RiwayatGolongan';
 import RiwayatJabatan from './RiwayatJabatan';
+import RiwayatKeluarga from './RiwayatKeluarga';
 import RiwayatPendidikan from './RiwayatPendidikan';
 import RiwayatPenghargaan from './RiwayatPenghargaan';
 
@@ -25,6 +30,7 @@ const tabs = [
   { name: 'Riwayat Diklat', href: '#' },
   { name: 'Riwayat Penghargaan', href: '#' },
   { name: 'Riwayat Belajar', href: '#' },
+  { name: 'Riwayat Keluarga', href: '#' },
   { name: 'Arsip Digital', href: '#' },
 ];
 
@@ -32,6 +38,27 @@ function DetailPegawai() {
   const { tabName = tabs[0].name } = getQueryString<{ tabName: string }>();
   const [selected, setSelected] = React.useState(tabName);
   const personalPegawaiData = usePersonalData();
+
+  const [img, setImg] = React.useState('');
+
+  const { data: profile } = useCommonApi<null, GetPhotoProfileRes>(UserProfileAPI.USER_PHOTO, null, { method: 'GET' });
+
+  const photos = () => {
+    callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${profile?.uuid_foto}`, null, { method: 'GET', isBlob: true }).then(
+      res => {
+        let url = '';
+        if (res.status === 200 && res.data instanceof Blob) {
+          url = window.URL.createObjectURL(res.data);
+          setImg(url);
+        }
+      }
+    );
+  };
+
+  React.useEffect(() => {
+    const unSubscribe = photos();
+    return () => unSubscribe;
+  }, [profile?.uuid_foto]);
 
   if (!personalPegawaiData) {
     return (
@@ -44,7 +71,11 @@ function DetailPegawai() {
   return (
     <>
       <div className="flex flex-row gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
-        <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
+        {img.length >= 1 ? (
+          <img className="h-[88px] w-[88px] rounded-full" src={img} alt="" />
+        ) : (
+          <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
+        )}
         <div className="my-auto flex flex-col">
           <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
           <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
@@ -101,7 +132,8 @@ function DetailPegawai() {
           {selected === tabs[5].name ? <RiwayatDiklat /> : null}
           {selected === tabs[6].name ? <RiwayatPenghargaan /> : null}
           {selected === tabs[7].name ? <RiwayatBelajar /> : null}
-          {selected === tabs[8].name ? <ArsipDigital /> : null}
+          {selected === tabs[8].name ? <RiwayatKeluarga /> : null}
+          {selected === tabs[0].name ? <ArsipDigital /> : null}
         </div>
       </div>
     </>

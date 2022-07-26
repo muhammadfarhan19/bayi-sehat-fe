@@ -117,3 +117,8 @@ export const RiwayatBelajarAPI = {
   POST_RIWAYAT_BELAJAR_UPDATE: config.apiHost + '/riwayat-belajar/update',
   POST_RIWAYAT_BELAJAR_DELETE: config.apiHost + '/riwayat-belajar/delete',
 };
+
+export const UserProfileAPI = {
+  USER_PHOTO: config.apiHost + '/user/foto',
+  GET_USER_DOC_PHOTO: config.apiHost + '/document',
+};

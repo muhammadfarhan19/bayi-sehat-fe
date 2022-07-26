@@ -30,124 +30,11 @@ const dummyMonth = [
 ];
 const dummyStatus = ['Eligible', 'Tidak Eligible'];
 
-const dummyList = [
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-  {
-    nip: '196612251987022001',
-    name: 'Aan Sriwidayati',
-    unit: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    gol: 'III/d',
-    tmt_mk_awal: '2017-04-01, 25 thn 2 bln',
-    tmt_mk_baru: '2021-10-01, 29 thn 8 bln',
-    notes: 'SUDAH MAKSIMAL',
-    pegajuan: 'Diproses',
-  },
-];
-
 function Kepangkatan() {
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
   const [filterState] = React.useState({
     page: 1,
-    per_page: 4,
+    per_page: 20,
   });
 
   const { data: dataTable, isValidating } = useCommonApi<Kepangkatan, GetKepangkatanList>(
@@ -284,6 +171,12 @@ function Kepangkatan() {
                         scope="col"
                         className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
+                        No
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         NIP
                       </th>
                       <th
@@ -337,28 +230,29 @@ function Kepangkatan() {
                         key={dataIdx}
                         className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                       >
-                        <td className="font-regular px-6 text-xs text-gray-500">{data.nip}</td>
+                        <td className="font-regular px-6 text-xs text-gray-500">{dataIdx + 1}</td>
+                        <td className="font-regular px-6 text-xs text-gray-500">{data?.nip}</td>
                         <td
                           className="font-regular cursor-pointer px-6 text-xs text-indigo-800"
                           onClick={() => (window.location.href = `/kepegawaian/kepangkatan?id=${dataIdx}`)}
                         >
-                          {data.name}
+                          {data?.name}
                         </td>
-                        <td className="font-regular px-6 text-xs text-gray-500">{data.unit_kerja}</td>
-                        <td className="font-regular px-6 py-4 text-xs text-gray-500">{data.golongan} </td>
+                        <td className="font-regular px-6 text-xs text-gray-500">{data?.unit_kerja}</td>
+                        <td className="font-regular px-6 py-4 text-xs text-gray-500">{data?.golongan} </td>
                         <td className="font-regular px-6 py-4 text-xs text-gray-500">
-                          {data.tmt_mk_awal} {data.tmt_mk_awal_period}
+                          {data?.tmt_mk_awal} {data?.tmt_mk_awal_period}
                         </td>
                         <td className="font-regular px-6 text-xs text-gray-500">
-                          {data.tmt_mk_baru} {data.tmt_mk_baru_period}
+                          {data?.tmt_mk_baru} {data?.tmt_mk_baru_period}
                         </td>
-                        <td className="font-regular px-6 py-4 text-xs text-gray-500">{data.notes}</td>
+                        <td className="font-regular px-6 py-4 text-xs text-gray-500">{data?.notes}</td>
                         <td className="font-regular px-6 py-4 text-xs text-gray-500">
                           <a
                             href={`#`}
                             className="rounded-[4px] bg-indigo-600 px-[11px] py-[7px] text-xs font-medium text-gray-50 focus:outline-none"
                           >
-                            {/* {data.pegajuan} */}
+                            {/* {data?.pegajuan} */}
                           </a>
                         </td>
                       </tr>
@@ -369,9 +263,9 @@ function Kepangkatan() {
                   onChange={value => {
                     console.log(value);
                   }}
-                  totalData={dummyList.length}
-                  perPage={20}
-                  page={1}
+                  totalData={dataTable ? dataTable.pagination.total_data : 0}
+                  perPage={filterState.per_page}
+                  page={filterState.page}
                 />
               </div>
             </div>
