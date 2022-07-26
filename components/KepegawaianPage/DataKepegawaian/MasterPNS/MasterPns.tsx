@@ -65,7 +65,10 @@ export default function MasterPns() {
               <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
             </button>
             <div className="flex">
-              <button className="ml-1 inline-flex items-center rounded-md border border-indigo-600 bg-indigo-600 p-2 px-3 text-sm text-white hover:bg-indigo-700 focus:outline-none">
+              <button
+                className="ml-1 inline-flex items-center rounded-md border border-indigo-600 bg-indigo-600 p-2 px-3 text-sm text-white hover:bg-indigo-700 focus:outline-none"
+                onClick={() => (window.location.href = '/kepegawaian/data-pegawai?action=add&type=pns')}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path
                     fillRule="evenodd"
