@@ -27,3 +27,31 @@ export interface GetPegawaiListData {
   }[];
   pagination: Pagination;
 }
+
+export interface PostPegawaiInsertReq {
+  nip: string;
+  nama: string;
+  tempat_lahir: string;
+  tanggal_lahir: string;
+  jenis_kelamin: number;
+  status_menikah: number;
+  ktp: string;
+  email: string;
+  alamat: string;
+  npwp: string;
+  bpjs: string;
+  status_cpns: number;
+  status_kepegawaian: number;
+  tmt_cpns: string;
+  tmt_golongan: string;
+  golongan_id: number;
+  karpeg: string;
+  jabatan_id: number;
+  unit_kerja_id: number;
+  jumlah_anak: number;
+}
+
+export interface PostPegawaiInsertRes {
+  status: Status;
+  data: string;
+}

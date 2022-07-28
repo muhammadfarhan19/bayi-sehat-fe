@@ -40,6 +40,7 @@ export const JabatanAPI = {
 
 export const KepegawaianAPI = {
   GET_PEGAWAI_LIST: config.apiHost + '/pegawai/list',
+  POST_PEGAWAI_INSERT: config.apiHost + '/pegawai/insert',
 };
 
 export const PetaAPI = {

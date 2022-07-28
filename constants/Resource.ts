@@ -15,6 +15,7 @@ export const GenderText: Record<Gender, string> = {
 export const StatusPNSText: Record<StatusCpns, String> = {
   [StatusCpns.PNS]: 'PNS',
   [StatusCpns.PPNPN]: 'PPNPN',
+  [StatusCpns.CPNS]: 'CPNS',
 };
 
 export const JenisBerkas = {

@@ -24,6 +24,7 @@ export enum Gender {
 export enum StatusCpns {
   PNS = 1,
   PPNPN = 2,
+  CPNS = 3,
 }
 
 export enum DocumentUploadType {
