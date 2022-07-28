@@ -1,9 +1,21 @@
 import React from 'react';
 
 import { GenderText, StatusMenikahText } from '../../../../constants/Resource';
+import FileLoader from '../../../shared/FileLoader';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
 import Loader from '../../../shared/Loader/Loader';
+
+const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
+  if (!link) {
+    return <>{value}</>;
+  }
+  return (
+    <FileLoader uuid={link} asLink>
+      <a className="ml-2 whitespace-nowrap text-blue-500 underline">{value}</a>
+    </FileLoader>
+  );
+};
 
 function DataDiriPribadi() {
   const dataApiRes = usePersonalData();
@@ -28,11 +40,21 @@ function DataDiriPribadi() {
               value: dataApiRes?.status_menikah ? StatusMenikahText[dataApiRes.status_menikah] : '',
             },
             { label: 'Jumlah Anak', value: dataApiRes.jumlah_anak },
-            { label: 'KTP', value: dataApiRes.ktp },
+            {
+              label: 'KTP',
+              value: <LinkFile link={dataApiRes.uuid_file_ktp} value={dataApiRes.ktp} />,
+            },
             { label: 'Email', value: dataApiRes.email },
             { label: 'Alamat', value: dataApiRes.alamat },
-            { label: 'NPWP', value: dataApiRes.npwp },
-            { label: 'BPJS', value: dataApiRes.bpjs },
+            {
+              label: 'NPWP',
+              value: <LinkFile link={dataApiRes.uuid_file_npwp} value={dataApiRes.npwp} />,
+            },
+            {
+              label: 'BPJS',
+              value: <LinkFile link={dataApiRes.uuid_file_bpjs} value={dataApiRes.bpjs} />,
+            },
+            { label: 'Nomor HP', value: dataApiRes.nomor_hp },
           ].map((each, index) => (
             <tr key={index}>
               <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>

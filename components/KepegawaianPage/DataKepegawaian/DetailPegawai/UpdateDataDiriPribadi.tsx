@@ -1,5 +1,5 @@
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
-import { ChevronLeftIcon } from '@heroicons/react/solid';
+import { ChevronLeftIcon, UploadIcon } from '@heroicons/react/solid';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -15,10 +15,13 @@ import {
   PostUserProfileRes,
 } from '../../../../types/api/UserAPI';
 import { Status, StatusMenikah } from '../../../../types/Common';
+import { classNames } from '../../../../utils/Components';
 import { callAPI } from '../../../../utils/Fetchers';
 import { getQueryString } from '../../../../utils/URLUtils';
 import { CircleProgress } from '../../../shared/CircleProgress';
+import FileLoader from '../../../shared/FileLoader';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
+import UploadWrapper, { FileObject } from '../../../shared/Input/UploadWrapper';
 import Loader from '../../../shared/Loader/Loader';
 
 export default function UpdateDataDiriPribadi() {
@@ -146,21 +149,69 @@ export default function UpdateDataDiriPribadi() {
               )}
             </div>
           </div>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">NIK</div>
-            <div className="flex w-full flex-auto flex-col">
-              <input
-                {...register('nik', { required: true })}
-                defaultValue={data?.ktp}
-                type="text"
-                className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+          <div>
+            <div className="flex flex-row items-center px-7">
+              <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">NIK</div>
+              <div className="flex w-full flex-auto flex-col">
+                <input
+                  {...register('nik', { required: true })}
+                  defaultValue={data?.ktp}
+                  type="text"
+                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                />
+                {errors.nik && errors.nik.type === 'required' && (
+                  <div className="flex items-center">
+                    <ExclamationCircleIcon className="mr-1 h-4 w-4 text-red-500" />
+                    <div className="text-sm text-red-500">Mohon isikan data KTP</div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
+              <Controller
+                control={control}
+                name="uuid_file_ktp"
+                rules={{ required: 'Mohon upload file' }}
+                render={({ field: { onChange, value } }) => (
+                  <div className="flex items-center">
+                    <UploadWrapper
+                      allowedTypes={['jpg', 'jpeg', 'png']}
+                      handleUploadChange={(files: FileObject[]) => {
+                        onChange(files[0].id);
+                      }}
+                    >
+                      {({ loading }) => (
+                        <div className="flex items-center">
+                          <button
+                            disabled={loading}
+                            type="button"
+                            className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                          >
+                            {loading ? <CircleProgress /> : null}
+                            <UploadIcon className="mr-1 h-4" />
+                            Upload
+                          </button>
+                          {!value && (
+                            <div
+                              className={classNames(
+                                'ml-2 text-xs',
+                                errors.uuid_file_ktp ? 'text-red-400' : 'text-gray-400'
+                              )}
+                            >
+                              (jpg,jpeg,png)
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </UploadWrapper>
+                    {!!value && (
+                      <FileLoader uuid={value} asLink>
+                        <a className={`ml-2 whitespace-nowrap text-blue-500 underline`}>foto KTP</a>
+                      </FileLoader>
+                    )}
+                  </div>
+                )}
               />
-              {errors.nik && errors.nik.type === 'required' && (
-                <div className="flex items-center">
-                  <ExclamationCircleIcon className="mr-1 h-4 w-4 text-red-500" />
-                  <div className="text-sm text-red-500">Mohon isikan data KTP</div>
-                </div>
-              )}
             </div>
           </div>
           <div className="flex flex-row items-center px-7">
@@ -197,36 +248,149 @@ export default function UpdateDataDiriPribadi() {
               )}
             </div>
           </div>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">NPWP</div>
-            <div className="flex w-full flex-auto flex-col">
-              <input
-                {...register('npwp', { required: true })}
-                defaultValue={data?.npwp}
-                type="text"
-                className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+          <div>
+            <div className="flex flex-row items-center px-7">
+              <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">NPWP</div>
+              <div className="flex w-full flex-auto flex-col">
+                <input
+                  {...register('npwp', { required: true })}
+                  defaultValue={data?.npwp}
+                  type="text"
+                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                />
+                {errors.npwp && errors.npwp.type === 'required' && (
+                  <div className="flex items-center">
+                    <ExclamationCircleIcon className="mr-1 h-4 w-4 text-red-500" />
+                    <div className="text-sm text-red-500">Mohon isikan data NPWP</div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
+              <Controller
+                control={control}
+                name="uuid_file_npwp"
+                rules={{ required: 'Mohon upload file' }}
+                render={({ field: { onChange, value } }) => (
+                  <div className="flex items-center">
+                    <UploadWrapper
+                      allowedTypes={['jpg', 'jpeg', 'png']}
+                      handleUploadChange={(files: FileObject[]) => {
+                        onChange(files[0].id);
+                      }}
+                    >
+                      {({ loading }) => (
+                        <div className="flex items-center">
+                          <button
+                            disabled={loading}
+                            type="button"
+                            className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                          >
+                            {loading ? <CircleProgress /> : null}
+                            <UploadIcon className="mr-1 h-4" />
+                            Upload
+                          </button>
+                          {!value && (
+                            <div
+                              className={classNames(
+                                'ml-2 text-xs',
+                                errors.uuid_file_npwp ? 'text-red-400' : 'text-gray-400'
+                              )}
+                            >
+                              (jpg,jpeg,png)
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </UploadWrapper>
+                    {!!value && (
+                      <FileLoader uuid={value} asLink>
+                        <a className="ml-2 whitespace-nowrap text-blue-500 underline">foto NPWP</a>
+                      </FileLoader>
+                    )}
+                  </div>
+                )}
               />
-              {errors.npwp && errors.npwp.type === 'required' && (
-                <div className="flex items-center">
-                  <ExclamationCircleIcon className="mr-1 h-4 w-4 text-red-500" />
-                  <div className="text-sm text-red-500">Mohon isikan data NPWP</div>
-                </div>
-              )}
+            </div>
+          </div>
+          <div>
+            <div className="flex flex-row items-center px-7">
+              <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">BPJS</div>
+              <div className="flex w-full flex-auto flex-col">
+                <input
+                  {...register('bpjs', { required: true })}
+                  defaultValue={data?.bpjs}
+                  type="text"
+                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                />
+                {errors.bpjs && errors.bpjs.type === 'required' && (
+                  <div className="flex items-center">
+                    <ExclamationCircleIcon className="mr-1 h-4 w-4 text-red-500" />
+                    <div className="text-sm text-red-500">Mohon isikan data BPJS</div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
+              <Controller
+                control={control}
+                name="uuid_file_bpjs"
+                rules={{ required: 'Mohon upload file' }}
+                render={({ field: { onChange, value } }) => (
+                  <div className="flex items-center">
+                    <UploadWrapper
+                      allowedTypes={['jpg', 'jpeg', 'png']}
+                      handleUploadChange={(files: FileObject[]) => {
+                        onChange(files[0].id);
+                      }}
+                    >
+                      {({ loading }) => (
+                        <div className="flex items-center">
+                          <button
+                            disabled={loading}
+                            type="button"
+                            className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                          >
+                            {loading ? <CircleProgress /> : null}
+                            <UploadIcon className="mr-1 h-4" />
+                            Upload
+                          </button>
+                          {!value && (
+                            <div
+                              className={classNames(
+                                'ml-2 text-xs',
+                                errors.uuid_file_bpjs ? 'text-red-400' : 'text-gray-400'
+                              )}
+                            >
+                              (jpg,jpeg,png)
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </UploadWrapper>
+                    {!!value && (
+                      <FileLoader uuid={value} asLink>
+                        <a className="ml-2 whitespace-nowrap text-blue-500 underline">foto BPJS</a>
+                      </FileLoader>
+                    )}
+                  </div>
+                )}
+              />
             </div>
           </div>
           <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">BPJS</div>
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nomor HP</div>
             <div className="flex w-full flex-auto flex-col">
               <input
-                {...register('bpjs', { required: true })}
-                defaultValue={data?.bpjs}
+                {...register('nomor_hp', { required: true })}
+                defaultValue={data?.nomor_hp}
                 type="text"
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               />
-              {errors.bpjs && errors.bpjs.type === 'required' && (
+              {errors.nomor_hp && errors.nomor_hp.type === 'required' && (
                 <div className="flex items-center">
                   <ExclamationCircleIcon className="mr-1 h-4 w-4 text-red-500" />
-                  <div className="text-sm text-red-500">Mohon isikan data BPJS</div>
+                  <div className="text-sm text-red-500">Mohon isikan data nomor HP</div>
                 </div>
               )}
             </div>

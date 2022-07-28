@@ -10,6 +10,10 @@ export interface GetUserProfileData {
   npwp: string;
   status_menikah: StatusMenikah;
   user_id: number;
+  uuid_file_ktp: string;
+  uuid_file_bpjs: string;
+  uuid_file_npwp: string;
+  nomor_hp: string;
 }
 
 export interface GetUserPersonalPegawaiData {
@@ -79,6 +83,10 @@ export interface PostUserProfileReq {
   alamat: string;
   npwp: string;
   bpjs: string;
+  uuid_file_ktp: string;
+  uuid_file_bpjs: string;
+  uuid_file_npwp: string;
+  nomor_hp: string;
 }
 
 export interface PostUserProfileRes {
