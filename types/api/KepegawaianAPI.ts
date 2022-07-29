@@ -55,3 +55,17 @@ export interface PostPegawaiInsertRes {
   status: Status;
   data: string;
 }
+
+export interface PostPegawaiKarpegUpdateReq {
+  pegawai_id: number;
+  karpeg: string;
+  karpeg_file: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+}
+
+export interface PostPegawaiKarpegUpdateRes {
+  status: Status;
+  data: string;
+}

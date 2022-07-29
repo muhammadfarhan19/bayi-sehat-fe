@@ -20,6 +20,10 @@ export interface GetUserPersonalPegawaiData {
   golongan: string;
   jabatan: string;
   karpeg: string;
+  karpeg_file: {
+    document_uuid: string;
+    document_name: string;
+  }[];
   masa_kerja: string;
   masa_kerja_kepangkatan: string;
   nama: string;

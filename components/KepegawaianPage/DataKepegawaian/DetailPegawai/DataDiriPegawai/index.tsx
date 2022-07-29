@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { StatusPNSText } from '../../../../constants/Resource';
-import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
-import usePersonalData from '../../../shared/hooks/usePersonalData';
-import Loader from '../../../shared/Loader/Loader';
+import { StatusPNSText } from '../../../../../constants/Resource';
+import { withErrorBoundary } from '../../../../shared/hocs/ErrorBoundary';
+import usePersonalData from '../../../../shared/hooks/usePersonalData';
+import Loader from '../../../../shared/Loader/Loader';
+import KarpegModal from './KarpegModal';
 
 function DataDiriPegawai() {
   const dataPersonal = usePersonalData();
@@ -36,7 +37,10 @@ function DataDiriPegawai() {
             { label: 'Pangkat', value: dataPersonal.pangkat },
             { label: 'Masa Kerja', value: dataPersonal.masa_kerja },
             { label: 'Masa Kerja Kepangkatan', value: dataPersonal.masa_kerja_kepangkatan },
-            { label: 'Karpeg', value: dataPersonal.karpeg },
+            {
+              label: 'Karpeg',
+              value: <KarpegModal />,
+            },
           ].map((each, index) => (
             <tr key={index}>
               <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
