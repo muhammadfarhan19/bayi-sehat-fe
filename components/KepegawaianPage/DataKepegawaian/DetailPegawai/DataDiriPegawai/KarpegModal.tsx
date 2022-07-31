@@ -78,7 +78,7 @@ export default function KarpegModal() {
   return (
     <>
       <a className="cursor-pointer whitespace-nowrap text-blue-500 underline" onClick={() => setShow(true)}>
-        {dataPersonal?.karpeg}
+        {!dataPersonal?.karpeg || dataPersonal?.karpeg === '-' ? 'kosong' : dataPersonal?.karpeg}
       </a>
       <Transition appear show={show} as={React.Fragment}>
         <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={handleModal}>
@@ -120,6 +120,7 @@ export default function KarpegModal() {
                         <div className="mt-1">
                           <input
                             {...register('nomorKartu', { required: 'Mohon masukkan nomor kartu pegawai.' })}
+                            defaultValue={dataPersonal?.karpeg}
                             autoComplete={'off'}
                             className={classNames(
                               'block w-full rounded-md shadow-sm sm:text-sm',

@@ -16,7 +16,7 @@ import {
   RiwayatPendidikanDetailData,
 } from '../../../../../types/api/PendidikanAPI';
 import { Status } from '../../../../../types/Common';
-import { classNames } from '../../../../../utils/Components';
+import { classNames, composeListDefaultValue } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
@@ -64,7 +64,7 @@ export default function PendidikanForm(props: UploadFormProps) {
 
   const jenjangPendidikan = useJenjangPendidikan();
 
-  const { data } = useCommonApi<GetRiwayatPendidikanDetailReq, RiwayatPendidikanDetailData>(
+  const { data, isValidating } = useCommonApi<GetRiwayatPendidikanDetailReq, RiwayatPendidikanDetailData>(
     RiwayatPendidikanAPI.GET_RIWAYAT_PENDIDIKAN_DETAIL,
     { id: Number(selectedId) },
     { method: 'GET' },
@@ -72,18 +72,22 @@ export default function PendidikanForm(props: UploadFormProps) {
   );
 
   React.useEffect(() => {
-    if (data && data?.files[0]?.document_uuid) {
-      setValue('file_id', data.files[0].document_uuid);
-      setValue('file_name', data.files[0].document_name);
+    if (data) {
+      setValue('file_id', data.files?.[0]?.document_uuid);
+      setValue('file_name', data.files?.[0]?.document_name);
       setValue('jenjang', data.jenjang_id);
       setValue('nama_institusi', data.pt);
       setValue('prodi', data.prodi);
       setValue('no_ijazah', data.no_ijazah);
-      setValue('ijazah_cpns', data.is_ijazah_cpns === true ? '1' : '2'),
-        setValue('ijazah_terakhir', data.is_ijazah_terakhir === true ? '1' : '2'),
-        setValue('tgl_lulus', data.tanggal_lulus);
+      setValue('ijazah_cpns', data.is_ijazah_cpns === true ? '1' : '2');
+      setValue('ijazah_terakhir', data.is_ijazah_terakhir === true ? '1' : '2');
+      setValue('tgl_lulus', data.tanggal_lulus);
     }
   }, [data]);
+
+  if (isValidating) {
+    return <></>;
+  }
 
   const submitHandler = async (formData: FormState) => {
     let resSubmit;
@@ -224,10 +228,15 @@ export default function PendidikanForm(props: UploadFormProps) {
                       control={control}
                       rules={{ required: 'Mohon pilih jenjang yang ingin disimpan.' }}
                       name="jenjang"
-                      render={({ field: { onChange } }) => (
+                      render={({ field: { onChange, value } }) => (
                         <AutoComplete
                           onChange={value => onChange(value.value)}
                           label={'Jenjang'}
+                          defaultValue={
+                            value
+                              ? composeListDefaultValue(jenjangPendidikan!, 'jenjang_id', 'jenjang', value)
+                              : undefined
+                          }
                           options={(jenjangPendidikan || [])?.map(each => ({
                             text: each.jenjang,
                             value: String(each.jenjang_id),

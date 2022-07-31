@@ -51,6 +51,7 @@ export default function JabatanForm(props: UploadFormProps) {
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm<FormState>({
     defaultValues: {
       tmt: Date.now(),
@@ -63,8 +64,9 @@ export default function JabatanForm(props: UploadFormProps) {
 
   const { data: daftarJabatan } = useCommonApi<GetJabatanReq, JabatanData>(
     JabatanAPI.GET_JABATAN,
-    { page: 1, per_page: 20, jabatan: queryJabatan },
-    { method: 'GET' }
+    { page: 1, per_page: 20, jabatan: queryJabatan, jenis_jabatan: Number(getValues('tipe_jabatan')) },
+    { method: 'GET' },
+    { skipCall: !getValues('tipe_jabatan') }
   );
 
   React.useEffect(() => {
