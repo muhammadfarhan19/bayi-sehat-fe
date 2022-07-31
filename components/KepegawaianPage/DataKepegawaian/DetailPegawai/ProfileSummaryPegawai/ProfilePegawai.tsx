@@ -37,7 +37,7 @@ export default function ProfilePegawai(props: ID) {
       <HeaderComponents
         name={String(personalPegawaiData?.nama)}
         jabatan={String(personalPegawaiData?.jabatan)}
-        contact={`${personalPegawaiData?.email} , ${personalPegawaiData?.nomor_hp}`}
+        contact={`${personalPegawaiData?.email} , ${personalPegawaiData?.hp}`}
       />
       <LabelledRowsItem separatorTop="mt-5 mb-2" title="Data Diri Pegawai" />
       <ContentLabelledItems
