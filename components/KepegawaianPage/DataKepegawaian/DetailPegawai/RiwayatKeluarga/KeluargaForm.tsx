@@ -78,26 +78,16 @@ export default function KeluargaForm(props: UploadFormProps) {
   React.useEffect(() => {
     const isCerai = getValues('tanggal_cerai');
     const isMeninggal = getValues('tanggal_meninggal');
-    // logic pada field status pernikahan:
-    // - Jika tanggal meninggal dan tanggal cerai kosong maka = Menikah
-    // - Jika tanggal meninggal di isi dan tanggal cerai kosong maka =  Cerai Meninggal
-    // - Jika tanggal meninggal kosong dan tanggal cerai di isi = maka Cerai Hidup
-    // - Jika tanggal meninggal di isi dan tanggal cerai DI ISI maka =  Cerai Meninggal
     if (isMeninggal.length === 0 && isCerai.length === 0) {
       setValue('status_pernikahan', 'Menikah');
-      // setMarriageStatus('1');
     } else if (isMeninggal.length >= 2 && isCerai.length === 0) {
       setValue('status_pernikahan', 'Cerai - Meninggal');
-      // setMarriageStatus('2');
     } else if (isMeninggal.length === 0 && isCerai.length >= 2) {
       setValue('status_pernikahan', 'Cerai - Hidup');
-      // setMarriageStatus('3');
     } else if (isMeninggal.length >= 2 && isCerai.length >= 2) {
       setValue('status_pernikahan', 'Cerai - Meninggal');
-      // setMarriageStatus('4');
     } else {
       setValue('status_pernikahan', 'Menikah');
-      // setMarriageStatus('1');
     }
   }, [watch('tanggal_cerai'), watch('tanggal_menikah'), watch('tanggal_meninggal')]);
 
@@ -147,6 +137,10 @@ export default function KeluargaForm(props: UploadFormProps) {
           {
             document_name: formData?.file_name_kartu_suami_istri,
             document_uuid: formData?.file_id_kartu_suami_istri,
+          },
+          {
+            document_name: formData?.file_name_akta_meninggal,
+            document_uuid: formData?.file_id_akta_meninggal,
           },
         ],
       },
@@ -555,11 +549,16 @@ export default function KeluargaForm(props: UploadFormProps) {
               <label className="block text-sm font-medium text-gray-700">No Akta Meninggal</label>
               <div className="mt-1">
                 <input
-                  {...register('nomor_akta_meninggal')}
+                  {...register('nomor_akta_meninggal', {
+                    required: getValues('tanggal_meninggal').length >= 1 ? 'Silahkan Isi No. Akta Meninggal' : false,
+                  })}
                   className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                   name="nomor_akta_meninggal"
                   type="text"
                 />
+                {errors.nomor_akta_meninggal && (
+                  <p className="mt-1 text-xs text-red-500">{errors.nomor_akta_meninggal.message}</p>
+                )}
               </div>
             </div>
           </div>
@@ -622,11 +621,16 @@ export default function KeluargaForm(props: UploadFormProps) {
               <label className="block text-sm font-medium text-gray-700">No Akta Cerai</label>
               <div className="mt-1">
                 <input
-                  {...register('nomor_akta_cerai')}
+                  {...register('nomor_akta_cerai', {
+                    required: getValues('tanggal_cerai').length >= 1 ? 'Silahkan Isi No. Akta Cerai' : false,
+                  })}
                   className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                   name="nomor_akta_cerai"
                   type="text"
                 />
+                {errors.nomor_akta_cerai && (
+                  <p className="mt-1 text-xs text-red-500">{errors.nomor_akta_cerai.message}</p>
+                )}
               </div>
             </div>
           </div>

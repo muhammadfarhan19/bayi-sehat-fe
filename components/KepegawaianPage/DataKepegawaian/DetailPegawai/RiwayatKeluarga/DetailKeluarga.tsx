@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, PlusIcon } from '@heroicons/react/outline';
-import { format } from 'date-fns';
+import format from 'date-fns/format';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -98,6 +98,12 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
     });
   };
 
+  const formatDate = (date: any) => {
+    if (date !== undefined) {
+      return format(new Date(date), 'yyyy-MM-dd');
+    }
+  };
+
   const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
     if (!link) {
       return <>{value}</>;
@@ -110,16 +116,16 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
   };
 
   React.useEffect(() => {
-    if (detailKeluarga?.status_pernikahan === 1) {
+    if (Number(detailKeluarga?.status_pernikahan) === 1) {
       setMarriageState('Menikah');
-    } else if (detailKeluarga?.status_pernikahan === 2) {
+    } else if (Number(detailKeluarga?.status_pernikahan) === 2) {
       setMarriageState('Cerai Meninggal');
-    } else if (detailKeluarga?.status_pernikahan === 3) {
+    } else if (Number(detailKeluarga?.status_pernikahan) === 3) {
       setMarriageState('Cerai Hidup');
-    } else if (detailKeluarga?.status_pernikahan === 4) {
+    } else if (Number(detailKeluarga?.status_pernikahan) === 4) {
       setMarriageState('Cerai Meninggal');
     }
-  }, [detailKeluarga?.status_pernikahan]);
+  }, [Number(detailKeluarga?.status_pernikahan)]);
 
   React.useEffect(() => {
     if (detailKeluarga?.agama === 1) {
@@ -176,7 +182,7 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
             {[
               { label: 'Nama', value: detailKeluarga?.nama },
               { label: 'Tempat Lahir', value: detailKeluarga?.tempat_lahir },
-              { label: 'Tanggal Lahir', value: detailKeluarga?.tanggal_lahir },
+              { label: 'Tanggal Lahir', value: formatDate(detailKeluarga?.tanggal_lahir) },
               { label: 'Jenis Kelamin', value: detailKeluarga?.jenis_kelamin === 1 ? 'Laki-Laki' : 'Perempuan' },
 
               { label: 'Agama', value: religionState },
@@ -220,7 +226,7 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
               },
               { label: 'Status Pasangan', value: detailKeluarga?.status_pasangan === 1 ? 'Suami' : 'Istri' },
               { label: 'Status PNS', value: detailKeluarga?.status_pns === 1 ? 'PNS' : 'Non-PNS' },
-              { label: 'Tanggal Menikah', value: format(new Date(detailKeluarga?.tanggal_menikah), 'yyyy-MM-dd') },
+              { label: 'Tanggal Menikah', value: formatDate(detailKeluarga?.tanggal_menikah) },
               { label: 'Nomer Akta Nikah', value: detailKeluarga?.nomor_akta_menikah },
               {
                 label: 'Akta Nikah',
@@ -236,22 +242,35 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
               },
               {
                 label: 'Tanggal Meninggal',
-                value:
-                  detailKeluarga?.tanggal_meninggal === null
-                    ? '-'
-                    : format(new Date(detailKeluarga?.tanggal_meninggal), 'yyyy-MM-dd'),
+                value: detailKeluarga?.tanggal_meninggal === null ? '-' : formatDate(detailKeluarga?.tanggal_meninggal),
               },
               {
                 label: 'Nomer Akta Meninggal',
                 value: detailKeluarga?.nomor_akta_meninggal?.length === 0 ? '-' : detailKeluarga?.nomor_akta_meninggal,
               },
-              { label: 'Akta Meninggal', value: '-' },
+              {
+                label: 'Akta Meninggal',
+                value: (
+                  <div className="flex flex-row items-center space-x-2">
+                    {detailKeluarga?.nomor_akta_meninggal?.length === 0 ? (
+                      '-'
+                    ) : detailKeluarga?.files?.[5].document_name.length === 0 ? (
+                      <p className="text-[red]">Tidak ada Data</p>
+                    ) : (
+                      <>
+                        <PDFIcon />
+                        <LinkFile
+                          link={detailKeluarga?.files?.[5].document_uuid}
+                          value={detailKeluarga?.files?.[5].document_name}
+                        />
+                      </>
+                    )}
+                  </div>
+                ),
+              },
               {
                 label: 'Tanggal Cerai',
-                value:
-                  detailKeluarga?.tanggal_cerai === null
-                    ? '-'
-                    : format(new Date(detailKeluarga?.tanggal_cerai), 'yyyy-MM-dd'),
+                value: detailKeluarga?.tanggal_cerai === null ? '-' : formatDate(detailKeluarga?.tanggal_cerai),
               },
               {
                 label: 'No Akta Cerai',
@@ -263,6 +282,8 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
                   <div className="flex flex-row items-center space-x-2">
                     {detailKeluarga?.nomor_akta_cerai?.length === 0 ? (
                       '-'
+                    ) : detailKeluarga?.files?.[3].document_name.length === 0 ? (
+                      <p className="text-[red]">Tidak ada Data</p>
                     ) : (
                       <>
                         <PDFIcon />
@@ -286,6 +307,8 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
                   <div className="flex flex-row items-center space-x-2">
                     {detailKeluarga?.nomor_kartu_suami_istri?.length === 0 ? (
                       '-'
+                    ) : detailKeluarga?.files?.[4].document_name.length === 0 ? (
+                      <p className="text-[red]">Tidak ada Data</p>
                     ) : (
                       <>
                         <PDFIcon />

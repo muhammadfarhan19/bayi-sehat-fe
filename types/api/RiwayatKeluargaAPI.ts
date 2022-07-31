@@ -84,6 +84,10 @@ export interface PostListKeluargaReq {
     {
       document_uuid: string;
       document_name: string;
+    },
+    {
+      document_uuid: string;
+      document_name: string;
     }
   ];
 }

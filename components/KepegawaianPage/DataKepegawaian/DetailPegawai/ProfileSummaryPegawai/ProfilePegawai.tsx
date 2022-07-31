@@ -102,19 +102,18 @@ export default function ProfilePegawai(props: ID) {
       />
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
       <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat Pendidikan" />
-      {getPendidikan?.map(data =>
-        data.prodi.length && data.pt.length && data.tanggal_lulus.length === 0 ? (
-          '-'
-        ) : (
-          <div className="mb-2" key={data.riwayat_id}>
-            <h6 className="flex flex-1 text-[12px]">{`${data.prodi} , ${data.pt}`}</h6>
-            <h6 className="mt-1 text-[10px] text-slate-500">{`(${format(
-              new Date(data.tanggal_lulus),
-              'yyyy-MM-dd'
-            )})`}</h6>
-          </div>
-        )
-      )}
+      {getPendidikan === null
+        ? '-'
+        : getPendidikan?.map(data => (
+            <div className="mb-2" key={data.riwayat_id}>
+              <h6 className="flex flex-1 text-[12px]">{`${data.jenjang_str}, ${data.prodi} , ${data.pt}`}</h6>
+              <h6 className="mt-1 text-[10px] text-slate-500">{`(${format(
+                new Date(data.tanggal_lulus),
+                'yyyy-MM-dd'
+              )})`}</h6>
+            </div>
+          ))}
+
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
       <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat Golongan" />
       <ContentLabelledItems subtitle="-" value={null} />
