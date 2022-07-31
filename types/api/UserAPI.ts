@@ -10,10 +10,19 @@ export interface GetUserProfileData {
   npwp: string;
   status_menikah: StatusMenikah;
   user_id: number;
-  uuid_file_ktp: string;
-  uuid_file_bpjs: string;
-  uuid_file_npwp: string;
-  nomor_hp: string;
+  uuid_ktp: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  uuid_bpjs: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  uuid_npwp: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  hp: string;
 }
 
 export interface GetUserPersonalPegawaiData {
@@ -87,10 +96,19 @@ export interface PostUserProfileReq {
   alamat: string;
   npwp: string;
   bpjs: string;
-  uuid_file_ktp: string;
-  uuid_file_bpjs: string;
-  uuid_file_npwp: string;
-  nomor_hp: string;
+  uuid_ktp: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  uuid_bpjs: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  uuid_npwp: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  hp: string;
 }
 
 export interface PostUserProfileRes {

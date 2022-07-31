@@ -24,6 +24,12 @@ import useCommonApi from '../../../shared/hooks/useCommonApi';
 import UploadWrapper, { FileObject } from '../../../shared/Input/UploadWrapper';
 import Loader from '../../../shared/Loader/Loader';
 
+type FormType = Omit<PostUserProfileReq, 'uuid_ktp' | 'uuid_bpjs' | 'uuid_npwp'> & {
+  uuid_ktp: string;
+  uuid_bpjs: string;
+  uuid_npwp: string;
+};
+
 export default function UpdateDataDiriPribadi() {
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
@@ -41,7 +47,7 @@ export default function UpdateDataDiriPribadi() {
     register,
     formState: { errors },
     setValue,
-  } = useForm<PostUserProfileReq>();
+  } = useForm<FormType>();
 
   React.useEffect(() => {
     if (!isValidating && data) {
@@ -63,14 +69,37 @@ export default function UpdateDataDiriPribadi() {
     window.location.href = `/?pegawai_id=${pegawai_id}&tabName=Data%20Diri%20Pribadi`;
   };
 
-  const submitHandler = async (formData: PostUserProfileReq) => {
+  const submitHandler = async (formData: FormType) => {
     setLoading(true);
 
     const updateRes = await callAPI<PostUserProfileReq, PostUserProfileRes>(UserAPI.POST_USER_UPDATE_PROFILE, {
-      ...formData,
+      nik: formData.nik,
+      email: formData.email,
+      alamat: formData.alamat,
+      npwp: formData.npwp,
+      bpjs: formData.bpjs,
+      hp: formData.hp,
       pegawai_id: Number(pegawai_id),
       jumlah_anak: Number(formData.jumlah_anak),
       status_menikah: Number(formData.status_menikah),
+      uuid_bpjs: [
+        {
+          document_name: 'BPJS',
+          document_uuid: formData.uuid_bpjs,
+        },
+      ],
+      uuid_ktp: [
+        {
+          document_name: 'KTP',
+          document_uuid: formData.uuid_ktp,
+        },
+      ],
+      uuid_npwp: [
+        {
+          document_name: 'NPWP',
+          document_uuid: formData.uuid_npwp,
+        },
+      ],
     });
 
     if (updateRes.status === 200 && updateRes.data?.status === Status.OK) {
@@ -170,7 +199,7 @@ export default function UpdateDataDiriPribadi() {
             <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
               <Controller
                 control={control}
-                name="uuid_file_ktp"
+                name="uuid_ktp"
                 rules={{ required: 'Mohon upload file' }}
                 render={({ field: { onChange, value } }) => (
                   <div className="flex items-center">
@@ -193,10 +222,7 @@ export default function UpdateDataDiriPribadi() {
                           </button>
                           {!value && (
                             <div
-                              className={classNames(
-                                'ml-2 text-xs',
-                                errors.uuid_file_ktp ? 'text-red-400' : 'text-gray-400'
-                              )}
+                              className={classNames('ml-2 text-xs', errors.uuid_ktp ? 'text-red-400' : 'text-gray-400')}
                             >
                               (jpg,jpeg,png)
                             </div>
@@ -269,7 +295,7 @@ export default function UpdateDataDiriPribadi() {
             <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
               <Controller
                 control={control}
-                name="uuid_file_npwp"
+                name="uuid_npwp"
                 rules={{ required: 'Mohon upload file' }}
                 render={({ field: { onChange, value } }) => (
                   <div className="flex items-center">
@@ -294,7 +320,7 @@ export default function UpdateDataDiriPribadi() {
                             <div
                               className={classNames(
                                 'ml-2 text-xs',
-                                errors.uuid_file_npwp ? 'text-red-400' : 'text-gray-400'
+                                errors.uuid_npwp ? 'text-red-400' : 'text-gray-400'
                               )}
                             >
                               (jpg,jpeg,png)
@@ -334,7 +360,7 @@ export default function UpdateDataDiriPribadi() {
             <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
               <Controller
                 control={control}
-                name="uuid_file_bpjs"
+                name="uuid_bpjs"
                 rules={{ required: 'Mohon upload file' }}
                 render={({ field: { onChange, value } }) => (
                   <div className="flex items-center">
@@ -359,7 +385,7 @@ export default function UpdateDataDiriPribadi() {
                             <div
                               className={classNames(
                                 'ml-2 text-xs',
-                                errors.uuid_file_bpjs ? 'text-red-400' : 'text-gray-400'
+                                errors.uuid_bpjs ? 'text-red-400' : 'text-gray-400'
                               )}
                             >
                               (jpg,jpeg,png)
@@ -382,12 +408,12 @@ export default function UpdateDataDiriPribadi() {
             <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nomor HP</div>
             <div className="flex w-full flex-auto flex-col">
               <input
-                {...register('nomor_hp', { required: true })}
-                defaultValue={data?.nomor_hp}
+                {...register('hp', { required: true })}
+                defaultValue={data?.hp}
                 type="text"
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               />
-              {errors.nomor_hp && errors.nomor_hp.type === 'required' && (
+              {errors.hp && errors.hp.type === 'required' && (
                 <div className="flex items-center">
                   <ExclamationCircleIcon className="mr-1 h-4 w-4 text-red-500" />
                   <div className="text-sm text-red-500">Mohon isikan data nomor HP</div>

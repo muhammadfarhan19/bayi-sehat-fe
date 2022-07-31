@@ -12,7 +12,7 @@ const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
   }
   return (
     <FileLoader uuid={link} asLink>
-      <a className="ml-2 whitespace-nowrap text-blue-500 underline">{value}</a>
+      <a className="whitespace-nowrap text-blue-500 underline">{value}</a>
     </FileLoader>
   );
 };
@@ -42,19 +42,19 @@ function DataDiriPribadi() {
             { label: 'Jumlah Anak', value: dataApiRes.jumlah_anak },
             {
               label: 'KTP',
-              value: <LinkFile link={dataApiRes.uuid_file_ktp} value={dataApiRes.ktp} />,
+              value: <LinkFile link={dataApiRes.uuid_ktp?.[0]?.document_uuid} value={dataApiRes.ktp} />,
             },
             { label: 'Email', value: dataApiRes.email },
             { label: 'Alamat', value: dataApiRes.alamat },
             {
               label: 'NPWP',
-              value: <LinkFile link={dataApiRes.uuid_file_npwp} value={dataApiRes.npwp} />,
+              value: <LinkFile link={dataApiRes.uuid_npwp?.[0]?.document_uuid} value={dataApiRes.npwp} />,
             },
             {
               label: 'BPJS',
-              value: <LinkFile link={dataApiRes.uuid_file_bpjs} value={dataApiRes.bpjs} />,
+              value: <LinkFile link={dataApiRes.uuid_bpjs?.[0]?.document_uuid} value={dataApiRes.bpjs} />,
             },
-            { label: 'Nomor HP', value: dataApiRes.nomor_hp },
+            { label: 'Nomor HP', value: dataApiRes.hp },
           ].map((each, index) => (
             <tr key={index}>
               <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
