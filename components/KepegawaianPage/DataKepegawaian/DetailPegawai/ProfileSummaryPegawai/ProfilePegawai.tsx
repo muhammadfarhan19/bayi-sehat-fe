@@ -3,9 +3,10 @@ import React from 'react';
 
 import { JabatanAPI, RiwayatPendidikanAPI, RiwayatPenghargaan } from '../../../../../constants/APIUrls';
 import { StatusMenikahText } from '../../../../../constants/Resource';
-import { RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
+import { GetRiwayatJabatanReq, RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
 import { GetRiwayatPendidikanListReq, RiwayatPendidikanListData } from '../../../../../types/api/PendidikanAPI';
 import { GetRiwayatPenghargaanListReq, PenghargaanList } from '../../../../../types/api/RiwayatPenghargaanAPI';
+import { getQueryString } from '../../../../../utils/URLUtils';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import { ContentLabelledItems, EndPrintedStatement, HeaderComponents, LabelledRowsItem } from './Shared/PageComponents';
@@ -15,6 +16,7 @@ interface ID {
 }
 
 export default function ProfilePegawai(props: ID) {
+  const { pegawai_id: pegawai_id_qs } = getQueryString<{ pegawai_id?: string }>();
   const personalPegawaiData = usePersonalData();
 
   const { data: getPendidikan } = useCommonApi<GetRiwayatPendidikanListReq, RiwayatPendidikanListData[]>(
@@ -23,9 +25,12 @@ export default function ProfilePegawai(props: ID) {
     { method: 'GET' }
   );
 
-  const { data: getJabatan } = useCommonApi<null, RiwayatJabatanData[]>(JabatanAPI.GET_RIWAYAT_JABATAN, null, {
-    method: 'GET',
-  });
+  const { data: getJabatan } = useCommonApi<GetRiwayatJabatanReq, RiwayatJabatanData[]>(
+    JabatanAPI.GET_RIWAYAT_JABATAN,
+    pegawai_id_qs ? { pegawai_id: Number(pegawai_id_qs) } : {},
+    { method: 'GET' }
+  );
+
   const { data: getPenghargaan } = useCommonApi<GetRiwayatPenghargaanListReq, PenghargaanList[]>(
     RiwayatPenghargaan.GET_RIWAYAT_PENGHARGAAN_LIST,
     { pegawai_id: personalPegawaiData?.pegawai_id },

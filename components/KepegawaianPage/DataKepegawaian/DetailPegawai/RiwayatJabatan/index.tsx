@@ -3,24 +3,27 @@ import * as React from 'react';
 
 import { JabatanAPI, RbacAPI, UserAPI } from '../../../../../constants/APIUrls';
 import { Permissions } from '../../../../../constants/Permission';
-import { RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
+import { GetRiwayatJabatanReq, RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
 import { AuthorizeData, PostRbacBulkAuthorizeReq } from '../../../../../types/api/RbacAPI';
 import { GetUserProfileData, GetUserProfileReq } from '../../../../../types/api/UserAPI';
 import { formatDate } from '../../../../../utils/DateUtil';
+import { getQueryString } from '../../../../../utils/URLUtils';
 import FileLoader from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import { PDFIcon } from '../../../../shared/icons/PDFIcon';
 import JabatanForm from './JabatanForm';
 
 export default function RiwayatJabatan() {
+  const { pegawai_id: pegawai_id_qs } = getQueryString<{ pegawai_id?: string }>();
+
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: string }>({
     open: false,
     selectedId: undefined,
   });
 
-  const { data: riwayatJabatan, mutate } = useCommonApi<null, RiwayatJabatanData[]>(
+  const { data: riwayatJabatan, mutate } = useCommonApi<GetRiwayatJabatanReq, RiwayatJabatanData[]>(
     JabatanAPI.GET_RIWAYAT_JABATAN,
-    null,
+    pegawai_id_qs ? { pegawai_id: Number(pegawai_id_qs) } : {},
     { method: 'GET' }
   );
 
