@@ -135,12 +135,15 @@ export default function ProfilePegawai(props: ID) {
       <ContentLabelledItems subtitle="-" value={null} />
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
       <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat Penghargaan" />
-      {getPenghargaan?.map(data => (
-        <div className="ml-10" key={data.riwayat_id}>
-          <p className="w-2/4 text-[12px]">{data.nama_penghargaan}</p>
-          <p className="mt-1 text-[10px] text-slate-500">{format(new Date(data.tgl_penghargaan), 'yyyy-MM-dd')}</p>
-        </div>
-      ))}
+      {getPenghargaan === null
+        ? '-'
+        : getPenghargaan?.map(data => (
+            <div className="ml-10" key={data.riwayat_id}>
+              <p className="w-2/4 text-[12px]">{data.nama_penghargaan}</p>
+              <p className="mt-1 text-[10px] text-slate-500">{format(new Date(data.tgl_penghargaan), 'yyyy-MM-dd')}</p>
+            </div>
+          ))}
+
       <EndPrintedStatement
         styleHeader="mt-5"
         styleContent="text-[12px] indent-10"
