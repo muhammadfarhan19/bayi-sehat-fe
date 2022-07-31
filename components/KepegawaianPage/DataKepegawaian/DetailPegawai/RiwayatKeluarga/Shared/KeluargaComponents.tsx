@@ -5,6 +5,9 @@ interface TextInput {
   name: string;
   type: string;
   label: string;
+  errorMessage: any;
+  isError: any;
+  validation: any;
 }
 
 interface Picker {
@@ -13,6 +16,9 @@ interface Picker {
   firstOption: string;
   secondOption: string;
   formVerification: string;
+  validation: any;
+  errorMessage: any;
+  isError: any;
 }
 
 interface ButtonRows {
@@ -32,6 +38,7 @@ export function DropdownSelect(props: Picker) {
       <label className="block text-sm font-medium text-gray-700">{props.label}</label>
       <div className="mt-1 sm:col-span-2 sm:mt-0">
         <select
+          {...props.validation}
           name={props.formVerification}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         >
@@ -39,6 +46,7 @@ export function DropdownSelect(props: Picker) {
           <option value={'1'}>{props.firstOption}</option>
           <option value={'2'}>{props.secondOption}</option>
         </select>
+        {props.isError && <p className="mt-1 text-xs text-red-500">{props.errorMessage}</p>}
       </div>
     </div>
   );
@@ -71,10 +79,12 @@ export function InputLabelled(props: TextInput) {
       </label>
       <div className="mt-1">
         <input
+          {...props.validation}
           className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
           name={props.name}
           type={props.type}
         />
+        {props.isError && <p className="mt-1 text-xs text-red-500">{props.errorMessage}</p>}
       </div>
     </div>
   );

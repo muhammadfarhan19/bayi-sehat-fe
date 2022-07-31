@@ -18,6 +18,11 @@ export interface GetPhotoProfileRes {
   user_id: number;
   nama: string;
   uuid_foto: string;
+  pegawai_id: number;
+}
+
+export interface GetOptPhotoReq {
+  pegawai_id?: number;
 }
 
 export interface GetPhotoProfileReq {

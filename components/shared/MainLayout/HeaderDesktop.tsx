@@ -4,8 +4,10 @@ import { UserCircleIcon } from '@heroicons/react/solid';
 import * as React from 'react';
 
 import { UserProfileAPI } from '../../../constants/APIUrls';
-import { GetPhotoProfileRes } from '../../../types/api/ProfilePhotoAPI';
+// import dataPegawai from '../../../pages/kepegawaian/data-pegawai';
+import { GetOptPhotoReq, GetPhotoProfileRes } from '../../../types/api/ProfilePhotoAPI';
 import { callAPI } from '../../../utils/Fetchers';
+import { getQueryString } from '../../../utils/URLUtils';
 import useCommonApi from '../hooks/useCommonApi';
 import usePersonalData from '../hooks/usePersonalData';
 import HeaderMobile from './HeaderMobile';
@@ -20,27 +22,40 @@ export default function HeaderDesktop(props: NavigationProps) {
   const { navigation, userNavigation } = props;
   const [img, setImg] = React.useState('');
   const personalPegawaiData = usePersonalData();
+  const { pegawai_id } = getQueryString<{ pegawai_id: string }>();
 
-  const { data: profile } = useCommonApi<null, GetPhotoProfileRes>(UserProfileAPI.USER_PHOTO, null, { method: 'GET' });
+  const { data: pegawaiProfile } = useCommonApi<GetOptPhotoReq, GetPhotoProfileRes>(
+    UserProfileAPI.USER_PHOTO,
+    pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
+    { method: 'GET' },
+    { revalidateOnMount: true }
+  );
+
+  const { data: isAdmin } = useCommonApi<GetOptPhotoReq, GetPhotoProfileRes>(
+    UserProfileAPI.USER_PHOTO,
+    { pegawai_id: 0 },
+    { method: 'GET' },
+    { revalidateOnMount: true }
+  );
 
   const photos = () => {
-    if (personalPegawaiData?.user_id === profile?.user_id) {
-      callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${profile?.uuid_foto}`, null, { method: 'GET', isBlob: true }).then(
-        res => {
-          let url = '';
-          if (res.status === 200 && res.data instanceof Blob) {
-            url = window.URL.createObjectURL(res.data);
-            setImg(url);
-          }
+    const nonAdmin = pegawaiProfile?.uuid_foto;
+    const isAdminUser = isAdmin?.uuid_foto;
+    const ApiCall = (userPhoto: string) => {
+      callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${userPhoto}`, null, { method: 'GET', isBlob: true }).then(res => {
+        if (res.status === 200 && res.data instanceof Blob) {
+          const url = URL.createObjectURL(res.data);
+          setImg(url);
         }
-      );
-    }
+      });
+    };
+    !pegawai_id ? ApiCall(String(nonAdmin)) : ApiCall(String(isAdminUser));
   };
 
   React.useEffect(() => {
     const unSubscribe = photos();
     return () => unSubscribe;
-  }, [profile?.user_id === personalPegawaiData?.user_id]);
+  }, [personalPegawaiData?.pegawai_id === pegawaiProfile?.pegawai_id]);
 
   return (
     <>

@@ -15,6 +15,7 @@ import Loader from '../../../shared/Loader/Loader';
 import ArsipDigital from './ArsipDigital';
 import DataDiriPegawai from './DataDiriPegawai';
 import DataDiriPribadi from './DataDiriPribadi';
+import ProfilePegawai from './ProfileSummaryPegawai/ProfilePegawai';
 import RiwayatBelajar from './RiwayatBelajar';
 import RiwayatDiklat from './RiwayatDiklat';
 import RiwayatGolongan from './RiwayatGolongan';
@@ -41,6 +42,7 @@ function DetailPegawai() {
   const [selected, setSelected] = React.useState(tabName);
   const [showImage, setShowImage] = React.useState(false);
   const personalPegawaiData = usePersonalData();
+  const [showComponent, setShowComponent] = React.useState(false);
 
   const [img, setImg] = React.useState('');
 
@@ -75,15 +77,28 @@ function DetailPegawai() {
 
   return (
     <>
-      <div className="flex flex-row gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
-        {img.length >= 1 ? (
-          <img onClick={() => setShowImage(!showImage)} className="h-[88px] w-[88px] rounded-full" src={img} alt="" />
-        ) : (
-          <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
-        )}
-        <div className="my-auto flex flex-col">
-          <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
-          <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
+      <div className="flex flex-row flex-nowrap justify-between gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
+        <div className="flex flex-row">
+          {img.length >= 1 ? (
+            <img onClick={() => setShowImage(!showImage)} className="h-[88px] w-[88px] rounded-full" src={img} alt="" />
+          ) : (
+            <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
+          )}
+          <div className="my-auto flex flex-col">
+            <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
+            <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
+          </div>
+        </div>
+        <div className="self-center">
+          <button
+            onClick={() => {
+              setShowComponent(!showComponent);
+            }}
+            type="button"
+            className="mr-2 mb-2 inline-flex items-center rounded border border-transparent bg-green-600 py-1.5 px-2.5 text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200 disabled:text-gray-200"
+          >
+            Download Riwayat Hidup
+          </button>
         </div>
       </div>
       <div className="mt-[12px] rounded-[8px] bg-white py-6 px-[24px] shadow">
@@ -173,6 +188,63 @@ function DetailPegawai() {
                     <img className="h-[250px] w-[250px] rounded-full" src={img} alt="" />
                     <XIcon className="h-5 cursor-pointer" onClick={() => setShowImage(!showImage)} />
                   </Dialog.Title>
+                </div>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition>
+      )}
+      {showComponent && (
+        <Transition appear show={showComponent} as={React.Fragment}>
+          <Dialog
+            as="div"
+            className="fixed inset-0 z-10 overflow-y-auto"
+            onClose={() => setShowComponent(!showComponent)}
+          >
+            <div className="min-h-screen px-4 text-center">
+              <Transition.Child
+                as={React.Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Dialog.Overlay className="fixed inset-0 backdrop-brightness-50" />
+              </Transition.Child>
+              <span className="inline-block h-screen align-middle" aria-hidden="true">
+                &#8203;
+              </span>
+              <Transition.Child
+                as={React.Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title as="div" className="flex justify-center">
+                    {/* <XIcon className="h-5 cursor-pointer " onClick={() => setShowComponent(!showComponent)} /> */}
+                    <div className="self-end">
+                      <ProfilePegawai id="PDF Pegawai" />
+                    </div>
+                  </Dialog.Title>
+
+                  <button
+                    onClick={() => {
+                      const printContents = document.getElementById('PDF Pegawai')?.outerHTML;
+                      document.body.outerHTML = String(printContents);
+                      window.print();
+                      window.location.href = '/';
+                    }}
+                    type="submit"
+                    className="align-center mt-5 w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Download Riwayat Hidup
+                  </button>
                 </div>
               </Transition.Child>
             </div>

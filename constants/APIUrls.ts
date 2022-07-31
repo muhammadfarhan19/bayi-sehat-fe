@@ -124,3 +124,17 @@ export const UserProfileAPI = {
   USER_PHOTO: config.apiHost + '/user/foto',
   GET_USER_DOC_PHOTO: config.apiHost + '/document',
 };
+
+export const RiwayatKeluargaAPI = {
+  POST_RIWAYAT_KELUARGA_INSERT: config.apiHost + '/riwayat-keluarga/insert',
+  POST_RIWAYAT_KELUARGA_UPDATE: config.apiHost + '/riwayat-keluarga/update',
+  POST_RIWAYAT_KELUARGA_DELETE: config.apiHost + '/riwayat-keluarga/delete',
+  POST_RIWAYAT_KELUARGA_DETAIL: config.apiHost + '/riwayat-keluarga/detail',
+  GET_RIWAYAT_KELUARGA_LIST: config.apiHost + '/riwayat-keluarga/list',
+};
+
+export const RiwayatAnakAPI = {
+  POST_RIWAYAT_ANAK_INSERT: config.apiHost + '/anak-pegawai/insert',
+  POST_RIWAYAT_ANAK_DELETE: config.apiHost + '/anak-pegawai/delete',
+  GET_RIWAYAT_ANAK_LIST: config.apiHost + '/anak-pegawai/list',
+};
