@@ -58,6 +58,10 @@ export default function UpdateDataDiriPribadi() {
       setValue('alamat', data?.alamat);
       setValue('npwp', data?.npwp);
       setValue('bpjs', data?.bpjs);
+      setValue('hp', data?.hp);
+      setValue('uuid_bpjs', data?.uuid_bpjs?.[0]?.document_uuid);
+      setValue('uuid_ktp', data?.uuid_ktp?.[0]?.document_uuid);
+      setValue('uuid_npwp', data?.uuid_npwp?.[0]?.document_uuid);
     }
   }, [data]);
 
