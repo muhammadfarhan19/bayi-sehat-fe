@@ -4,7 +4,7 @@ import { UserCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
 
 import { UserProfileAPI } from '../../../../constants/APIUrls';
-import { GetPhotoProfileRes } from '../../../../types/api/ProfilePhotoAPI';
+import { GetOptPhotoReq, GetPhotoProfileRes } from '../../../../types/api/ProfilePhotoAPI';
 import { classNames } from '../../../../utils/Components';
 import { callAPI } from '../../../../utils/Fetchers';
 import { getQueryString } from '../../../../utils/URLUtils';
@@ -43,29 +43,38 @@ function DetailPegawai() {
   const [showImage, setShowImage] = React.useState(false);
   const personalPegawaiData = usePersonalData();
   const [showComponent, setShowComponent] = React.useState(false);
+  const { pegawai_id } = getQueryString<{ pegawai_id: string }>();
 
   const [img, setImg] = React.useState('');
 
-  const { data: profile } = useCommonApi<null, GetPhotoProfileRes>(UserProfileAPI.USER_PHOTO, null, { method: 'GET' });
+  const { data: profile } = useCommonApi<GetOptPhotoReq, GetPhotoProfileRes>(
+    UserProfileAPI.USER_PHOTO,
+    pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
+    { method: 'GET' }
+  );
+  const dataId = profile?.uuid_foto;
+  const userId = personalPegawaiData?.user_id;
+  const profileDataId = profile?.user_id;
 
   const photos = () => {
-    if (personalPegawaiData?.user_id === profile?.user_id) {
-      callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${profile?.uuid_foto}`, null, { method: 'GET', isBlob: true }).then(
-        res => {
-          let url = '';
-          if (res.status === 200 && res.data instanceof Blob) {
-            url = window.URL.createObjectURL(res.data);
-            setImg(url);
-          }
+    if (dataId && userId === profileDataId) {
+      callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${dataId}`, null, {
+        method: 'GET',
+        isBlob: true,
+      }).then(res => {
+        let url = '';
+        if (res.status === 200 && res.data instanceof Blob) {
+          url = window.URL.createObjectURL(res.data);
+          setImg(url);
         }
-      );
+      });
     }
   };
 
   React.useEffect(() => {
     const unSubscribe = photos();
     return () => unSubscribe;
-  }, [profile?.user_id === personalPegawaiData?.user_id]);
+  }, [profileDataId === userId && dataId]);
 
   if (!personalPegawaiData) {
     return (

@@ -41,15 +41,19 @@ export default function HeaderDesktop(props: NavigationProps) {
   const photos = () => {
     const nonAdmin = pegawaiProfile?.uuid_foto;
     const isAdminUser = isAdmin?.uuid_foto;
-    const ApiCall = (userPhoto: string) => {
-      callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${userPhoto}`, null, { method: 'GET', isBlob: true }).then(res => {
-        if (res.status === 200 && res.data instanceof Blob) {
-          const url = URL.createObjectURL(res.data);
-          setImg(url);
-        }
-      });
+    const ApiCall = (userPhoto?: string) => {
+      if (userPhoto !== undefined) {
+        callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${userPhoto}`, null, { method: 'GET', isBlob: true }).then(
+          res => {
+            if (res.status === 200 && res.data instanceof Blob) {
+              const url = URL.createObjectURL(res.data);
+              setImg(url);
+            }
+          }
+        );
+      }
     };
-    !pegawai_id ? ApiCall(String(nonAdmin)) : ApiCall(String(isAdminUser));
+    !pegawai_id ? ApiCall(nonAdmin) : ApiCall(isAdminUser);
   };
 
   React.useEffect(() => {

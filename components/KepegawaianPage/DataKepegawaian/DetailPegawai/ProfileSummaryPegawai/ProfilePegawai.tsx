@@ -3,7 +3,7 @@ import React from 'react';
 
 import { JabatanAPI, RiwayatPendidikanAPI, RiwayatPenghargaan } from '../../../../../constants/APIUrls';
 import { StatusMenikahText } from '../../../../../constants/Resource';
-import { GetRiwayatJabatanReq, RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
+import { RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
 import { GetRiwayatPendidikanListReq, RiwayatPendidikanListData } from '../../../../../types/api/PendidikanAPI';
 import { GetRiwayatPenghargaanListReq, PenghargaanList } from '../../../../../types/api/RiwayatPenghargaanAPI';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
@@ -23,12 +23,9 @@ export default function ProfilePegawai(props: ID) {
     { method: 'GET' }
   );
 
-  const { data: getJabatan } = useCommonApi<GetRiwayatJabatanReq, RiwayatJabatanData[]>(
-    JabatanAPI.GET_RIWAYAT_JABATAN,
-    { pegawai_id: Number(personalPegawaiData?.pegawai_id) },
-    { method: 'GET' }
-  );
-
+  const { data: getJabatan } = useCommonApi<null, RiwayatJabatanData[]>(JabatanAPI.GET_RIWAYAT_JABATAN, null, {
+    method: 'GET',
+  });
   const { data: getPenghargaan } = useCommonApi<GetRiwayatPenghargaanListReq, PenghargaanList[]>(
     RiwayatPenghargaan.GET_RIWAYAT_PENGHARGAAN_LIST,
     { pegawai_id: personalPegawaiData?.pegawai_id },
@@ -40,7 +37,7 @@ export default function ProfilePegawai(props: ID) {
       <HeaderComponents
         name={String(personalPegawaiData?.nama)}
         jabatan={String(personalPegawaiData?.jabatan)}
-        contact={`${personalPegawaiData?.email} + ${personalPegawaiData?.hp}`}
+        contact={`${personalPegawaiData?.email} + ${personalPegawaiData?.nomor_hp}`}
       />
       <LabelledRowsItem separatorTop="mt-5 mb-2" title="Data Diri Pegawai" />
       <ContentLabelledItems
