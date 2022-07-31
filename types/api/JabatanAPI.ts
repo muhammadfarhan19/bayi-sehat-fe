@@ -63,6 +63,10 @@ export interface UpdateJabatanRes {
   data: string;
 }
 
+export interface GetRiwayatJabatanReq {
+  pegawai_id?: number;
+}
+
 export interface GetRiwayatJabatanRes {
   status: string;
   data: RiwayatJabatanData[];

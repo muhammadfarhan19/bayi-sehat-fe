@@ -23,7 +23,7 @@ import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrappe
 
 interface FormState {
   tipe_jabatan: string;
-  jabatan_id: string;
+  jabatan_id?: string;
   kumulatif: string;
   tmt: number;
   file_name: string;
@@ -194,7 +194,11 @@ export default function JabatanForm(props: UploadFormProps) {
                       render={({ field: { onChange, value } }) =>
                         value ? (
                           <AutoComplete
-                            onChange={value => onChange(value.value)}
+                            onChange={value => {
+                              onChange(value.value);
+                              setValue('jabatan_id', undefined);
+                              setQueryJabatan('');
+                            }}
                             label={'Jenis Jabatan'}
                             defaultValue={composeListDefaultValue(jenisJabatan!, 'id', 'jenis_jabatan', value)}
                             options={(jenisJabatan || [])?.map(each => ({
@@ -217,6 +221,7 @@ export default function JabatanForm(props: UploadFormProps) {
                     <Controller
                       control={control}
                       name="jabatan_id"
+                      rules={{ required: 'Mohon isi data jabatan' }}
                       render={({ field: { onChange } }) => (
                         <AutoComplete
                           onChange={value => onChange(value.value)}
