@@ -57,11 +57,11 @@ export interface PostListKeluargaReq {
   status_pasangan: string | number;
   status_pernikahan: string | number | null;
   status_pns: string | number;
-  tanggal_menikah: string;
+  tanggal_menikah: string | null | undefined | number | any;
   nomor_akta_menikah: string;
-  tanggal_meninggal: string | null;
+  tanggal_meninggal: string | null | any;
   nomor_akta_meninggal: string | null;
-  tanggal_cerai: string | null;
+  tanggal_cerai: string | null | any;
   nomor_akta_cerai: string | null;
   nomor_kartu_suami_istri: string | null;
   files?: [

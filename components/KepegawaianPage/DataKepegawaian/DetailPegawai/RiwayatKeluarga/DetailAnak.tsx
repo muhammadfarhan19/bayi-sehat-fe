@@ -1,8 +1,10 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
 import React from 'react';
 
 import { RiwayatAnakAPI } from '../../../../../constants/APIUrls';
 import { GetAnakList, GetAnakListRes } from '../../../../../types/api/RiwayatKeluargaAPI';
+import FileLoader from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import { PDFIcon } from '../../../../shared/icons/PDFIcon';
@@ -24,6 +26,17 @@ export default function DetailAnak(props: DetailAnakProps) {
   );
 
   const dataSelected = detailAnak?.map(data => data?.agama);
+
+  const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
+    if (!link) {
+      return <>{value}</>;
+    }
+    return (
+      <FileLoader uuid={link} asLink>
+        <a className="ml-2 whitespace-nowrap text-blue-500 underline">{value}</a>
+      </FileLoader>
+    );
+  };
 
   React.useEffect(() => {
     if (Number(dataSelected) === 1) {
@@ -58,7 +71,7 @@ export default function DetailAnak(props: DetailAnakProps) {
               {[
                 { label: 'Nama', value: data?.nama },
                 { label: 'Tempat Lahir', value: data?.tempat_lahir },
-                { label: 'Tanggal Lahir', value: data?.tanggal_lahir },
+                { label: 'Tanggal Lahir', value: format(new Date(data?.tanggal_lahir), 'yyyy-MM-dd') },
                 { label: 'Jenis Kelamin', value: data?.jenis_kelamin === 1 ? 'Laki-Laki' : 'Perempuan' },
                 { label: 'Agama', value: religionState },
                 { label: 'No Hp', value: data?.no_hp.length === 0 ? '-' : data?.no_hp },
@@ -71,12 +84,15 @@ export default function DetailAnak(props: DetailAnakProps) {
                     ) : (
                       <div className="flex flex-row items-center space-x-2">
                         <PDFIcon />
-                        <h6> {data.files[0].document_name}</h6>
+                        <LinkFile link={data?.files?.[0].document_uuid} value={data?.files?.[0].document_name} />
                       </div>
                     ),
                 },
-                { label: 'Alamat', value: 'Jalan Jalan' },
-                { label: 'Nomor Akta Kelahiran', value: '22222-9999' },
+                { label: 'Alamat', value: data?.alamat },
+                {
+                  label: 'Nomor Akta Kelahiran',
+                  value: data?.no_akta_kelahiran.length === 0 ? '-' : data?.no_akta_kelahiran,
+                },
                 {
                   label: 'Akta Kelahiran',
                   value:
@@ -85,7 +101,7 @@ export default function DetailAnak(props: DetailAnakProps) {
                     ) : (
                       <div className="flex flex-row items-center space-x-2">
                         <PDFIcon />
-                        <h6> {data.files[0].document_name}</h6>
+                        <LinkFile link={data?.files?.[1].document_uuid} value={data?.files?.[1].document_name} />
                       </div>
                     ),
                 },

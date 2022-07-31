@@ -83,7 +83,7 @@ export function ContentLabelledItems(props: InnerData) {
       >
         {props.subtitle}
       </span>
-      <span style={{ display: 'flex', flex: 2, fontSize: 12 }}>: {props.value}</span>
+      <span style={{ display: 'flex', flex: 2, fontSize: 12 }}>{props.value}</span>
     </div>
   );
 }
