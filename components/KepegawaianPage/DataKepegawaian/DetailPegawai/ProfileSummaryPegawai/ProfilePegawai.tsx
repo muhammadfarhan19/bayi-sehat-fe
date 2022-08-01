@@ -1,8 +1,9 @@
 import { format } from 'date-fns';
 import React from 'react';
 
-import { JabatanAPI, RiwayatPendidikanAPI, RiwayatPenghargaan } from '../../../../../constants/APIUrls';
+import { GolonganAPI, JabatanAPI, RiwayatPendidikanAPI, RiwayatPenghargaan } from '../../../../../constants/APIUrls';
 import { StatusMenikahText } from '../../../../../constants/Resource';
+import { GetRiwayatGolonganListReq, RiwayatGolonganListData } from '../../../../../types/api/GolonganAPI';
 import { GetRiwayatJabatanReq, RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
 import { GetRiwayatPendidikanListReq, RiwayatPendidikanListData } from '../../../../../types/api/PendidikanAPI';
 import { GetRiwayatPenghargaanListReq, PenghargaanList } from '../../../../../types/api/RiwayatPenghargaanAPI';
@@ -22,6 +23,11 @@ export default function ProfilePegawai(props: ID) {
   const { data: getPendidikan } = useCommonApi<GetRiwayatPendidikanListReq, RiwayatPendidikanListData[]>(
     RiwayatPendidikanAPI.GET_RIWAYAT_PENDIDIKAN_LIST,
     { pegawai_id: Number(personalPegawaiData?.pegawai_id) },
+    { method: 'GET' }
+  );
+  const { data: getGolongan } = useCommonApi<GetRiwayatGolonganListReq, RiwayatGolonganListData[]>(
+    GolonganAPI.GET_RIWAYAT_GOLONGAN_LIST,
+    pegawai_id_qs ? { pegawai_id: Number(pegawai_id_qs) } : {},
     { method: 'GET' }
   );
 
@@ -121,7 +127,18 @@ export default function ProfilePegawai(props: ID) {
 
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
       <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat Golongan" />
-      <ContentLabelledItems subtitle="-" value={null} />
+      {getGolongan === null
+        ? '-'
+        : getGolongan?.map(data => (
+            <div className="ml-10 mb-2" key={data.riwayat_id}>
+              <h6 className="flex flex-1 text-[12px]">
+                {data?.pangkat}, {data?.golongan}
+              </h6>
+              <h6 className="mt-1 text-[10px] text-slate-500">{`${format(new Date(data?.tmt), 'dd MMMM yyyy')}, ${
+                data?.masa_kerja
+              }`}</h6>
+            </div>
+          ))}
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
       <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat Jabatan" />
       {getJabatan === null
@@ -151,7 +168,7 @@ export default function ProfilePegawai(props: ID) {
       <EndPrintedStatement
         styleHeader="mt-5"
         styleContent="text-[12px] indent-10"
-        text="Demikian daftar riwayat hidup ini saya buat dengan sesuangguhnya, dan apabila dikemudian hari terdapat keterangan yang tidak benar saya bersedia dituntut dimuka pengadilan, serta bersedia menerima tindakan yang diambil oleh pemerintah."
+        text="Demikian daftar riwayat hidup ini saya buat dengan sesungguhnya, dan apabila dikemudian hari terdapat keterangan yang tidak benar saya bersedia dituntut dimuka pengadilan, serta bersedia menerima tindakan yang diambil oleh pemerintah."
       />
 
       <div className="mt-10 flex flex-col items-end">
