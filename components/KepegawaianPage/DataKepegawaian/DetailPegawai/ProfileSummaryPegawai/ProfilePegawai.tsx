@@ -65,7 +65,7 @@ export default function ProfilePegawai(props: ID) {
       />
       <ContentLabelledItems
         subtitle="Tempat, Tanggal Lahir"
-        value={`${personalPegawaiData?.tanggal_lahir}, ${personalPegawaiData?.tempat_lahir} `}
+        value={`: ${personalPegawaiData?.tempat_lahir}, ${personalPegawaiData?.tanggal_lahir} `}
       />
       <ContentLabelledItems
         subtitle="Jabatan"
@@ -144,7 +144,7 @@ export default function ProfilePegawai(props: ID) {
       {getJabatan === null
         ? '-'
         : getJabatan?.map(data => (
-            <div className="ml-10" key={data.jabatan_pegawai_id}>
+            <div className="ml-10 mb-2" key={data.jabatan_pegawai_id}>
               <p className="w-2/4 text-[12px]">{data.nama_jabatan}</p>
               <p className="mt-1 text-[10px] text-slate-500">{`${format(new Date(data.tmt), 'yyyy-MM-dd')}, ${
                 data.masa_kerja
@@ -159,7 +159,7 @@ export default function ProfilePegawai(props: ID) {
       {getPenghargaan === null
         ? '-'
         : getPenghargaan?.map(data => (
-            <div className="ml-10" key={data.riwayat_id}>
+            <div className="ml-10 mb-2" key={data.riwayat_id}>
               <p className="w-2/4 text-[12px]">{data.nama_penghargaan}</p>
               <p className="mt-1 text-[10px] text-slate-500">{format(new Date(data.tgl_penghargaan), 'yyyy-MM-dd')}</p>
             </div>

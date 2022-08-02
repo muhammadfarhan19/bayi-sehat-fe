@@ -169,7 +169,7 @@ export default function UpdateDataDiriPribadi() {
             <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Jumlah Anak</div>
             <div className="flex w-full flex-auto flex-col">
               <input
-                {...register('jumlah_anak', { required: true })}
+                {...register('jumlah_anak', { required: false })}
                 defaultValue={data?.jumlah_anak}
                 type="text"
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -187,7 +187,8 @@ export default function UpdateDataDiriPribadi() {
               <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">NIK</div>
               <div className="flex w-full flex-auto flex-col">
                 <input
-                  {...register('nik', { required: true })}
+                  maxLength={16}
+                  {...register('nik', { required: false })}
                   defaultValue={data?.ktp}
                   type="text"
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -248,7 +249,7 @@ export default function UpdateDataDiriPribadi() {
             <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Email</div>
             <div className="flex w-full flex-auto flex-col">
               <input
-                {...register('email', { required: true })}
+                {...register('email', { required: false })}
                 defaultValue={data?.email}
                 type="text"
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -265,7 +266,7 @@ export default function UpdateDataDiriPribadi() {
             <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Alamat</div>
             <div className="flex w-full flex-auto flex-col">
               <input
-                {...register('alamat', { required: true })}
+                {...register('alamat', { required: false })}
                 defaultValue={data?.alamat}
                 type="text"
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -283,7 +284,7 @@ export default function UpdateDataDiriPribadi() {
               <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">NPWP</div>
               <div className="flex w-full flex-auto flex-col">
                 <input
-                  {...register('npwp', { required: true })}
+                  {...register('npwp', { required: false })}
                   defaultValue={data?.npwp}
                   type="text"
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -348,7 +349,7 @@ export default function UpdateDataDiriPribadi() {
               <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">BPJS</div>
               <div className="flex w-full flex-auto flex-col">
                 <input
-                  {...register('bpjs', { required: true })}
+                  {...register('bpjs', { required: false })}
                   defaultValue={data?.bpjs}
                   type="text"
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -412,7 +413,7 @@ export default function UpdateDataDiriPribadi() {
             <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nomor HP</div>
             <div className="flex w-full flex-auto flex-col">
               <input
-                {...register('hp', { required: true })}
+                {...register('hp', { required: false })}
                 defaultValue={data?.hp}
                 type="text"
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
