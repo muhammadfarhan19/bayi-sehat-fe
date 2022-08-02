@@ -91,6 +91,9 @@ export default function KeluargaForm(props: UploadFormProps) {
     }
   }, [watch('tanggal_cerai'), watch('tanggal_menikah'), watch('tanggal_meninggal')]);
 
+  const isCerai = getValues('tanggal_cerai');
+  const isMeninggal = getValues('tanggal_meninggal');
+
   const submitHandler = async (formData: FormState) => {
     const resSubmit = await callAPI<PostListKeluargaReq, PostListKeluargaRes>(
       RiwayatKeluargaAPI.POST_RIWAYAT_KELUARGA_INSERT,
@@ -550,7 +553,7 @@ export default function KeluargaForm(props: UploadFormProps) {
               <div className="mt-1">
                 <input
                   {...register('nomor_akta_meninggal', {
-                    required: getValues('tanggal_meninggal').length >= 1 ? 'Silahkan Isi No. Akta Meninggal' : false,
+                    required: isMeninggal?.length > 2 ? 'Silahkan isi No Akta Meninggal' : false,
                   })}
                   className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                   name="nomor_akta_meninggal"
@@ -622,7 +625,7 @@ export default function KeluargaForm(props: UploadFormProps) {
               <div className="mt-1">
                 <input
                   {...register('nomor_akta_cerai', {
-                    required: getValues('tanggal_cerai').length >= 1 ? 'Silahkan Isi No. Akta Cerai' : false,
+                    required: isCerai?.length > 2 ? 'Silahkan Isi No. Akta Cerai' : false,
                   })}
                   className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                   name="nomor_akta_cerai"
