@@ -40,7 +40,7 @@ export default function DetailPendidikan(props: ListDigitalProps) {
               { label: 'Nama Institusi', value: data?.pt },
               { label: 'Prodi/Jurusan', value: data?.prodi },
               { label: 'No Ijazah', value: data?.no_ijazah },
-              { label: 'Tanggal Lulus', value: data?.tanggal_lulus },
+              { label: 'Tanggal Lulus', value: data?.tanggal_lulus.split('T')?.[0] },
               { label: 'Bukti Ijazah', value: data?.files?.[0]?.document_name },
             ].map((each, index) => (
               <tr key={index}>
