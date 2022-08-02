@@ -81,7 +81,7 @@ export default function PendidikanForm(props: UploadFormProps) {
       setValue('no_ijazah', data.no_ijazah);
       setValue('ijazah_cpns', data.is_ijazah_cpns === true ? '1' : '2');
       setValue('ijazah_terakhir', data.is_ijazah_terakhir === true ? '1' : '2');
-      setValue('tgl_lulus', data.tanggal_lulus);
+      setValue('tgl_lulus', data.tanggal_lulus.split('T')?.[0]);
     }
   }, [data]);
 
