@@ -205,11 +205,11 @@ export default function UpdateDataDiriPribadi() {
               <Controller
                 control={control}
                 name="uuid_ktp"
-                rules={{ required: 'Mohon upload file' }}
+                rules={{ required: false }}
                 render={({ field: { onChange, value } }) => (
                   <div className="flex items-center">
                     <UploadWrapper
-                      allowedTypes={['jpg', 'jpeg', 'png']}
+                      allowedTypes={['jpg', 'jpeg', 'png', 'pdf']}
                       handleUploadChange={(files: FileObject[]) => {
                         onChange(files[0].id);
                       }}
@@ -229,7 +229,7 @@ export default function UpdateDataDiriPribadi() {
                             <div
                               className={classNames('ml-2 text-xs', errors.uuid_ktp ? 'text-red-400' : 'text-gray-400')}
                             >
-                              (jpg,jpeg,png)
+                              (jpg,jpeg,png,pdf)
                             </div>
                           )}
                         </div>
@@ -237,7 +237,7 @@ export default function UpdateDataDiriPribadi() {
                     </UploadWrapper>
                     {!!value && (
                       <FileLoader uuid={value} asLink>
-                        <a className={`ml-2 whitespace-nowrap text-blue-500 underline`}>foto KTP</a>
+                        <a className={`ml-2 whitespace-nowrap text-blue-500 underline`}>Dokumen KTP</a>
                       </FileLoader>
                     )}
                   </div>
@@ -301,11 +301,11 @@ export default function UpdateDataDiriPribadi() {
               <Controller
                 control={control}
                 name="uuid_npwp"
-                rules={{ required: 'Mohon upload file' }}
+                rules={{ required: false }}
                 render={({ field: { onChange, value } }) => (
                   <div className="flex items-center">
                     <UploadWrapper
-                      allowedTypes={['jpg', 'jpeg', 'png']}
+                      allowedTypes={['jpg', 'jpeg', 'png', 'pdf']}
                       handleUploadChange={(files: FileObject[]) => {
                         onChange(files[0].id);
                       }}
@@ -328,7 +328,7 @@ export default function UpdateDataDiriPribadi() {
                                 errors.uuid_npwp ? 'text-red-400' : 'text-gray-400'
                               )}
                             >
-                              (jpg,jpeg,png)
+                              (jpg,jpeg,png,pdf)
                             </div>
                           )}
                         </div>
@@ -336,7 +336,7 @@ export default function UpdateDataDiriPribadi() {
                     </UploadWrapper>
                     {!!value && (
                       <FileLoader uuid={value} asLink>
-                        <a className="ml-2 whitespace-nowrap text-blue-500 underline">foto NPWP</a>
+                        <a className="ml-2 whitespace-nowrap text-blue-500 underline">Dokumen NPWP</a>
                       </FileLoader>
                     )}
                   </div>
@@ -366,11 +366,11 @@ export default function UpdateDataDiriPribadi() {
               <Controller
                 control={control}
                 name="uuid_bpjs"
-                rules={{ required: 'Mohon upload file' }}
+                rules={{ required: false }}
                 render={({ field: { onChange, value } }) => (
                   <div className="flex items-center">
                     <UploadWrapper
-                      allowedTypes={['jpg', 'jpeg', 'png']}
+                      allowedTypes={['jpg', 'jpeg', 'png', 'pdf']}
                       handleUploadChange={(files: FileObject[]) => {
                         onChange(files[0].id);
                       }}
@@ -393,7 +393,7 @@ export default function UpdateDataDiriPribadi() {
                                 errors.uuid_bpjs ? 'text-red-400' : 'text-gray-400'
                               )}
                             >
-                              (jpg,jpeg,png)
+                              (jpg,jpeg,png,pdf)
                             </div>
                           )}
                         </div>
@@ -401,7 +401,7 @@ export default function UpdateDataDiriPribadi() {
                     </UploadWrapper>
                     {!!value && (
                       <FileLoader uuid={value} asLink>
-                        <a className="ml-2 whitespace-nowrap text-blue-500 underline">foto BPJS</a>
+                        <a className="ml-2 whitespace-nowrap text-blue-500 underline">Dokumen BPJS</a>
                       </FileLoader>
                     )}
                   </div>

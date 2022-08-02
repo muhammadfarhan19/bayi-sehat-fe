@@ -167,16 +167,7 @@ export default function AnakForm(props: UploadFormProps) {
             secondOption="Perempuan"
             formVerification="jenis_kelamin"
           />
-          {/* <DropdownSelect
-            isError={errors.agama}
-            errorMessage={errors.agama?.message}
-            validation={{ ...register('agama', { required: 'Silahkan Pilih Agama' }) }}
-            label="Agama"
-            defaultOption="Silahkan Pilih"
-            firstOption="Islam"
-            secondOption="Kristen"
-            formVerification="agama"
-          /> */}
+
           <div className="mt-5 sm:col-span-6">
             <label className="block text-sm font-medium text-gray-700">Agama *</label>
             <div className="mt-1">
@@ -211,6 +202,7 @@ export default function AnakForm(props: UploadFormProps) {
             name="nik"
             label="NIK atau ID Identitas *"
             type="text"
+            maxLength={16}
           />
           <div className="mt-5 sm:col-span-6">
             <label className="mb-2 block text-sm font-medium text-gray-700">Upload Kartu Identitas (KTP/KK) *</label>

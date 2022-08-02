@@ -8,6 +8,7 @@ interface TextInput {
   errorMessage: any;
   isError: any;
   validation: any;
+  maxLength?: number;
 }
 
 interface Picker {
@@ -83,6 +84,7 @@ export function InputLabelled(props: TextInput) {
           className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
           name={props.name}
           type={props.type}
+          maxLength={props.maxLength}
         />
         {props.isError && <p className="mt-1 text-xs text-red-500">{props.errorMessage}</p>}
       </div>

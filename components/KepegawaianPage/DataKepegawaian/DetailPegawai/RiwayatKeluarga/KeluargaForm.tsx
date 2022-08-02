@@ -106,7 +106,7 @@ export default function KeluargaForm(props: UploadFormProps) {
         agama: Number(formData?.agama),
         hp: formData?.hp,
         nik: formData?.nik,
-        alamat: personalPegawaiData?.alamat,
+        alamat: formData?.alamat,
         nomor_akta_kelahiran: formData?.nomor_akta_kelahiran,
         status_hidup: Number(formData?.status_hidup),
         nomor_npwp: formData?.nomor_npwp,
@@ -281,6 +281,7 @@ export default function KeluargaForm(props: UploadFormProps) {
                 className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                 name="nik"
                 type="text"
+                maxLength={16}
               />
               {errors.nik && <p className="mt-1 text-xs text-red-500">{errors.nik.message}</p>}
             </div>
@@ -336,7 +337,6 @@ export default function KeluargaForm(props: UploadFormProps) {
                 className="block w-full rounded-md border-gray-300 pb-10 shadow-sm "
                 name="alamat"
                 type="text"
-                value={personalPegawaiData?.alamat}
               />
               {errors.alamat && <p className="mt-1 text-xs text-red-500">{errors.alamat.message}</p>}
             </div>
@@ -451,18 +451,7 @@ export default function KeluargaForm(props: UploadFormProps) {
               {errors.status_pns && <p className="mt-1 text-xs text-red-500">{errors.status_pns.message}</p>}
             </div>
           </div>
-          {/* <div className="mt-5 sm:col-span-6">
-            <label  className="block text-sm font-medium text-gray-700">
-              Nama *
-            </label>
-            <div className="mt-1">
-              <input
-                className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                name="no_npwp"
-                type="text"
-              />
-            </div>
-          </div> */}
+
           <div className="flex flex-row justify-between space-x-3">
             <div className="mt-5 flex-1 sm:col-span-6">
               <label className="block text-sm font-medium text-gray-700">Tanggal Menikah *</label>

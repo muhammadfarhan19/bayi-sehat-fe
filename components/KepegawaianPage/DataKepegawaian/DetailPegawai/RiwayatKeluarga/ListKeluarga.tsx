@@ -40,6 +40,8 @@ export default function ListKeluarga(props: ListKeluargaProps) {
     { method: 'GET' }
   );
 
+  console.log(riwayatKeluargaList);
+
   const handleConfirm = async () => {
     const resDelete = await callAPI<DelListKeluargaReq, PostListKeluargaRes>(
       RiwayatKeluargaAPI.POST_RIWAYAT_KELUARGA_DELETE,
@@ -94,58 +96,58 @@ export default function ListKeluarga(props: ListKeluargaProps) {
         </button>
       </div>
       <div className="overflow-auto">
-        {(riwayatKeluargaList || []).map((each, index) => (
-          <table key={each.pasangan_id} className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  No
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  Nama
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  Status Pasangan
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  Tanggal Menikah
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  Status Pernikahan
-                </th>
-                {each.jumlah_anak === 0 ? null : (
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Jumlah Anak
-                  </th>
-                )}
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  Aksi
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
-              <tr>
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                No
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Nama
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Status Pasangan
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Tanggal Menikah
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Status Pernikahan
+              </th>
+              {/* {each.jumlah_anak === 0 ? null : ( */}
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Jumlah Anak
+              </th>
+              {/* )} */}
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Aksi
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 bg-white">
+            {(riwayatKeluargaList || []).map((each, index) => (
+              <tr key={each.pasangan_id}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nama}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
@@ -157,11 +159,10 @@ export default function ListKeluarga(props: ListKeluargaProps) {
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   {each.status_pernikahan === 1 ? 'Menikah' : 'Cerai Hidup'}
                 </td>
-                {each.jumlah_anak === 0 ? null : (
-                  <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
-                    <div className="whitespace-nowrap">{each.jumlah_anak + ' Anak'}</div>
-                  </td>
-                )}
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  <div className="whitespace-nowrap">{each.jumlah_anak + ' Anak'}</div>
+                </td>
+
                 <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
                   <div className="flex justify-start">
                     <button
@@ -181,9 +182,9 @@ export default function ListKeluarga(props: ListKeluargaProps) {
                   </div>
                 </td>
               </tr>
-            </tbody>
-          </table>
-        ))}
+            ))}
+          </tbody>
+        </table>
       </div>
       <ConfirmDialog
         open={!!confirmId}

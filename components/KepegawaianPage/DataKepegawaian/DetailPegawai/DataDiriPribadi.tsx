@@ -39,7 +39,7 @@ function DataDiriPribadi() {
               label: 'Status Nikah',
               value: dataApiRes?.status_menikah ? StatusMenikahText[dataApiRes.status_menikah] : '',
             },
-            { label: 'Jumlah Anak', value: dataApiRes.jumlah_anak },
+            { label: 'Jumlah Anak', value: dataApiRes.jumlah_anak + ' ' + 'Anak' },
             {
               label: 'KTP',
               value: <LinkFile link={dataApiRes.uuid_ktp?.[0]?.document_uuid} value={dataApiRes.ktp} />,
