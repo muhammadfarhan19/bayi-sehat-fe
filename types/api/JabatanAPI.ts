@@ -40,6 +40,22 @@ export interface JabatanData {
   };
 }
 
+export interface JabatanDataDetail {
+  data: {
+    list: {
+      jabatan_id: number;
+      name: string;
+      jenis_jabatan: number;
+      kelas_jabatan: number;
+      jenis_jabatan_str: string;
+    }[];
+    pagination: {
+      total_page: number;
+      total_data: number;
+    };
+  };
+}
+
 export interface GetJabatanRes {
   status: Status;
   data: JabatanData;
@@ -83,4 +99,31 @@ export interface RiwayatJabatanData {
     document_uuid: string;
     document_name: string;
   }[];
+}
+
+export interface PostRiwayatJabatanDeleteReq {
+  jabatan_pegawai_id: number;
+}
+
+export interface PostRiwayatJabatanDeleteRes {
+  status: Status;
+  data: string;
+}
+
+export interface PostRiwayatJabatanUpdateReq {
+  jabatan_pegawai_id: number;
+  jabatan_id: number;
+  unit_kerja_id: number;
+  tgl_pengangkatan: string;
+  tgl_mulai: string;
+  angka_kredit: number;
+  surat_keputusan: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+}
+
+export interface PostRiwayatJabatanUpdateRes {
+  status: Status;
+  data: string;
 }

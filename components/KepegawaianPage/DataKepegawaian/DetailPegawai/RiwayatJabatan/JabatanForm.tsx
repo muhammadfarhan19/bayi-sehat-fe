@@ -9,7 +9,17 @@ import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../../../../../action/CommonAction';
 import { JabatanAPI, MasterAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
-import { GetJabatanReq, JabatanData, UpdateJabatanReq, UpdateJabatanRes } from '../../../../../types/api/JabatanAPI';
+import {
+  GetJabatanReq,
+  GetRiwayatJabatanReq,
+  JabatanData,
+  JabatanDataDetail,
+  PostRiwayatJabatanUpdateReq,
+  PostRiwayatJabatanUpdateRes,
+  RiwayatJabatanData,
+  UpdateJabatanReq,
+  UpdateJabatanRes,
+} from '../../../../../types/api/JabatanAPI';
 import { JenisJabatanListData } from '../../../../../types/api/MasterAPI';
 import { Status } from '../../../../../types/Common';
 import { classNames, composeListDefaultValue } from '../../../../../utils/Components';
@@ -44,6 +54,11 @@ export default function JabatanForm(props: UploadFormProps) {
   const { onSuccess, open, selectedId, setOpen } = props;
   const [queryJabatan, setQueryJabatan] = React.useState('');
   const debounce = React.useRef<number>(0);
+  const [loadDetail, setLoadDetail] = React.useState(false);
+  const [formJabatanState, setFormJabatanState] = React.useState<{ text?: string; value?: string }>({
+    text: undefined,
+    value: undefined,
+  });
 
   const {
     control,
@@ -69,35 +84,100 @@ export default function JabatanForm(props: UploadFormProps) {
     { skipCall: !getValues('tipe_jabatan') }
   );
 
-  React.useEffect(() => {
-    if (jenisJabatan && jenisJabatan.length) {
-      setValue('tipe_jabatan', String(jenisJabatan[jenisJabatan.length - 1].id));
-    }
-  }, [jenisJabatan]);
-
   const toggleModal = () => {
     setOpen(!open);
   };
 
+  const { data: riwayatJabatan } = useCommonApi<GetRiwayatJabatanReq, RiwayatJabatanData[]>(
+    JabatanAPI.GET_RIWAYAT_JABATAN,
+    {},
+    { method: 'GET' }
+  );
+
+  React.useEffect(() => {
+    if (selectedId) {
+      const detailForm = riwayatJabatan?.find(each => each.jabatan_pegawai_id === Number(selectedId));
+      if (detailForm) {
+        const kodeJabatan = detailForm?.jenis_jabatan.split(':')[0];
+        const getDataJabatan = jenisJabatan?.find(each => each.tipe_jabatan === kodeJabatan);
+        setValue('tipe_jabatan', String(getDataJabatan?.id));
+        setValue('file_id', String(detailForm?.files[0].document_uuid));
+        setValue('file_name', String(detailForm?.files[0].document_uuid));
+        setValue('tmt', Number(new Date(detailForm?.tmt)));
+        setValue('kumulatif', String(detailForm?.kumulatif));
+        (async () => {
+          setLoadDetail(true);
+          const { data: daftarJabatanDetail } = await callAPI<GetJabatanReq, JabatanDataDetail>(
+            JabatanAPI.GET_JABATAN,
+            {
+              page: 1,
+              per_page: 20,
+              jabatan: detailForm?.nama_jabatan,
+              jenis_jabatan: Number(getValues('tipe_jabatan')),
+            },
+            { method: 'GET' }
+          );
+          setFormJabatanState({
+            text: daftarJabatanDetail?.data?.list?.[0]?.name,
+            value: String(daftarJabatanDetail?.data?.list?.[0]?.jabatan_id),
+          });
+          setValue('jabatan_id', String(daftarJabatanDetail?.data?.list?.[0]?.jabatan_id));
+          setLoadDetail(false);
+        })();
+      }
+    } else {
+      if (jenisJabatan && jenisJabatan.length) {
+        setValue('tipe_jabatan', String(jenisJabatan[jenisJabatan.length - 1].id));
+      }
+      setFormJabatanState({ text: '', value: '' });
+      setValue('tmt', Date.now());
+      setValue('file_id', '');
+      setValue('file_name', '');
+      setValue('kumulatif', '');
+    }
+  }, [jenisJabatan, selectedId]);
+
   const submitHandler = async (formData: FormState) => {
-    const resSubmit = await callAPI<UpdateJabatanReq, UpdateJabatanRes>(
-      JabatanAPI.UPDATE_JABATAN,
-      {
-        pegawai_id: dataApiRes?.pegawai_id || 0,
-        jabatan_id: Number(formData.jabatan_id),
-        unit_kerja_id: Number(formData.tipe_jabatan),
-        tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
-        tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
-        angka_kredit: Number(formData.kumulatif),
-        surat_keputusan: [
-          {
-            document_uuid: formData.file_id,
-            document_name: formData.file_name,
-          },
-        ],
-      },
-      { method: 'post' }
-    );
+    let resSubmit;
+    if (!selectedId) {
+      resSubmit = await callAPI<UpdateJabatanReq, UpdateJabatanRes>(
+        JabatanAPI.UPDATE_JABATAN,
+        {
+          pegawai_id: dataApiRes?.pegawai_id || 0,
+          jabatan_id: Number(formData.jabatan_id),
+          unit_kerja_id: Number(formData.tipe_jabatan),
+          tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
+          tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
+          angka_kredit: Number(formData.kumulatif),
+          surat_keputusan: [
+            {
+              document_uuid: formData.file_id,
+              document_name: formData.file_name,
+            },
+          ],
+        },
+        { method: 'post' }
+      );
+    } else {
+      resSubmit = await callAPI<PostRiwayatJabatanUpdateReq, PostRiwayatJabatanUpdateRes>(
+        JabatanAPI.POST_RIWAYAT_JABATAN_UPDATE,
+        {
+          jabatan_pegawai_id: Number(selectedId),
+          jabatan_id: Number(formData.jabatan_id),
+          unit_kerja_id: Number(formData.tipe_jabatan),
+          tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
+          tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
+          angka_kredit: Number(formData.kumulatif),
+          surat_keputusan: [
+            {
+              document_uuid: formData.file_id,
+              document_name: formData.file_name,
+            },
+          ],
+        },
+        { method: 'post' }
+      );
+    }
 
     if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
       dispatch(
@@ -120,6 +200,9 @@ export default function JabatanForm(props: UploadFormProps) {
     }
   };
 
+  if (loadDetail) {
+    return <></>;
+  }
   return (
     <>
       <Transition appear show={open} as={React.Fragment}>
@@ -226,7 +309,7 @@ export default function JabatanForm(props: UploadFormProps) {
                         <AutoComplete
                           onChange={value => onChange(value.value)}
                           label={'Nama Jabatan'}
-                          defaultValue={{ text: '', value: '' }}
+                          defaultValue={{ text: formJabatanState.text || '', value: formJabatanState.value || '' }}
                           onQueryChange={queryText => {
                             if (debounce.current) {
                               clearTimeout(debounce.current);
