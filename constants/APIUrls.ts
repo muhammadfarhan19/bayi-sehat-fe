@@ -38,6 +38,7 @@ export const JabatanAPI = {
   UPDATE_JABATAN: config.apiHost + '/jabatan/update-jabatan-pegawai',
   POST_RIWAYAT_JABATAN_DELETE: config.apiHost + '/riwayat-jabatan/delete',
   POST_RIWAYAT_JABATAN_UPDATE: config.apiHost + '/riwayat-jabatan/update',
+  POST_JABATAN_INSERT: config.apiHost + '/jabatan/insert',
 };
 
 export const KepegawaianAPI = {

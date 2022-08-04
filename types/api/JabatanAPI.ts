@@ -101,6 +101,13 @@ export interface RiwayatJabatanData {
   }[];
 }
 
+export interface TambahJabatanReq {
+  name: string;
+  jenis_jabatan: number;
+  kelas_jabatan: number;
+  is_dikti: number;
+}
+
 export interface PostRiwayatJabatanDeleteReq {
   jabatan_pegawai_id: number;
 }

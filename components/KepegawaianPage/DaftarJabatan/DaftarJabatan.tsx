@@ -9,10 +9,14 @@ import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import FormJabatan from './FormJabatan/FormJabatan';
 
 function DaftarJabatan() {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
+  const [formModalState, setFormModalState] = React.useState<{ open: boolean }>({
+    open: false,
+  });
   const [filterState, setFilterState] = React.useState<GetJabatanReq>({
     page: 1,
     per_page: 20,
@@ -55,7 +59,21 @@ function DaftarJabatan() {
     setshowAdvancedFilter(showState);
   };
 
-  return (
+  const handleShowForm = (open: boolean) => {
+    setFormModalState({
+      open,
+    });
+  };
+
+  return formModalState?.open ? (
+    <FormJabatan
+      onSuccess={() => null}
+      open={formModalState.open}
+      setOpen={(open: boolean) => {
+        handleShowForm(open);
+      }}
+    />
+  ) : (
     <>
       <div className="px-6">
         <div className="flex flex-row py-6">
@@ -78,6 +96,15 @@ function DaftarJabatan() {
               <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
             </button>
           </div>
+        </div>
+        <div className="mt-5 flex justify-end">
+          <button
+            onClick={() => handleShowForm(!formModalState.open)}
+            type="submit"
+            className="w-3/12 rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            Tambah Jabatan
+          </button>
         </div>
 
         {showAdvancedFilter && (
@@ -115,6 +142,7 @@ function DaftarJabatan() {
           </div>
         )}
       </div>
+
       {isValidating ? (
         <div className="relative h-[150px] w-full divide-y divide-gray-200">
           <Loader />

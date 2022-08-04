@@ -20,6 +20,7 @@ interface Picker {
   validation: any;
   errorMessage: any;
   isError: any;
+  moreOptions?: any;
 }
 
 interface ButtonRows {
@@ -46,6 +47,7 @@ export function DropdownSelect(props: Picker) {
           <option value={''}>{props.defaultOption}</option>
           <option value={'1'}>{props.firstOption}</option>
           <option value={'2'}>{props.secondOption}</option>
+          {props.moreOptions}
         </select>
         {props.isError && <p className="mt-1 text-xs text-red-500">{props.errorMessage}</p>}
       </div>
