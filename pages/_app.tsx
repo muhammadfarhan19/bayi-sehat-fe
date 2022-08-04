@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Intra DIKTI</title>
       </Head>
+      {/* @ts-ignore */}
       <Component {...pageProps} />
     </>
   );
