@@ -358,6 +358,7 @@ export default function JabatanForm(props: UploadFormProps) {
                             showYearDropdown
                             dropdownMode="select"
                             selected={new Date(value)}
+                            dateFormat="dd/MM/yyyy"
                             onChange={(date: Date) => onChange(date.getTime())}
                             customInput={
                               <input

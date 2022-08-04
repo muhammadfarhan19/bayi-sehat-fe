@@ -200,20 +200,24 @@ export default function ListJabatan(props: ListJabatanProps) {
                     >
                       Lihat
                     </button>
-                    <button
-                      type="button"
-                      className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                      onClick={() => handleShowForm(!formModalState.open, String(each.jabatan_pegawai_id))}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      className="mr-2 inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
-                      onClick={() => setConfirmId(each.jabatan_pegawai_id)}
-                    >
-                      Hapus
-                    </button>
+                    {allowKepegawaianAdmin && (
+                      <>
+                        <button
+                          type="button"
+                          className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                          onClick={() => handleShowForm(!formModalState.open, String(each.jabatan_pegawai_id))}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="mr-2 inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                          onClick={() => setConfirmId(each.jabatan_pegawai_id)}
+                        >
+                          Hapus
+                        </button>
+                      </>
+                    )}
                   </div>
                 </td>
               </tr>
