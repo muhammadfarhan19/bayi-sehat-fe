@@ -5,6 +5,8 @@ import { setSnackbar } from '../../../../../action/CommonAction';
 import { GolonganAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
+  DeleteRiwayatGolonganReq,
+  DeleteRiwayatGolonganRes,
   GetRiwayatGolonganListReq,
   RiwayatGolonganListData,
   UpdateSuratKeputusanReq,
@@ -15,14 +17,21 @@ import { formatDate } from '../../../../../utils/DateUtil';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { getQueryString } from '../../../../../utils/URLUtils';
 import { CircleProgress } from '../../../../shared/CircleProgress';
+import ConfirmDialog from '../../../../shared/ConfirmDialog';
 import FileLoader from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import { PDFIcon } from '../../../../shared/icons/PDFIcon';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
+import GolonganForm from './GolonganForm';
 
 export default function RiwayatGolongan() {
   const dispatch = useDispatch();
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
+  const [confirmId, setConfirmId] = React.useState(0);
+  const [formModalState, setFormModalState] = React.useState<{ open: boolean; selected?: RiwayatGolonganListData }>({
+    open: false,
+    selected: undefined,
+  });
 
   const { data: riwayatGolongan, mutate } = useCommonApi<GetRiwayatGolonganListReq, RiwayatGolonganListData[]>(
     GolonganAPI.GET_RIWAYAT_GOLONGAN_LIST,
@@ -57,6 +66,36 @@ export default function RiwayatGolongan() {
         })
       );
     }
+  };
+
+  const handleShowForm = (open: boolean, selected?: RiwayatGolonganListData) => {
+    setFormModalState({ open, selected });
+  };
+
+  const handleConfirm = async () => {
+    const resDelete = await callAPI<DeleteRiwayatGolonganReq, DeleteRiwayatGolonganRes>(
+      GolonganAPI.DELETE_RIWAYAT_GOLONGAN,
+      { riwayat_id: confirmId },
+      { method: 'post' }
+    );
+
+    let snackbarProps;
+    if (resDelete.status === 200 && resDelete.data?.status === Status.OK) {
+      snackbarProps = {
+        show: true,
+        message: 'Data terhapus.',
+        type: SnackbarType.INFO,
+      };
+    } else {
+      snackbarProps = {
+        show: true,
+        message: 'Gagal menghapus data.',
+        type: SnackbarType.ERROR,
+      };
+    }
+    dispatch(setSnackbar(snackbarProps));
+    setConfirmId(0);
+    mutate();
   };
 
   return (
@@ -137,13 +176,27 @@ export default function RiwayatGolongan() {
                       {({ loading }) => (
                         <button
                           type="button"
-                          className="flex w-[150px] justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200"
+                          className="mr-2 flex w-[150px] justify-center rounded border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200"
                         >
                           {loading ? <CircleProgress /> : null}
                           Unggah berkas
                         </button>
                       )}
                     </UploadWrapper>
+                    <button
+                      type="button"
+                      className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                      onClick={() => handleShowForm(!formModalState.open, each)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="mr-2 inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                      onClick={() => setConfirmId(each.riwayat_id)}
+                    >
+                      Hapus
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -151,6 +204,18 @@ export default function RiwayatGolongan() {
           </tbody>
         </table>
       </div>
+      <GolonganForm
+        onSuccess={() => mutate()}
+        open={formModalState.open}
+        setOpen={(open: boolean) => handleShowForm(open)}
+        detail={formModalState.selected}
+      />
+      <ConfirmDialog
+        open={!!confirmId}
+        message="Anda yakin ingin menghapus data ini?"
+        onClose={() => setConfirmId(0)}
+        onConfirm={handleConfirm}
+      />
     </>
   );
 }

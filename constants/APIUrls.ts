@@ -90,6 +90,8 @@ export const RiwayatPendidikanAPI = {
 export const GolonganAPI = {
   GET_RIWAYAT_GOLONGAN_LIST: config.apiHost + '/riwayat-golongan/list',
   UPDATE_SURAT_KEPUTUSAN: config.apiHost + '/riwayat-golongan/update-surat-keputusan',
+  UPDATE_RIWAYAT_GOLONGAN: config.apiHost + '/riwayat-golongan/update',
+  DELETE_RIWAYAT_GOLONGAN: config.apiHost + '/riwayat-golongan/delete',
 };
 
 export const RekapDinasAPI = {

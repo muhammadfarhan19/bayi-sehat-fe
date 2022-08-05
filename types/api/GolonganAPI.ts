@@ -27,3 +27,27 @@ export interface UpdateSuratKeputusanRes {
   status: Status;
   data: string;
 }
+
+export interface UpdateRiwayatGolonganReq {
+  riwayat_id: number;
+  tanggal_mulai: string;
+  files: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  masa_jabatan: string;
+}
+
+export interface UpdateRiwayatGolonganRes {
+  status: Status;
+  data: string;
+}
+
+export interface DeleteRiwayatGolonganReq {
+  riwayat_id: number;
+}
+
+export interface DeleteRiwayatGolonganRes {
+  status: Status;
+  data: string;
+}
