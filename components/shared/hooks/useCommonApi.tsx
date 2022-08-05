@@ -1,3 +1,4 @@
+import { Method } from 'axios';
 import useSWR, { SWRConfiguration, SWRResponse } from 'swr';
 
 import { Status } from '../../../types/Common';
@@ -47,8 +48,8 @@ export default function useCommonApi<TReq, TReturn>(
     useSwrOptions.dedupingInterval = 0;
   }
 
-  return useSWR<DataType<TReturn>, string, [string, typeof apiReq] | null>(
-    swrOptions?.skipCall ? null : [apiUrl, apiReq],
+  return useSWR<DataType<TReturn>, string, [string, typeof apiReq, Method] | null>(
+    swrOptions?.skipCall ? null : [apiUrl, apiReq, options?.method || 'post'],
     fetcher,
     useSwrOptions
   );

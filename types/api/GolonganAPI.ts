@@ -15,6 +15,7 @@ export interface RiwayatGolonganListData {
   golongan: string;
   tmt: string;
   masa_kerja: string;
+  masa_jabatan: string;
   files: File[];
 }
 

@@ -9,23 +9,21 @@ import {
   DeleteRiwayatGolonganRes,
   GetRiwayatGolonganListReq,
   RiwayatGolonganListData,
-  UpdateSuratKeputusanReq,
-  UpdateSuratKeputusanRes,
 } from '../../../../../types/api/GolonganAPI';
 import { Status } from '../../../../../types/Common';
 import { formatDate } from '../../../../../utils/DateUtil';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { getQueryString } from '../../../../../utils/URLUtils';
-import { CircleProgress } from '../../../../shared/CircleProgress';
 import ConfirmDialog from '../../../../shared/ConfirmDialog';
 import FileLoader from '../../../../shared/FileLoader';
+import useAllowAdmin from '../../../../shared/hooks/useAllowAdmin';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import { PDFIcon } from '../../../../shared/icons/PDFIcon';
-import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
 import GolonganForm from './GolonganForm';
 
 export default function RiwayatGolongan() {
   const dispatch = useDispatch();
+  const isAllowAdmin = useAllowAdmin();
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const [confirmId, setConfirmId] = React.useState(0);
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selected?: RiwayatGolonganListData }>({
@@ -38,35 +36,6 @@ export default function RiwayatGolongan() {
     pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
     { method: 'GET' }
   );
-
-  const handleUploadChange = (riwayat_id: number) => async (files: FileObject[]) => {
-    const resSubmit = await callAPI<UpdateSuratKeputusanReq, UpdateSuratKeputusanRes>(
-      GolonganAPI.UPDATE_SURAT_KEPUTUSAN,
-      {
-        riwayat_id,
-        files: [{ document_uuid: files[0].id, document_name: files[0].name }],
-      },
-      { method: 'post' }
-    );
-    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
-      dispatch(
-        setSnackbar({
-          show: true,
-          message: 'Data berhasil tersimpan.',
-          type: SnackbarType.INFO,
-        })
-      );
-      mutate();
-    } else {
-      dispatch(
-        setSnackbar({
-          show: true,
-          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
-          type: SnackbarType.ERROR,
-        })
-      );
-    }
-  };
 
   const handleShowForm = (open: boolean, selected?: RiwayatGolonganListData) => {
     setFormModalState({ open, selected });
@@ -140,12 +109,14 @@ export default function RiwayatGolongan() {
               >
                 Berkas
               </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-              >
-                Aksi
-              </th>
+              {isAllowAdmin && (
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                >
+                  Aksi
+                </th>
+              )}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
@@ -158,7 +129,7 @@ export default function RiwayatGolongan() {
                   <div className="whitespace-nowrap">{formatDate(new Date(each.tmt), 'yyyy-MM-dd')}</div>
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  <div className="whitespace-nowrap">{each.masa_kerja}</div>
+                  <div className="whitespace-nowrap">{each.masa_jabatan}</div>
                 </td>
                 <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
                   {each?.files?.[0]?.document_uuid && (
@@ -170,35 +141,26 @@ export default function RiwayatGolongan() {
                     </FileLoader>
                   )}
                 </td>
-                <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
-                  <div className="flex justify-between">
-                    <UploadWrapper allowedTypes={['pdf']} handleUploadChange={handleUploadChange(each.riwayat_id)}>
-                      {({ loading }) => (
-                        <button
-                          type="button"
-                          className="mr-2 flex w-[150px] justify-center rounded border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200"
-                        >
-                          {loading ? <CircleProgress /> : null}
-                          Unggah berkas
-                        </button>
-                      )}
-                    </UploadWrapper>
-                    <button
-                      type="button"
-                      className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                      onClick={() => handleShowForm(!formModalState.open, each)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      className="mr-2 inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
-                      onClick={() => setConfirmId(each.riwayat_id)}
-                    >
-                      Hapus
-                    </button>
-                  </div>
-                </td>
+                {isAllowAdmin && (
+                  <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
+                    <div className="flex justify-between">
+                      <button
+                        type="button"
+                        className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                        onClick={() => handleShowForm(!formModalState.open, each)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="mr-2 inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                        onClick={() => setConfirmId(each.riwayat_id)}
+                      >
+                        Hapus
+                      </button>
+                    </div>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

@@ -22,7 +22,7 @@ import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrappe
 
 interface FormState {
   tmt: number;
-  masa_kerja: string;
+  masa_jabatan: string;
   file_name: string;
   file_id: string;
 }
@@ -58,7 +58,7 @@ export default function GolonganForm(props: GolonganFormProps) {
     if (detail) {
       setValue('file_id', String(detail?.files?.[0]?.document_uuid || ''));
       setValue('file_name', String(detail?.files?.[0]?.document_uuid || ''));
-      setValue('masa_kerja', detail?.masa_kerja);
+      setValue('masa_jabatan', detail?.masa_jabatan);
       setValue('tmt', Number(new Date(detail?.tmt).getTime()));
     }
   }, [detail]);
@@ -70,7 +70,7 @@ export default function GolonganForm(props: GolonganFormProps) {
         {
           riwayat_id: detail.riwayat_id,
           tanggal_mulai: new Date(formData.tmt).toISOString().split('T')?.[0],
-          masa_jabatan: formData.masa_kerja,
+          masa_jabatan: formData.masa_jabatan,
           files: [
             {
               document_name: formData.file_name,
@@ -120,7 +120,6 @@ export default function GolonganForm(props: GolonganFormProps) {
             >
               <Dialog.Overlay className="fixed inset-0 backdrop-brightness-50" />
             </Transition.Child>
-
             {/* This element is to trick the browser into centering the modal contents. */}
             <span className="inline-block h-screen align-middle" aria-hidden="true">
               &#8203;
@@ -141,20 +140,22 @@ export default function GolonganForm(props: GolonganFormProps) {
                 </Dialog.Title>
                 <form onSubmit={handleSubmit(submitHandler)} className="mt-2">
                   <div className="mt-5 sm:col-span-6">
-                    <label className="block text-sm font-medium text-gray-700">Masa Kerja</label>
+                    <label className="block text-sm font-medium text-gray-700">Masa Jabatan</label>
                     <div className="mt-1">
                       <input
-                        {...register('masa_kerja', { required: 'Mohon masukkan informasi masa kerja.' })}
+                        {...register('masa_jabatan', { required: 'Mohon masukkan informasi masa jabatan.' })}
                         autoComplete={'off'}
                         className={classNames(
                           'block w-full rounded-md shadow-sm sm:text-sm',
-                          errors.masa_kerja
+                          errors.masa_jabatan
                             ? 'ring-red-500 focus:border-red-500 focus:ring-red-500'
                             : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
                         )}
                         type="text"
                       />
-                      {errors.masa_kerja && <p className="mt-1 text-xs text-red-500">{errors.masa_kerja.message}</p>}
+                      {errors.masa_jabatan && (
+                        <p className="mt-1 text-xs text-red-500">{errors.masa_jabatan.message}</p>
+                      )}
                     </div>
                   </div>
                   <div className="mt-5 sm:col-span-6">
