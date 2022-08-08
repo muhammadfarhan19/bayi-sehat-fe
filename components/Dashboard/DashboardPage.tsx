@@ -104,7 +104,6 @@ function Selection({
 }
 
 function DashboardPage() {
-  const [throwError, setThrowError] = useState<string>('');
   const [selectedDirectoratGolongan, setSelectedDirectoratGolongan] = useState<string>('');
   const [selectedDirectoratJenjangPendidikan, setSelectedDirectoratJenjangPendidikan] = useState<string>('');
   const [selectedDirectoratByGender, setSelectedDirectoratByGender] = useState<string>('');
@@ -119,6 +118,8 @@ function DashboardPage() {
   const [listDirectoratGolongan, setListDirectoratGolongan] = useState<Array<string>>();
   const [listDirectoratJenjangPendidikan, setListDirectoratJenjangPendidikan] = useState<Array<string>>();
   const [listDirectoratByGender, setListDirectoratByGender] = useState<Array<string>>([]);
+
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   React.useEffect(() => {
     getStatiscticData();
@@ -168,66 +169,50 @@ function DashboardPage() {
 
       if (res[0].status === 200 && res[0].data && res[0].data?.status === Status.OK) {
         dataStatisticTableRes = { ...dataStatisticTableRes, ...res[0].data.data.data.data };
+        setDataStatisticTable(dataStatisticTableRes);
       }
       if (res[1].status === 200 && res[1].data && res[1].data?.status === Status.OK) {
         dataStatisticGolonganRes = { ...dataStatisticGolonganRes, ...res[1].data.data.data.data };
-      }
-      if (res[2].status === 200 && res[2].data && res[2].data?.status === Status.OK) {
-        dataStatisticJenjangPendidikanRes = { ...dataStatisticJenjangPendidikanRes, ...res[2].data.data.data.data };
-      }
-      if (res[3].status === 200 && res[3].data && res[3].data?.status === Status.OK) {
-        dataStatisticByMaleRes = { ...dataStatisticByMaleRes, ...res[3].data.data.data.data };
-      }
-      if (res[4].status === 200 && res[4].data && res[4].data?.status === Status.OK) {
-        dataStatisticByFemaleRes = { ...dataStatisticByFemaleRes, ...res[4].data.data.data.data };
-      }
-
-      if (
-        Object.keys(dataStatisticTableRes).length &&
-        Object.keys(dataStatisticGolonganRes).length &&
-        Object.keys(dataStatisticJenjangPendidikanRes).length &&
-        Object.keys(dataStatisticByMaleRes).length &&
-        Object.keys(dataStatisticByFemaleRes).length
-      ) {
-        setDataStatisticTable(dataStatisticTableRes);
         setDataStatisticGolongan(dataStatisticGolonganRes);
-        setDataStatisticJenjangPendidikan(dataStatisticJenjangPendidikanRes);
-        setDataStatisticByMale(dataStatisticByMaleRes);
-        setDataStatisticByFemale(dataStatisticByFemaleRes);
 
         const UniqueListGolongan = Array.from(
           new Set(dataStatisticGolonganRes?.multiple_bar_charts?.map(item => item['chart_title']))
         );
-        const UniqueListJenjangPendidikan = Array.from(
-          new Set(dataStatisticJenjangPendidikanRes?.multiple_bar_charts?.map(item => item['chart_title']))
-        );
-        const UniqueListByGender = (dataStatisticByMaleRes?.multiple_bar_charts || []).map(item => item['chart_title']);
-
         if (!selectedDirectoratGolongan && UniqueListGolongan[0]) {
           setListDirectoratGolongan(UniqueListGolongan);
           setSelectedDirectoratGolongan(UniqueListGolongan[0]);
         }
+      }
+      if (res[2].status === 200 && res[2].data && res[2].data?.status === Status.OK) {
+        dataStatisticJenjangPendidikanRes = { ...dataStatisticJenjangPendidikanRes, ...res[2].data.data.data.data };
+        setDataStatisticJenjangPendidikan(dataStatisticJenjangPendidikanRes);
 
+        const UniqueListJenjangPendidikan = Array.from(
+          new Set(dataStatisticJenjangPendidikanRes?.multiple_bar_charts?.map(item => item['chart_title']))
+        );
         if (!selectedDirectoratJenjangPendidikan && UniqueListJenjangPendidikan[0]) {
           setListDirectoratJenjangPendidikan(UniqueListJenjangPendidikan);
           setSelectedDirectoratJenjangPendidikan(UniqueListJenjangPendidikan[0]);
         }
-
+      }
+      if (res[3].status === 200 && res[3].data && res[3].data?.status === Status.OK) {
+        dataStatisticByMaleRes = { ...dataStatisticByMaleRes, ...res[3].data.data.data.data };
+        setDataStatisticByMale(dataStatisticByMaleRes);
+        const UniqueListByGender = (dataStatisticByMaleRes?.multiple_bar_charts || []).map(item => item['chart_title']);
         if (!selectedDirectoratByGender && UniqueListByGender[0]) {
           setListDirectoratByGender(UniqueListByGender);
           setSelectedDirectoratByGender(UniqueListByGender[0]);
         }
-      } else {
-        setThrowError('Failed to fetch the data');
       }
+      if (res[4].status === 200 && res[4].data && res[4].data?.status === Status.OK) {
+        dataStatisticByFemaleRes = { ...dataStatisticByFemaleRes, ...res[4].data.data.data.data };
+        setDataStatisticByFemale(dataStatisticByFemaleRes);
+      }
+      setLoaded(true);
     });
   };
 
-  if (throwError) {
-    throw throwError;
-  }
-
-  if (!Object.keys(dataStatisticTable).length) {
+  if (!loaded) {
     return (
       <div className="relative h-[150px] w-full divide-y divide-gray-200">
         <Loader />
