@@ -17,12 +17,14 @@ import { Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
+import AutoComplete, { OptionType } from '../../../../shared/Input/ComboBox';
 import DatePicker from '../../../../shared/Input/DatePicker';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
 
 interface FormState {
   tmt: number;
-  masa_jabatan: string;
+  tahun: string;
+  bulan: string;
   file_name: string;
   file_id: string;
 }
@@ -34,13 +36,27 @@ interface GolonganFormProps {
   detail?: RiwayatGolonganListData;
 }
 
+const yearMonthOption = () => {
+  const years: OptionType[] = [];
+  const months: OptionType[] = [];
+
+  for (let index = 1; index <= 70; index++) {
+    years.push({ text: index + ' Tahun', value: String(index) });
+    if (index < 12) {
+      months.push({ text: index + ' Bulan', value: String(index) });
+    }
+  }
+
+  return [years, months];
+};
+
 export default function GolonganForm(props: GolonganFormProps) {
   const dispatch = useDispatch();
   const { onSuccess, open, setOpen, detail } = props;
+  const [yearOptions, monthOptions] = yearMonthOption();
 
   const {
     control,
-    register,
     handleSubmit,
     formState: { errors },
     setValue,
@@ -56,9 +72,11 @@ export default function GolonganForm(props: GolonganFormProps) {
 
   React.useEffect(() => {
     if (detail) {
+      const masaJabatan = detail?.masa_jabatan.split(' ');
       setValue('file_id', String(detail?.files?.[0]?.document_uuid || ''));
       setValue('file_name', String(detail?.files?.[0]?.document_uuid || ''));
-      setValue('masa_jabatan', detail?.masa_jabatan);
+      setValue('tahun', masaJabatan?.[0]);
+      setValue('bulan', masaJabatan?.[2]);
       setValue('tmt', Number(new Date(detail?.tmt).getTime()));
     }
   }, [detail]);
@@ -70,7 +88,7 @@ export default function GolonganForm(props: GolonganFormProps) {
         {
           riwayat_id: detail.riwayat_id,
           tanggal_mulai: new Date(formData.tmt).toISOString().split('T')?.[0],
-          masa_jabatan: formData.masa_jabatan,
+          masa_jabatan: formData.tahun + ' tahun ' + formData.bulan + ' bulan',
           files: [
             {
               document_name: formData.file_name,
@@ -141,21 +159,43 @@ export default function GolonganForm(props: GolonganFormProps) {
                 <form onSubmit={handleSubmit(submitHandler)} className="mt-2">
                   <div className="mt-5 sm:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">Masa Jabatan</label>
-                    <div className="mt-1">
-                      <input
-                        {...register('masa_jabatan', { required: 'Mohon masukkan informasi masa jabatan.' })}
-                        autoComplete={'off'}
-                        className={classNames(
-                          'block w-full rounded-md shadow-sm sm:text-sm',
-                          errors.masa_jabatan
-                            ? 'ring-red-500 focus:border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
+                    <div className="flex flex-row items-center justify-between">
+                      <Controller
+                        control={control}
+                        name="tahun"
+                        render={({ field: { onChange, value } }) => (
+                          <AutoComplete
+                            onChange={value => onChange(value.value)}
+                            label={''}
+                            defaultValue={
+                              (value && yearOptions.filter(each => each.value === value)?.[0]) || {
+                                text: '',
+                                value: '',
+                              }
+                            }
+                            placeholder={'0 Tahun'}
+                            options={yearOptions}
+                          />
                         )}
-                        type="text"
                       />
-                      {errors.masa_jabatan && (
-                        <p className="mt-1 text-xs text-red-500">{errors.masa_jabatan.message}</p>
-                      )}
+                      <Controller
+                        control={control}
+                        name="bulan"
+                        render={({ field: { onChange, value } }) => (
+                          <AutoComplete
+                            onChange={value => onChange(value.value)}
+                            label={''}
+                            defaultValue={
+                              (value && monthOptions.filter(each => each.value === value)?.[0]) || {
+                                text: '',
+                                value: '',
+                              }
+                            }
+                            placeholder={'0 Bulan'}
+                            options={monthOptions}
+                          />
+                        )}
+                      />
                     </div>
                   </div>
                   <div className="mt-5 sm:col-span-6">
