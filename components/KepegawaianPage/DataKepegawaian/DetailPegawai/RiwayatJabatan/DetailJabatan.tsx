@@ -3,6 +3,7 @@ import React from 'react';
 
 import { JabatanAPI } from '../../../../../constants/APIUrls';
 import { GetRiwayatJabatanReq, RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
+import { getQueryString } from '../../../../../utils/URLUtils';
 import ImgFile from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 
@@ -13,9 +14,10 @@ type ListJabatanProps = {
 
 export default function DetailJabatan(props: ListJabatanProps) {
   const { riwayatJabatanId, onBack } = props;
+  const { pegawai_id: pegawai_id_qs } = getQueryString<{ pegawai_id?: string }>();
   const { data: riwayatJabatan } = useCommonApi<GetRiwayatJabatanReq, RiwayatJabatanData[]>(
     JabatanAPI.GET_RIWAYAT_JABATAN,
-    {},
+    pegawai_id_qs ? { pegawai_id: Number(pegawai_id_qs) } : {},
     { method: 'GET' }
   );
 
@@ -34,6 +36,7 @@ export default function DetailJabatan(props: ListJabatanProps) {
           <tbody className="divide-y divide-gray-200 bg-white">
             {[
               { label: 'Tipe Jabatan', value: detailForm?.jenis_jabatan },
+              { label: 'Unit Kerja', value: detailForm?.nama_unit_kerja },
               { label: 'Jabatan', value: detailForm?.nama_jabatan },
               { label: 'Kumulatif', value: detailForm?.kumulatif },
               { label: 'TMT Jabatan', value: detailForm?.tmt.split('T')[0] },

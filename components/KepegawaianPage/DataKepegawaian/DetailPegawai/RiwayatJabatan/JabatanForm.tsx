@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { JabatanAPI, MasterAPI } from '../../../../../constants/APIUrls';
+import { JabatanAPI, MasterAPI, UnitKerjaAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
   GetJabatanReq,
@@ -21,9 +21,11 @@ import {
   UpdateJabatanRes,
 } from '../../../../../types/api/JabatanAPI';
 import { JenisJabatanListData } from '../../../../../types/api/MasterAPI';
+import { GetUnitKerjaData } from '../../../../../types/api/UnitKerjaAPI';
 import { Status } from '../../../../../types/Common';
 import { classNames, composeListDefaultValue } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
+import { getQueryString } from '../../../../../utils/URLUtils';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
@@ -38,6 +40,7 @@ interface FormState {
   tmt: number;
   file_name: string;
   file_id: string;
+  unit_kerja_id: string;
 }
 
 interface UploadFormProps {
@@ -48,6 +51,7 @@ interface UploadFormProps {
 }
 
 export default function JabatanForm(props: UploadFormProps) {
+  const { pegawai_id: pegawai_id_qs } = getQueryString<{ pegawai_id?: string }>();
   const dataApiRes = usePersonalData();
   const dispatch = useDispatch();
   const personalData = usePersonalData();
@@ -73,6 +77,12 @@ export default function JabatanForm(props: UploadFormProps) {
     },
   });
 
+  const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
+    UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
+    null,
+    { method: 'GET' }
+  );
+
   const { data: jenisJabatan } = useCommonApi<null, JenisJabatanListData[]>(MasterAPI.GET_JENIS_JABATAN_LIST, null, {
     method: 'GET',
   });
@@ -90,7 +100,7 @@ export default function JabatanForm(props: UploadFormProps) {
 
   const { data: riwayatJabatan } = useCommonApi<GetRiwayatJabatanReq, RiwayatJabatanData[]>(
     JabatanAPI.GET_RIWAYAT_JABATAN,
-    {},
+    pegawai_id_qs ? { pegawai_id: Number(pegawai_id_qs) } : {},
     { method: 'GET' }
   );
 
@@ -100,11 +110,14 @@ export default function JabatanForm(props: UploadFormProps) {
       if (detailForm) {
         const kodeJabatan = detailForm?.jenis_jabatan.split(':')[0];
         const getDataJabatan = jenisJabatan?.find(each => each.tipe_jabatan === kodeJabatan);
+        if (detailForm.files.length) {
+          setValue('file_id', String(detailForm?.files?.[0]?.document_uuid));
+          setValue('file_name', String(detailForm?.files?.[0]?.document_name));
+        }
         setValue('tipe_jabatan', String(getDataJabatan?.id));
-        setValue('file_id', String(detailForm?.files[0].document_uuid));
-        setValue('file_name', String(detailForm?.files[0].document_uuid));
         setValue('tmt', Number(new Date(detailForm?.tmt)));
         setValue('kumulatif', String(detailForm?.kumulatif));
+        setValue('unit_kerja_id', String(detailForm?.unit_kerja_id));
         (async () => {
           setLoadDetail(true);
           const { data: daftarJabatanDetail } = await callAPI<GetJabatanReq, JabatanDataDetail>(
@@ -134,6 +147,7 @@ export default function JabatanForm(props: UploadFormProps) {
       setValue('file_id', '');
       setValue('file_name', '');
       setValue('kumulatif', '');
+      setValue('unit_kerja_id', '');
     }
   }, [jenisJabatan, selectedId]);
 
@@ -145,7 +159,7 @@ export default function JabatanForm(props: UploadFormProps) {
         {
           pegawai_id: dataApiRes?.pegawai_id || 0,
           jabatan_id: Number(formData.jabatan_id),
-          unit_kerja_id: Number(formData.tipe_jabatan),
+          unit_kerja_id: Number(formData.unit_kerja_id),
           tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
           tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
           angka_kredit: Number(formData.kumulatif),
@@ -164,7 +178,7 @@ export default function JabatanForm(props: UploadFormProps) {
         {
           jabatan_pegawai_id: Number(selectedId),
           jabatan_id: Number(formData.jabatan_id),
-          unit_kerja_id: Number(formData.tipe_jabatan),
+          unit_kerja_id: Number(formData.unit_kerja_id),
           tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
           tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
           angka_kredit: Number(formData.kumulatif),
@@ -300,6 +314,27 @@ export default function JabatanForm(props: UploadFormProps) {
                       }
                     />
                   </div>
+
+                  <div className="mt-5 sm:col-span-6">
+                    <label className="block text-sm font-medium text-gray-700">Unit Organisasi</label>
+                    <div className="pt-1 sm:col-span-2 sm:mt-0">
+                      <select
+                        className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                        {...register('unit_kerja_id', { required: 'Silahkan masukan unit organisasi.' })}
+                      >
+                        <option value="">Silahkan Pilih</option>
+                        {(unitKerjaList || []).map((item, index) => (
+                          <option key={`options-${index}`} value={item?.unit_kerja_id}>
+                            {item?.name}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.unit_kerja_id && (
+                        <p className="mt-1 text-xs text-red-500">{errors.unit_kerja_id.message}</p>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="mt-5 sm:col-span-6">
                     <Controller
                       control={control}

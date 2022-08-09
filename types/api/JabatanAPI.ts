@@ -95,6 +95,8 @@ export interface RiwayatJabatanData {
   masa_kerja: string;
   kumulatif: number;
   tmt: string;
+  unit_kerja_id: number;
+  nama_unit_kerja: string;
   files: {
     document_uuid: string;
     document_name: string;
