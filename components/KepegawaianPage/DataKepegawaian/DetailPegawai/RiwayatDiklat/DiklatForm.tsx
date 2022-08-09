@@ -228,8 +228,9 @@ export default function DiklatForm(props: UploadFormProps) {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       <option value={''}>Silahkan Pilih</option>
-                      <option value={1}>DIKLAT PRAJABATAN</option>
-                      <option value={2}>DIKLAT JABATAN</option>
+                      <option value={1}>DIKLAT TEKNIS</option>
+                      <option value={2}>DIKLAT FUNGSIONAL</option>
+                      <option value={3}>DIKLAT JABATAN</option>
                     </select>
                     {errors.jenis_diklat_id && (
                       <p className="mt-1 text-xs text-red-500">{errors.jenis_diklat_id.message}</p>
