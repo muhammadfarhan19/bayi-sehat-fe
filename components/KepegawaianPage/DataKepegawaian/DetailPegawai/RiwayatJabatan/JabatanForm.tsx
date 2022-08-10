@@ -110,7 +110,7 @@ export default function JabatanForm(props: UploadFormProps) {
       if (detailForm) {
         const kodeJabatan = detailForm?.jenis_jabatan.split(':')[0];
         const getDataJabatan = jenisJabatan?.find(each => each.tipe_jabatan === kodeJabatan);
-        if (detailForm.files.length) {
+        if (detailForm?.files?.length) {
           setValue('file_id', String(detailForm?.files?.[0]?.document_uuid));
           setValue('file_name', String(detailForm?.files?.[0]?.document_name));
         }
