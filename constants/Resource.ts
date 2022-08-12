@@ -45,3 +45,23 @@ export const JenjangPendidikan = [
   { jenjang_id: 15, jenjang: 'Sp-2' },
   { jenjang_id: 16, jenjang: 'SMP' },
 ];
+
+export const Golongan = [
+  { value: '13', text: 'IV/e - Pembina Utama' },
+  { value: '14', text: 'I/a - Juru Muda' },
+  { value: '15', text: 'I/b - Juru Muda Tingkat I' },
+  { value: '16', text: 'I/c - Juru' },
+  { value: '17', text: 'I/d - Juru Tingkat I' },
+  { value: '1', text: 'II/a - Pengatur Muda' },
+  { value: '2', text: 'II/b - Pengatur Muda Tingkat I' },
+  { value: '3', text: 'II/c - Pengatur' },
+  { value: '4', text: 'II/d - Pengatur Tingkat I' },
+  { value: '5', text: 'III/a - Penata Muda' },
+  { value: '6', text: 'III/b - Penata Muda Tingkat I' },
+  { value: '7', text: 'III/c - Penata' },
+  { value: '8', text: 'III/d - Penata Tingkat I' },
+  { value: '9', text: 'IV/a - Pembina' },
+  { value: '10', text: 'IV/b - Pembina Tingkat I' },
+  { value: '11', text: 'IV/c - Pembina Utama Muda' },
+  { value: '12', text: 'IV/d - Pembina Utama Madya' },
+];

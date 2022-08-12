@@ -92,6 +92,7 @@ export const GolonganAPI = {
   UPDATE_SURAT_KEPUTUSAN: config.apiHost + '/riwayat-golongan/update-surat-keputusan',
   UPDATE_RIWAYAT_GOLONGAN: config.apiHost + '/riwayat-golongan/update',
   DELETE_RIWAYAT_GOLONGAN: config.apiHost + '/riwayat-golongan/delete',
+  INSERT_RIWAYAT_GOLONGAN: config.apiHost + '/riwayat-golongan/insert',
 };
 
 export const RekapDinasAPI = {

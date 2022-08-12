@@ -52,3 +52,19 @@ export interface DeleteRiwayatGolonganRes {
   status: Status;
   data: string;
 }
+
+export interface PostRiwayatGolonganInsertReq {
+  employee_id: number;
+  golongan_id: number;
+  tanggal_mulai: string;
+  files: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  masa_jabatan: string;
+}
+
+export interface PostRiwayatGolonganInsertRes {
+  status: Status;
+  data: string;
+}

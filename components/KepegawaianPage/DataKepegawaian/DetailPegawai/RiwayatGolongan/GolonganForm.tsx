@@ -7,8 +7,11 @@ import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
 import { GolonganAPI } from '../../../../../constants/APIUrls';
+import { Golongan } from '../../../../../constants/Resource';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
+  PostRiwayatGolonganInsertReq,
+  PostRiwayatGolonganInsertRes,
   RiwayatGolonganListData,
   UpdateRiwayatGolonganReq,
   UpdateRiwayatGolonganRes,
@@ -17,6 +20,7 @@ import { Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
+import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import AutoComplete, { OptionType } from '../../../../shared/Input/ComboBox';
 import DatePicker from '../../../../shared/Input/DatePicker';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
@@ -25,6 +29,7 @@ interface FormState {
   tmt: number;
   tahun: string;
   bulan: string;
+  golongan: string;
   file_name: string;
   file_id: string;
 }
@@ -39,27 +44,28 @@ interface GolonganFormProps {
 const yearMonthOption = () => {
   const years: OptionType[] = [];
   const months: OptionType[] = [];
-
-  for (let index = 1; index <= 70; index++) {
+  for (let index = 0; index <= 70; index++) {
     years.push({ text: index + ' Tahun', value: String(index) });
     if (index < 12) {
       months.push({ text: index + ' Bulan', value: String(index) });
     }
   }
-
   return [years, months];
 };
 
 export default function GolonganForm(props: GolonganFormProps) {
+  const pegawai = usePersonalData();
   const dispatch = useDispatch();
   const { onSuccess, open, setOpen, detail } = props;
   const [yearOptions, monthOptions] = yearMonthOption();
+  const isEditForm = !!detail?.riwayat_id;
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
+    resetField,
   } = useForm<FormState>({
     defaultValues: {
       tmt: Date.now(),
@@ -78,12 +84,20 @@ export default function GolonganForm(props: GolonganFormProps) {
       setValue('tahun', masaJabatan?.[0]);
       setValue('bulan', masaJabatan?.[2]);
       setValue('tmt', Number(new Date(detail?.tmt).getTime()));
+    } else {
+      resetField('golongan');
+      resetField('file_id');
+      resetField('file_name');
+      resetField('tahun');
+      resetField('bulan');
+      resetField('tmt');
     }
-  }, [detail]);
+  }, [open]);
 
   const submitHandler = async (formData: FormState) => {
-    if (detail?.riwayat_id) {
-      const resSubmit = await callAPI<UpdateRiwayatGolonganReq, UpdateRiwayatGolonganRes>(
+    let resSubmit;
+    if (isEditForm) {
+      resSubmit = await callAPI<UpdateRiwayatGolonganReq, UpdateRiwayatGolonganRes>(
         GolonganAPI.UPDATE_RIWAYAT_GOLONGAN,
         {
           riwayat_id: detail.riwayat_id,
@@ -98,19 +112,36 @@ export default function GolonganForm(props: GolonganFormProps) {
         },
         { method: 'post' }
       );
+    } else {
+      resSubmit = await callAPI<PostRiwayatGolonganInsertReq, PostRiwayatGolonganInsertRes>(
+        GolonganAPI.INSERT_RIWAYAT_GOLONGAN,
+        {
+          employee_id: Number(pegawai?.pegawai_id),
+          golongan_id: Number(formData.golongan),
+          tanggal_mulai: new Date(formData.tmt).toISOString().split('T')?.[0],
+          masa_jabatan: formData.tahun + ' tahun ' + formData.bulan + ' bulan',
+          files: [
+            {
+              document_name: formData.file_name,
+              document_uuid: formData.file_id,
+            },
+          ],
+        },
+        { method: 'post' }
+      );
+    }
 
-      if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
-        dispatch(
-          setSnackbar({
-            show: true,
-            message: 'Data berhasil tersimpan.',
-            type: SnackbarType.INFO,
-          })
-        );
-        onSuccess();
-        setOpen(!open);
-        return;
-      }
+    if (resSubmit?.status === 200 && resSubmit.data?.status === Status.OK) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Data berhasil tersimpan.',
+          type: SnackbarType.INFO,
+        })
+      );
+      onSuccess();
+      setOpen(!open);
+      return;
     }
 
     dispatch(
@@ -157,12 +188,31 @@ export default function GolonganForm(props: GolonganFormProps) {
                   <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
                 </Dialog.Title>
                 <form onSubmit={handleSubmit(submitHandler)} className="mt-2">
+                  {!isEditForm && (
+                    <div className="mt-5 sm:col-span-6">
+                      <Controller
+                        control={control}
+                        name="golongan"
+                        rules={{ required: 'Mohon input data golongan.' }}
+                        render={({ field: { onChange } }) => (
+                          <AutoComplete
+                            onChange={value => onChange(value.value)}
+                            label={'Golongan'}
+                            placeholder={'Pilih golongan'}
+                            options={Golongan}
+                          />
+                        )}
+                      />
+                      {errors.golongan && <p className="mt-1 text-xs text-red-500">{errors.golongan.message}</p>}
+                    </div>
+                  )}
                   <div className="mt-5 sm:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">Masa Jabatan</label>
                     <div className="flex flex-row items-center justify-between">
                       <Controller
                         control={control}
                         name="tahun"
+                        rules={{ required: 'Mohon masukkan tahun.' }}
                         render={({ field: { onChange, value } }) => (
                           <AutoComplete
                             onChange={value => onChange(value.value)}
@@ -181,6 +231,7 @@ export default function GolonganForm(props: GolonganFormProps) {
                       <Controller
                         control={control}
                         name="bulan"
+                        rules={{ required: 'Mohon masukkan bulan.' }}
                         render={({ field: { onChange, value } }) => (
                           <AutoComplete
                             onChange={value => onChange(value.value)}
@@ -197,6 +248,9 @@ export default function GolonganForm(props: GolonganFormProps) {
                         )}
                       />
                     </div>
+                    {(errors.tahun || errors.bulan) && (
+                      <p className="mt-1 text-xs text-red-500">{'Masukkan info masa jabatan'}</p>
+                    )}
                   </div>
                   <div className="mt-5 sm:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">TMT</label>
@@ -227,7 +281,8 @@ export default function GolonganForm(props: GolonganFormProps) {
                             }
                           />
                         )}
-                      ></Controller>
+                      />
+                      {errors.tmt && <p className="mt-1 text-xs text-red-500">{errors.tmt.message}</p>}
                     </div>
                   </div>
                   <div className="mt-5 sm:col-span-6">
@@ -267,7 +322,7 @@ export default function GolonganForm(props: GolonganFormProps) {
                           )}
                         </UploadWrapper>
                       )}
-                    ></Controller>
+                    />
                     {errors.file_name && <p className="mt-1 text-xs text-red-500">{errors.file_name.message}</p>}
                   </div>
                   <div className="mt-5">

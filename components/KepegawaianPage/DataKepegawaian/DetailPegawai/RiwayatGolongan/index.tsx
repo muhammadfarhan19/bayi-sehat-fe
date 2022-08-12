@@ -1,3 +1,4 @@
+import { PlusIcon } from '@heroicons/react/outline';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -69,6 +70,17 @@ export default function RiwayatGolongan() {
 
   return (
     <>
+      <div className="my-3 flex items-center">
+        <div className="flex flex-1 pr-2 text-sm text-gray-500">{/* TODO: Wait for wording */}</div>
+        <button
+          type="button"
+          className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
+          onClick={() => handleShowForm(!formModalState.open)}
+        >
+          <PlusIcon className="mr-1 h-4" />
+          Tambah Riwayat Golongan
+        </button>
+      </div>
       <div className="overflow-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
