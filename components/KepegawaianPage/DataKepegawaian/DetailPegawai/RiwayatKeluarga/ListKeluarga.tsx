@@ -40,8 +40,6 @@ export default function ListKeluarga(props: ListKeluargaProps) {
     { method: 'GET' }
   );
 
-  console.log(riwayatKeluargaList);
-
   const handleConfirm = async () => {
     const resDelete = await callAPI<DelListKeluargaReq, PostListKeluargaRes>(
       RiwayatKeluargaAPI.POST_RIWAYAT_KELUARGA_DELETE,

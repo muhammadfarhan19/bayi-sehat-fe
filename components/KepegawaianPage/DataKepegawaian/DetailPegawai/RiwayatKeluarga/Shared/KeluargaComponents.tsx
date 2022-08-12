@@ -14,8 +14,8 @@ interface TextInput {
 interface Picker {
   label: string;
   defaultOption: string;
-  firstOption: string;
-  secondOption: string;
+  firstOption?: string;
+  secondOption?: string;
   formVerification: string;
   validation: any;
   errorMessage: any;

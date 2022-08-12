@@ -3,11 +3,13 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../action/CommonAction';
-import { JabatanAPI } from '../../../../constants/APIUrls';
+import { JabatanAPI, MasterAPI } from '../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../reducer/CommonReducer';
 import { TambahJabatanReq, UpdateJabatanRes } from '../../../../types/api/JabatanAPI';
+import { JenisJabatanListData } from '../../../../types/api/MasterAPI';
 import { Status } from '../../../../types/Common';
 import { callAPI } from '../../../../utils/Fetchers';
+import useCommonApi from '../../../shared/hooks/useCommonApi';
 import {
   ButtonRows,
   DropdownSelect,
@@ -37,6 +39,10 @@ export default function FormJabatan(props: UploadFormProps) {
     register,
     handleSubmit,
   } = useForm<FormState>();
+
+  const { data: jabatanList } = useCommonApi<null, JenisJabatanListData[]>(MasterAPI.GET_JENIS_JABATAN_LIST, null, {
+    method: 'GET',
+  });
 
   const submitHandler = async (formData: FormState) => {
     const resSubmit = await callAPI<TambahJabatanReq, UpdateJabatanRes>(
@@ -82,17 +88,24 @@ export default function FormJabatan(props: UploadFormProps) {
       <div className="w-full max-w-full p-6 text-left ">
         <HeaderComponents navigateBack={toggleModal} headerTitle="Tambah Jabatan" />
         <form onSubmit={handleSubmit(submitHandler)}>
-          <DropdownSelect
-            moreOptions={<option value={'3'}>JPT: Jabatan Pimpinan Tinggi</option>}
-            isError={errors.jenis_jabatan}
-            errorMessage={errors.jenis_jabatan?.message}
-            validation={{ ...register('jenis_jabatan', { required: 'Silahkan Pilih Jenis Jabatan' }) }}
-            label="Tipe Jabatan"
-            defaultOption="Silahkan Pilih"
-            firstOption="JA: Jabatan Administrasi"
-            secondOption="JF: Jabatan Fungsional"
-            formVerification="jenis_jabatan"
-          />
+          <div className="mt-5 sm:col-span-6">
+            <label className="block text-sm font-medium text-gray-700">Tipe Jabatan</label>
+            <div className="mt-1 sm:col-span-2 sm:mt-0">
+              <select
+                {...register('jenis_jabatan', { required: 'Silahkan Pilih Jenis Jabatan' })}
+                name={'jenis_jabatan'}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              >
+                {(jabatanList || []).map((item, index) => (
+                  <option key={index} value={item?.id}>
+                    {item?.jenis_jabatan}
+                  </option>
+                ))}
+              </select>
+              {errors.jenis_jabatan && <p className="mt-1 text-xs text-red-500">{errors.jenis_jabatan.message}</p>}
+            </div>
+          </div>
+
           <InputLabelled
             isError={errors.name}
             errorMessage={errors.name?.message}

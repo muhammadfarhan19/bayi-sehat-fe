@@ -38,7 +38,7 @@ export default function DetailJabatan(props: ListJabatanProps) {
               { label: 'Tipe Jabatan', value: detailForm?.jenis_jabatan },
               { label: 'Unit Kerja', value: detailForm?.nama_unit_kerja },
               { label: 'Jabatan', value: detailForm?.nama_jabatan },
-              { label: 'Kumulatif', value: detailForm?.kumulatif },
+              // { label: 'Kumulatif', value: detailForm?.kumulatif },
               { label: 'TMT Jabatan', value: detailForm?.tmt.split('T')[0] },
               { label: 'Masa Jabatan', value: detailForm?.masa_kerja },
               { label: 'Bukti SK', value: detailForm?.files?.[0]?.document_name },

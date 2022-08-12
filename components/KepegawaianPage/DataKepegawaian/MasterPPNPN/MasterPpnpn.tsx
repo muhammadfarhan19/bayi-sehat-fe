@@ -1,11 +1,21 @@
 import { AdjustmentsIcon } from '@heroicons/react/solid';
 import React from 'react';
 
+import { MasterAPI } from '../../../../constants/APIUrls';
+import { JenisJabatanListData } from '../../../../types/api/MasterAPI';
+import useCommonApi from '../../../shared/hooks/useCommonApi';
+
 export default function MasterPpnpn() {
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
   const toggleAdvancedFilter = () => {
     setshowAdvancedFilter(!showAdvancedFilter);
   };
+
+  const { data: jenisJabatanList } = useCommonApi<null, JenisJabatanListData[]>(
+    MasterAPI.GET_JENIS_JABATAN_LIST,
+    null,
+    { method: 'GET' }
+  );
 
   return (
     <>
@@ -59,9 +69,11 @@ export default function MasterPpnpn() {
               <p className="mb-[4px] text-[14px] font-normal">Tipe Jabatan</p>
               <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                 <option value="10">Semua</option>
-                <option value="10"> Jabatan Administrasi</option>
-                <option value="10">Jabatan Fungsional</option>
-                <option value="10">Jabatan Pimpinan Tinggi</option>
+                {(jenisJabatanList || []).map((item, index) => (
+                  <option key={`options-${index}`} value={item?.tipe_jabatan}>
+                    {item?.jenis_jabatan}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

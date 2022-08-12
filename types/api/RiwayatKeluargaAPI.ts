@@ -90,6 +90,12 @@ export interface PostListKeluargaReq {
       document_name: string;
     }
   ];
+  foto_pasangan?: [
+    {
+      document_uuid: string;
+      document_name: string;
+    }
+  ];
 }
 
 export interface PostAnakReq {

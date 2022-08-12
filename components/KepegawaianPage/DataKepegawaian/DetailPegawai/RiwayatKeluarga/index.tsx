@@ -6,8 +6,6 @@ import ListKeluarga from './ListKeluarga';
 export default function RiwayatKeluarga() {
   const [riwayatKeluargaId, setRiwayatKeluargaId] = React.useState(0);
 
-  console.log(riwayatKeluargaId);
-
   return (
     <>
       {riwayatKeluargaId === 0 ? (

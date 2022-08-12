@@ -54,6 +54,8 @@ interface FormState {
   nomor_kartu_suami_istri: string;
   file_id_kartu_suami_istri: string;
   file_name_kartu_suami_istri: string;
+  file_id_foto_pasangan: string;
+  file_name_foto_pasangan: string;
   status_pernikahan: string;
 }
 
@@ -144,6 +146,12 @@ export default function KeluargaForm(props: UploadFormProps) {
           {
             document_name: formData?.file_name_akta_meninggal,
             document_uuid: formData?.file_id_akta_meninggal,
+          },
+        ],
+        foto_pasangan: [
+          {
+            document_name: formData?.file_name_foto_pasangan,
+            document_uuid: formData?.file_id_foto_pasangan,
           },
         ],
       },
@@ -271,6 +279,49 @@ export default function KeluargaForm(props: UploadFormProps) {
               />
               {errors.hp && <p className="mt-1 text-xs text-red-500">{errors.hp.message}</p>}
             </div>
+          </div>
+          <div className="mt-5 sm:col-span-6">
+            <label className="mb-2 block text-sm font-medium text-gray-700">Upload Foto Pasangan</label>
+            <Controller
+              control={control}
+              name={'file_name_foto_pasangan'}
+              rules={{ required: false }}
+              render={({ field: { onChange, value } }) => (
+                <UploadWrapper
+                  allowedTypes={['pdf', 'jpeg', 'jpg', 'png']}
+                  handleUploadChange={(files: FileObject[]) => {
+                    setValue('file_id_foto_pasangan', files[0].id);
+                    onChange(files[0].name);
+                  }}
+                >
+                  {({ loading }) => (
+                    <div
+                      className={classNames(
+                        'flex items-center justify-center space-x-2 rounded-md border-[1px] p-2',
+                        errors.file_name_foto_pasangan ? 'border-red-500' : ''
+                      )}
+                    >
+                      <div className="flex flex-1 flex-row items-center justify-center space-x-3 rounded-md bg-sky-100 py-2">
+                        <div>
+                          <div className="text-sm text-gray-400">
+                            {value || 'Masukan dokumen dalam bentuk PDF, JPG, JPEG,atau PNG max 2mb'}
+                          </div>
+                        </div>
+                        <button
+                          disabled={loading}
+                          type="button"
+                          className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                        >
+                          {loading ? <CircleProgress /> : null}
+                          <UploadIcon className="mr-1 h-4" />
+                          Upload
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </UploadWrapper>
+              )}
+            ></Controller>
           </div>
 
           <div className="mt-5 sm:col-span-6">

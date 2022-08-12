@@ -1,4 +1,5 @@
 import { ChevronLeftIcon, PlusIcon } from '@heroicons/react/outline';
+import { PhotographIcon } from '@heroicons/react/solid';
 import format from 'date-fns/format';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -51,6 +52,8 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
     { pasangan_id: Number(riwayatKeluargaId) },
     { method: 'GET' }
   );
+
+  console.log(detailKeluarga);
 
   const { data: detailAnak, mutate } = useCommonApi<GetAnakList, GetAnakListRes[]>(
     RiwayatAnakAPI.GET_RIWAYAT_ANAK_LIST,
@@ -188,13 +191,31 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
               { label: 'Agama', value: religionState },
               { label: 'No Hp', value: detailKeluarga?.hp.length === 0 ? '-' : detailKeluarga?.hp },
               {
+                label: 'Foto Pasangan',
+                value: (
+                  <div className="flex flex-row items-center space-x-2">
+                    {detailKeluarga?.foto_pasangan?.[0]?.document_name == '' ? (
+                      '-'
+                    ) : (
+                      <>
+                        <PhotographIcon style={{ width: 28, height: 28 }} />
+                        <LinkFile
+                          link={detailKeluarga?.foto_pasangan?.[0]?.document_uuid}
+                          value={detailKeluarga?.foto_pasangan?.[0]?.document_name}
+                        />
+                      </>
+                    )}
+                  </div>
+                ),
+              },
+              {
                 label: 'Kartu Identitas',
                 value: (
                   <div className="flex flex-row items-center space-x-2">
                     <PDFIcon />
                     <LinkFile
-                      link={detailKeluarga?.files?.[0].document_uuid}
-                      value={detailKeluarga?.files?.[0].document_name}
+                      link={detailKeluarga?.files?.[0]?.document_uuid}
+                      value={detailKeluarga?.files?.[0]?.document_name}
                     />
                   </div>
                 ),
@@ -208,12 +229,15 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
                 label: 'Akta Kelahiran',
                 value: (
                   <div className="flex flex-row items-center space-x-2">
-                    {detailKeluarga?.files?.[2].document_name.length === 0 ? (
+                    {detailKeluarga?.files?.[2]?.document_name.length === 0 ? (
                       '-'
                     ) : (
                       <>
                         <PDFIcon />
-                        <h6>detailKeluarga?.files?.[2].document_name</h6>
+                        <LinkFile
+                          link={detailKeluarga?.files?.[2]?.document_uuid}
+                          value={detailKeluarga?.files?.[2]?.document_name}
+                        />
                       </>
                     )}
                   </div>
@@ -234,15 +258,15 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
                   <div className="flex flex-row items-center space-x-2">
                     <PDFIcon />
                     <LinkFile
-                      link={detailKeluarga?.files?.[1].document_uuid}
-                      value={detailKeluarga?.files?.[1].document_name}
+                      link={detailKeluarga?.files?.[1]?.document_uuid}
+                      value={detailKeluarga?.files?.[1]?.document_name}
                     />
                   </div>
                 ),
               },
               {
                 label: 'Tanggal Meninggal',
-                value: detailKeluarga?.tanggal_meninggal === null ? '-' : formatDate(detailKeluarga?.tanggal_meninggal),
+                value: detailKeluarga?.tanggal_meninggal == '' ? '-' : formatDate(detailKeluarga?.tanggal_meninggal),
               },
               {
                 label: 'Nomer Akta Meninggal',
@@ -254,14 +278,14 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
                   <div className="flex flex-row items-center space-x-2">
                     {detailKeluarga?.nomor_akta_meninggal?.length === 0 ? (
                       '-'
-                    ) : detailKeluarga?.files?.[5].document_name.length === 0 ? (
+                    ) : detailKeluarga?.files?.[5]?.document_name.length === 0 ? (
                       <p className="text-[red]">Tidak ada Data</p>
                     ) : (
                       <>
                         <PDFIcon />
                         <LinkFile
-                          link={detailKeluarga?.files?.[5].document_uuid}
-                          value={detailKeluarga?.files?.[5].document_name}
+                          link={detailKeluarga?.files?.[5]?.document_uuid}
+                          value={detailKeluarga?.files?.[5]?.document_name}
                         />
                       </>
                     )}
@@ -270,7 +294,7 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
               },
               {
                 label: 'Tanggal Cerai',
-                value: detailKeluarga?.tanggal_cerai === null ? '-' : formatDate(detailKeluarga?.tanggal_cerai),
+                value: detailKeluarga?.tanggal_cerai == '' ? '-' : formatDate(detailKeluarga?.tanggal_cerai),
               },
               {
                 label: 'No Akta Cerai',
@@ -282,14 +306,14 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
                   <div className="flex flex-row items-center space-x-2">
                     {detailKeluarga?.nomor_akta_cerai?.length === 0 ? (
                       '-'
-                    ) : detailKeluarga?.files?.[3].document_name.length === 0 ? (
+                    ) : detailKeluarga?.files?.[3]?.document_name.length === 0 ? (
                       <p className="text-[red]">Tidak ada Data</p>
                     ) : (
                       <>
                         <PDFIcon />
                         <LinkFile
-                          link={detailKeluarga?.files?.[3].document_uuid}
-                          value={detailKeluarga?.files?.[3].document_name}
+                          link={detailKeluarga?.files?.[3]?.document_uuid}
+                          value={detailKeluarga?.files?.[3]?.document_name}
                         />
                       </>
                     )}
@@ -307,14 +331,14 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
                   <div className="flex flex-row items-center space-x-2">
                     {detailKeluarga?.nomor_kartu_suami_istri?.length === 0 ? (
                       '-'
-                    ) : detailKeluarga?.files?.[4].document_name.length === 0 ? (
+                    ) : detailKeluarga?.files?.[4]?.document_name?.length === 0 ? (
                       <p className="text-[red]">Tidak ada Data</p>
                     ) : (
                       <>
                         <PDFIcon />
                         <LinkFile
-                          link={detailKeluarga?.files?.[4].document_uuid}
-                          value={detailKeluarga?.files?.[4].document_name}
+                          link={detailKeluarga?.files?.[4]?.document_uuid}
+                          value={detailKeluarga?.files?.[4]?.document_name}
                         />
                       </>
                     )}

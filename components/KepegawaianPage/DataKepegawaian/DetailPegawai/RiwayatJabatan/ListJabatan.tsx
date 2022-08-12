@@ -120,6 +120,7 @@ export default function ListJabatan(props: ListJabatanProps) {
               >
                 No
               </th>
+
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -132,12 +133,12 @@ export default function ListJabatan(props: ListJabatanProps) {
               >
                 Jabatan
               </th>
-              <th
+              {/* <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
                 Kumulatif
-              </th>
+              </th> */}
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -173,10 +174,12 @@ export default function ListJabatan(props: ListJabatanProps) {
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   <div className="whitespace-nowrap">{each.jenis_jabatan}</div>
                 </td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nama_jabatan}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  <div className="whitespace-nowrap">{each.kumulatif}</div>
+                  <div className="w-[150px]"> {each.nama_jabatan}</div>
                 </td>
+                {/* <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  <div className="whitespace-nowrap">{each.kumulatif}</div>
+                </td> */}
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   <div className="whitespace-nowrap">{formatDate(new Date(each.tmt), 'yyyy-MM-dd')}</div>
                 </td>
