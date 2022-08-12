@@ -119,14 +119,12 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
   };
 
   React.useEffect(() => {
-    if (Number(detailKeluarga?.status_pernikahan) === 1) {
+    if (Number(detailKeluarga?.status_pernikahan) === 2) {
       setMarriageState('Menikah');
-    } else if (Number(detailKeluarga?.status_pernikahan) === 2) {
+    } else if (Number(detailKeluarga?.status_pernikahan) === 4) {
       setMarriageState('Cerai Meninggal');
     } else if (Number(detailKeluarga?.status_pernikahan) === 3) {
       setMarriageState('Cerai Hidup');
-    } else if (Number(detailKeluarga?.status_pernikahan) === 4) {
-      setMarriageState('Cerai Meninggal');
     }
   }, [Number(detailKeluarga?.status_pernikahan)]);
 

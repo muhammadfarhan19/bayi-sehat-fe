@@ -28,7 +28,6 @@ export default function ListKeluarga(props: ListKeluargaProps) {
   const [confirmId, setConfirmId] = React.useState(0);
   const personalPegawaiData = usePersonalData();
   const dispatch = useDispatch();
-
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: number }>({
     open: false,
     selectedId: undefined,
@@ -39,6 +38,11 @@ export default function ListKeluarga(props: ListKeluargaProps) {
     { pegawai_id: personalPegawaiData?.pegawai_id },
     { method: 'GET' }
   );
+  const IS_MENIKAH = 2;
+  const IS_CERAI_HIDUP = 3;
+  const MENIKAH_TEXT = 'Menikah';
+  const CERAI_MENINGGAL_TEXT = 'Cerai Meninggal';
+  const CERAI_HIDUP_TEXT = 'Cerai Hidup';
 
   const handleConfirm = async () => {
     const resDelete = await callAPI<DelListKeluargaReq, PostListKeluargaRes>(
@@ -155,7 +159,11 @@ export default function ListKeluarga(props: ListKeluargaProps) {
                   {format(new Date(each.tanggal_menikah), 'yyyy-MM-dd')}
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  {each.status_pernikahan === 1 ? 'Menikah' : 'Cerai Hidup'}
+                  {each?.status_pernikahan === IS_MENIKAH
+                    ? MENIKAH_TEXT
+                    : each?.status_pernikahan === IS_CERAI_HIDUP
+                    ? CERAI_HIDUP_TEXT
+                    : CERAI_MENINGGAL_TEXT}
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   <div className="whitespace-nowrap">{each.jumlah_anak + ' Anak'}</div>
