@@ -24,6 +24,7 @@ export interface GetPetaReq {
   page: number;
   per_page: number;
   nama_jabatan?: string;
+  is_dikti?: number;
 }
 
 export interface PostKebutuhanPetaReq {
