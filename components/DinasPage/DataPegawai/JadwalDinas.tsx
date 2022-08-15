@@ -84,15 +84,15 @@ export default function JadwalDinas(props: DownloadJadwal) {
           >
             <div className="my-8 inline-block w-full max-w-md transform rounded-md bg-white p-4 text-left align-middle shadow-xl transition-all">
               <Dialog.Title as="div" className="flex justify-between">
-                <h5 className="text-lg font-medium text-gray-900">Download Jadwal</h5>
+                <h5 className="text-lg font-medium text-gray-900">{`Download Jadwal`}</h5>
                 <XIcon className="h-5 cursor-pointer" onClick={toggleView} />
               </Dialog.Title>
               <div>
-                <p className="text-[12px] font-normal leading-8 text-gray-900">Periode Jadwal</p>
+                <p className="text-[12px] font-normal leading-8 text-gray-900">{`Periode Jadwal`}</p>
                 <div className="flex flex-col">
                   <div className="flex flex-row justify-between space-x-5">
-                    <p className="mb-2 flex-1 text-[10px] font-normal text-gray-900"> Dari Tanggal</p>
-                    <p className=" mb-2 flex-1  text-[10px]  font-normal text-gray-900"> Sampai Tanggal</p>
+                    <p className="mb-2 flex-1 text-[10px] font-normal text-gray-900"> {`Dari Tanggal`}</p>
+                    <p className=" mb-2 flex-1  text-[10px]  font-normal text-gray-900"> {`Sampai Tanggal`}</p>
                   </div>
 
                   <div className="flex flex-row space-x-5">
@@ -119,8 +119,8 @@ export default function JadwalDinas(props: DownloadJadwal) {
                 </div>
 
                 <div className="my-3 ml-1">
-                  <p className="text-[10px] font-normal text-red-500">Catatan :</p>
-                  <p className="text-[10px]  font-normal text-red-500">*Periode download maksimal 3 bulan</p>
+                  <p className="text-[10px] font-normal text-red-500">{`Catatan :`}</p>
+                  <p className="text-[10px]  font-normal text-red-500">{`*Periode download maksimal 3 bulan`}</p>
                 </div>
 
                 <form method="get" className="flex justify-end">
@@ -131,7 +131,7 @@ export default function JadwalDinas(props: DownloadJadwal) {
                     }}
                     className="flex rounded-[4px] bg-indigo-600 px-3 py-2 text-sm font-medium text-white focus:outline-none"
                   >
-                    Download
+                    {`Download`}
                   </a>
                 </form>
               </div>

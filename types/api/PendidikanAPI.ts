@@ -37,6 +37,8 @@ export interface PostRiwayatPendidikanUpdateReq {
   is_ijazah_terakhir: boolean;
   is_ijazah_cpns: boolean;
   files: DocumentData[];
+  gelar_depan: string;
+  gelar_belakang: string;
 }
 
 export interface DocumentData {
@@ -59,6 +61,8 @@ export interface PostRiwayatPendidikanInsertReq {
   is_ijazah_terakhir: boolean;
   is_ijazah_cpns: boolean;
   files: DocumentData[];
+  gelar_depan: string;
+  gelar_belakang: string;
 }
 
 export interface PostRiwayatPendidikanInsertRes {
@@ -86,6 +90,8 @@ export interface RiwayatPendidikanDetailData {
   is_ijazah_terakhir: boolean;
   is_ijazah_cpns: boolean;
   files: DocumentData[];
+  gelar_depan: string;
+  gelar_belakang: string;
 }
 
 export interface PostRiwayatPendidikanDeleteReq {

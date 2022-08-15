@@ -44,6 +44,8 @@ interface FormState {
   ijazah_terakhir: string;
   tgl_lulus: string;
   document_uuid: string;
+  gelar_depan: string;
+  gelar_belakang: string;
 }
 
 export default function PendidikanForm(props: UploadFormProps) {
@@ -79,6 +81,8 @@ export default function PendidikanForm(props: UploadFormProps) {
       setValue('nama_institusi', data.pt);
       setValue('prodi', data.prodi);
       setValue('no_ijazah', data.no_ijazah);
+      setValue('gelar_depan', data?.gelar_depan);
+      setValue('gelar_belakang', data?.gelar_belakang);
       setValue('ijazah_cpns', data.is_ijazah_cpns === true ? '1' : '2');
       setValue('ijazah_terakhir', data.is_ijazah_terakhir === true ? '1' : '2');
       setValue('tgl_lulus', data.tanggal_lulus.split('T')?.[0]);
@@ -103,13 +107,15 @@ export default function PendidikanForm(props: UploadFormProps) {
           tanggal_lulus: formData.tgl_lulus,
           no_ijazah: formData.no_ijazah,
           is_ijazah_cpns: formData.ijazah_cpns === '1' ? true : false,
-          is_ijazah_terakhir: formData.ijazah_cpns === '1' ? true : false,
+          is_ijazah_terakhir: formData.ijazah_terakhir === '1' ? true : false,
           files: [
             {
               document_uuid: formData.file_id,
               document_name: formData.file_name,
             },
           ],
+          gelar_depan: formData?.gelar_depan,
+          gelar_belakang: formData?.gelar_belakang,
         },
         { method: 'put' }
       );
@@ -131,6 +137,8 @@ export default function PendidikanForm(props: UploadFormProps) {
               document_name: formData.file_name,
             },
           ],
+          gelar_depan: formData?.gelar_depan,
+          gelar_belakang: formData?.gelar_belakang,
         },
         { method: 'post' }
       );
@@ -285,6 +293,33 @@ export default function PendidikanForm(props: UploadFormProps) {
                     {errors.no_ijazah && <p className="mt-1 text-xs text-red-500">{errors.no_ijazah.message}</p>}
                   </div>
                 </div>
+
+                <div className="mt-5 sm:col-span-6">
+                  <label className="block text-sm font-medium text-gray-700">Gelar Depan</label>
+                  <div className="mt-1">
+                    <input
+                      {...register('gelar_depan', { required: false })}
+                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                      name="gelar_depan"
+                      type="text"
+                    />
+                    {/* {errors.gelar_depan && <p className="mt-1 text-xs text-red-500">{errors.no_ijazah.message}</p>} */}
+                  </div>
+                </div>
+
+                <div className="mt-5 sm:col-span-6">
+                  <label className="block text-sm font-medium text-gray-700">Gelar Belakang</label>
+                  <div className="mt-1">
+                    <input
+                      {...register('gelar_belakang', { required: false })}
+                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                      name="gelar_belakang"
+                      type="text"
+                    />
+                    {/* {errors.no_ijazah && <p className="mt-1 text-xs text-red-500">{errors.no_ijazah.message}</p>} */}
+                  </div>
+                </div>
+
                 <div className="mt-5 sm:col-span-6">
                   <label className="block text-sm font-medium text-gray-700">Ijazah CPNS?</label>
                   <div className="mt-1 sm:col-span-2 sm:mt-0">

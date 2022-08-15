@@ -19,6 +19,7 @@ export default function DetailPendidikan(props: ListDigitalProps) {
     { method: 'GET' },
     { skipCall: !riwayatPendidikanId, revalidateOnMount: true }
   );
+  const BLANK_FIELD = '-';
 
   if (isValidating) {
     return <Loader />;
@@ -40,6 +41,11 @@ export default function DetailPendidikan(props: ListDigitalProps) {
               { label: 'Nama Institusi', value: data?.pt },
               { label: 'Prodi/Jurusan', value: data?.prodi },
               { label: 'No Ijazah', value: data?.no_ijazah },
+              { label: 'Gelar Depan', value: data?.gelar_depan?.length === 0 ? BLANK_FIELD : data?.gelar_depan },
+              {
+                label: 'Gelar Belakang',
+                value: data?.gelar_belakang?.length === 0 ? BLANK_FIELD : data?.gelar_belakang,
+              },
               { label: 'Tanggal Lulus', value: data?.tanggal_lulus.split('T')?.[0] },
               { label: 'Bukti Ijazah', value: data?.files?.[0]?.document_name },
             ].map((each, index) => (
