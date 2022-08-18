@@ -1,9 +1,15 @@
 import { AdjustmentsIcon } from '@heroicons/react/solid';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
+import { setSnackbar } from '../../../action/CommonAction';
 import { JabatanAPI, MasterAPI } from '../../../constants/APIUrls';
-import { GetJabatanReq, JabatanData } from '../../../types/api/JabatanAPI';
+import { SnackbarType } from '../../../reducer/CommonReducer';
+import { GetJabatanReq, JabatanData, PostJabatanDeleteReq, PostJabatanDeleteRes } from '../../../types/api/JabatanAPI';
 import { JenisJabatanListData } from '../../../types/api/MasterAPI';
+import { Status } from '../../../types/Common';
+import { callAPI } from '../../../utils/Fetchers';
+import ConfirmDialog from '../../shared/ConfirmDialog';
 import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
@@ -12,21 +18,24 @@ import Pagination from '../../shared/Pagination';
 import FormJabatan from './FormJabatan/FormJabatan';
 
 function DaftarJabatan() {
+  const dispatch = useDispatch();
+  const [confirmId, setConfirmId] = React.useState(0);
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
-  const [formModalState, setFormModalState] = React.useState<{ open: boolean }>({
+  const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: string }>({
     open: false,
+    selectedId: undefined,
   });
   const [filterState, setFilterState] = React.useState<GetJabatanReq>({
     page: 1,
     per_page: 20,
   });
 
-  const { data: dataTable, isValidating } = useCommonApi<GetJabatanReq, JabatanData>(
-    JabatanAPI.GET_JABATAN,
-    filterState,
-    { method: 'GET' }
-  );
+  const {
+    data: dataTable,
+    isValidating,
+    mutate,
+  } = useCommonApi<GetJabatanReq, JabatanData>(JabatanAPI.GET_JABATAN, filterState, { method: 'GET' });
 
   const { data: jenisJabatanList } = useCommonApi<null, JenisJabatanListData[]>(
     MasterAPI.GET_JENIS_JABATAN_LIST,
@@ -59,19 +68,53 @@ function DaftarJabatan() {
     setshowAdvancedFilter(showState);
   };
 
-  const handleShowForm = (open: boolean) => {
+  const handleShowForm = (open: boolean, selectedId?: string) => {
     setFormModalState({
       open,
+      selectedId,
     });
   };
 
+  const handleConfirm = async () => {
+    const resDelete = await callAPI<PostJabatanDeleteReq, PostJabatanDeleteRes>(
+      JabatanAPI.POST_JABATAN_DELETE,
+      { jabatan_id: confirmId },
+      { method: 'post' }
+    );
+
+    let snackbarProps;
+    if (resDelete.status === 200 && resDelete.data?.status === Status.OK) {
+      snackbarProps = {
+        show: true,
+        message: 'Data terhapus.',
+        type: SnackbarType.INFO,
+      };
+    } else {
+      snackbarProps = {
+        show: true,
+        message: 'Gagal menghapus data.',
+        type: SnackbarType.ERROR,
+      };
+    }
+    dispatch(setSnackbar(snackbarProps));
+    setConfirmId(0);
+    mutate();
+  };
+
+  if (isValidating) {
+    <div className="relative h-[150px] w-full divide-y divide-gray-200">
+      <Loader />
+    </div>;
+  }
+
   return formModalState?.open ? (
     <FormJabatan
-      onSuccess={() => null}
+      onSuccess={() => mutate()}
       open={formModalState.open}
       setOpen={(open: boolean) => {
         handleShowForm(open);
       }}
+      selectedId={formModalState?.selectedId}
     />
   ) : (
     <>
@@ -143,89 +186,106 @@ function DaftarJabatan() {
         )}
       </div>
 
-      {isValidating ? (
-        <div className="relative h-[150px] w-full divide-y divide-gray-200">
-          <Loader />
-        </div>
-      ) : (
-        <div className="flex">
-          <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-            <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-              <div className="overflow-hidden sm:rounded-lg">
-                <table className="w-full table-fixed rounded-lg bg-gray-100">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
-                        No
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
-                        Nama
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
-                        Kelas
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
-                        Tipe Jabatan
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
-                        Aksi
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(dataTable?.list || []).map((data, dataIdx) => (
-                      <tr
-                        key={dataIdx}
-                        className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
-                      >
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                          {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.name}</td>
-                        <td className="px-6 text-xs font-medium text-gray-900">{data.kelas_jabatan}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jenis_jabatan_str}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+      <div className="flex">
+        <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+          <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+            <div className="sm:rounded-lg">
+              <table className="w-full table-fixed divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      No
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Nama
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Kelas
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Tipe Jabatan
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(dataTable?.list || []).map((data, dataIdx) => (
+                    <tr
+                      key={dataIdx}
+                      className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                    >
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                        {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
+                      </td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.name}</td>
+                      <td className="px-6 text-xs font-medium text-gray-900">{data.kelas_jabatan}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jenis_jabatan_str}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                        <div className="flex justify-between">
                           <a
                             href={`/kepegawaian/daftar-jabatan?id=${data.jabatan_id}&name=${encodeURIComponent(
                               data.name
                             )}`}
-                            className="rounded-[4px] bg-indigo-600 px-[11px] py-[7px] text-xs font-medium text-gray-50 focus:outline-none"
+                            className="mr-2 rounded-[4px] bg-indigo-600 px-[11px] py-[7px] text-xs font-medium text-gray-50 focus:outline-none"
                           >
                             Detail
                           </a>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <Pagination
-                  onChange={value => {
-                    changeFilterState({ page: value });
-                  }}
-                  totalData={dataTable ? dataTable?.pagination.total_data : 0}
-                  perPage={filterState.per_page}
-                  page={filterState.page}
-                />
-              </div>
+                          <button
+                            type="button"
+                            className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                            onClick={() => handleShowForm(!formModalState.open, String(data.jabatan_id))}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            className="mr-2 inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                            onClick={() => setConfirmId(data.jabatan_id)}
+                          >
+                            Hapus
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Pagination
+                onChange={value => {
+                  changeFilterState({ page: value });
+                }}
+                totalData={dataTable ? dataTable?.pagination.total_data : 0}
+                perPage={filterState.per_page}
+                page={filterState.page}
+              />
             </div>
           </div>
         </div>
-      )}
+      </div>
+
+      <ConfirmDialog
+        open={!!confirmId}
+        message="Anda yakin ingin menghapus data ini?"
+        onClose={() => setConfirmId(0)}
+        onConfirm={handleConfirm}
+      />
     </>
   );
 }

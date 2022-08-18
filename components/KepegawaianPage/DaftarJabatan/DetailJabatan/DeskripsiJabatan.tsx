@@ -49,6 +49,7 @@ function DeskripsiJabatan() {
             { label: 'Nama Jabatan', value: detailJabatan.name },
             { label: 'Kelas', value: detailJabatan.kelas_jabatan },
             { label: 'Tipe Jabatan', value: detailJabatan.jenis_jabatan_str },
+            { label: 'Jabatan Dikti', value: detailJabatan.is_dikti === 1 ? 'Jabatan Dikti' : 'Jabatan Non Dikti' },
           ].map((each, index) => (
             <tr key={index}>
               <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>

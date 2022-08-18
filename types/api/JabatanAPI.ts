@@ -11,6 +11,7 @@ export interface JabatanDetailData {
   jenis_jabatan_str: string;
   kelas_jabatan: number;
   name: string;
+  is_dikti: number;
 }
 
 export interface GetJabatanDetailRes {
@@ -133,6 +134,28 @@ export interface PostRiwayatJabatanUpdateReq {
 }
 
 export interface PostRiwayatJabatanUpdateRes {
+  status: Status;
+  data: string;
+}
+
+export interface PostJabatanDeleteReq {
+  jabatan_id: number;
+}
+
+export interface PostJabatanDeleteRes {
+  status: Status;
+  data: string;
+}
+
+export interface PostJabatanUpdateReq {
+  jabatan_id: number;
+  name: string;
+  jenis_jabatan: number;
+  kelas_jabatan: number;
+  is_dikti: number;
+}
+
+export interface PostJabatanUpdateRes {
   status: Status;
   data: string;
 }

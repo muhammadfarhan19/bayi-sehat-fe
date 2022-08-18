@@ -34,6 +34,8 @@ export const StatisticAPI = {
 export const JabatanAPI = {
   GET_JABATAN_DETAIL: config.apiHost + '/jabatan/detail',
   GET_JABATAN: config.apiHost + '/jabatan/list',
+  POST_JABATAN_DELETE: config.apiHost + '/jabatan/delete',
+  POST_JABATAN_UPDATE: config.apiHost + '/jabatan/update',
   GET_RIWAYAT_JABATAN: config.apiHost + '/riwayat-jabatan/list',
   UPDATE_JABATAN: config.apiHost + '/jabatan/update-jabatan-pegawai',
   POST_RIWAYAT_JABATAN_DELETE: config.apiHost + '/riwayat-jabatan/delete',
