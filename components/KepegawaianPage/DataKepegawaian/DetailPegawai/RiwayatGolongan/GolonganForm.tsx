@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { GolonganAPI } from '../../../../../constants/APIUrls';
+import { GolonganAPI, MasterAPI } from '../../../../../constants/APIUrls';
 import { Golongan } from '../../../../../constants/Resource';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
@@ -16,10 +16,12 @@ import {
   UpdateRiwayatGolonganReq,
   UpdateRiwayatGolonganRes,
 } from '../../../../../types/api/GolonganAPI';
+import { MasterJenisKpData } from '../../../../../types/api/MasterAPI';
 import { Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
+import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import AutoComplete, { OptionType } from '../../../../shared/Input/ComboBox';
 import DatePicker from '../../../../shared/Input/DatePicker';
@@ -27,6 +29,7 @@ import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrappe
 
 interface FormState {
   tmt: number;
+  tipe_kp: number;
   tahun: string;
   bulan: string;
   golongan: string;
@@ -76,6 +79,10 @@ export default function GolonganForm(props: GolonganFormProps) {
     setOpen(!open);
   };
 
+  const { data: jenisKp } = useCommonApi<null, MasterJenisKpData[]>(MasterAPI.GET_MASTER_JENIS_KP, null, {
+    method: 'GET',
+  });
+
   React.useEffect(() => {
     if (detail) {
       const masaJabatan = detail?.masa_jabatan.split(' ');
@@ -103,6 +110,7 @@ export default function GolonganForm(props: GolonganFormProps) {
           riwayat_id: detail.riwayat_id,
           tanggal_mulai: new Date(formData.tmt).toISOString().split('T')?.[0],
           masa_jabatan: formData.tahun + ' tahun ' + formData.bulan + ' bulan',
+          tipe_kp: Number(formData.tipe_kp),
           files: [
             {
               document_name: formData.file_name,
@@ -118,6 +126,7 @@ export default function GolonganForm(props: GolonganFormProps) {
         {
           employee_id: Number(pegawai?.pegawai_id),
           golongan_id: Number(formData.golongan),
+          tipe_kp: Number(formData.tipe_kp),
           tanggal_mulai: new Date(formData.tmt).toISOString().split('T')?.[0],
           masa_jabatan: formData.tahun + ' tahun ' + formData.bulan + ' bulan',
           files: [
@@ -184,7 +193,9 @@ export default function GolonganForm(props: GolonganFormProps) {
             >
               <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <Dialog.Title as="div" className="flex justify-between">
-                  <h3 className="text-lg font-medium leading-6 text-gray-900">Ubah Riwayat Golongan</h3>
+                  <h3 className="text-lg font-medium leading-6 text-gray-900">
+                    {isEditForm ? 'Ubah' : 'Tambah'} Riwayat Golongan
+                  </h3>
                   <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
                 </Dialog.Title>
                 <form onSubmit={handleSubmit(submitHandler)} className="mt-2">
@@ -251,6 +262,41 @@ export default function GolonganForm(props: GolonganFormProps) {
                     {(errors.tahun || errors.bulan) && (
                       <p className="mt-1 text-xs text-red-500">{'Masukkan info masa jabatan'}</p>
                     )}
+                  </div>
+                  <div className="mt-5 sm:col-span-6">
+                    <Controller
+                      control={control}
+                      name="tipe_kp"
+                      rules={{ required: 'Mohon input data golongan.' }}
+                      render={({ field: { onChange } }) => (
+                        <AutoComplete
+                          onChange={value => onChange(value.value)}
+                          label={'Jenis KP'}
+                          placeholder={'Pilih jenis kp'}
+                          defaultValue={(() => {
+                            if ((jenisKp || []).length) {
+                              const selectedJenisKp = (jenisKp || [])?.filter(
+                                each => Number(each.id) === Number(detail?.tipe_kp)
+                              )[0] || {
+                                text: '',
+                                value: '',
+                              };
+                              return {
+                                text: selectedJenisKp.jenis_kp,
+                                value: String(selectedJenisKp.id),
+                              };
+                            }
+                          })()}
+                          options={(jenisKp || [])?.map(each => {
+                            return {
+                              text: each.jenis_kp,
+                              value: String(each.id),
+                            };
+                          })}
+                        />
+                      )}
+                    />
+                    {errors.golongan && <p className="mt-1 text-xs text-red-500">{errors.golongan.message}</p>}
                   </div>
                   <div className="mt-5 sm:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">TMT</label>

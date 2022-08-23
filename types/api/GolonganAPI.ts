@@ -12,10 +12,13 @@ export interface GetRiwayatGolonganListRes {
 export interface RiwayatGolonganListData {
   riwayat_id: number;
   pangkat: string;
+  tipe_kp_str: string;
+  tipe_kp: number;
   golongan: string;
   tmt: string;
   masa_kerja: string;
   masa_jabatan: string;
+  verified_hr: number;
   files: File[];
 }
 
@@ -32,6 +35,7 @@ export interface UpdateSuratKeputusanRes {
 export interface UpdateRiwayatGolonganReq {
   riwayat_id: number;
   tanggal_mulai: string;
+  tipe_kp: number;
   files: {
     document_uuid: string;
     document_name: string;
@@ -57,6 +61,7 @@ export interface PostRiwayatGolonganInsertReq {
   employee_id: number;
   golongan_id: number;
   tanggal_mulai: string;
+  tipe_kp: number;
   files: {
     document_uuid: string;
     document_name: string;
@@ -68,3 +73,5 @@ export interface PostRiwayatGolonganInsertRes {
   status: Status;
   data: string;
 }
+
+export interface MasterJenisKp {}

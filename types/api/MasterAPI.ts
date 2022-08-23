@@ -31,3 +31,13 @@ export interface PendidikanEligibleJenjangData {
   jenjang: string;
   kode_jenjang: number;
 }
+
+export interface MasterJenisKpData {
+  id: number;
+  jenis_kp: string;
+}
+
+export interface GetMasterJenisKpRes {
+  status: Status;
+  data: MasterJenisKpData[];
+}
