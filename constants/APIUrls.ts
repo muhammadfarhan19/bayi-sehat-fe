@@ -147,3 +147,11 @@ export const RiwayatAnakAPI = {
   POST_RIWAYAT_ANAK_DELETE: config.apiHost + '/anak-pegawai/delete',
   GET_RIWAYAT_ANAK_LIST: config.apiHost + '/anak-pegawai/list',
 };
+
+export const RiwayatKGBAPI = {
+  GET_RIWAYAT_KGB_LIST : config.apiHost + '/riwayat-kgb/list',
+  GET_RIWAYAT_KGB_DETAIL : config.apiHost + '/riwayat-kgb/detail',
+  POST_RIWAYAT_KGB_INSERT: config.apiHost + '/riwayat-kgb/insert',
+  POST_RIWAYAT_KGB_DELETE :config.apiHost + '/riwayat-kgb/delete',
+  POST_RIWAYAT_KGB_UPDATE: config.apiHost + '/riwayat-kgb/update'
+}

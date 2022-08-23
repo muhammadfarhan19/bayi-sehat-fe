@@ -21,6 +21,7 @@ import RiwayatDiklat from './RiwayatDiklat';
 import RiwayatGolongan from './RiwayatGolongan';
 import RiwayatJabatan from './RiwayatJabatan';
 import RiwayatKeluarga from './RiwayatKeluarga';
+import RiwayatKGB from './RiwayatKGB';
 import RiwayatPendidikan from './RiwayatPendidikan';
 import RiwayatPenghargaan from './RiwayatPenghargaan';
 
@@ -29,6 +30,7 @@ const tabs = [
   { name: 'Data Diri Pribadi', href: '#' },
   { name: 'Riwayat Golongan', href: '#' },
   { name: 'Riwayat Jabatan', href: '#' },
+  { name: 'Riwayat KGB', href: '#' },
   { name: 'Riwayat Pendidikan', href: '#' },
   { name: 'Riwayat Diklat', href: '#' },
   { name: 'Riwayat Penghargaan', href: '#' },
@@ -157,12 +159,13 @@ function DetailPegawai() {
           {selected === tabs[1].name ? <DataDiriPribadi /> : null}
           {selected === tabs[2].name ? <RiwayatGolongan /> : null}
           {selected === tabs[3].name ? <RiwayatJabatan /> : null}
-          {selected === tabs[4].name ? <RiwayatPendidikan /> : null}
-          {selected === tabs[5].name ? <RiwayatDiklat /> : null}
-          {selected === tabs[6].name ? <RiwayatPenghargaan /> : null}
-          {selected === tabs[7].name ? <RiwayatBelajar /> : null}
-          {selected === tabs[8].name ? <RiwayatKeluarga /> : null}
-          {selected === tabs[9].name ? <ArsipDigital /> : null}
+          {selected === tabs[4].name ? <RiwayatKGB /> : null}
+          {selected === tabs[5].name ? <RiwayatPendidikan /> : null}
+          {selected === tabs[6].name ? <RiwayatDiklat /> : null}
+          {selected === tabs[7].name ? <RiwayatPenghargaan /> : null}
+          {selected === tabs[8].name ? <RiwayatBelajar /> : null}
+          {selected === tabs[9].name ? <RiwayatKeluarga /> : null}
+          {selected === tabs[10].name ? <ArsipDigital /> : null}
         </div>
       </div>
       {showImage && (
