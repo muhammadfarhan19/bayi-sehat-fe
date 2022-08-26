@@ -186,7 +186,7 @@ export default function DiklatForm(props: UploadFormProps) {
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
               <Dialog.Title as="div" className="flex justify-between">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  {selectedId ? 'Ubah' : 'Tambah'} Riwayat Diklat
+                  {selectedId ? 'Ubah' : 'Tambah'} Riwayat Pelatihan/ Diklat
                 </h3>
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
@@ -379,7 +379,7 @@ export default function DiklatForm(props: UploadFormProps) {
                     type="submit"
                     className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
-                    {selectedId ? 'Ubah' : 'Tambah'} Riwayat Diklat
+                    {selectedId ? 'Ubah' : 'Tambah'} Riwayat Pelatihan/ Diklat
                   </button>
                 </div>
               </form>

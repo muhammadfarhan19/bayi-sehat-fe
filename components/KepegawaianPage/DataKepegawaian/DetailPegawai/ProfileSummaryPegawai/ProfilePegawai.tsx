@@ -1,11 +1,18 @@
 import { format } from 'date-fns';
 import React from 'react';
 
-import { GolonganAPI, JabatanAPI, RiwayatPendidikanAPI, RiwayatPenghargaan } from '../../../../../constants/APIUrls';
+import {
+  GolonganAPI,
+  JabatanAPI,
+  RiwayatKGBAPI,
+  RiwayatPendidikanAPI,
+  RiwayatPenghargaan,
+} from '../../../../../constants/APIUrls';
 import { StatusMenikahText } from '../../../../../constants/Resource';
 import { GetRiwayatGolonganListReq, RiwayatGolonganListData } from '../../../../../types/api/GolonganAPI';
 import { GetRiwayatJabatanReq, RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
 import { GetRiwayatPendidikanListReq, RiwayatPendidikanListData } from '../../../../../types/api/PendidikanAPI';
+import { GetKGBList, GetKGBListReq } from '../../../../../types/api/RiwayatKGBApi';
 import { GetRiwayatPenghargaanListReq, PenghargaanList } from '../../../../../types/api/RiwayatPenghargaanAPI';
 import { getQueryString } from '../../../../../utils/URLUtils';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
@@ -39,6 +46,12 @@ export default function ProfilePegawai(props: ID) {
 
   const { data: getPenghargaan } = useCommonApi<GetRiwayatPenghargaanListReq, PenghargaanList[]>(
     RiwayatPenghargaan.GET_RIWAYAT_PENGHARGAAN_LIST,
+    { pegawai_id: personalPegawaiData?.pegawai_id },
+    { method: 'GET' }
+  );
+
+  const { data: getKGB } = useCommonApi<GetKGBListReq, GetKGBList>(
+    RiwayatKGBAPI.GET_RIWAYAT_KGB_DETAIL,
     { pegawai_id: personalPegawaiData?.pegawai_id },
     { method: 'GET' }
   );
@@ -112,6 +125,17 @@ export default function ProfilePegawai(props: ID) {
         value={personalPegawaiData?.alamat?.length === 0 ? '-' : `: ${personalPegawaiData?.alamat}`}
       />
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
+      <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat KGB" />
+      {getKGB === undefined ? (
+        '-'
+      ) : (
+        <React.Fragment>
+          <div className="mb-2">
+            <h6 className="flex flex-1 text-[12px]">{`${getKGB?.golongan_id_str}, ${getKGB?.golongan_id}`}</h6>
+            <h6 className="mt-1 text-[10px] text-slate-500">{`${getKGB?.tmt_kgb}`}</h6>
+          </div>
+        </React.Fragment>
+      )}
       <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat Pendidikan" />
       {getPendidikan === null
         ? '-'
@@ -152,7 +176,7 @@ export default function ProfilePegawai(props: ID) {
             </div>
           ))}
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
-      <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat Diklat" />
+      <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat Pelatihan/ Diklat" />
       <ContentLabelledItems subtitle="-" value={null} />
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
       <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat Penghargaan" />

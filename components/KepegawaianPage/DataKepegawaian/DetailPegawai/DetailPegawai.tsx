@@ -32,7 +32,7 @@ const tabs = [
   { name: 'Riwayat Jabatan', href: '#' },
   { name: 'Riwayat KGB', href: '#' },
   { name: 'Riwayat Pendidikan', href: '#' },
-  { name: 'Riwayat Diklat', href: '#' },
+  { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
   { name: 'Riwayat Penghargaan', href: '#' },
   { name: 'Riwayat Belajar', href: '#' },
   { name: 'Riwayat Keluarga', href: '#' },
