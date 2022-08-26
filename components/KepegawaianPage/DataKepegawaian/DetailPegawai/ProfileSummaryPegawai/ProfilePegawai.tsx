@@ -23,6 +23,12 @@ interface ID {
   id: string;
 }
 
+const formatDate = (date: any) => {
+  if (date !== undefined && date?.length >= 1) {
+    return format(new Date(date), 'yyyy-MM-dd');
+  }
+};
+
 export default function ProfilePegawai(props: ID) {
   const { pegawai_id: pegawai_id_qs } = getQueryString<{ pegawai_id?: string }>();
   const personalPegawaiData = usePersonalData();
@@ -132,7 +138,7 @@ export default function ProfilePegawai(props: ID) {
         <React.Fragment>
           <div className="mb-2">
             <h6 className="flex flex-1 text-[12px]">{`${getKGB?.golongan_id_str}, ${getKGB?.golongan_id}`}</h6>
-            <h6 className="mt-1 text-[10px] text-slate-500">{`${getKGB?.tmt_kgb}`}</h6>
+            <h6 className="mt-1 text-[10px] text-slate-500">{`TMT KGB : ${formatDate(getKGB?.tmt_kgb)}`}</h6>
           </div>
         </React.Fragment>
       )}
@@ -142,10 +148,7 @@ export default function ProfilePegawai(props: ID) {
         : getPendidikan?.map(data => (
             <div className="mb-2" key={data.riwayat_id}>
               <h6 className="flex flex-1 text-[12px]">{`${data.jenjang_str}, ${data.prodi} , ${data.pt}`}</h6>
-              <h6 className="mt-1 text-[10px] text-slate-500">{`(${format(
-                new Date(data.tanggal_lulus),
-                'yyyy-MM-dd'
-              )})`}</h6>
+              <h6 className="mt-1 text-[10px] text-slate-500">{`(${formatDate(data?.tanggal_lulus)})`}</h6>
             </div>
           ))}
 
@@ -158,9 +161,7 @@ export default function ProfilePegawai(props: ID) {
               <h6 className="flex flex-1 text-[12px]">
                 {data?.pangkat}, {data?.golongan}
               </h6>
-              <h6 className="mt-1 text-[10px] text-slate-500">{`${format(new Date(data?.tmt), 'dd MMMM yyyy')}, ${
-                data?.masa_kerja
-              }`}</h6>
+              <h6 className="mt-1 text-[10px] text-slate-500">{`${formatDate(data?.tmt)}, ${data?.masa_kerja}`}</h6>
             </div>
           ))}
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
@@ -170,9 +171,7 @@ export default function ProfilePegawai(props: ID) {
         : getJabatan?.map(data => (
             <div className="ml-10 mb-2" key={data.jabatan_pegawai_id}>
               <p className="w-2/4 text-[12px]">{data.nama_jabatan}</p>
-              <p className="mt-1 text-[10px] text-slate-500">{`${format(new Date(data.tmt), 'yyyy-MM-dd')}, ${
-                data.masa_kerja
-              }`}</p>
+              <p className="mt-1 text-[10px] text-slate-500">{`${formatDate(data.tmt)}, ${data.masa_kerja}`}</p>
             </div>
           ))}
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
@@ -185,7 +184,7 @@ export default function ProfilePegawai(props: ID) {
         : getPenghargaan?.map(data => (
             <div className="ml-10 mb-2" key={data.riwayat_id}>
               <p className="w-2/4 text-[12px]">{data.nama_penghargaan}</p>
-              <p className="mt-1 text-[10px] text-slate-500">{format(new Date(data.tgl_penghargaan), 'yyyy-MM-dd')}</p>
+              <p className="mt-1 text-[10px] text-slate-500">{formatDate(data.tgl_penghargaan)}</p>
             </div>
           ))}
 

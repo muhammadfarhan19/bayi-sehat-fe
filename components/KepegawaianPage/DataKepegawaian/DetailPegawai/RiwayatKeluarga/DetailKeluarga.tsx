@@ -102,7 +102,7 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
   };
 
   const formatDate = (date: any) => {
-    if (date !== undefined) {
+    if (date !== undefined && date?.length >= 1) {
       return format(new Date(date), 'yyyy-MM-dd');
     }
   };
