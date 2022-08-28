@@ -22,7 +22,7 @@ export interface GetKGBListReq {
 }
 
 export interface PostRiwayatKGBReq {
-  pegawai_id?: number;  
+  pegawai_id?: number;
   golongan_id: number | string;
   tanggal_kgb: string;
   tmt_kgb: string;
@@ -44,12 +44,12 @@ export interface PostRiwayatKGBRes {
 
 export interface PostRiwayatKGBUpdateReq {
   riwayat_id: number;
-  golongan_id: number ;
+  golongan_id: number;
   pegawai_id: number;
   tanggal_kgb: string;
   tmt_kgb: string;
   penandatangan: string;
-  jabatan_id: number | string ;
+  jabatan_id: number | string;
   tmt_kgb_selanjutnya: string;
   files: [
     {
@@ -59,10 +59,10 @@ export interface PostRiwayatKGBUpdateReq {
   ];
 }
 
-export interface PostDetailRiwayatKGBReq{
-    riwayat_id:number
+export interface PostDetailRiwayatKGBReq {
+  riwayat_id: number;
 }
 
 export interface PostRiwayatKGBDelReq {
-    riwayat_id : number;
+  riwayat_id: number;
 }

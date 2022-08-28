@@ -149,9 +149,9 @@ export const RiwayatAnakAPI = {
 };
 
 export const RiwayatKGBAPI = {
-  GET_RIWAYAT_KGB_LIST : config.apiHost + '/riwayat-kgb/list',
-  GET_RIWAYAT_KGB_DETAIL : config.apiHost + '/riwayat-kgb/detail',
+  GET_RIWAYAT_KGB_LIST: config.apiHost + '/riwayat-kgb/list',
+  GET_RIWAYAT_KGB_DETAIL: config.apiHost + '/riwayat-kgb/detail',
   POST_RIWAYAT_KGB_INSERT: config.apiHost + '/riwayat-kgb/insert',
-  POST_RIWAYAT_KGB_DELETE :config.apiHost + '/riwayat-kgb/delete',
-  POST_RIWAYAT_KGB_UPDATE: config.apiHost + '/riwayat-kgb/update'
-}
+  POST_RIWAYAT_KGB_DELETE: config.apiHost + '/riwayat-kgb/delete',
+  POST_RIWAYAT_KGB_UPDATE: config.apiHost + '/riwayat-kgb/update',
+};

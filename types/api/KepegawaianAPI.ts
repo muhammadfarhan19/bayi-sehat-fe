@@ -5,6 +5,7 @@ export interface GetPegawaiListReq {
   nama?: string;
   tipe_jabatan?: string;
   jabatan?: string;
+  is_ppnpn?: boolean;
   page: number;
   per_page: number;
 }
