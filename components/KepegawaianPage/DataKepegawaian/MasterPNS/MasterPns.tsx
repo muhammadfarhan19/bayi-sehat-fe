@@ -180,7 +180,7 @@ export default function MasterPns() {
                       </td>
                       <td
                         className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"
-                        onClick={() => router.push(`/kepegawaian/data-pegawai?pegawai_id=${data.pegawai_id}`)}
+                        onClick={() => router.push(`/kepegawaian/data-pegawai?pegawai_id=${data.pegawai_id}&type=pns`)}
                       >
                         {data.name}
                       </td>

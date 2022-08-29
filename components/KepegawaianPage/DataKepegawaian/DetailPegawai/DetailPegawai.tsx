@@ -25,21 +25,33 @@ import RiwayatKGB from './RiwayatKGB';
 import RiwayatPendidikan from './RiwayatPendidikan';
 import RiwayatPenghargaan from './RiwayatPenghargaan';
 
-const tabs = [
-  { name: 'Data Diri Pegawai', href: '#' },
-  { name: 'Data Diri Pribadi', href: '#' },
-  { name: 'Riwayat Golongan', href: '#' },
-  { name: 'Riwayat Jabatan', href: '#' },
-  { name: 'Riwayat KGB', href: '#' },
-  { name: 'Riwayat Pendidikan', href: '#' },
-  { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
-  { name: 'Riwayat Penghargaan', href: '#' },
-  { name: 'Riwayat Belajar', href: '#' },
-  { name: 'Riwayat Keluarga', href: '#' },
-  { name: 'Arsip Digital', href: '#' },
-];
-
 function DetailPegawai() {
+  const { type } = getQueryString();
+
+  const pns = [
+    { name: 'Data Diri Pegawai', href: '#' },
+    { name: 'Data Diri Pribadi', href: '#' },
+    { name: 'Riwayat Golongan', href: '#' },
+    { name: 'Riwayat Jabatan', href: '#' },
+    { name: 'Riwayat KGB', href: '#' },
+    { name: 'Riwayat Pendidikan', href: '#' },
+    { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
+    { name: 'Riwayat Penghargaan', href: '#' },
+    { name: 'Riwayat Belajar', href: '#' },
+    { name: 'Riwayat Keluarga', href: '#' },
+    { name: 'Arsip Digital', href: '#' },
+  ];
+
+  const ppnpn = [
+    { name: 'Data Diri Pribadi', href: '#' },
+    { name: 'Riwayat Pendidikan', href: '#' },
+    { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
+    { name: 'Riwayat Keluarga', href: '#' },
+    { name: 'Arsip Digital', href: '#' },
+  ];
+
+  const tabs = type === 'pns' ? pns : ppnpn;
+
   const { tabName = tabs[0].name } = getQueryString<{ tabName: string }>();
   const [selected, setSelected] = React.useState(tabName);
   const [showImage, setShowImage] = React.useState(false);
@@ -127,9 +139,9 @@ function DetailPegawai() {
                 setSelected(event.target.value);
               }}
             >
-              {tabs.map(tab => (
-                <option key={tab.name}>{tab.name}</option>
-              ))}
+              {tabs.map(tab => {
+                <option key={tab.name}>{tab.name}</option>;
+              })}
             </select>
           </div>
           <div className="hidden sm:block">
@@ -155,17 +167,17 @@ function DetailPegawai() {
           </div>
         </div>
         <div className="overflow-auto">
-          {selected === tabs[0].name ? <DataDiriPegawai /> : null}
-          {selected === tabs[1].name ? <DataDiriPribadi /> : null}
-          {selected === tabs[2].name ? <RiwayatGolongan /> : null}
-          {selected === tabs[3].name ? <RiwayatJabatan /> : null}
-          {selected === tabs[4].name ? <RiwayatKGB /> : null}
-          {selected === tabs[5].name ? <RiwayatPendidikan /> : null}
-          {selected === tabs[6].name ? <RiwayatDiklat /> : null}
-          {selected === tabs[7].name ? <RiwayatPenghargaan /> : null}
-          {selected === tabs[8].name ? <RiwayatBelajar /> : null}
-          {selected === tabs[9].name ? <RiwayatKeluarga /> : null}
-          {selected === tabs[10].name ? <ArsipDigital /> : null}
+          {selected === tabs[0]?.name ? <DataDiriPegawai /> : null}
+          {selected === tabs[1]?.name ? <DataDiriPribadi /> : null}
+          {selected === tabs[2]?.name ? <RiwayatGolongan /> : null}
+          {selected === tabs[3]?.name ? <RiwayatJabatan /> : null}
+          {selected === tabs[4]?.name ? <RiwayatKGB /> : null}
+          {selected === tabs[5]?.name ? <RiwayatPendidikan /> : null}
+          {selected === tabs[6]?.name ? <RiwayatDiklat /> : null}
+          {selected === tabs[7]?.name ? <RiwayatPenghargaan /> : null}
+          {selected === tabs[8]?.name ? <RiwayatBelajar /> : null}
+          {selected === tabs[9]?.name ? <RiwayatKeluarga /> : null}
+          {selected === tabs[10]?.name ? <ArsipDigital /> : null}
         </div>
       </div>
       {showImage && (
