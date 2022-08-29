@@ -1,9 +1,10 @@
 import { Combobox } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { ChangeEvent, ReactNode, useState } from 'react';
+
 import { classNames } from '../../../../../../utils/Components';
 
-// import { classNames } from '../../../utils/Components';
+
 
 export interface OptionType {
   text: string;
@@ -42,6 +43,7 @@ export default function AutoCompleteCustom(props: AutoCompleteProps) {
     if (onQueryChange && typeof onQueryChange === 'function') {
       onQueryChange(value);
     }
+
     if (!!selectedValue) {
       setSelectedValue(undefined);
     }
