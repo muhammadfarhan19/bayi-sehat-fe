@@ -59,7 +59,6 @@ export interface PostRiwayatKGBUpdateReq {
   ];
 }
 
-
 export interface PostDetailRiwayatKGBReq {
   riwayat_id?: number;
 }

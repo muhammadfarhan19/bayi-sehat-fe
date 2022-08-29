@@ -4,8 +4,6 @@ import { ChangeEvent, ReactNode, useState } from 'react';
 
 import { classNames } from '../../../../../../utils/Components';
 
-
-
 export interface OptionType {
   text: string;
   value: string;

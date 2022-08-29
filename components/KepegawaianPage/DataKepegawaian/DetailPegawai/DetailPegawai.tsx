@@ -25,10 +25,6 @@ import RiwayatKGB from './RiwayatKGB';
 import RiwayatPendidikan from './RiwayatPendidikan';
 import RiwayatPenghargaan from './RiwayatPenghargaan';
 
-
-
-
-
 function DetailPegawai() {
   const { type } = getQueryString();
 
