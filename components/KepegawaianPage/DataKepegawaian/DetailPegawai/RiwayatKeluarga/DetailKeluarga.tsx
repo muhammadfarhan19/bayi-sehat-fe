@@ -53,8 +53,6 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
     { method: 'GET' }
   );
 
-  console.log(detailKeluarga);
-
   const { data: detailAnak, mutate } = useCommonApi<GetAnakList, GetAnakListRes[]>(
     RiwayatAnakAPI.GET_RIWAYAT_ANAK_LIST,
     { pegawai_id: Number(personalPegawaiData?.pegawai_id), pasangan_id: Number(riwayatKeluargaId) },

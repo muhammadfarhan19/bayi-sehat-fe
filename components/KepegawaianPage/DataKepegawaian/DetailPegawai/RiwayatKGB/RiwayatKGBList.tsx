@@ -130,7 +130,7 @@ export default function RiwayatKGBList(props: ListKGBProps) {
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {(riwayatKGBList || []).map((each, index) => (
-              <tr key={1}>
+              <tr key={each?.riwayat_id}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.golongan_id_str}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">

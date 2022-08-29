@@ -33,6 +33,9 @@ const statusNikah = [
 ];
 
 const golongan = [
+  //
+  { id: '19', title: '-' },
+  //
   { id: '13', title: 'IV/e - Pembina Utama' },
   { id: '14', title: 'I/a - Juru Muda' },
   { id: '15', title: 'I/b - Juru Muda Tingkat I' },

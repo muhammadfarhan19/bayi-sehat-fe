@@ -5,10 +5,11 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { JabatanAPI, RiwayatKGBAPI } from '../../../../../constants/APIUrls';
+import { JabatanAPI, KepegawaianAPI, RiwayatKGBAPI } from '../../../../../constants/APIUrls';
 import { Golongan } from '../../../../../constants/Resource';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import { GetJabatanReq, JabatanData } from '../../../../../types/api/JabatanAPI';
+import { GetPegawaiListData, GetPegawaiListReq } from '../../../../../types/api/KepegawaianAPI';
 import {
   GetKGBList,
   PostDetailRiwayatKGBReq,
@@ -25,6 +26,7 @@ import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import AutoComplete from '../../../../shared/Input/ComboBox';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
 import { InputLabelled } from '../RiwayatKeluarga/Shared/KeluargaComponents';
+import AutoCompleteCustom from './Shared/CustomComboBox';
 
 interface UploadFormProps {
   open: boolean;
@@ -50,7 +52,18 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
   const dispatch = useDispatch();
   const personalData = usePersonalData();
   const [queryJabatan, setQueryJabatan] = React.useState('');
+  const [queryPegawai, setQueryPegawai] = React.useState('');
   const debounce = React.useRef<number>(0);
+  const [filter, setFilter] = React.useState<GetPegawaiListReq>({
+    page: 1,
+    per_page: 20,
+  });
+
+  const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
+    KepegawaianAPI.GET_PEGAWAI_LIST,
+    { nama: queryPegawai, ...filter },
+    { method: 'GET' }
+  );
 
   const { data } = useCommonApi<PostDetailRiwayatKGBReq, GetKGBList>(
     RiwayatKGBAPI.GET_RIWAYAT_KGB_DETAIL,
@@ -225,16 +238,35 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
                   isError={errors.tmt_kgb}
                   validation={{ ...register('tmt_kgb', { required: 'Silahkan Masukkan TMT KGB' }) }}
                 />
-                <InputLabelled
-                  name="penandatangan"
-                  type="text"
-                  label="Pejabat Penandatanganan"
-                  errorMessage={errors.penandatangan?.message}
-                  isError={errors.penandatangan}
-                  validation={{
-                    ...register('penandatangan', { required: 'Silahkan Masukkan Pejabat Penandatanganan' }),
-                  }}
-                />
+                <div className="mt-5 sm:col-span-6">
+                  <Controller
+                    control={control}
+                    name="penandatangan"
+                    rules={{ required: 'Mohon isi data Jabatan Penandatangan' }}
+                    render={({ field: { onChange } }) => (
+                      <AutoCompleteCustom
+                        onChange={input => {
+                          onChange(input?.value);
+                        }}
+                        label={'Pejabat Penandatangan'}
+                        defaultValue={{ text: data?.penandatangan || '', value: String(data?.penandatangan) || '' }}
+                        onQueryChange={queryText => {
+                          if (debounce.current) {
+                            clearTimeout(debounce.current);
+                          }
+                          debounce.current = window.setTimeout(() => {
+                            setQueryPegawai(queryText);
+                          }, 500);
+                        }}
+                        options={(pegawaiList?.list || []).map(each => ({
+                          text: each.name,
+                          value: String(each.name),
+                        }))}
+                      />
+                    )}
+                  />
+                  {errors.penandatangan && <p className="mt-1 text-xs text-red-500">{errors.penandatangan.message}</p>}
+                </div>
                 <div className="mt-5 sm:col-span-6">
                   <Controller
                     control={control}
