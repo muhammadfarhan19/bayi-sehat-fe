@@ -27,19 +27,6 @@ import RiwayatPenghargaan from './RiwayatPenghargaan';
 
 
 
-const tabs = [
-  { name: 'Data Diri Pegawai', href: '#' },
-  { name: 'Data Diri Pribadi', href: '#' },
-  { name: 'Riwayat Golongan', href: '#' },
-  { name: 'Riwayat Jabatan', href: '#' },
-  { name: 'Riwayat KGB', href: '#' },
-  { name: 'Riwayat Pendidikan', href: '#' },
-  { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
-  { name: 'Riwayat Penghargaan', href: '#' },
-  { name: 'Riwayat Belajar', href: '#' },
-  { name: 'Riwayat Keluarga', href: '#' },
-  { name: 'Arsip Digital', href: '#' },
-];
 
 
 function DetailPegawai() {
