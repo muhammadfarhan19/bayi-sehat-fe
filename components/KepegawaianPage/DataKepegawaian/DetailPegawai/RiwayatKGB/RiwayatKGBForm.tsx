@@ -54,6 +54,16 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
   const [queryJabatan, setQueryJabatan] = React.useState('');
   const [queryPegawai, setQueryPegawai] = React.useState('');
   const debounce = React.useRef<number>(0);
+  const [filter] = React.useState<GetPegawaiListReq>({
+    page: 1,
+    per_page: 20,
+  });
+
+  const { data: pegawaiList } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
+    KepegawaianAPI.GET_PEGAWAI_LIST,
+    { nama: queryPegawai, ...filter },
+    { method: 'GET' }
+  );
 
   const [filter] = React.useState<GetPegawaiListReq>({
 

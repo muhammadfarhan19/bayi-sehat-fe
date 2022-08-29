@@ -43,12 +43,10 @@ export default function AutoCompleteCustom(props: AutoCompleteProps) {
     if (onQueryChange && typeof onQueryChange === 'function') {
       onQueryChange(value);
     }
-
-    if (!!selectedValue) {
+    if (selectedValue) {
       setSelectedValue(undefined);
     }
     onChange({ value });
-
     setQuery(value);
   };
 
