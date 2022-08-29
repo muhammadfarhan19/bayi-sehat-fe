@@ -2,14 +2,14 @@ import { Popover } from '@headlessui/react';
 import { BellIcon, ChevronDownIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { UserCircleIcon } from '@heroicons/react/solid';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 
+import { setShowProfPic } from '../../../action/CommonAction';
 import { UserProfileAPI } from '../../../constants/APIUrls';
-// import dataPegawai from '../../../pages/kepegawaian/data-pegawai';
 import { GetOptPhotoReq, GetPhotoProfileRes } from '../../../types/api/ProfilePhotoAPI';
 import { callAPI } from '../../../utils/Fetchers';
-import { getQueryString } from '../../../utils/URLUtils';
 import useCommonApi from '../hooks/useCommonApi';
-import usePersonalData from '../hooks/usePersonalData';
+import ModalProfilePic from './ChangeProfilePic/ModalProfilePic';
 import HeaderMobile from './HeaderMobile';
 import MenuDropdown from './MenuDropdown';
 import { NavigationProps } from './NavigationProps';
@@ -19,47 +19,34 @@ function classNames(...classes: string[]) {
 }
 
 export default function HeaderDesktop(props: NavigationProps) {
+  const dispatch = useDispatch();
   const { navigation, userNavigation } = props;
   const [img, setImg] = React.useState('');
-  const personalPegawaiData = usePersonalData();
-  const { pegawai_id } = getQueryString<{ pegawai_id: string }>();
 
-  const { data: pegawaiProfile } = useCommonApi<GetOptPhotoReq, GetPhotoProfileRes>(
+  const { data: isAdmin, isValidating } = useCommonApi<GetOptPhotoReq, GetPhotoProfileRes>(
     UserProfileAPI.USER_PHOTO,
-    pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
-    { method: 'GET' },
-    { revalidateOnMount: true }
+    {},
+    { method: 'GET' }
   );
-
-  const { data: isAdmin } = useCommonApi<GetOptPhotoReq, GetPhotoProfileRes>(
-    UserProfileAPI.USER_PHOTO,
-    { pegawai_id: 0 },
-    { method: 'GET' },
-    { revalidateOnMount: true }
-  );
-
-  const photos = () => {
-    const nonAdmin = pegawaiProfile?.uuid_foto;
-    const isAdminUser = isAdmin?.uuid_foto;
-    const ApiCall = (userPhoto?: string) => {
-      if (userPhoto !== undefined) {
-        callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${userPhoto}`, null, { method: 'GET', isBlob: true }).then(
-          res => {
-            if (res.status === 200 && res.data instanceof Blob) {
-              const url = URL.createObjectURL(res.data);
-              setImg(url);
-            }
-          }
-        );
-      }
-    };
-    !pegawai_id ? ApiCall(nonAdmin) : ApiCall(isAdminUser);
-  };
 
   React.useEffect(() => {
-    const unSubscribe = photos();
-    return () => unSubscribe;
-  }, [personalPegawaiData?.pegawai_id === pegawaiProfile?.pegawai_id]);
+    if (isAdmin?.uuid_foto) {
+      callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${isAdmin?.uuid_foto}`, null, { method: 'GET', isBlob: true }).then(
+        res => {
+          if (res.status === 200 && res.data instanceof Blob) {
+            const url = URL.createObjectURL(res.data);
+            setImg(url);
+          }
+        }
+      );
+    }
+  }, [isValidating]);
+
+  const handleCustomMenuClick = (itemName: string) => () => {
+    if (itemName === 'Ubah Foto Profil') {
+      dispatch(setShowProfPic(true));
+    }
+  };
 
   return (
     <>
@@ -131,6 +118,7 @@ export default function HeaderDesktop(props: NavigationProps) {
                               'rounded-md bg-white bg-opacity-0 px-3 py-2 text-sm font-medium hover:bg-opacity-10'
                             )}
                             aria-current={item.current ? 'page' : undefined}
+                            {...(item.href === '#' ? { onClick: handleCustomMenuClick(item.name) } : {})}
                           >
                             {item.name}
                           </a>
@@ -145,6 +133,7 @@ export default function HeaderDesktop(props: NavigationProps) {
           </>
         )}
       </Popover>
+      <ModalProfilePic />
     </>
   );
 }

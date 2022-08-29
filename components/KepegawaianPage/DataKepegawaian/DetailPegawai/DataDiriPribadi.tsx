@@ -12,7 +12,7 @@ const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
   }
   return (
     <FileLoader uuid={link} asLink>
-      <a className="whitespace-nowrap text-blue-500 underline">{value}</a>
+      <span className="whitespace-nowrap text-blue-500 underline">{value}</span>
     </FileLoader>
   );
 };

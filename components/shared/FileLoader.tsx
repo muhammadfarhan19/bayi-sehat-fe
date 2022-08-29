@@ -18,20 +18,19 @@ export default function FileLoader(props: ImgFileProps) {
   const [isImg, setIsImg] = React.useState(false);
 
   React.useEffect(() => {
+    if (!!fileUrl || !uuid) return;
     (async () => {
-      if (uuid) {
-        const fileRes = await callAPI<null, GetDocumentRes>(DocumentAPI.GET_DOCUMENT.replace(':uuid', uuid), null, {
-          method: 'get',
-          isBlob: true,
-        });
+      const fileRes = await callAPI<null, GetDocumentRes>(DocumentAPI.GET_DOCUMENT.replace(':uuid', uuid), null, {
+        method: 'get',
+        isBlob: true,
+      });
 
-        if (fileRes.status === 200 && fileRes.data instanceof Blob) {
-          setFileUrl(window.URL.createObjectURL(fileRes.data));
-        }
+      if (fileRes.status === 200 && fileRes.data instanceof Blob) {
+        setFileUrl(window.URL.createObjectURL(fileRes.data));
+      }
 
-        if ([MimeType.JPG, MimeType.PNG].includes(fileRes?.headers?.['content-type'] || '')) {
-          setIsImg(true);
-        }
+      if ([MimeType.JPG, MimeType.PNG].includes(fileRes?.headers?.['content-type'] || '')) {
+        setIsImg(true);
       }
     })();
   }, [uuid]);

@@ -1,6 +1,8 @@
 import { Menu, Transition } from '@headlessui/react';
 import { ElementType, Fragment, ReactNode } from 'react';
+import { useDispatch } from 'react-redux';
 
+import { setShowProfPic } from '../../../action/CommonAction';
 import { classNames } from '../../../utils/Components';
 import { Navigation } from './NavigationProps';
 
@@ -24,6 +26,13 @@ export default function MenuDropdown(props: MenuDropdownProps) {
     navigation,
     position = '-right-2',
   } = props;
+  const dispatch = useDispatch();
+
+  const handleCustomMenuClick = (itemName: string) => () => {
+    if (itemName === 'Ubah Foto Profil') {
+      dispatch(setShowProfPic(true));
+    }
+  };
 
   return (
     <Menu as={menuAs} {...(menuClassName ? { className: menuClassName } : {})}>
@@ -45,6 +54,7 @@ export default function MenuDropdown(props: MenuDropdownProps) {
                 <a
                   href={item.href}
                   className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                  {...(item.href === '#' ? { onClick: handleCustomMenuClick(item.name) } : {})}
                 >
                   {item.name}
                 </a>

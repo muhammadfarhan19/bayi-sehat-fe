@@ -11,7 +11,7 @@ export const NavigationId = {
 
 export const UserNavigationList: Navigation[] = [
   { name: 'Biodata', href: '/', id: PUBLIC },
-  { name: 'Ubah Foto Profil', href: '/updateprofpic', id: PUBLIC },
+  { name: 'Ubah Foto Profil', href: '#', id: PUBLIC },
   { name: 'Ubah Kata Sandi', href: '/changepassword', id: PUBLIC },
   { name: 'Keluar', href: '/logout', id: PUBLIC },
 ];

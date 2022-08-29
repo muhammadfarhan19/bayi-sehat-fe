@@ -1,3 +1,4 @@
+import { useSelector, shallowEqual } from 'react-redux';
 import { CommonAction, CommonActionType } from '../action/CommonAction';
 
 export enum ModalType {
@@ -15,6 +16,7 @@ export enum SnackbarType {
 export interface CommonState {
   apiRes: Record<string, object>;
   userId: string;
+  showProfPic: boolean;
   modal: {
     show: boolean;
     type: ModalType;
@@ -32,6 +34,7 @@ export interface CommonState {
 const initialState: CommonState = {
   apiRes: {},
   userId: '',
+  showProfPic: false,
   modal: {
     show: false,
     type: ModalType.INFO,
@@ -74,7 +77,15 @@ export default function commonReducer(state = initialState, action: CommonAction
       newState.userId = action.userId;
       return newState;
     }
+    case CommonActionType.SHOW_PROF_PIC: {
+      const newState = { ...state };
+      newState.showProfPic = action.show;
+      return newState;
+    }
     default:
       return state;
   }
 }
+
+export const useCommonState = () =>
+  useSelector<{ common: CommonState }, CommonState>(state => state.common, shallowEqual);

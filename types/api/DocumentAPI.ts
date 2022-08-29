@@ -2,7 +2,7 @@ import { DocumentUploadType, Status } from '../Common';
 
 export interface PostDocumentUploadReq {
   title: string;
-  file: File;
+  file: File | Blob;
   document_type: DocumentUploadType;
   file_name: string;
   file_path: string;
