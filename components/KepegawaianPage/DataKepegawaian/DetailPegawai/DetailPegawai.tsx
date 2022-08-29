@@ -50,7 +50,7 @@ function DetailPegawai() {
     { name: 'Arsip Digital', href: '#' },
   ];
 
-  const tabs = type === 'pns' ? pns : ppnpn;
+  const tabs = type === 'pns' || typeof type === 'undefined' ? pns : ppnpn;
 
   const { tabName = tabs[0].name } = getQueryString<{ tabName: string }>();
   const [selected, setSelected] = React.useState(tabName);
@@ -107,7 +107,7 @@ function DetailPegawai() {
           ) : (
             <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
           )}
-          <div className="my-auto ml-4 flex flex-col">
+          <div className="my-auto flex flex-col">
             <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
             <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
           </div>
@@ -167,17 +167,29 @@ function DetailPegawai() {
           </div>
         </div>
         <div className="overflow-auto">
-          {selected === tabs[0]?.name ? <DataDiriPegawai /> : null}
-          {selected === tabs[1]?.name ? <DataDiriPribadi /> : null}
-          {selected === tabs[2]?.name ? <RiwayatGolongan /> : null}
-          {selected === tabs[3]?.name ? <RiwayatJabatan /> : null}
-          {selected === tabs[4]?.name ? <RiwayatKGB /> : null}
-          {selected === tabs[5]?.name ? <RiwayatPendidikan /> : null}
-          {selected === tabs[6]?.name ? <RiwayatDiklat /> : null}
-          {selected === tabs[7]?.name ? <RiwayatPenghargaan /> : null}
-          {selected === tabs[8]?.name ? <RiwayatBelajar /> : null}
-          {selected === tabs[9]?.name ? <RiwayatKeluarga /> : null}
-          {selected === tabs[10]?.name ? <ArsipDigital /> : null}
+          {type === 'pns' || typeof type === 'undefined' ? (
+            <>
+              {selected === tabs[0]?.name ? <DataDiriPegawai /> : null}
+              {selected === tabs[1]?.name ? <DataDiriPribadi /> : null}
+              {selected === tabs[2]?.name ? <RiwayatGolongan /> : null}
+              {selected === tabs[3]?.name ? <RiwayatJabatan /> : null}
+              {selected === tabs[4]?.name ? <RiwayatKGB /> : null}
+              {selected === tabs[5]?.name ? <RiwayatPendidikan /> : null}
+              {selected === tabs[6]?.name ? <RiwayatDiklat /> : null}
+              {selected === tabs[7]?.name ? <RiwayatPenghargaan /> : null}
+              {selected === tabs[8]?.name ? <RiwayatBelajar /> : null}
+              {selected === tabs[9]?.name ? <RiwayatKeluarga /> : null}
+              {selected === tabs[10]?.name ? <ArsipDigital /> : null}
+            </>
+          ) : (
+            <>
+              {selected === tabs[0]?.name ? <DataDiriPribadi /> : null}
+              {selected === tabs[1]?.name ? <RiwayatPendidikan /> : null}
+              {selected === tabs[2]?.name ? <RiwayatDiklat /> : null}
+              {selected === tabs[3]?.name ? <RiwayatKeluarga /> : null}
+              {selected === tabs[4]?.name ? <ArsipDigital /> : null}
+            </>
+          )}
         </div>
       </div>
       {showImage && (
