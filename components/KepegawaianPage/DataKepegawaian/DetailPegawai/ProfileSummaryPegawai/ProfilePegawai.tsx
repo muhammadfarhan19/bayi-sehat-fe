@@ -90,7 +90,6 @@ export default function ProfilePegawai(props: ID) {
         subtitle="Jabatan"
         value={personalPegawaiData?.jabatan?.length === 0 ? '-' : `: ${personalPegawaiData?.jabatan}`}
       />
-      {/* getPendidikan?.slice(-1).pop()?.jenjang_str */}
       <ContentLabelledItems
         subtitle="Pendidikan Terakhir"
         value={getPendidikan?.length === 0 ? '-' : `: ${getPendidikan?.slice(-1).pop()?.jenjang_str}`}
