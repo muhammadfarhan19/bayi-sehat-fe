@@ -24,6 +24,7 @@ import RiwayatKeluarga from './RiwayatKeluarga';
 import RiwayatKGB from './RiwayatKGB';
 import RiwayatPendidikan from './RiwayatPendidikan';
 import RiwayatPenghargaan from './RiwayatPenghargaan';
+import RiwayatSkp from './RiwayatSkp';
 
 function DetailPegawai() {
   const { type } = getQueryString();
@@ -38,6 +39,7 @@ function DetailPegawai() {
     { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
     { name: 'Riwayat Penghargaan', href: '#' },
     { name: 'Riwayat Belajar', href: '#' },
+    { name: 'Riwayat SKP', href: '#' },
     { name: 'Riwayat Keluarga', href: '#' },
     { name: 'Arsip Digital', href: '#' },
   ];
@@ -178,8 +180,9 @@ function DetailPegawai() {
               {selected === tabs[6]?.name ? <RiwayatDiklat /> : null}
               {selected === tabs[7]?.name ? <RiwayatPenghargaan /> : null}
               {selected === tabs[8]?.name ? <RiwayatBelajar /> : null}
-              {selected === tabs[9]?.name ? <RiwayatKeluarga /> : null}
-              {selected === tabs[10]?.name ? <ArsipDigital /> : null}
+              {selected === tabs[9]?.name ? <RiwayatSkp /> : null}
+              {selected === tabs[10]?.name ? <RiwayatKeluarga /> : null}
+              {selected === tabs[11]?.name ? <ArsipDigital /> : null}
             </>
           ) : (
             <>

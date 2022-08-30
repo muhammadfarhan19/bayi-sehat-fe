@@ -155,3 +155,10 @@ export const RiwayatKGBAPI = {
   POST_RIWAYAT_KGB_DELETE: config.apiHost + '/riwayat-kgb/delete',
   POST_RIWAYAT_KGB_UPDATE: config.apiHost + '/riwayat-kgb/update',
 };
+
+export const RiwayatSKPAPI = {
+  GET_RIWAYAT_SKP_LIST: config.apiHost + '/riwayat-skp/list',
+  POST_RIWAYAT_SKP_INSERT: config.apiHost + '/riwayat-skp/insert',
+  POST_RIWAYAT_SKP_UPDATE: config.apiHost + '/riwayat-skp/update',
+  POST_RIWAYAT_SKP_DELETE: config.apiHost + '/riwayat-skp/delete',
+};
