@@ -56,8 +56,8 @@ export default function ProfilePegawai(props: ID) {
     { method: 'GET' }
   );
 
-  const { data: getKGB } = useCommonApi<GetKGBListReq, GetKGBList>(
-    RiwayatKGBAPI.GET_RIWAYAT_KGB_DETAIL,
+  const { data: getKGB } = useCommonApi<GetKGBListReq, GetKGBList[]>(
+    RiwayatKGBAPI.GET_RIWAYAT_KGB_LIST,
     { pegawai_id: personalPegawaiData?.pegawai_id },
     { method: 'GET' }
   );
@@ -132,16 +132,14 @@ export default function ProfilePegawai(props: ID) {
       />
       <div className="mt-5 mb-2 w-1/12 border-b-2 border-black" />
       <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat KGB" />
-      {getKGB === undefined ? (
-        '-'
-      ) : (
-        <React.Fragment>
-          <div className="mb-2">
-            <h6 className="flex flex-1 text-[12px]">{`${getKGB?.golongan_id_str}, ${getKGB?.golongan_id}`}</h6>
-            <h6 className="mt-1 text-[10px] text-slate-500">{`TMT KGB : ${formatDate(getKGB?.tmt_kgb)}`}</h6>
-          </div>
-        </React.Fragment>
-      )}
+      {getKGB === null
+        ? '-'
+        : getKGB?.map(data => (
+            <div className="mb-2" key={data.riwayat_id}>
+              <h6 className="flex flex-1 text-[12px]">{`${data?.golongan_id_str}, ${data?.jabatan_id_str}`}</h6>
+              <h6 className="mt-1 text-[10px] text-slate-500">{`TMT KGB : ${formatDate(data?.tmt_kgb)}`}</h6>
+            </div>
+          ))}
       <LabelledRowsItem separatorTop="mt-0 mb-2" title="Riwayat Pendidikan" />
       {getPendidikan === null
         ? '-'
