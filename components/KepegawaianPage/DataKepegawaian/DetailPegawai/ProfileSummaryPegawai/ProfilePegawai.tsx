@@ -136,7 +136,7 @@ export default function ProfilePegawai(props: ID) {
         ? '-'
         : getKGB?.map(data => (
             <div className="mb-2" key={data.riwayat_id}>
-              <h6 className="flex flex-1 text-[12px]">{`${data?.golongan_id_str},${data?.golongan_id}`}</h6>
+              <h6 className="flex flex-1 text-[12px]">{`${data?.golongan_id_str}, ${data?.jabatan_id_str}`}</h6>
               <h6 className="mt-1 text-[10px] text-slate-500">{`TMT KGB : ${formatDate(data?.tmt_kgb)}`}</h6>
             </div>
           ))}
