@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import {
   GolonganAPI,
@@ -8,7 +8,7 @@ import {
   RiwayatPendidikanAPI,
   RiwayatPenghargaan,
 } from '../../../../../constants/APIUrls';
-import { Golongan, StatusMenikahText } from '../../../../../constants/Resource';
+import { StatusMenikahText } from '../../../../../constants/Resource';
 import { GetRiwayatGolonganListReq, RiwayatGolonganListData } from '../../../../../types/api/GolonganAPI';
 import { GetRiwayatJabatanReq, RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
 import { GetRiwayatPendidikanListReq, RiwayatPendidikanListData } from '../../../../../types/api/PendidikanAPI';
@@ -32,7 +32,6 @@ const formatDate = (date: any) => {
 export default function ProfilePegawai(props: ID) {
   const { pegawai_id: pegawai_id_qs } = getQueryString<{ pegawai_id?: string }>();
   const personalPegawaiData = usePersonalData();
-  const [golState, setGolState] = useState();
 
   const { data: getPendidikan } = useCommonApi<GetRiwayatPendidikanListReq, RiwayatPendidikanListData[]>(
     RiwayatPendidikanAPI.GET_RIWAYAT_PENDIDIKAN_LIST,

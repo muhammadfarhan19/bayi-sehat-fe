@@ -5,10 +5,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { JabatanAPI, KepegawaianAPI, RiwayatKGBAPI } from '../../../../../constants/APIUrls';
+import { KepegawaianAPI, RiwayatKGBAPI } from '../../../../../constants/APIUrls';
 import { Golongan } from '../../../../../constants/Resource';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
-import { GetJabatanReq, JabatanData } from '../../../../../types/api/JabatanAPI';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../../../types/api/KepegawaianAPI';
 import {
   GetKGBList,
@@ -51,7 +50,6 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
   const { open, setOpen, selectedId, onSuccess } = props;
   const dispatch = useDispatch();
   const personalData = usePersonalData();
-  const [queryJabatan, setQueryJabatan] = React.useState('');
   const [queryPegawai, setQueryPegawai] = React.useState('');
   const debounce = React.useRef<number>(0);
 
@@ -75,12 +73,6 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
     formState: { errors },
     setValue,
   } = useForm<FormState>();
-
-  const { data: daftarJabatan } = useCommonApi<GetJabatanReq, JabatanData>(
-    JabatanAPI.GET_JABATAN,
-    { page: 1, per_page: 20, jabatan: queryJabatan },
-    { method: 'GET' }
-  );
 
   React.useLayoutEffect(() => {
     if (selectedId && data) {
