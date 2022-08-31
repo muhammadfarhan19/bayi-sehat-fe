@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
+import { DownloadIcon, PencilIcon, XIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -51,6 +51,15 @@ export default function ModalProfilePic() {
     setIsEdit(false);
   };
 
+  const downloadImage = () => {
+    if (!img) return;
+    const link = document.createElement('a');
+    link.href = img;
+    link.setAttribute('download', `profile.jpg`);
+    link.click();
+    link.remove();
+  };
+
   return (
     <Transition appear show={showProfPic} as={React.Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={() => handleShowModal(false)}>
@@ -90,19 +99,22 @@ export default function ModalProfilePic() {
                 <>
                   {!!img && (
                     <div
-                      className="h-[200px] w-full bg-center bg-no-repeat"
+                      className="h-[200px] w-full bg-contain bg-center bg-no-repeat"
                       style={{ backgroundImage: `url("${img}")` }}
                     />
                   )}
-                  <hr />
+                  <hr className="mt-2" />
                   <div className="mt-5 flex flex-col items-end">
-                    <button
-                      type="button"
-                      className="inline-flex rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                      onClick={() => setIsEdit(true)}
-                    >
-                      Ubah
-                    </button>
+                    <div className="flex flex-row items-center">
+                      <div className="flex cursor-pointer flex-col items-center" onClick={downloadImage}>
+                        <DownloadIcon className="h-5 cursor-pointer" />
+                        <div className="text-xs">Unduh</div>
+                      </div>
+                      <div className="ml-3 flex cursor-pointer flex-col items-center" onClick={() => setIsEdit(true)}>
+                        <PencilIcon className="h-5 cursor-pointer" />
+                        <div className="text-xs">Ubah</div>
+                      </div>
+                    </div>
                   </div>
                 </>
               ) : (

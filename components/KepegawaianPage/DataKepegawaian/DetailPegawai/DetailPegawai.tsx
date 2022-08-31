@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
+import { DownloadIcon, XIcon } from '@heroicons/react/outline';
 import { UserCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
 
@@ -99,6 +99,14 @@ function DetailPegawai() {
       </div>
     );
   }
+
+  const downloadImage = () => {
+    const link = document.createElement('a');
+    link.href = img;
+    link.setAttribute('download', `profile.jpg`);
+    link.click();
+    link.remove();
+  };
 
   return (
     <>
@@ -223,10 +231,17 @@ function DetailPegawai() {
                 leaveTo="opacity-0 scale-95"
               >
                 <div className="my-8 inline-block w-full max-w-xs transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title as="div" className="flex justify-center">
+                  <div className="flex justify-center">
                     <img className="h-[250px] w-[250px] rounded-full" src={img} alt="" />
                     <XIcon className="h-5 cursor-pointer" onClick={() => setShowImage(!showImage)} />
-                  </Dialog.Title>
+                  </div>
+                  <hr className="mt-2" />
+                  <div className="mt-2 flex flex-col items-end">
+                    <div className="flex cursor-pointer flex-col items-center" onClick={downloadImage}>
+                      <DownloadIcon className="h-5 cursor-pointer" />
+                      <div className="text-xs">Unduh</div>
+                    </div>
+                  </div>
                 </div>
               </Transition.Child>
             </div>
