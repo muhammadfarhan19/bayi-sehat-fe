@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   GolonganAPI,
@@ -8,7 +8,7 @@ import {
   RiwayatPendidikanAPI,
   RiwayatPenghargaan,
 } from '../../../../../constants/APIUrls';
-import { StatusMenikahText } from '../../../../../constants/Resource';
+import { Golongan, StatusMenikahText } from '../../../../../constants/Resource';
 import { GetRiwayatGolonganListReq, RiwayatGolonganListData } from '../../../../../types/api/GolonganAPI';
 import { GetRiwayatJabatanReq, RiwayatJabatanData } from '../../../../../types/api/JabatanAPI';
 import { GetRiwayatPendidikanListReq, RiwayatPendidikanListData } from '../../../../../types/api/PendidikanAPI';
@@ -32,6 +32,7 @@ const formatDate = (date: any) => {
 export default function ProfilePegawai(props: ID) {
   const { pegawai_id: pegawai_id_qs } = getQueryString<{ pegawai_id?: string }>();
   const personalPegawaiData = usePersonalData();
+  const [golState, setGolState] = useState();
 
   const { data: getPendidikan } = useCommonApi<GetRiwayatPendidikanListReq, RiwayatPendidikanListData[]>(
     RiwayatPendidikanAPI.GET_RIWAYAT_PENDIDIKAN_LIST,
@@ -135,7 +136,7 @@ export default function ProfilePegawai(props: ID) {
         ? '-'
         : getKGB?.map(data => (
             <div className="mb-2" key={data.riwayat_id}>
-              <h6 className="flex flex-1 text-[12px]">{`${data?.golongan_id_str}, ${data?.jabatan_id_str}`}</h6>
+              <h6 className="flex flex-1 text-[12px]">{`${data?.golongan_id_str},${data?.golongan_id}`}</h6>
               <h6 className="mt-1 text-[10px] text-slate-500">{`TMT KGB : ${formatDate(data?.tmt_kgb)}`}</h6>
             </div>
           ))}
