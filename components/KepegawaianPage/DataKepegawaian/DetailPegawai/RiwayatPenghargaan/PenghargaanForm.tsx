@@ -197,7 +197,7 @@ export default function PendidikanForm(props: UploadFormProps) {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       <option value={''}>Silahkan Pilih</option>
-                      <option value={'Internasional11'}>Internasional</option>
+                      <option value={'Internasional'}>Internasional</option>
                       <option value={'Nasional'}>Nasional</option>
                       <option value={'Kementerian'}>Kementerian</option>
                       <option value={'Provinsi'}>Provinsi</option>
