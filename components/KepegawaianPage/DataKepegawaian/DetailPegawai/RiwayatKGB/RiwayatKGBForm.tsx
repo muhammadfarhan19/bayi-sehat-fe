@@ -5,10 +5,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { JabatanAPI, KepegawaianAPI, RiwayatKGBAPI } from '../../../../../constants/APIUrls';
+import { KepegawaianAPI, RiwayatKGBAPI } from '../../../../../constants/APIUrls';
 import { Golongan } from '../../../../../constants/Resource';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
-import { GetJabatanReq, JabatanData } from '../../../../../types/api/JabatanAPI';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../../../types/api/KepegawaianAPI';
 import {
   GetKGBList,
@@ -51,7 +50,6 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
   const { open, setOpen, selectedId, onSuccess } = props;
   const dispatch = useDispatch();
   const personalData = usePersonalData();
-  const [queryJabatan, setQueryJabatan] = React.useState('');
   const [queryPegawai, setQueryPegawai] = React.useState('');
   const debounce = React.useRef<number>(0);
 
@@ -75,12 +73,6 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
     formState: { errors },
     setValue,
   } = useForm<FormState>();
-
-  const { data: daftarJabatan } = useCommonApi<GetJabatanReq, JabatanData>(
-    JabatanAPI.GET_JABATAN,
-    { page: 1, per_page: 20, jabatan: queryJabatan },
-    { method: 'GET' }
-  );
 
   React.useLayoutEffect(() => {
     if (selectedId && data) {
@@ -106,7 +98,7 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
           tanggal_kgb: formData?.tanggal_kgb,
           tmt_kgb: formData?.tmt_kgb,
           penandatangan: formData?.penandatangan,
-          jabatan_id: Number(formData?.jabatan_id),
+          jabatan_id: 418,
           tmt_kgb_selanjutnya: formData?.tmt_kgb_selanjutnya,
           files: [
             {
@@ -126,7 +118,7 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
           tanggal_kgb: formData?.tanggal_kgb,
           tmt_kgb: formData?.tmt_kgb,
           penandatangan: formData?.penandatangan,
-          jabatan_id: Number(formData?.jabatan_id),
+          jabatan_id: 418,
           tmt_kgb_selanjutnya: formData?.tmt_kgb_selanjutnya,
           files: [
             {
@@ -263,7 +255,7 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
                   />
                   {errors.penandatangan && <p className="mt-1 text-xs text-red-500">{errors.penandatangan.message}</p>}
                 </div>
-                <div className="mt-5 sm:col-span-6">
+                {/* <div className="mt-5 sm:col-span-6">
                   <Controller
                     control={control}
                     name="jabatan_id"
@@ -289,7 +281,7 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
                     )}
                   />
                   {errors.jabatan_id && <p className="mt-1 text-xs text-red-500">{errors.jabatan_id.message}</p>}
-                </div>
+                </div> */}
                 <InputLabelled
                   name="tmt_kgb_selanjutnya"
                   type="date"
