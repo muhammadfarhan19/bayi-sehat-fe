@@ -52,3 +52,10 @@ export const generateDays = (
 
   return dates;
 };
+
+export function yearMonthDuration(start: string, end: string) {
+  const [startYear, startMonth] = start.split('-');
+  const [endYear, endMonth] = end.split('-');
+  const totalMonth = (Number(endYear) - Number(startYear)) * 12 + Number(endMonth) - Number(startMonth);
+  return [Math.floor(totalMonth / 12), totalMonth % 12];
+}

@@ -41,3 +41,8 @@ export interface Pagination {
   total_data: number;
   total_page: number;
 }
+
+export interface DocumentFile {
+  document_uuid: string;
+  document_name: string;
+}

@@ -23,6 +23,7 @@ import RiwayatJabatan from './RiwayatJabatan';
 import RiwayatKeluarga from './RiwayatKeluarga';
 import RiwayatKGB from './RiwayatKGB';
 import RiwayatPendidikan from './RiwayatPendidikan';
+import RiwayatPengangkatan from './RiwayatPengangkatan';
 import RiwayatPenghargaan from './RiwayatPenghargaan';
 import RiwayatSkp from './RiwayatSkp';
 
@@ -46,6 +47,7 @@ function DetailPegawai() {
 
   const ppnpn = [
     { name: 'Data Diri Pribadi', href: '#' },
+    { name: 'Riwayat Pengangkatan Pekerjaan', href: '#' },
     { name: 'Riwayat Pendidikan', href: '#' },
     { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
     { name: 'Riwayat Keluarga', href: '#' },
@@ -196,10 +198,11 @@ function DetailPegawai() {
           ) : (
             <>
               {selected === tabs[0]?.name ? <DataDiriPribadi /> : null}
-              {selected === tabs[1]?.name ? <RiwayatPendidikan /> : null}
-              {selected === tabs[2]?.name ? <RiwayatDiklat /> : null}
-              {selected === tabs[3]?.name ? <RiwayatKeluarga /> : null}
-              {selected === tabs[4]?.name ? <ArsipDigital /> : null}
+              {selected === tabs[1]?.name ? <RiwayatPengangkatan /> : null}
+              {selected === tabs[2]?.name ? <RiwayatPendidikan /> : null}
+              {selected === tabs[3]?.name ? <RiwayatDiklat /> : null}
+              {selected === tabs[4]?.name ? <RiwayatKeluarga /> : null}
+              {selected === tabs[5]?.name ? <ArsipDigital /> : null}
             </>
           )}
         </div>

@@ -163,3 +163,11 @@ export const RiwayatSKPAPI = {
   POST_RIWAYAT_SKP_UPDATE: config.apiHost + '/riwayat-skp/update',
   POST_RIWAYAT_SKP_DELETE: config.apiHost + '/riwayat-skp/delete',
 };
+
+export const RiwayatPengangkatanPekerjaan = {
+  POST_RIWAYAT_PENGANGKATAN_DELETE: config.apiHost + '/riwayat-pengangkatan-perkerjaan/delete',
+  GET_RIWAYAT_PENGANGKATAN_DETAIL: config.apiHost + '/riwayat-pengangkatan-perkerjaan/detail',
+  GET_RIWAYAT_PENGANGKATAN_LIST: config.apiHost + '/riwayat-pengangkatan-perkerjaan/list',
+  POST_RIWAYAT_PENGANGKATAN_INSERT: config.apiHost + '/riwayat-pengangkatan-perkerjaan/insert',
+  POST_RIWAYAT_PENGANGKATAN_UPDATE: config.apiHost + '/riwayat-pengangkatan-perkerjaan/update',
+};
