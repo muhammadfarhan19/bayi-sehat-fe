@@ -37,6 +37,13 @@ export interface MasterJenisKpData {
   jenis_kp: string;
 }
 
+export interface GetMasterJenisGol {
+  golongan_id: number;
+  golongan: string;
+  kode_golongan: string;
+  pangkat: string;
+}
+
 export interface GetMasterJenisKpRes {
   status: Status;
   data: MasterJenisKpData[];

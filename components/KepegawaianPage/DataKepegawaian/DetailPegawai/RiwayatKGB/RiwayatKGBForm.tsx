@@ -5,10 +5,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { KepegawaianAPI, RiwayatKGBAPI } from '../../../../../constants/APIUrls';
-import { Golongan } from '../../../../../constants/Resource';
+import { KepegawaianAPI, MasterAPI, RiwayatKGBAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../../../types/api/KepegawaianAPI';
+import { GetMasterJenisGol } from '../../../../../types/api/MasterAPI';
 import {
   GetKGBList,
   PostDetailRiwayatKGBReq,
@@ -24,6 +24,7 @@ import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import AutoComplete from '../../../../shared/Input/ComboBox';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
+import Loader from '../../../../shared/Loader/Loader';
 import { InputLabelled } from '../RiwayatKeluarga/Shared/KeluargaComponents';
 import AutoCompleteCustom from './Shared/CustomComboBox';
 
@@ -52,6 +53,8 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
   const personalData = usePersonalData();
   const [queryPegawai, setQueryPegawai] = React.useState('');
   const debounce = React.useRef<number>(0);
+  const [golongan, setGolongan] = React.useState<React.SetStateAction<any>>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const { data: pegawaiList } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
     KepegawaianAPI.GET_PEGAWAI_LIST,
@@ -65,6 +68,20 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
     { method: 'GET' },
     { revalidateOnMount: true }
   );
+
+  React.useLayoutEffect(() => {
+    dataGolongan();
+  }, []);
+
+  const dataGolongan = async () => {
+    setIsLoading(true);
+    await callAPI<null, GetMasterJenisGol>(MasterAPI.GET_MASTER_JENIS_GOLONGAN, null, { method: 'GET' })
+      .then(res => {
+        res.data;
+        setGolongan(res?.data);
+      })
+      .finally(() => setIsLoading(false));
+  };
 
   const {
     control,
@@ -156,6 +173,12 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
     setOpen(!open);
   };
 
+  if (isLoading) {
+    <div className="relative h-[150px] w-full divide-y divide-gray-200">
+      <Loader />
+    </div>;
+  }
+
   return (
     <Transition appear show={open} as={React.Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={toggleModal}>
@@ -204,7 +227,12 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
                         onChange={value => onChange(value.value)}
                         label={'Golongan'}
                         placeholder={'Pilih golongan'}
-                        options={Golongan}
+                        options={(golongan?.data || []).map(
+                          (each: { golongan: any; pangkat: any; golongan_id: any }) => ({
+                            text: `${each?.golongan}, ${each?.pangkat}`,
+                            value: String(each?.golongan_id),
+                          })
+                        )}
                       />
                     )}
                   />

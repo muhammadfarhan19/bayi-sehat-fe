@@ -45,31 +45,20 @@ function DetailPegawai() {
   ];
 
   const ppnpn = [
-    // { name: 'Data Diri Pribadi', href: '#' },
-    // { name: 'Riwayat Pendidikan', href: '#' },
-    // { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
-    // { name: 'Riwayat Keluarga', href: '#' },
-    // { name: 'Arsip Digital', href: '#' },
-    { name: 'Data Diri Pegawai', href: '#' },
     { name: 'Data Diri Pribadi', href: '#' },
-    { name: 'Riwayat Golongan', href: '#' },
-    { name: 'Riwayat Jabatan', href: '#' },
-    { name: 'Riwayat KGB', href: '#' },
     { name: 'Riwayat Pendidikan', href: '#' },
     { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
-    { name: 'Riwayat Penghargaan', href: '#' },
-    { name: 'Riwayat Belajar', href: '#' },
-    { name: 'Riwayat SKP', href: '#' },
     { name: 'Riwayat Keluarga', href: '#' },
     { name: 'Arsip Digital', href: '#' },
   ];
+  const personalPegawaiData = usePersonalData();
 
-  const tabs = type === 'pns' || typeof type === 'undefined' ? pns : ppnpn;
+  const tabs = personalPegawaiData?.status_cpns === 1 ? pns : ppnpn;
 
   const { tabName = tabs[0].name } = getQueryString<{ tabName: string }>();
   const [selected, setSelected] = React.useState(tabName);
   const [showImage, setShowImage] = React.useState(false);
-  const personalPegawaiData = usePersonalData();
+
   const [showComponent, setShowComponent] = React.useState(false);
   const { pegawai_id } = getQueryString<{ pegawai_id: string }>();
 
@@ -189,7 +178,7 @@ function DetailPegawai() {
           </div>
         </div>
         <div className="overflow-auto">
-          {type === 'pns' || typeof type === 'undefined' ? (
+          {type === 'pns' || (typeof type === 'undefined' && personalPegawaiData?.status_cpns === 1) ? (
             <>
               {selected === tabs[0]?.name ? <DataDiriPegawai /> : null}
               {selected === tabs[1]?.name ? <DataDiriPribadi /> : null}
@@ -206,23 +195,11 @@ function DetailPegawai() {
             </>
           ) : (
             <>
-              {selected === tabs[0]?.name ? <DataDiriPegawai /> : null}
-              {selected === tabs[1]?.name ? <DataDiriPribadi /> : null}
-              {selected === tabs[2]?.name ? <RiwayatGolongan /> : null}
-              {selected === tabs[3]?.name ? <RiwayatJabatan /> : null}
-              {selected === tabs[4]?.name ? <RiwayatKGB /> : null}
-              {selected === tabs[5]?.name ? <RiwayatPendidikan /> : null}
-              {selected === tabs[6]?.name ? <RiwayatDiklat /> : null}
-              {selected === tabs[7]?.name ? <RiwayatPenghargaan /> : null}
-              {selected === tabs[8]?.name ? <RiwayatBelajar /> : null}
-              {selected === tabs[9]?.name ? <RiwayatSkp /> : null}
-              {selected === tabs[10]?.name ? <RiwayatKeluarga /> : null}
-              {selected === tabs[11]?.name ? <ArsipDigital /> : null}
-              {/* {selected === tabs[0]?.name ? <DataDiriPribadi /> : null}
+              {selected === tabs[0]?.name ? <DataDiriPribadi /> : null}
               {selected === tabs[1]?.name ? <RiwayatPendidikan /> : null}
               {selected === tabs[2]?.name ? <RiwayatDiklat /> : null}
               {selected === tabs[3]?.name ? <RiwayatKeluarga /> : null}
-              {selected === tabs[4]?.name ? <ArsipDigital /> : null} */}
+              {selected === tabs[4]?.name ? <ArsipDigital /> : null}
             </>
           )}
         </div>

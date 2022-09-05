@@ -67,6 +67,7 @@ export const MasterAPI = {
   GET_MASTER_JENIS_BERKAS: config.apiHost + '/master/jenis-berkas',
   GET_PENDIDIKAN_ELIGIBLE_JENJANG: config.apiHost + '/pendidikan/eligible_jenjang',
   GET_MASTER_JENIS_KP: config.apiHost + '/master/jenis-kp',
+  GET_MASTER_JENIS_GOLONGAN: config.apiHost + '/master/golongan',
 };
 
 export const DocumentAPI = {
