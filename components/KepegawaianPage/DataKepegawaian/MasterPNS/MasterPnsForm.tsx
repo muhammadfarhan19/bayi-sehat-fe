@@ -34,29 +34,6 @@ const statusNikah = [
   { id: '4', title: 'Cerai Hidup' },
 ];
 
-// const golongan = [
-//   //
-//   { id: '19', title: '-' },
-//   //
-//   { id: '13', title: 'IV/e - Pembina Utama' },
-//   { id: '14', title: 'I/a - Juru Muda' },
-//   { id: '15', title: 'I/b - Juru Muda Tingkat I' },
-//   { id: '16', title: 'I/c - Juru' },
-//   { id: '17', title: 'I/d - Juru Tingkat I' },
-//   { id: '1', title: 'II/a - Pengatur Muda' },
-//   { id: '2', title: 'II/b - Pengatur Muda Tingkat I' },
-//   { id: '3', title: 'II/c - Pengatur' },
-//   { id: '4', title: 'II/d - Pengatur Tingkat I' },
-//   { id: '5', title: 'III/a - Penata Muda' },
-//   { id: '6', title: 'III/b - Penata Muda Tingkat I' },
-//   { id: '7', title: 'III/c - Penata' },
-//   { id: '8', title: 'III/d - Penata Tingkat I' },
-//   { id: '9', title: 'IV/a - Pembina' },
-//   { id: '10', title: 'IV/b - Pembina Tingkat I' },
-//   { id: '11', title: 'IV/c - Pembina Utama Muda' },
-//   { id: '12', title: 'IV/d - Pembina Utama Madya' },
-// ];
-
 interface FormState {
   nip: string;
   nama: string;
@@ -78,6 +55,7 @@ interface FormState {
   jabatan_id: number;
   unit_kerja_id: number;
   jumlah_anak: number;
+  agama: string;
 }
 
 function MasterPnsForm() {
@@ -561,7 +539,7 @@ function MasterPnsForm() {
             <div className="mt-5 sm:col-span-6">
               <div className="mt-[27px]">
                 <label htmlFor="bpjs" className="block text-sm font-medium text-gray-700">
-                  BPJS
+                  BPJS Kesehatan
                 </label>
                 <div className="pt-1">
                   <input

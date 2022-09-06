@@ -44,6 +44,7 @@ interface FormState {
   tgl_akhir_acara: string;
   document_uuid: string;
   document_name: string;
+  tgl_sertifikat: string;
 }
 
 export default function DiklatForm(props: UploadFormProps) {
@@ -80,6 +81,7 @@ export default function DiklatForm(props: UploadFormProps) {
       setValue('lokasi', data.lokasi);
       setValue('tgl_awal_acara', data.tgl_awal_acara);
       setValue('tgl_akhir_acara', data.tgl_akhir_acara);
+      setValue('tgl_sertifikat', data?.tgl_sertifikat);
       setValue('keterangan', data.keterangan);
     }
   }, [data]);
@@ -106,6 +108,7 @@ export default function DiklatForm(props: UploadFormProps) {
               document_name: formData.file_name,
             },
           ],
+          tgl_sertifikat: formData?.tgl_sertifikat,
         },
         { method: 'put' }
       );
@@ -128,6 +131,7 @@ export default function DiklatForm(props: UploadFormProps) {
               document_name: formData.file_name,
             },
           ],
+          tgl_sertifikat: '2022-09-10',
         },
         { method: 'post' }
       );
@@ -318,6 +322,22 @@ export default function DiklatForm(props: UploadFormProps) {
                     />
                     {errors.tgl_akhir_acara && (
                       <p className="mt-1 text-xs text-red-500">{errors.tgl_akhir_acara.message}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="mt-5 sm:col-span-6">
+                  <label htmlFor="tgl_awal_acara" className="block text-sm font-medium text-gray-700">
+                    Tanggal Sertifikat
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      {...register('tgl_sertifikat', { required: 'Silahkan masukan tanggal sertifikat.' })}
+                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                      name="tgl_sertifikat"
+                      type="date"
+                    />
+                    {errors.tgl_sertifikat && (
+                      <p className="mt-1 text-xs text-red-500">{errors.tgl_sertifikat.message}</p>
                     )}
                   </div>
                 </div>

@@ -48,6 +48,7 @@ export interface RiwayatDiklatDetailData {
   tgl_awal_acara: string;
   files: DocumentData[];
   tgl_akhir_acara: string;
+  tgl_sertifikat: string;
   created_at: string;
   created_by: string;
 }
@@ -63,6 +64,7 @@ export interface PostRiwayatDiklatInsertReq {
   tgl_awal_acara: string;
   tgl_akhir_acara: string;
   files: DocumentData[];
+  tgl_sertifikat: string;
 }
 
 export interface PostRiwayatDiklatInsertRes {
@@ -82,6 +84,7 @@ export interface PostRiwayatDiklatUpdateReq {
   tgl_awal_acara: string;
   tgl_akhir_acara: string;
   files: DocumentData[];
+  tgl_sertifikat: string;
 }
 
 export interface DocumentData {
