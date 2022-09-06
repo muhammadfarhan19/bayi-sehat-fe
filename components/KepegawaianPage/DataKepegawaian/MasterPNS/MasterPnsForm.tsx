@@ -485,6 +485,37 @@ function MasterPnsForm() {
 
             <div className="mt-5 sm:col-span-6">
               <div className="mt-[27px]">
+                <label htmlFor="agama" className="block text-sm font-medium text-gray-700">
+                  Agama
+                </label>
+                <div className="pt-1">
+                  <input
+                    className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                    name="agama"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <label className="block text-sm font-medium text-gray-700">Golongan Darah</label>
+              <div className="pt-1 sm:col-span-2 sm:mt-0">
+                <select
+                  name="gol_darah"
+                  className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                >
+                  <option value="">Silahkan Pilih</option>
+                  <option value="A">A</option>
+                  <option value="AB">AB</option>
+                  <option value="B">B</option>
+                  <option value="O">O</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="mt-5 sm:col-span-6">
+              <div className="mt-[27px]">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email
                 </label>
@@ -549,6 +580,21 @@ function MasterPnsForm() {
                     type="text"
                   />
                   {errors.bpjs && <p className="mt-1 text-xs text-red-500">{errors.bpjs.message}</p>}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 sm:col-span-6">
+              <div className="mt-[27px]">
+                <label htmlFor="bpjs_ketenagakerjaan" className="block text-sm font-medium text-gray-700">
+                  BPJS Ketenagakerjaan
+                </label>
+                <div className="pt-1">
+                  <input
+                    className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                    name="bpjs_ketenagakerjaan"
+                    type="text"
+                  />
                 </div>
               </div>
             </div>
