@@ -483,7 +483,7 @@ function MasterPnsForm() {
               </div>
             </div>
 
-            <div className="mt-5 sm:col-span-6">
+            {/* <div className="mt-5 sm:col-span-6">
               <div className="mt-[27px]">
                 <label htmlFor="agama" className="block text-sm font-medium text-gray-700">
                   Agama
@@ -496,9 +496,9 @@ function MasterPnsForm() {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="mt-5">
+            {/* <div className="mt-5">
               <label className="block text-sm font-medium text-gray-700">Golongan Darah</label>
               <div className="pt-1 sm:col-span-2 sm:mt-0">
                 <select
@@ -512,7 +512,7 @@ function MasterPnsForm() {
                   <option value="O">O</option>
                 </select>
               </div>
-            </div>
+            </div> */}
 
             <div className="mt-5 sm:col-span-6">
               <div className="mt-[27px]">
@@ -584,7 +584,7 @@ function MasterPnsForm() {
               </div>
             </div>
 
-            <div className="mt-5 sm:col-span-6">
+            {/* <div className="mt-5 sm:col-span-6">
               <div className="mt-[27px]">
                 <label htmlFor="bpjs_ketenagakerjaan" className="block text-sm font-medium text-gray-700">
                   BPJS Ketenagakerjaan
@@ -597,7 +597,7 @@ function MasterPnsForm() {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="mt-[3rem] flex w-full">
               <div className="ml-auto flex flex-row gap-x-[12px]">
