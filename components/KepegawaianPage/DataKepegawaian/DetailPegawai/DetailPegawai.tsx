@@ -15,6 +15,7 @@ import Loader from '../../../shared/Loader/Loader';
 import ArsipDigital from './ArsipDigital';
 import DataDiriPegawai from './DataDiriPegawai';
 import DataDiriPribadi from './DataDiriPribadi';
+import DataDiriPribadiPpnpn from './DataDiriPribadiPpnpn';
 import ProfilePegawai from './ProfileSummaryPegawai/ProfilePegawai';
 import RiwayatBelajar from './RiwayatBelajar';
 import RiwayatDiklat from './RiwayatDiklat';
@@ -197,7 +198,7 @@ function DetailPegawai() {
             </>
           ) : (
             <>
-              {selected === tabs[0]?.name ? <DataDiriPribadi /> : null}
+              {selected === tabs[0]?.name ? <DataDiriPribadiPpnpn /> : null}
               {selected === tabs[1]?.name ? <RiwayatPengangkatan /> : null}
               {selected === tabs[2]?.name ? <RiwayatPendidikan /> : null}
               {selected === tabs[3]?.name ? <RiwayatDiklat /> : null}

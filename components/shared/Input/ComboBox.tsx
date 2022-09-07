@@ -16,10 +16,11 @@ interface AutoCompleteProps {
   options: OptionType[];
   onQueryChange?: (value: string) => void;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export default function AutoComplete(props: AutoCompleteProps) {
-  const { defaultValue, label, onChange, onQueryChange, options, placeholder } = props;
+  const { defaultValue, label, onChange, onQueryChange, options, placeholder, disabled } = props;
   const [query, setQuery] = useState('');
   const [selectedValue, setSelectedValue] = useState<OptionType | undefined>(defaultValue);
 
@@ -44,12 +45,12 @@ export default function AutoComplete(props: AutoCompleteProps) {
   };
 
   return (
-    <Combobox as="div" value={selectedValue} onChange={handleOnChange}>
+    <Combobox as="div" value={selectedValue} onChange={handleOnChange} disabled={disabled}>
       <Combobox.Label className="block text-sm font-medium text-gray-700">{label}</Combobox.Label>
       <div className="relative mt-1">
         <Combobox.Input
           autoComplete="off"
-          className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+          className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
           onChange={handleQueryChanged}
           displayValue={(optionDisplay: OptionType) => optionDisplay?.text || ''}
           placeholder={placeholder}

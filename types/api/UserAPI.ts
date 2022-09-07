@@ -1,8 +1,11 @@
-import { Gender, Status, StatusCpns, StatusMenikah } from '../Common';
+import { Agama, Gender, Status, StatusCpns, StatusMenikah } from '../Common';
 
 export interface GetUserProfileData {
+  agama: Agama;
+  golongan_darah: '';
   alamat: string;
   bpjs: string;
+  no_bpjs_kt: string;
   email: string;
   jenis_kelamin: Gender;
   jumlah_anak: number;
@@ -15,6 +18,10 @@ export interface GetUserProfileData {
     document_name: string;
   }[];
   uuid_bpjs: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  uuid_bpjs_kt: {
     document_uuid: string;
     document_name: string;
   }[];
@@ -104,15 +111,47 @@ export interface PostUserProfileReq {
     document_uuid: string;
     document_name: string;
   }[];
+  uuid_bpjs_kt?: {
+    document_uuid: string;
+    document_name: string;
+  }[];
   uuid_npwp: {
     document_uuid: string;
     document_name: string;
   }[];
   hp: string;
+  agama?: number;
+  golongan_darah?: string;
+  no_bpjs_kt?: string;
 }
 
 export interface PostUserProfileRes {
   status: Status;
   data: null | string;
   error_message?: string;
+}
+
+export interface PostUserUpdateDataDiriPegawaiReq {
+  pegawai_id: number;
+  unit_kerja_id: number;
+  nip: string;
+  tempat_lahir: string;
+  tanggal_lahir: string;
+  tmt_cpns: string;
+  status_cpns: number;
+  jabatan: number;
+  tmt_golongan: string;
+  pangkat: number;
+  masa_kerja: string;
+  masa_kerja_kepangkatan: string;
+  karpeg: string;
+  karpeg_file: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+}
+
+export interface PostUserUpdateDataDiriPegawaiRes {
+  status: Status;
+  data: string;
 }
