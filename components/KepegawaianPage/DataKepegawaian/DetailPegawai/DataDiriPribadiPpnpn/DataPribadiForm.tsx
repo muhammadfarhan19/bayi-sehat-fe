@@ -160,7 +160,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
         status_cpns: Number(pegawai?.status_cpns),
         jabatan: Number(formData?.jabatan),
         tmt_golongan: String(pegawai?.tmt_golongan),
-        pangkat: Number(pegawai?.pangkat),
+        pangkat: Number(0),
         masa_kerja: String(pegawai?.masa_kerja),
         masa_kerja_kepangkatan: String(pegawai?.masa_kerja_kepangkatan),
         karpeg: String(pegawai?.karpeg),
