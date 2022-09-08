@@ -59,6 +59,7 @@ export default function PengangkatanForm(props: Props) {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setValue,
   } = useForm<FormState>({
     defaultValues: {
@@ -274,7 +275,10 @@ export default function PengangkatanForm(props: Props) {
                           dropdownMode="select"
                           selected={new Date(value)}
                           dateFormat="dd/MM/yyyy"
-                          onChange={(date: Date) => onChange(date.getTime())}
+                          onChange={(date: Date) => {
+                            onChange(date.getTime());
+                            setValue('tmt_akhir', date.getTime());
+                          }}
                           customInput={
                             <input
                               type="text"
@@ -303,6 +307,7 @@ export default function PengangkatanForm(props: Props) {
                           peekNextMonth
                           showMonthDropdown
                           showYearDropdown
+                          minDate={new Date(getValues().tmt_awal)}
                           dropdownMode="select"
                           selected={new Date(value)}
                           dateFormat="dd/MM/yyyy"

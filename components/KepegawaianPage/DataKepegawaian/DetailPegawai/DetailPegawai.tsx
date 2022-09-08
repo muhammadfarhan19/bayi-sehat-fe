@@ -121,7 +121,7 @@ function DetailPegawai() {
           ) : (
             <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
           )}
-          <div className="my-auto flex flex-col">
+          <div className="my-auto ml-2 flex flex-col">
             <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
             <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
           </div>

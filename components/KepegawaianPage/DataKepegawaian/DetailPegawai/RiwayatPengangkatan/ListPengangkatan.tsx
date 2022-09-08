@@ -15,8 +15,10 @@ import { Status } from '../../../../../types/Common';
 import { yearMonthDuration } from '../../../../../utils/DateUtil';
 import { callAPI } from '../../../../../utils/Fetchers';
 import ConfirmDialog from '../../../../shared/ConfirmDialog';
+import FileLoader from '../../../../shared/FileLoader';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
+import { PDFIcon } from '../../../../shared/icons/PDFIcon';
 import PengangkatanForm from './PengangkatanForm';
 
 type ListPendidikanProps = {
@@ -128,6 +130,12 @@ export default function ListPengangkatan(props: ListPendidikanProps) {
                 scope="col"
                 className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
+                Dokumen
+              </th>
+              <th
+                scope="col"
+                className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
                 Aksi
               </th>
             </tr>
@@ -154,6 +162,14 @@ export default function ListPengangkatan(props: ListPendidikanProps) {
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   {each.is_unit_kerja_pemerintah ? 'Iya' : 'Tidak'}
+                </td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                  <FileLoader uuid={each?.files?.[0]?.document_uuid}>
+                    <div className="flex items-center">
+                      <PDFIcon />
+                      <span className="ml-1 whitespace-nowrap text-blue-500 underline">{'Bukti Pengangkatan'} </span>
+                    </div>
+                  </FileLoader>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500">
                   <div className="flex justify-between">
