@@ -71,6 +71,8 @@ export default function GolonganForm(props: GolonganFormProps) {
     formState: { errors },
     setValue,
     resetField,
+    watch,
+    getValues,
   } = useForm<FormState>({
     defaultValues: {
       tmt: Date.now(),
@@ -84,6 +86,18 @@ export default function GolonganForm(props: GolonganFormProps) {
   const toggleModal = () => {
     setOpen(!open);
   };
+
+  React.useEffect(() => {
+    const valuesTahun = watch('tahun');
+    const valuesBulan = watch('bulan');
+    if (Number(valuesTahun) === 0 && Number(valuesBulan) === 0) {
+      resetField('bulan');
+      resetField('tahun');
+    }
+    if (Number(valuesTahun) === 0 && Number(valuesBulan) > 0) {
+      setValue('tahun', String(0));
+    }
+  }, [watch('bulan'), watch('tahun'), getValues('bulan'), getValues('tahun')]);
 
   const dataGolongan = async () => {
     setIsLoading(true);
