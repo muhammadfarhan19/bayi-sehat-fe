@@ -54,8 +54,8 @@ export const generateDays = (
 };
 
 export function yearMonthDuration(start: string, end: string) {
-  const [startYear, startMonth] = start.split('-');
-  const [endYear, endMonth] = end.split('-');
-  const totalMonth = (Number(endYear) - Number(startYear)) * 12 + Number(endMonth) - Number(startMonth);
-  return [Math.floor(totalMonth / 12), totalMonth % 12];
+  var dateStart = new Date(start);
+  var dateEnd = new Date(end);
+  var diff = new Date(dateEnd.getTime() - dateStart.getTime());
+  return [diff.getUTCFullYear() - 1970, diff.getUTCMonth()];
 }
