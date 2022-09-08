@@ -53,6 +53,7 @@ export interface GetUserPersonalPegawaiData {
   tmt_golongan: string;
   unit_kerja: string;
   user_id: number;
+  golongan_id: number;
 }
 
 export type GetUserProfileReq = {
