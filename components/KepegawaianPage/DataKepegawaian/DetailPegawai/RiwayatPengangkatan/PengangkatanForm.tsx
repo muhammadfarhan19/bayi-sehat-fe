@@ -6,9 +6,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { JabatanAPI, RiwayatPengangkatanPekerjaan } from '../../../../../constants/APIUrls';
+import { RiwayatPengangkatanPekerjaan } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
-import { GetJabatanReq, JabatanData } from '../../../../../types/api/JabatanAPI';
 import {
   GetRiwayatPengangkatanDetailReq,
   PostRiwayatPengangkatanInsertReq,
@@ -23,7 +22,6 @@ import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
-import AutoComplete from '../../../../shared/Input/ComboBox';
 import DatePickerCustom from '../../../../shared/Input/DatePicker';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
 
@@ -50,7 +48,6 @@ interface FormState {
 
 export default function PengangkatanForm(props: Props) {
   const { open, setOpen, selectedId, onSuccess } = props;
-  const debounce = React.useRef<number>(0);
   const dispatch = useDispatch();
   const personalData = usePersonalData();
 
@@ -68,13 +65,6 @@ export default function PengangkatanForm(props: Props) {
       tmt_akhir: Date.now(),
     },
   });
-
-  const [queryJabatan, setQueryJabatan] = React.useState('');
-  const { data: daftarJabatan } = useCommonApi<GetJabatanReq, JabatanData>(
-    JabatanAPI.GET_JABATAN,
-    { page: 1, per_page: 20, jabatan: queryJabatan },
-    { method: 'GET' }
-  );
 
   const { data, isValidating } = useCommonApi<GetRiwayatPengangkatanDetailReq, RiwayatPengangkatanDetailData>(
     RiwayatPengangkatanPekerjaan.GET_RIWAYAT_PENGANGKATAN_DETAIL,
@@ -96,7 +86,6 @@ export default function PengangkatanForm(props: Props) {
       setValue('jabatan_penandatangan', data.jabatan_penandatangan);
       setValue('unit_kerja', data.unit_kerja);
       setValue('is_unit_kerja_pemerintah', data.is_unit_kerja_pemerintah);
-      setQueryJabatan(data.jabatan_penandatangan);
     }
   }, [data]);
 
@@ -212,7 +201,7 @@ export default function PengangkatanForm(props: Props) {
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
               <Dialog.Title as="div" className="flex justify-between">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  {selectedId ? 'Ubah' : 'Tambah'} Riwayat Pendidikan
+                  {selectedId ? 'Ubah' : 'Tambah'} Riwayat Pengangkatan Pekerjaan
                 </h3>
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
@@ -364,35 +353,12 @@ export default function PengangkatanForm(props: Props) {
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
-                  {(!selectedId || data?.jabatan_penandatangan) && (
-                    <Controller
-                      control={control}
-                      name="jabatan_penandatangan"
-                      rules={{ required: 'Mohon isi data jabatan' }}
-                      render={({ field: { onChange } }) => (
-                        <AutoComplete
-                          onChange={value => onChange(value.value)}
-                          label={'Jabatan Penandatangan'}
-                          defaultValue={{
-                            text: data?.jabatan_penandatangan || '',
-                            value: data?.jabatan_penandatangan || '',
-                          }}
-                          onQueryChange={queryText => {
-                            if (debounce.current) {
-                              clearTimeout(debounce.current);
-                            }
-                            debounce.current = window.setTimeout(() => {
-                              setQueryJabatan(queryText);
-                            }, 500);
-                          }}
-                          options={(daftarJabatan?.list || []).map(each => ({
-                            text: each.name,
-                            value: each.name,
-                          }))}
-                        />
-                      )}
-                    />
-                  )}
+                  <label className="block text-sm font-medium text-gray-700">Jabatan Penandatangan</label>
+                  <input
+                    {...register('jabatan_penandatangan', { required: 'Silahkan masukan data jabatan penandatangan.' })}
+                    className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                    type="text"
+                  />
                   {errors.jabatan_penandatangan && (
                     <p className="mt-1 text-xs text-red-500">{errors.jabatan_penandatangan.message}</p>
                   )}
