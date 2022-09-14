@@ -70,3 +70,37 @@ export interface PostPegawaiKarpegUpdateRes {
   status: Status;
   data: string;
 }
+
+export interface GetDinasPegawaiKalenderReq {
+  pegawai_id: number;
+  tgl_mulai: string;
+  tgl_selesai: string;
+}
+
+export interface GetDinasPegawaiKalenderRes {
+  status: string;
+  data: DinasPegawaiKalenderData;
+}
+
+export interface DinasPegawaiKalenderData {
+  list_presensi: Presensi[];
+  list_dinas: Dinas[];
+}
+
+export interface Presensi {
+  presensi_id: number;
+  date: string;
+  check_in: string;
+  check_out: string;
+  status: string;
+}
+
+export interface Dinas {
+  dinas_id: number;
+  no_sp: string;
+  isi_penugasan: string;
+  tgl_mulai: string;
+  tgl_selesai: string;
+  jenis_dinas: string;
+  lokasi: string;
+}

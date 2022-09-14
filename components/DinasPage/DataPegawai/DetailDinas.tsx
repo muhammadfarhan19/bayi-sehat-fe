@@ -1,25 +1,13 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid';
 import React from 'react';
 
-import Loader from '../../shared/Loader/Loader';
+import usePersonalData from '../../shared/hooks/usePersonalData';
 import DinasCalendar from './DinasCalendar';
 import JadwalDinas from './JadwalDinas';
 
 export default function DetailDinas() {
   const [formModalState, setFormModalState] = React.useState(false);
-
-  const { data, isValidating } = {
-    isValidating: false,
-    data: {
-      nip: '1623897986718927',
-      name: 'Muhammad Amin',
-      unit_kerja: 'Direktorat Sumber Daya',
-    },
-  };
-
-  if (isValidating) {
-    return <Loader />;
-  }
+  const personalPegawai = usePersonalData();
 
   const handleBack = () => {
     window.location.href = `/dinas/pegawai`;
@@ -37,15 +25,15 @@ export default function DetailDinas() {
         </div>
         <div className="flex flex-row border-y-[1px] px-7 py-3">
           <div className="text-l basis-[200px] tracking-wider text-gray-700">NIP</div>
-          <div className="text-l text-gray-700">{data?.nip}</div>
+          <div className="text-l text-gray-700">{personalPegawai?.nip}</div>
         </div>
         <div className="flex flex-row border-b-[1px] px-7 py-3">
           <div className="text-l basis-[200px] tracking-wider text-gray-700">Nama</div>
-          <div className="text-l text-gray-700">{data?.unit_kerja}</div>
+          <div className="text-l text-gray-700">{personalPegawai?.nama}</div>
         </div>
         <div className="flex flex-row border-b-[1px] px-7 py-3">
           <div className="text-l basis-[200px] tracking-wider text-gray-700">Unit Kerja</div>
-          <div className="text-l text-gray-700">{data?.name}</div>
+          <div className="text-l text-gray-700">{personalPegawai?.unit_kerja}</div>
         </div>
       </div>
 

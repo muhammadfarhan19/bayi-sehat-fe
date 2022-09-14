@@ -186,7 +186,7 @@ export function DataDinasPegawai() {
                       </td>
                       <td
                         className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"
-                        onClick={() => router.push(`/dinas/pegawai/detail?id=${data.pegawai_id}`)}
+                        onClick={() => router.push(`/dinas/pegawai/detail?pegawai_id=${data.pegawai_id}`)}
                       >
                         {data.name}
                       </td>
