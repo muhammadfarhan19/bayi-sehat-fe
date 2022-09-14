@@ -9,6 +9,8 @@ interface TextInput {
   isError: any;
   validation: any;
   maxLength?: number;
+  value?: string;
+  isUneditable?: boolean;
 }
 
 interface Picker {
@@ -82,6 +84,8 @@ export function InputLabelled(props: TextInput) {
       </label>
       <div className="mt-1">
         <input
+          disabled={props.isUneditable}
+          value={props.value}
           {...props.validation}
           className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
           name={props.name}

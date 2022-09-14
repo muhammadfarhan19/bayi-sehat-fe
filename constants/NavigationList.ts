@@ -26,6 +26,22 @@ export const NavigationList: Navigation[] = [
         name: 'Biodata',
         href: '/',
       },
+      {
+        id: PUBLIC,
+        name: 'Kehadiran',
+        childMenu: [
+          {
+            id: NavigationId.BERANDA,
+            name: 'Klaim Kehadiran',
+            href: '/kehadiran',
+          },
+          {
+            id: NavigationId.BERANDA,
+            name: 'Log Harian',
+            href: '/log-harian',
+          },
+        ],
+      },
     ],
   },
   {
@@ -76,6 +92,22 @@ export const NavigationList: Navigation[] = [
             id: NavigationId.KEPEGAWAIAN,
             name: 'Data Dinas Pegawai',
             href: '/dinas/pegawai',
+          },
+        ],
+      },
+      {
+        id: NavigationId.KEPEGAWAIAN,
+        name: 'Kehadiran',
+        childMenu: [
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Klaim Kehadiran',
+            href: '/kepegawaian/kehadiran',
+          },
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Log Harian',
+            href: '/kepegawaian/log-harian',
           },
         ],
       },
