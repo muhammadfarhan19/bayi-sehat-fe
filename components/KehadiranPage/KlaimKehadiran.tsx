@@ -61,7 +61,7 @@ function KlaimKehadiran() {
             isError={null}
             errorMessage={null}
             validation={null}
-            name="tempat_lahir"
+            name="tanggal_klaim"
             type="date"
             label="Tanggal Klaim"
           />
@@ -74,7 +74,7 @@ function KlaimKehadiran() {
             defaultOption="Silahkan Pilih"
             firstOption="Jam Kerja Masuk"
             secondOption="Jam Kerja Pulang"
-            formVerification="status_anak"
+            formVerification="jenis_pengajuan"
           />
 
           <InputLabelled isError={null} errorMessage={null} validation={null} name="nama" type="text" label="Alasan" />
