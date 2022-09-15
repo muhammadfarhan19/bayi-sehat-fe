@@ -1,6 +1,8 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
+
+import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Pagination from '../../shared/Pagination';
 
@@ -28,7 +30,7 @@ function KlaimAdmin() {
 
         <div className="flex w-full flex-row gap-x-[16px]">
           <div className="w-[202px] pb-2">
-            <p className="text-sm font-medium text-gray-700"> Dari Tanggal</p>
+            <p className="text-sm font-medium text-gray-700">Dari Tanggal</p>
             <input
               type="date"
               className="mt-1 w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
@@ -36,7 +38,7 @@ function KlaimAdmin() {
             />
           </div>
           <div className="w-[202px] pb-2">
-            <p className="text-sm font-medium text-gray-700"> Sampai Tanggal</p>
+            <p className="text-sm font-medium text-gray-700">Sampai Tanggal</p>
             <input
               type="date"
               className="mt-1 w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
@@ -95,14 +97,13 @@ function KlaimAdmin() {
                   </tr>
                 </thead>
                 <tbody>
+                  <tr className={'bg-white hover:bg-gray-100'}>
                   <tr
                     className={
-                      // dataIdx % 2 === 0 ?
                       'bg-white hover:bg-gray-100'
-                      //  :
-                      //  'bg-gray-50 hover:bg-gray-100'
                     }
                   >
+
                     <td className="px-6 py-4 text-xs font-medium text-gray-900">1</td>
                     <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900" onClick={() => null}>
                       {'1'}
@@ -122,4 +123,4 @@ function KlaimAdmin() {
   );
 }
 
-export default KlaimAdmin;
+export default withErrorBoundary(KlaimAdmin);

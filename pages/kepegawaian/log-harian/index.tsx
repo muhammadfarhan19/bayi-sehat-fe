@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-
 import KlaimAdmin from '../../../components/KehadiranPage/isAdminKehadiran/KlaimAdmin';
 import { withAuthenticatedPage } from '../../../components/shared/hocs/AuthenticatedPage';
 import { withReduxPage } from '../../../components/shared/hocs/ReduxPage';
