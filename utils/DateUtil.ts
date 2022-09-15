@@ -24,6 +24,7 @@ export const generateDays = (
   isCurrentMonth?: boolean;
   events: EventDate[];
 }[] => {
+  const today = new Date();
   const prevDate = new Date(year, month, 0);
   const firstDate = new Date(year, month, 1);
   const lastDate = new Date(year, month + 1, 0);
@@ -41,7 +42,10 @@ export const generateDays = (
 
   for (let i = 1; i <= lastDate.getDate(); i++) {
     dates.push({
-      ...(i === firstDate.getDate() ? { isToday: true } : {}),
+      isToday:
+        i === today.getDate() &&
+        lastDate.getMonth() === today.getMonth() &&
+        lastDate.getFullYear() === today.getFullYear(),
       date: prevDate.getFullYear() + '-' + (month + 1) + '-' + i,
       isCurrentMonth: true,
       events: mapEvent?.[i] || [],
