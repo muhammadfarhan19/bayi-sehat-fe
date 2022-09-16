@@ -173,3 +173,7 @@ export const RiwayatPengangkatanPekerjaan = {
   POST_RIWAYAT_PENGANGKATAN_INSERT: config.apiHost + '/riwayat-pengangkatan-perkerjaan/insert',
   POST_RIWAYAT_PENGANGKATAN_UPDATE: config.apiHost + '/riwayat-pengangkatan-perkerjaan/update',
 };
+
+export const KlaimKehadiranList = {
+  GET_KLAIM_KEHADIRAN_LIST: config.apiHost + '/klaim-kehadiran/list',
+};

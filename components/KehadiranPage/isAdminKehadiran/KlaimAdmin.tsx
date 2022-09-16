@@ -1,11 +1,43 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
+import { KlaimKehadiranList } from '../../../constants/APIUrls';
+import { GetKehadiranDataList, GetKehadiranList } from '../../../types/api/KlaimKehadiranAPI';
 import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
+import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Pagination from '../../shared/Pagination';
 
 function KlaimAdmin() {
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const [filterState, setFilterState] = React.useState<GetKehadiranList>({
+    page: 1,
+    per_page: 20,
+  });
+
+  const { data: getKlaimKehadiran } = useCommonApi<GetKehadiranList, GetKehadiranDataList>(
+    KlaimKehadiranList.GET_KLAIM_KEHADIRAN_LIST,
+    filterState,
+    { method: 'GET' },
+    { revalidateOnMount: true }
+  );
+
+  const changeFilterState = (inputState: Partial<GetKehadiranList>) => {
+    const pageAffected = Object.keys(inputState).includes('page');
+    const newState = {
+      ...filterState,
+      ...inputState,
+    };
+
+    if (!pageAffected) {
+      newState.page = 1;
+    }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
+  };
+
   return (
     <section aria-labelledby="section-1-title">
       <div className="overflow-hidden rounded-lg bg-white px-6 py-6 shadow">
@@ -33,7 +65,7 @@ function KlaimAdmin() {
             <input
               type="date"
               className="mt-1 w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-              onChange={() => null}
+              onChange={e => changeFilterState({ tgl_mulai: e.target.value })}
             />
           </div>
           <div className="w-[202px] pb-2">
@@ -41,13 +73,13 @@ function KlaimAdmin() {
             <input
               type="date"
               className="mt-1 w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-              onChange={() => null}
+              onChange={e => changeFilterState({ tgl_selesai: e.target.value })}
             />
           </div>
 
           <div className="w-[202px] pb-2">
             <AutoComplete
-              label={'Status Jabatan'}
+              label={'Status Pengajuan'}
               onChange={() => null}
               defaultValue={{ text: 'Semua', value: '*' }}
               options={['*', 'Diterima', 'Ditolak'].map(each => ({
@@ -63,6 +95,18 @@ function KlaimAdmin() {
               <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
                 <thead className="bg-gray-50">
                   <tr>
+                    <th
+                      scope="col"
+                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      No
+                    </th>
+                    <th
+                      scope="col"
+                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Nama
+                    </th>
                     <th
                       scope="col"
                       className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -96,18 +140,36 @@ function KlaimAdmin() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className={'bg-white hover:bg-gray-100'}>
-                    <td className="px-6 py-4 text-xs font-medium text-gray-900">1</td>
-                    <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900" onClick={() => null}>
-                      {'1'}
-                    </td>
-                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{'2'}</td>
-                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{'3'}</td>
-                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{'4'}</td>
-                  </tr>
+                  {(getKlaimKehadiran?.list || []).map((data, dataIdx) => (
+                    <tr
+                      key={data?.id}
+                      className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                    >
+                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                        {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
+                      </td>
+                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">{data?.nama}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.tanggal_klaim}</td>
+                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                        {data?.jenis_pengajuan}
+                      </td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.alasan_klaim}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-blue-900">
+                        {data?.files?.length === 0 ? '-' : 'Lihat'}
+                      </td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.status_klaim_str}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
-              <Pagination onChange={() => 1} totalData={20} perPage={1} page={20} />
+              <Pagination
+                onChange={value => {
+                  changeFilterState({ page: value });
+                }}
+                totalData={getKlaimKehadiran ? getKlaimKehadiran?.pagination.total_data : 0}
+                perPage={filterState?.per_page}
+                page={filterState?.page}
+              />
             </div>
           </div>
         </div>
