@@ -17,6 +17,7 @@
   "dependencies": {
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.1",
+    "@reduxjs/toolkit": "^1.8.5",
     "@tailwindcss/forms": "^0.4.0",
     "@types/react-datepicker": "^4.4.2",
     "axios": "^0.21.1",

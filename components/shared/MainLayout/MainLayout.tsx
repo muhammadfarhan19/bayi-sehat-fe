@@ -26,7 +26,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <>
       <div className="min-h-full">
         <HeaderDesktop navigation={navigation} user={user} userNavigation={UserNavigationList} />
-
         <main className="-mt-24 pb-8">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">{children}</div>
         </main>

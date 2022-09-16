@@ -1,14 +1,7 @@
+import { configureStore } from '@reduxjs/toolkit';
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import {
-  AnyAction,
-  applyMiddleware,
-  combineReducers,
-  createStore,
-  Dispatch,
-  MiddlewareAPI,
-  ReducersMapObject,
-} from 'redux';
+import { AnyAction, combineReducers, Dispatch, MiddlewareAPI, ReducersMapObject } from 'redux';
 import thunk from 'redux-thunk';
 
 import commonReducer from '../../../reducer/CommonReducer';
@@ -29,20 +22,23 @@ function logger({ getState }: MiddlewareAPI) {
 }
 
 interface WithReduxPage {
-  <T extends React.FunctionComponent<P>, P>(Component: T): (props: P) => JSX.Element;
+  <T extends React.FunctionComponent<P>, P extends Record<string, unknown>>(Component: T): (props: P) => JSX.Element;
 }
 
 export const withReduxPage =
   (reducers: ReducersMapObject = {}): WithReduxPage =>
   Component => {
     function ReduxPage(props = {}) {
-      const store = createStore(
-        combineReducers({
+      const store = configureStore({
+        reducer: combineReducers({
           common: commonReducer,
           ...reducers,
         }),
-        config.environment === 'development' ? applyMiddleware(thunk, logger) : applyMiddleware(thunk)
-      );
+        middleware: getDefaultMiddleware =>
+          config.environment === 'development'
+            ? getDefaultMiddleware().concat(thunk).concat(logger)
+            : getDefaultMiddleware().concat(thunk),
+      });
 
       return (
         <Provider store={store}>

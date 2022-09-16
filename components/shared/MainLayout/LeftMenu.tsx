@@ -1,5 +1,6 @@
 import { Disclosure } from '@headlessui/react';
 import { ChevronRightIcon, SearchIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
 import * as React from 'react';
 
 import { classNames } from '../../../utils/Components';
@@ -7,6 +8,7 @@ import { useAuthorizedMenuContext } from '../context/AuthorizedMenuContext';
 import { Navigation } from './NavigationProps';
 
 export default function LeftMenu() {
+  const debounce = React.useRef<number>();
   const navigationContext = useAuthorizedMenuContext();
   const navigation = React.useCallback<() => Navigation[]>(() => {
     for (let i = 0; i < navigationContext.length; i++) {
@@ -14,7 +16,7 @@ export default function LeftMenu() {
         return navigationContext[i].childMenu as Navigation[];
       }
     }
-    return navigationContext[0].childMenu as Navigation[];
+    return navigationContext?.[0]?.childMenu as Navigation[];
   }, [navigationContext]);
 
   const [filteredNavigation, setFilteredNavigation] = React.useState(navigation);
@@ -24,13 +26,12 @@ export default function LeftMenu() {
   }, [navigationContext]);
 
   const handleFilterMenu = () => {
-    let timeout: NodeJS.Timeout;
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       const filterText = event.target.value;
-      if (!timeout) {
-        clearTimeout(timeout);
+      if (!debounce.current) {
+        clearTimeout(debounce.current);
       }
-      timeout = setTimeout(() => {
+      debounce.current = window.setTimeout(() => {
         if (filterText) {
           const immutableNav = navigation();
           const filterNav = (navigationList: Navigation[]) =>
@@ -79,22 +80,23 @@ export default function LeftMenu() {
       </form>
 
       <nav className="flex-1 rounded-md bg-white" aria-label="Sidebar">
-        {filteredNavigation.map((item, index) =>
+        {(filteredNavigation || []).map((item, index) =>
           !item.childMenu ? (
             <div key={index}>
-              <a
-                href={item.href}
-                className={classNames(
-                  item.current
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                  index === 0 ? 'rounded-t-md' : '',
-                  index === filteredNavigation.length - 1 ? 'rounded-b-md' : '',
-                  'group flex w-full items-center border-b-2 border-b-gray-100 py-3 pl-7 pr-2 text-sm font-medium'
-                )}
-              >
-                {item.name}
-              </a>
+              <Link href={item.href}>
+                <a
+                  className={classNames(
+                    item.current
+                      ? 'bg-gray-100 text-gray-900'
+                      : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    index === 0 ? 'rounded-t-md' : '',
+                    index === filteredNavigation.length - 1 ? 'rounded-b-md' : '',
+                    'group flex w-full items-center border-b-2 border-b-gray-100 py-3 pl-7 pr-2 text-sm font-medium'
+                  )}
+                >
+                  {item.name}
+                </a>
+              </Link>
             </div>
           ) : (
             <Disclosure defaultOpen={true} as="div" key={item.name}>
@@ -117,19 +119,19 @@ export default function LeftMenu() {
                   </Disclosure.Button>
                   <Disclosure.Panel>
                     {item.childMenu.map((subItem, subIndex) => (
-                      <a
-                        key={subIndex}
-                        href={subItem.href}
-                        className={classNames(
-                          subIndex === item.childMenu.length - 1 ? 'rounded-b-md' : '',
-                          subItem.current
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                          'group flex w-full items-center border-b-2 border-b-gray-100 py-3 pl-10 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                        )}
-                      >
-                        {subItem.name}
-                      </a>
+                      <Link key={subIndex} href={subItem?.href || '/'}>
+                        <a
+                          className={classNames(
+                            subIndex === item.childMenu.length - 1 ? 'rounded-b-md' : '',
+                            subItem.current
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                            'group flex w-full items-center border-b-2 border-b-gray-100 py-3 pl-10 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                          )}
+                        >
+                          {subItem.name}
+                        </a>
+                      </Link>
                     ))}
                   </Disclosure.Panel>
                 </>

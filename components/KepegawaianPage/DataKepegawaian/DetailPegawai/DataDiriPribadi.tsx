@@ -75,4 +75,4 @@ function DataDiriPribadi() {
   );
 }
 
-export default withErrorBoundary<typeof DataDiriPribadi, unknown>(DataDiriPribadi);
+export default withErrorBoundary(DataDiriPribadi);

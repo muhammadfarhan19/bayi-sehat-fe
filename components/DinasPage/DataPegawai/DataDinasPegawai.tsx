@@ -132,7 +132,7 @@ export function DataDinasPegawai() {
         </div>
       ) : (
         <div className="flex">
-          <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+          <div className="my-[24px] w-full overflow-x-auto sm:mx-0">
             <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
               <table className="w-full table-auto rounded-lg bg-gray-100">
                 <thead className="bg-gray-50">

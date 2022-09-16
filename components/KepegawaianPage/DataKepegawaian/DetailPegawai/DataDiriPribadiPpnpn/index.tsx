@@ -100,4 +100,4 @@ function DataDiriPribadiPpnpn() {
   );
 }
 
-export default withErrorBoundary<typeof DataDiriPribadiPpnpn, unknown>(DataDiriPribadiPpnpn);
+export default withErrorBoundary(DataDiriPribadiPpnpn);

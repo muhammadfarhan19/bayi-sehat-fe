@@ -5,22 +5,23 @@ export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export function filterMenu(allowedMap?: Record<number, boolean>): Navigation[] {
+export function filterMenu(currentLocation: string, allowedMap?: Record<number, boolean>): Navigation[] {
   if (typeof window !== 'undefined') {
-    const currentLocation = window.location.pathname;
     const currentAppender = (listOfMenu: Navigation[], parent?: Navigation): Navigation[] => {
       let result = [];
+      let parentUpdated = false;
       for (const iterator of listOfMenu) {
-        if (iterator.href && iterator.href === currentLocation) {
-          iterator.current = true;
+        if (iterator.href) {
+          iterator.current = iterator.href === currentLocation;
         } else if (iterator.childMenu && Array.isArray(iterator.childMenu)) {
           // Recursive check
           iterator.childMenu = currentAppender(iterator.childMenu, iterator);
         }
 
         // Also inject current to parent if exist
-        if (parent && !parent.current && iterator.current) {
-          parent.current = true;
+        if (parent && !parentUpdated) {
+          parent.current = !!iterator.current;
+          parentUpdated = parent.current;
         }
 
         // Check if authorize
@@ -32,7 +33,9 @@ export function filterMenu(allowedMap?: Record<number, boolean>): Navigation[] {
       }
       return result;
     };
-    return currentAppender(NavigationList);
+    const res = currentAppender(NavigationList);
+    console.log(res);
+    return res;
   } else {
     return NavigationList;
   }
