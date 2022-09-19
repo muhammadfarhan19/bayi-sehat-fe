@@ -80,10 +80,10 @@ function KlaimAdmin() {
           <div className="w-[202px] pb-2">
             <AutoComplete
               label={'Status Pengajuan'}
-              onChange={() => null}
+              onChange={e => changeFilterState({ status: Number(e.value) })}
               defaultValue={{ text: 'Semua', value: '*' }}
-              options={['*', 'Diterima', 'Ditolak'].map(each => ({
-                text: each === '*' ? 'Semua' : each === 'Diterima' ? 'Diterima' : 'Ditolak',
+              options={[0, 1, 2, 3].map(each => ({
+                text: each === 0 ? 'Semua' : each === 1 ? 'Diproses' : each === 2 ? 'Diterima' : 'Ditolak',
                 value: String(each),
               }))}
             />

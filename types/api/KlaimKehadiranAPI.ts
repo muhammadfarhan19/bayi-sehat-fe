@@ -7,6 +7,7 @@ export interface GetKehadiranList {
   Unit_kerja_id?: number;
   page: number;
   per_page: number;
+  status?: number;
 }
 
 export interface GetKehadiranDataList {
