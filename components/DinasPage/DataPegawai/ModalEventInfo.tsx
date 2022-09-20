@@ -1,8 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
 import React from 'react';
 
 import { Dinas } from '../../../types/api/KepegawaianAPI';
+import { getQueryString } from '../../../utils/URLUtils';
 
 interface Props {
   open: boolean;
@@ -20,6 +22,13 @@ export default function ModalEventInfo(props: Props) {
   if (!info) {
     return null;
   }
+
+  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
+  const redirectLink = [
+    '/kepegawaian/rekap-dinas/detail',
+    '?dinas_id=' + info?.dinas_id,
+    pegawai_id ? '&pegawai_id=' + pegawai_id : '',
+  ].join('');
 
   const statusColor = `text-${
     MapEventColor?.[info.jenis_dinas.toUpperCase() as keyof typeof MapEventColor] || 'gray'
@@ -122,11 +131,18 @@ export default function ModalEventInfo(props: Props) {
                   </dt>
                 </div>
               </div>
+
+              <Link href={redirectLink}>
+                <button className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  Detail
+                </button>
+              </Link>
             </div>
           </Transition.Child>
 
           {/* precall tailwind class */}
           <div className="hidden">
+            <div className="text-gray-500" />
             <div className="text-cyan-500" />
           </div>
         </div>

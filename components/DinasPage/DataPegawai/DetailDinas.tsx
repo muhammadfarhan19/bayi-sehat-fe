@@ -1,27 +1,32 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid';
+import Link from 'next/link';
 import React from 'react';
 
+import { getQueryString } from '../../../utils/URLUtils';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import DinasCalendar from './DinasCalendar';
 import JadwalDinas from './JadwalDinas';
 
 export default function DetailDinas() {
+  const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const [formModalState, setFormModalState] = React.useState(false);
   const personalPegawai = usePersonalData();
-
-  const handleBack = () => {
-    window.location.href = `/dinas/pegawai`;
-  };
 
   return (
     <>
       <div className="overflow-hidden rounded-lg bg-white pb-6 shadow">
-        <div className="my-3 inline-flex cursor-pointer items-center px-7 pl-4 pr-6 font-semibold" onClick={handleBack}>
-          <ChevronLeftIcon className="mr-0.5 h-8" />
-          <span className="tracking-wide text-gray-600">Kembali</span>
-        </div>
-        <div className="mb-4 px-7 py-1">
-          <h3 className="text-xl font-semibold tracking-wider text-gray-700">Data Dinas Pegawai</h3>
+        {pegawai_id && (
+          <Link href="/dinas/pegawai">
+            <div className="mt-3 inline-flex cursor-pointer items-center px-7 pl-4 pr-6 font-semibold">
+              <ChevronLeftIcon className="mr-0.5 h-8" />
+              <span className="tracking-wide text-gray-600">Kembali</span>
+            </div>
+          </Link>
+        )}
+        <div className="my-4 px-7 py-1">
+          <h3 className="text-xl font-semibold tracking-wider text-gray-700">
+            {pegawai_id ? 'Data Dinas Pegawai' : 'Jadwal Pegawai'}
+          </h3>
         </div>
         <div className="flex flex-row border-y-[1px] px-7 py-3">
           <div className="text-l basis-[200px] tracking-wider text-gray-700">NIP</div>

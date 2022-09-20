@@ -32,6 +32,7 @@ export const withAuthenticatedPage: WithAuthenticatedPage =
 
     function AuthenticatedPage(props = {}) {
       const { asPath, push } = useRouter();
+      const [loaded, setLoaded] = React.useState(true);
       const currentPath = typeof window !== 'undefined' ? new URL(asPath, window.location.href).pathname : '/';
 
       const swrFetcher = async (resourceIdParam: number | undefined) => {
@@ -40,12 +41,14 @@ export const withAuthenticatedPage: WithAuthenticatedPage =
         });
         if (infoRes.status === 200 && infoRes.data?.data) {
           if (!checkLogin) {
+            setLoaded(false);
             push('/');
           }
 
           // Check RBAC
           const allowedMap = await getAuthorizedNavigation(infoRes.data.data.user_id);
           if (resourceIdParam && !allowedMap[resourceIdParam]) {
+            setLoaded(false);
             push('/');
           }
 
@@ -55,6 +58,7 @@ export const withAuthenticatedPage: WithAuthenticatedPage =
         removeCookie('refreshtoken');
         removeCookie('lastrefresh');
         if (checkLogin) {
+          setLoaded(false);
           push('/login');
         }
       };
@@ -64,7 +68,7 @@ export const withAuthenticatedPage: WithAuthenticatedPage =
       return (
         <AuthorizedMenuContext.Provider value={filterMenu(currentPath, authPageState)}>
           {/* @ts-ignore */}
-          {!isValidating && <Component {...props} />}
+          {!isValidating && loaded && <Component {...props} />}
         </AuthorizedMenuContext.Provider>
       );
     }

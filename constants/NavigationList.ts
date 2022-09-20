@@ -23,8 +23,13 @@ export const NavigationList: Navigation[] = [
     childMenu: [
       {
         id: PUBLIC,
-        name: 'Biodata',
+        name: 'Jadwal',
         href: '/',
+      },
+      {
+        id: PUBLIC,
+        name: 'Biodata',
+        href: '/pegawai/biodata',
       },
       {
         id: PUBLIC,
@@ -87,11 +92,13 @@ export const NavigationList: Navigation[] = [
             id: NavigationId.KEPEGAWAIAN,
             name: 'Rekap Dinas',
             href: '/kepegawaian/rekap-dinas',
+            selectedHref: ['/kepegawaian/rekap-dinas/detail'],
           },
           {
             id: NavigationId.KEPEGAWAIAN,
             name: 'Data Dinas Pegawai',
             href: '/dinas/pegawai',
+            selectedHref: ['/dinas/pegawai/detail'],
           },
         ],
       },

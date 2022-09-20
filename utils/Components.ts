@@ -13,6 +13,11 @@ export function filterMenu(currentLocation: string, allowedMap?: Record<number, 
       for (const iterator of listOfMenu) {
         if (iterator.href) {
           iterator.current = iterator.href === currentLocation;
+
+          // CONDITIONAL SELECTED MENU
+          if (!iterator.current && iterator.selectedHref && iterator.selectedHref.length) {
+            iterator.current = iterator.selectedHref.includes(currentLocation);
+          }
         } else if (iterator.childMenu && Array.isArray(iterator.childMenu)) {
           // Recursive check
           iterator.childMenu = currentAppender(iterator.childMenu, iterator);
@@ -33,9 +38,7 @@ export function filterMenu(currentLocation: string, allowedMap?: Record<number, 
       }
       return result;
     };
-    const res = currentAppender(NavigationList);
-    console.log(res);
-    return res;
+    return currentAppender(NavigationList);
   } else {
     return NavigationList;
   }
