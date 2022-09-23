@@ -176,4 +176,7 @@ export const RiwayatPengangkatanPekerjaan = {
 
 export const KlaimKehadiranList = {
   GET_KLAIM_KEHADIRAN_LIST: config.apiHost + '/klaim-kehadiran/list',
+  GET_KUOTA_KEHADIRAN_SUBMIT: config.apiHost + '/klaim-kehadiran/stat-pengajuan',
+  POST_KLAIM_KEHADIRAN_POST: config.apiHost + '/klaim-kehadiran/insert',
+  POST_KLAIM_KEHADIRAN_UPDATE: config.apiHost + '/klaim-kehadiran/update',
 };

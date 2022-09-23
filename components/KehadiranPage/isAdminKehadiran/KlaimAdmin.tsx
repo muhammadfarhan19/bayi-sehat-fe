@@ -3,24 +3,48 @@ import React from 'react';
 
 import { KlaimKehadiranList } from '../../../constants/APIUrls';
 import { GetKehadiranDataList, GetKehadiranList } from '../../../types/api/KlaimKehadiranAPI';
-import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
+import FileLoader from '../../shared/FileLoader';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
+import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import KlaimModal from './KlaimModal';
 
-function KlaimAdmin() {
+type ListKlaimProps = {
+  onShowDetail: (id: number) => void;
+};
+
+function KlaimAdmin(props: ListKlaimProps) {
+  const { onShowDetail } = props;
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [filterState, setFilterState] = React.useState<GetKehadiranList>({
     page: 1,
     per_page: 20,
   });
 
-  const { data: getKlaimKehadiran } = useCommonApi<GetKehadiranList, GetKehadiranDataList>(
+  const { data: getKlaimKehadiran, isValidating } = useCommonApi<GetKehadiranList, GetKehadiranDataList>(
     KlaimKehadiranList.GET_KLAIM_KEHADIRAN_LIST,
     filterState,
     { method: 'GET' },
     { revalidateOnMount: true }
   );
+
+  const search = async <T extends keyof typeof filterState>(type: T, value: typeof filterState[T]) => {
+    const newState = { ...filterState };
+    newState[type] = value;
+    setFilterState(newState);
+  };
+
+  const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: number }>({
+    open: false,
+    selectedId: undefined,
+  });
+  const handleShowForm = (open: boolean, selectedId?: number) => {
+    setFormModalState({
+      open,
+      selectedId,
+    });
+  };
 
   const changeFilterState = (inputState: Partial<GetKehadiranList>) => {
     const pageAffected = Object.keys(inputState).includes('page');
@@ -48,7 +72,7 @@ function KlaimAdmin() {
               type="text"
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               placeholder="Cari..."
-              onChange={() => null}
+              onChange={e => search('nama', e.target.value)}
             />
             <button
               className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
@@ -89,93 +113,133 @@ function KlaimAdmin() {
             />
           </div>
         </div>
-        <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-          <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-            <div className="sm:rounded-lg">
-              <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      No
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Nama
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Tanggal
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Jenis Pengajuan
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Alasan
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Dokumen
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(getKlaimKehadiran?.list || []).map((data, dataIdx) => (
-                    <tr
-                      key={data?.id}
-                      className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
-                    >
-                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
-                        {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
-                      </td>
-                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">{data?.nama}</td>
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.tanggal_klaim}</td>
-                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
-                        {data?.jenis_pengajuan}
-                      </td>
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.alasan_klaim}</td>
-                      <td className="px-6 py-4 text-xs font-medium text-blue-900">
-                        {data?.files?.length === 0 ? '-' : 'Lihat'}
-                      </td>
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.status_klaim_str}</td>
+        {isValidating ? (
+          <div className="relative h-[150px] w-full divide-y divide-gray-200">
+            <Loader />
+          </div>
+        ) : (
+          <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+            <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+              <div className="sm:rounded-lg">
+                <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        No
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Nama
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Tanggal
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Jenis Pengajuan
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Alasan
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-5 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Dokumen
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Status
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-full px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Aksi
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              <Pagination
-                onChange={value => {
-                  changeFilterState({ page: value });
-                }}
-                totalData={getKlaimKehadiran ? getKlaimKehadiran?.pagination.total_data : 0}
-                perPage={filterState?.per_page}
-                page={filterState?.page}
-              />
+                  </thead>
+                  <tbody>
+                    {(getKlaimKehadiran?.list || []).map((data, dataIdx) => (
+                      <tr
+                        key={data?.id}
+                        className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                      >
+                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                          {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
+                        </td>
+                        <td
+                          onClick={() => onShowDetail(data?.id)}
+                          className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-500"
+                        >
+                          {data?.nama}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.tanggal_klaim}</td>
+                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                          {data?.jenis_pengajuan}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.alasan_klaim}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-blue-900">
+                          <FileLoader uuid={data?.files?.[0]?.document_uuid} asLink>
+                            {data?.files?.[0]?.document_name?.length === 0 ? '-' : data?.files?.[0]?.document_name}
+                          </FileLoader>
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.status_klaim_str}</td>
+                        <td className="py-4 pr-2">
+                          <button
+                            onClick={() => handleShowForm(!formModalState?.open, data?.id)}
+                            disabled={data?.status_klaim === 2 || data?.status_klaim === 3}
+                            type="button"
+                            className={
+                              data?.status_klaim === 2 || data?.status_klaim === 3
+                                ? 'inline-flex w-full items-center rounded border border-transparent bg-gray-300 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200'
+                                : 'inline-flex w-full items-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200'
+                            }
+                          >
+                            Proses Klaim
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {formModalState?.open ? (
+                  <KlaimModal
+                    open={formModalState?.open}
+                    setOpen={(open: boolean) => handleShowForm(open)}
+                    selectedId={formModalState?.selectedId}
+                  />
+                ) : null}
+                <Pagination
+                  onChange={value => {
+                    changeFilterState({ page: value });
+                  }}
+                  totalData={getKlaimKehadiran ? getKlaimKehadiran?.pagination.total_data : 0}
+                  perPage={filterState?.per_page}
+                  page={filterState?.page}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
 }
 
-export default withErrorBoundary(KlaimAdmin);
+export default KlaimAdmin;

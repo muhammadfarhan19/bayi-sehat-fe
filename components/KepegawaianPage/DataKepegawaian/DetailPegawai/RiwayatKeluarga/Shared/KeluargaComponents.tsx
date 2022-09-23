@@ -11,6 +11,7 @@ interface TextInput {
   maxLength?: number;
   value?: string;
   isUneditable?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface Picker {
@@ -23,6 +24,8 @@ interface Picker {
   errorMessage: any;
   isError: any;
   moreOptions?: any;
+  firstValue?: any;
+  secondValue?: any;
 }
 
 interface ButtonRows {
@@ -49,6 +52,27 @@ export function DropdownSelect(props: Picker) {
           <option value={''}>{props.defaultOption}</option>
           <option value={'1'}>{props.firstOption}</option>
           <option value={'2'}>{props.secondOption}</option>
+          {props.moreOptions}
+        </select>
+        {props.isError && <p className="mt-1 text-xs text-red-500">{props.errorMessage}</p>}
+      </div>
+    </div>
+  );
+}
+
+export function DropdownPicker(props: Picker) {
+  return (
+    <div className="mt-5 sm:col-span-6">
+      <label className="block text-sm font-medium text-gray-700">{props.label}</label>
+      <div className="mt-1 sm:col-span-2 sm:mt-0">
+        <select
+          {...props.validation}
+          name={props.formVerification}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        >
+          <option value={''}>{props.defaultOption}</option>
+          <option value={props.firstValue}>{props.firstOption}</option>
+          <option value={props.secondValue}>{props.secondOption}</option>
           {props.moreOptions}
         </select>
         {props.isError && <p className="mt-1 text-xs text-red-500">{props.errorMessage}</p>}
@@ -84,6 +108,7 @@ export function InputLabelled(props: TextInput) {
       </label>
       <div className="mt-1">
         <input
+          onChange={props.onChange}
           disabled={props.isUneditable}
           value={props.value}
           {...props.validation}
