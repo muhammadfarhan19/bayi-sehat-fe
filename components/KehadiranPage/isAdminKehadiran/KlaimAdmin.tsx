@@ -207,8 +207,8 @@ function KlaimAdmin(props: ListKlaimProps) {
                             type="button"
                             className={
                               data?.status_klaim === 2 || data?.status_klaim === 3
-                                ? 'inline-flex w-full items-center rounded border border-transparent bg-gray-300 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200'
-                                : 'inline-flex w-full items-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200'
+                                ? 'inline-flex w-full items-center justify-center rounded border border-transparent bg-gray-300 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200'
+                                : 'inline-flex w-full items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200'
                             }
                           >
                             Proses Klaim

@@ -1,5 +1,4 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
-import { format } from 'date-fns';
 import React from 'react';
 
 import { KlaimKehadiranList } from '../../../constants/APIUrls';
@@ -38,7 +37,7 @@ function KlaimDetail(props: DetailPenghargaanProps) {
           <tbody className="divide-y divide-gray-200 bg-white">
             {[
               { label: 'Nama', value: filterData?.nama },
-              { label: 'Tanggal', value: format(new Date(filterData?.tanggal_klaim), 'dd-MMMM-yyyy') },
+              { label: 'Tanggal', value: filterData?.tanggal_klaim },
               { label: 'Jenis Pengajuan', value: filterData?.jenis_pengajuan },
               {
                 label: 'Dokumen',
