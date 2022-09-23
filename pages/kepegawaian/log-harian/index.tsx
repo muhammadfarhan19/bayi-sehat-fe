@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-
 import LogHarian from '../../../components/LogHarianPage/LogHarian';
 import { withAuthenticatedPage } from '../../../components/shared/hocs/AuthenticatedPage';
 import { withReduxPage } from '../../../components/shared/hocs/ReduxPage';
