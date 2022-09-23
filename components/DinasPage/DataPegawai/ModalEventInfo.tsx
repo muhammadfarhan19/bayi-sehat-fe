@@ -25,7 +25,7 @@ export default function ModalEventInfo(props: Props) {
 
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const redirectLink = [
-    '/kepegawaian/rekap-dinas/detail',
+    pegawai_id ? '/kepegawaian/rekap-dinas' : '/kepegawaian/rekap-dinas/detail',
     '?dinas_id=' + info?.dinas_id,
     pegawai_id ? '&pegawai_id=' + pegawai_id : '',
   ].join('');

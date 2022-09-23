@@ -29,10 +29,10 @@ function DetailRekapPage(props: DetailProps) {
   const { dinas_id, viewOnly } = props;
 
   const qs = getQueryString<{ pegawai_id?: string }>();
-  const redirectBackLink = viewOnly
-    ? qs.pegawai_id
-      ? '/dinas/pegawai/detail?pegawai_id=' + qs.pegawai_id
-      : '/'
+  const redirectBackLink = qs.pegawai_id
+    ? '/dinas/pegawai/detail?pegawai_id=' + qs.pegawai_id
+    : viewOnly
+    ? '/'
     : '/kepegawaian/rekap-dinas';
 
   const [confirmId, setConfirmId] = React.useState(0);

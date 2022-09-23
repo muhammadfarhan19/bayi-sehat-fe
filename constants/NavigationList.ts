@@ -25,6 +25,7 @@ export const NavigationList: Navigation[] = [
         id: PUBLIC,
         name: 'Jadwal',
         href: '/',
+        selectedHref: ['/kepegawaian/rekap-dinas/detail'],
       },
       {
         id: PUBLIC,
@@ -92,7 +93,6 @@ export const NavigationList: Navigation[] = [
             id: NavigationId.KEPEGAWAIAN,
             name: 'Rekap Dinas',
             href: '/kepegawaian/rekap-dinas',
-            selectedHref: ['/kepegawaian/rekap-dinas/detail'],
           },
           {
             id: NavigationId.KEPEGAWAIAN,
