@@ -138,7 +138,7 @@ export default function DinasCalendar() {
                   </time>
                   {day.events.length > 0 && (
                     <ol className="mt-2">
-                      {day.events.slice(0, 3).map((event, index) => (
+                      {day.events.slice(0, 1).map((event, index) => (
                         <li key={`event.id${index}`}>
                           <span
                             onClick={handleClick(event)}

@@ -319,7 +319,7 @@ function KlaimKehadiran() {
                 type="text"
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="Cari..."
-                onChange={() => null}
+                onChange={e => changeFilterState({ nama: e.target.value })}
               />
               <button
                 className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"

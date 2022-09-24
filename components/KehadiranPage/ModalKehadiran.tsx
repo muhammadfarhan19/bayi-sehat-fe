@@ -78,10 +78,6 @@ function ModalKehadiran(props: ModalProps) {
                   <ContentLabelledItems subtitle="Dokumen" value={dokumen} />
                 </div>
 
-                <div className="mt-5 flex flex-row items-center space-x-2 sm:col-span-6">
-                  <input type="checkbox" />
-                  <p className="text-xs font-medium">Apakah Anda yakin untuk mengklaim kehadiran</p>
-                </div>
                 <div className="mt-5 sm:col-span-6"></div>
                 <div className="mt-5">
                   <div className="mt-5 flex flex-row space-x-5">

@@ -29,6 +29,19 @@ export default function ModalPresensiInfo(props: Props) {
     MapPresensiColor?.[info.status.toUpperCase() as keyof typeof MapPresensiColor] || 'gray'
   }-500`;
 
+  const additionalInfo = [
+    '5',
+    'Tidak Hadir',
+    '7',
+    'Libur Akhir Pekan',
+    '8',
+    'Cuti',
+    '9',
+    'Libur',
+    'Cuti Sakit',
+    '10',
+  ].includes(info.status);
+
   return (
     <Transition appear show={props.open} as={React.Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={() => props.toggleOpen(false)}>
@@ -78,17 +91,19 @@ export default function ModalPresensiInfo(props: Props) {
                 <XIcon className="h-5 cursor-pointer" onClick={() => props.toggleOpen(false)} />
               </Dialog.Title>
 
-              <div className="mx-12 mt-2 flex items-center justify-between">
-                <div className="flex h-24 flex-col items-center justify-around">
-                  <div className="text-base text-gray-600">Presensi Masuk</div>
-                  <div className="text-base text-indigo-600">{info.check_in.split(' ')?.[1] || '~'}</div>
+              {!additionalInfo && (
+                <div className="mx-12 mt-2 flex items-center justify-between">
+                  <div className="flex h-24 flex-col items-center justify-around">
+                    <div className="text-base text-gray-600">Presensi Masuk</div>
+                    <div className="text-base text-indigo-600">{info.check_in.split(' ')?.[1] || '~'}</div>
+                  </div>
+                  <ArrowRightIcon className="h-5 " />
+                  <div className="flex h-24 flex-col items-center justify-around">
+                    <div className="text-base text-gray-600">Presensi Keluar</div>
+                    <div className="text-base text-indigo-600">{info.check_out.split(' ')?.[1] || '~'}</div>
+                  </div>
                 </div>
-                <ArrowRightIcon className="h-5 " />
-                <div className="flex h-24 flex-col items-center justify-around">
-                  <div className="text-base text-gray-600">Presensi Keluar</div>
-                  <div className="text-base text-indigo-600">{info.check_out.split(' ')?.[1] || '~'}</div>
-                </div>
-              </div>
+              )}
 
               <div className="mt-5 ml-12">
                 <span className="text-sm text-gray-500">Status: </span>
