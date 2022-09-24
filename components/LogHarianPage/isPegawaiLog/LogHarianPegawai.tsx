@@ -21,9 +21,9 @@ function LogHarianPegawai() {
 
   const personalPegawaiData = usePersonalData();
 
-  const toggleDetailPage = () => {
-    setIsShownEachDetailPage(!isShownEachDetailPage);
-  };
+  //   const toggleDetailPage = () => {
+  //     setIsShownEachDetailPage(!isShownEachDetailPage);
+  //   };
 
   const { data: logHarianData, isValidating } = useCommonApi<GetLogHarianReqYear, GetLogHarianData[]>(
     LogHarianAPI.GET_LOG_HARIAN_MONTH,
@@ -62,7 +62,10 @@ function LogHarianPegawai() {
         <LogHarianPegPPNPNDetail
           selectedYear={detailData?.year}
           selectedMonth={detailData?.month}
-          onBack={toggleDetailPage}
+          onBack={() => {
+            setIsShownEachDetailPage(false);
+            setTimeout(() => window.location.reload(), 50);
+          }}
         />
       ) : (
         <section aria-labelledby="section-1-title">
@@ -159,7 +162,7 @@ function LogHarianPegawai() {
                               <td className="px-6 py-4 text-xs font-normal text-gray-900">{data?.name}</td>
                               <td className="px-6 py-4 text-xs text-[20px] font-bold text-gray-900">{data?.title}</td>
                               <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900">
-                                {returnData?.[0] === undefined ? (
+                                {returnData?.[0] === undefined || returnData?.[0] === 0 ? (
                                   <div className="flex flex-row items-center space-x-2">
                                     <XCircleIcon width={14.67} height={14.67} fill={'#F24E1E'} />
                                     <div className="text-[14px] text-red-600">Belum diisi</div>
@@ -188,7 +191,7 @@ function LogHarianPegawai() {
                                     // handleShowForm(Number(detailMonth?.[0]),Number(detailYear?.[0]));
                                     handleShowForm(data?.id, Number(selectedDate?.getFullYear()));
                                     setTimeout(() => {
-                                      toggleDetailPage();
+                                      setIsShownEachDetailPage(true);
                                     }, 500);
                                   }}
                                   type="button"
