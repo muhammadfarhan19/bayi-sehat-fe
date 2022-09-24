@@ -1,11 +1,23 @@
 import { AdjustmentsIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
+import { ArchiveIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
 
+import { LogHarianAPI } from '../../../constants/APIUrls';
+import { GetLogHarianData, GetLogHarianReqYear } from '../../../types/api/LogHarianAPI';
+import DatePicker from '../../DinasPage/DataPegawai/DatePicker';
+import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
+import Loader from '../../shared/Loader/Loader';
 import LogHarianPegPPNPNDetail from './LogHarianPegPPNPNDetail';
+import { CALENDAR_MOCK } from './Shared/_calendar';
 
 function LogHarianPegawai() {
   const [isShownEachDetailPage, setIsShownEachDetailPage] = React.useState(false);
+  const [selectedDate, setSelectedDate] = React.useState<Date>();
+  const [detailData, setDetailData] = React.useState({
+    month: 1,
+    year: 2022,
+  });
 
   const personalPegawaiData = usePersonalData();
 
@@ -13,10 +25,45 @@ function LogHarianPegawai() {
     setIsShownEachDetailPage(!isShownEachDetailPage);
   };
 
+  const { data: logHarianData, isValidating } = useCommonApi<GetLogHarianReqYear, GetLogHarianData[]>(
+    LogHarianAPI.GET_LOG_HARIAN_MONTH,
+    { pegawai_id: Number(personalPegawaiData?.pegawai_id), year: Number(selectedDate?.getFullYear()) },
+    { method: 'GET' },
+    { revalidateOnMount: true, skipCall: !personalPegawaiData?.pegawai_id }
+  );
+
+  const handleShowForm = (month: number, year: number) => {
+    setDetailData({
+      month,
+      year,
+    });
+  };
+
+  let newData = CALENDAR_MOCK;
+  const checkData = newData?.map(data => data?.year);
+  if (Number(selectedDate?.getFullYear()) >= checkData?.[0]) {
+    const currentMonth = new Date().getMonth() + 1;
+    const wholeMonth = 12;
+    const sliceMonth = wholeMonth - currentMonth;
+    newData = CALENDAR_MOCK?.slice(0, newData?.length - sliceMonth);
+  }
+
+  if (isValidating) {
+    return (
+      <div className="relative h-[150px] w-full divide-y divide-gray-200">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
       {isShownEachDetailPage ? (
-        <LogHarianPegPPNPNDetail onBack={toggleDetailPage} />
+        <LogHarianPegPPNPNDetail
+          selectedYear={detailData?.year}
+          selectedMonth={detailData?.month}
+          onBack={toggleDetailPage}
+        />
       ) : (
         <section aria-labelledby="section-1-title">
           <div className="overflow-hidden rounded-lg bg-white px-6 py-6 shadow">
@@ -51,88 +98,120 @@ function LogHarianPegawai() {
                 </div>
               </div>
             ) : null}
-            <div className="flex w-full flex-row gap-x-[16px]">
-              <div className="w-[202px] pb-2">
-                <p className="mb-[4px] text-[14px] font-normal">Tahun</p>
-                <select
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  //   onChange={e => search('unit_kerja_id', e.target.value)}
-                >
-                  <option value="">Semua</option>
-                  {/* {(unitKerjaList || []).map((item, index) => (
-                  <option key={`options-${index}`} value={item?.unit_kerja_id}>
-                    {item?.name}
-                  </option>
-                ))} */}
-                </select>
-              </div>
+            <div className="flex w-full flex-row">
+              <DatePicker onChange={date => setSelectedDate(date)} />
             </div>
-            <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-              <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-                <div className="sm:rounded-lg">
-                  <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          BULAN-KE
-                        </th>
-
-                        <th
-                          scope="col"
-                          className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          BULAN
-                        </th>
-                        <th
-                          scope="col"
-                          className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          ISIAN LOG HARIAN
-                        </th>
-                        <th
-                          scope="col"
-                          className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          NILAI
-                        </th>
-                        <th
-                          scope="col"
-                          className="w-50 px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          Aksi
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {/* {(pegawaiList?.list || []).map((data, dataIdx) => ( */}
-                      <tr className={'bg-white hover:bg-gray-100'}>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{'data'}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{'data'}</td>
-                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900" onClick={() => null}>
-                          {'data'}
-                        </td>
-                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900" onClick={() => null}>
-                          {'data'}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          <button
-                            onClick={toggleDetailPage}
-                            type="button"
-                            className="inline-flex w-full items-center justify-center rounded border border-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-indigo-600 shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
+            {isValidating ? (
+              <div className="relative h-[150px] w-full divide-y divide-gray-200">
+                <Loader />
+              </div>
+            ) : (
+              <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+                <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+                  <div className="sm:rounded-lg">
+                    <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                           >
-                            Lihat Detail
-                          </button>
-                        </td>
-                      </tr>
-                      {/* ))} */}
-                    </tbody>
-                  </table>
+                            BULAN-KE
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            BULAN
+                          </th>
+                          <th
+                            scope="col"
+                            className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            ISIAN LOG HARIAN
+                          </th>
+                          {/* <th
+                            scope="col"
+                            className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            NILAI
+                          </th> */}
+                          <th
+                            scope="col"
+                            className="w-50 px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            Aksi
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {newData.map(data => {
+                          const submittedData = logHarianData?.filter(item => item?.log_month === data?.id);
+                          const returnData = submittedData?.map(list => list?.submited_log);
+                          //   const detailMonth = submittedData?.map(month => month?.log_month);
+                          //   const detailYear = submittedData?.map(year => year?.log_year);
+                          if (Number(selectedDate?.getFullYear()) > data?.year) {
+                            return;
+                          }
+                          return (
+                            <tr key={data?.id} className={'bg-white hover:bg-gray-100'}>
+                              <td className="px-6 py-4 text-xs font-normal text-gray-900">{data?.name}</td>
+                              <td className="px-6 py-4 text-xs text-[20px] font-bold text-gray-900">{data?.title}</td>
+                              <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900">
+                                {returnData?.[0] === undefined ? (
+                                  <div className="flex flex-row items-center space-x-2">
+                                    <XCircleIcon width={14.67} height={14.67} fill={'#F24E1E'} />
+                                    <div className="text-[14px] text-red-600">Belum diisi</div>
+                                  </div>
+                                ) : returnData?.[0] < 20 ? (
+                                  <div className="flex flex-row items-center space-x-2">
+                                    <ArchiveIcon width={14.67} height={14.67} fill={'#FBBF24'} />
+                                    <div className="text-[14px] text-yellow-400">Sudah diisi {returnData?.[0]}</div>
+                                  </div>
+                                ) : (
+                                  <div className="flex flex-row items-center space-x-2">
+                                    <CheckCircleIcon width={14.67} height={14.67} fill={'#29CC6A'} />
+                                    <div className="text-[14px] text-green-600">Sudah diisi {returnData?.[0]}</div>
+                                  </div>
+                                )}
+                              </td>
+                              {/* <td
+                                className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900"
+                                onClick={() => null}
+                              >
+                         
+                              </td> */}
+                              <td className="px-6 py-4 text-xs font-medium">
+                                <button
+                                  onClick={() => {
+                                    // handleShowForm(Number(detailMonth?.[0]),Number(detailYear?.[0]));
+                                    handleShowForm(data?.id, Number(selectedDate?.getFullYear()));
+                                    setTimeout(() => {
+                                      toggleDetailPage();
+                                    }, 500);
+                                  }}
+                                  type="button"
+                                  className={`inline-flex w-full ${
+                                    returnData?.[0] === undefined || returnData?.[0] < 20 ? 'bg-indigo-600' : 'bg-white'
+                                  } items-center justify-center rounded border border-indigo-600 px-2.5 py-2 text-center text-xs font-medium ${
+                                    returnData?.[0] === undefined || returnData?.[0] < 20
+                                      ? 'text-white'
+                                      : 'text-indigo-600'
+                                  }  shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200`}
+                                >
+                                  {returnData?.[0] === undefined || returnData?.[0] < 20 ? 'Tulis Log' : 'Lihat Detail'}
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
       )}

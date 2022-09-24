@@ -180,3 +180,11 @@ export const KlaimKehadiranList = {
   POST_KLAIM_KEHADIRAN_POST: config.apiHost + '/klaim-kehadiran/insert',
   POST_KLAIM_KEHADIRAN_UPDATE: config.apiHost + '/klaim-kehadiran/update',
 };
+
+export const LogHarianAPI = {
+  GET_LOG_HARIAN_MONTH: config.apiHost + '/dailylog/list/month',
+  GET_LOG_HARIAN_WEEK: config.apiHost + '/dailylog/list/week',
+  POST_LOG_HARIAN_DELETE: config.apiHost + '/dailylog/delete',
+  POST_LOG_HARIAN_INSERT: config.apiHost + '/dailylog/insert',
+  POST_LOG_HARIAN_UPDATE: config.apiHost + '/dailylog/update',
+};

@@ -37,12 +37,12 @@ export const NavigationList: Navigation[] = [
         name: 'Kehadiran',
         childMenu: [
           {
-            id: NavigationId.BERANDA,
+            id: PUBLIC,
             name: 'Klaim Kehadiran',
             href: '/kehadiran',
           },
           {
-            id: NavigationId.BERANDA,
+            id: PUBLIC,
             name: 'Log Harian',
             href: '/log-harian',
           },

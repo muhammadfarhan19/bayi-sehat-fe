@@ -1,26 +1,79 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { PlusCircleIcon, XIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
+// import { format } from 'date-fns';
 import React, { useState } from 'react';
-// import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+
+import { setSnackbar } from '../../../action/CommonAction';
+import { LogHarianAPI } from '../../../constants/APIUrls';
+import { SnackbarType } from '../../../reducer/CommonReducer';
+import { PostLogHarianInsert, PostLogHarianRes } from '../../../types/api/LogHarianAPI';
+import { Status } from '../../../types/Common';
+import { callAPI } from '../../../utils/Fetchers';
+import usePersonalData from '../../shared/hooks/usePersonalData';
 
 interface ModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  selectedId?: number;
+  selectedId: any;
+  onSuccess: () => void;
+}
+
+interface FormState {
+  peg_id: number;
+  date: string;
+  summary: string[];
 }
 
 function FormLogHarianPPNPN(props: ModalProps) {
-  const { open, setOpen } = props;
+  const { open, setOpen, selectedId, onSuccess } = props;
   const toggleModal = () => {
     setOpen(!open);
   };
+  const dispatch = useDispatch();
+  const personalPegawaiData = usePersonalData();
 
-  // const {
-  //     register,
-  //     handleSubmit,
-  //     formState: { errors },
-  //   } = useForm<FormState>();
   const [moreComponentBox, setMoreComponentBox] = useState(1);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormState>();
+
+  const submitHandler = async (formData: FormState) => {
+    const resSubmit = await callAPI<PostLogHarianInsert, PostLogHarianRes>(
+      LogHarianAPI.POST_LOG_HARIAN_INSERT,
+      {
+        peg_id: Number(personalPegawaiData?.pegawai_id),
+        date: format(new Date(selectedId), 'yyyy-MM-dd'),
+        summary: new Array(formData?.summary),
+      },
+      { method: 'post' }
+    );
+    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Data berhasil tersimpan.',
+          type: SnackbarType.INFO,
+        })
+      );
+      onSuccess();
+      setOpen(!open);
+    } else {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
+          type: SnackbarType.ERROR,
+        })
+      );
+      setOpen(!open);
+    }
+  };
 
   const handleAddInput = () => {
     setMoreComponentBox(moreComponentBox + 1);
@@ -59,9 +112,9 @@ function FormLogHarianPPNPN(props: ModalProps) {
                 <h3 className="text-lg font-medium leading-6 text-gray-900">Form Pengisian Log Harian</h3>
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
-              <form onSubmit={() => null}>
+              <form onSubmit={handleSubmit(submitHandler)}>
                 <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Selasa, 6 September 2022</label>
+                  <label className="block text-sm font-medium text-gray-700">{selectedId}</label>
                   <div className="mt-5 sm:col-span-6">
                     <label htmlFor="nama" className="block text-xs font-medium text-gray-700">
                       Isi Log / Jurnal Harian
@@ -69,16 +122,14 @@ function FormLogHarianPPNPN(props: ModalProps) {
                     {Array.from({ length: moreComponentBox }).map(() => (
                       <div className="mt-1">
                         <input
-                          // {...register('alasan_tolak', {
-                          //   required: watch('status_klaim') == 3 ? 'Silahkan Masukkan Alasan tolak' : false,
-                          // })}
+                          {...register('summary', {
+                            required: 'Silahkan masukkan Log Harian',
+                          })}
                           className="inline-block h-24 w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                          name="alasan_tolak"
+                          name="summary"
                           type="text"
                         />
-                        {/* {errors.alasan_tolak && (
-                            <p className="mt-1 text-xs text-red-500">{errors.alasan_tolak.message}</p>
-                          )} */}
+                        {errors.summary && <p className="mt-1 text-xs text-red-500">{errors.summary.message}</p>}
                       </div>
                     ))}
                   </div>
