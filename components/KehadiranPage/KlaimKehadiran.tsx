@@ -1,4 +1,4 @@
-import { AdjustmentsIcon, UploadIcon } from '@heroicons/react/outline';
+import { UploadIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -314,7 +314,7 @@ function KlaimKehadiran() {
         <div className="overflow-hidden rounded-lg bg-white px-6 py-6 shadow">
           <div className="mb-5 flex flex-row items-center">
             <h3 className="text-xl font-medium leading-6 text-gray-900">Data Klaim Kehadiran</h3>
-            <div className="ml-auto flex">
+            {/* <div className="ml-auto flex">
               <input
                 type="text"
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -327,7 +327,7 @@ function KlaimKehadiran() {
               >
                 <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
               </button>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex w-full flex-row gap-x-[16px]">
