@@ -111,15 +111,6 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
               ))}
             </select>
           </div> */}
-          {personalPegawaiData?.status_cpns === 2 ? (
-            <button
-              onClick={() => handleShowForm(!formModalState?.open)}
-              type="button"
-              className="mb-2 inline-flex w-40 items-center justify-center rounded border bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
-            >
-              Isi Log
-            </button>
-          ) : null}
         </div>
         <table className="min-w-full divide-y divide-gray-200">
           <thead></thead>
@@ -136,7 +127,7 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
                     {matchData?.length === 0 ? '-' : returnData}
                   </td> */}
                   {matchData?.length === 0 ? (
-                    <div className="flex flex-row justify-between">
+                    <div className="flex flex-row items-center justify-between">
                       <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">-</td>
                       {personalPegawaiData?.status_cpns === 2 ? (
                         <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
@@ -155,7 +146,7 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
                   ) : (
                     matchData?.map(data => {
                       return (
-                        <div key={data?.log_id} className="flex flex-row justify-between">
+                        <div key={data?.log_id} className="flex flex-row items-center justify-between">
                           <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{data?.summary}</td>
                           {personalPegawaiData?.status_cpns === 2 ? (
                             <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
