@@ -14,7 +14,7 @@ import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import MonthPicker from './DatePicker';
 import ModalEventInfo, { MapEventColor } from './ModalEventInfo';
-import ModalPresensiInfo, { MapPresensiColor } from './ModalPresensiInfo';
+import ModalPresensiInfo, { MapPresensiColorText } from './ModalPresensiInfo';
 
 export default function DinasCalendar() {
   const personalPegawai = usePersonalData();
@@ -54,7 +54,7 @@ export default function DinasCalendar() {
       dateTime.push(String(key));
       eventList[key].push({
         id: each.dinas_id,
-        color: MapEventColor[each.jenis_dinas.toUpperCase() as keyof typeof MapEventColor] || 'slate',
+        color: MapEventColor[each.jenis_dinas.toUpperCase() as keyof typeof MapEventColor] || 'blue',
         datetime: dateTime.join('-'),
         name: each.jenis_dinas,
         infoType: 'dinas',
@@ -69,7 +69,7 @@ export default function DinasCalendar() {
 
     eventList[key].push({
       id: each.presensi_id,
-      color: MapPresensiColor[each.status.toUpperCase() as keyof typeof MapPresensiColor] || 'slate',
+      color: String(MapPresensiColorText[each.status as keyof typeof MapPresensiColorText]?.[0]) || 'gray',
       datetime: each.date,
       name: 'Presensi',
       infoType: 'presensi',
@@ -154,7 +154,6 @@ export default function DinasCalendar() {
                           </span>
                         </li>
                       ))}
-                      {day.events.length > 3 && <li className="text-gray-500">+ {day.events.length - 3} more</li>}
                     </ol>
                   )}
                 </div>
@@ -175,14 +174,12 @@ export default function DinasCalendar() {
 
             {/* precall tailwind class */}
             <div className="hidden">
-              <div className="bg-amber-50 text-amber-500 hover:bg-amber-100 group-hover:text-amber-700" />
-              <div className="bg-indigo-50 text-indigo-500 hover:bg-indigo-100 group-hover:text-indigo-700" />
-              <div className="bg-pink-50 text-pink-500 hover:bg-pink-100 group-hover:text-pink-700" />
-              <div className="bg-rose-50 text-rose-500 hover:bg-rose-100 group-hover:text-rose-700" />
-              <div className="bg-slate-50 text-slate-500 hover:bg-slate-100 group-hover:text-slate-700" />
-              <div className="bg-red-50 text-red-500 hover:bg-red-100 group-hover:text-red-700" />
+              <div className="bg-blue-50 text-blue-500 hover:bg-blue-100 group-hover:text-blue-700" />
+              <div className="bg-gray-50 text-gray-500 hover:bg-gray-100 group-hover:text-gray-700" />
               <div className="bg-green-50 text-green-500 hover:bg-green-100 group-hover:text-green-700" />
-              <div className="bg-cyan-50 text-cyan-500 hover:bg-cyan-100 group-hover:text-cyan-700" />
+              <div className="bg-orange-50 text-orange-500 hover:bg-orange-100 group-hover:text-orange-700" />
+              <div className="bg-red-50 text-red-500 hover:bg-red-100 group-hover:text-red-700" />
+              <div className="bg-yellow-50 text-yellow-500 hover:bg-yellow-100 group-hover:text-yellow-700" />
             </div>
           </div>
         </div>

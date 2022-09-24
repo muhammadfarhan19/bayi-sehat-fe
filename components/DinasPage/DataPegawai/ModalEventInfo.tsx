@@ -13,8 +13,8 @@ interface Props {
 }
 
 export const MapEventColor = {
-  'DINAS NON SPPD': 'cyan',
-  'DINAS SPPD': 'cyan',
+  'DINAS NON SPPD': 'blue',
+  'DINAS SPPD': 'blue',
 };
 
 export default function ModalEventInfo(props: Props) {
@@ -31,7 +31,7 @@ export default function ModalEventInfo(props: Props) {
   ].join('');
 
   const statusColor = `text-${
-    MapEventColor?.[info.jenis_dinas.toUpperCase() as keyof typeof MapEventColor] || 'gray'
+    MapEventColor?.[info.jenis_dinas.toUpperCase() as keyof typeof MapEventColor] || 'blue'
   }-500`;
 
   return (
@@ -66,7 +66,7 @@ export default function ModalEventInfo(props: Props) {
             <div className="my-8 inline-block w-full max-w-lg transform space-y-4 rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
               <Dialog.Title as="div" className="flex justify-between">
                 <div className="relative">
-                  <dt className="flex">
+                  <div className="flex">
                     <svg viewBox="0 0 24 24" fill="currentColor" className={`h-6 w-6 ${statusColor}`}>
                       <path
                         fillRule="evenodd"
@@ -80,7 +80,7 @@ export default function ModalEventInfo(props: Props) {
                         {info.tgl_mulai} - {info.tgl_selesai}
                       </dd>
                     </div>
-                  </dt>
+                  </div>
                 </div>
                 <XIcon className="h-5 cursor-pointer" onClick={() => props.toggleOpen(false)} />
               </Dialog.Title>
@@ -142,8 +142,12 @@ export default function ModalEventInfo(props: Props) {
 
           {/* precall tailwind class */}
           <div className="hidden">
+            <div className="text-blue-500" />
             <div className="text-gray-500" />
-            <div className="text-cyan-500" />
+            <div className="text-green-500" />
+            <div className="text-orange-500" />
+            <div className="text-red-500" />
+            <div className="text-yellow-500" />
           </div>
         </div>
       </Dialog>

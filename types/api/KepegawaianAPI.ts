@@ -92,7 +92,8 @@ export interface Presensi {
   date: string;
   check_in: string;
   check_out: string;
-  status: string;
+  status: number;
+  status_str: string;
 }
 
 export interface Dinas {

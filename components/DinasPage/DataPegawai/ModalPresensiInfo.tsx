@@ -3,20 +3,26 @@ import { XIcon } from '@heroicons/react/outline';
 import { ArrowRightIcon } from '@heroicons/react/solid';
 import React from 'react';
 
+import { Presensi } from '../../../types/api/KepegawaianAPI';
+
 interface Props {
   open: boolean;
   toggleOpen: (open: boolean) => void;
-  info?: {
-    date: string;
-    check_in: string;
-    check_out: string;
-    status: string;
-  };
+  info?: Presensi;
 }
 
-export const MapPresensiColor = {
-  MASUK: 'green',
-  TERLAMBAT: 'red',
+export const MapPresensiColorText = {
+  0: ['gray', '-', true],
+  1: ['blue', 'Hadir', true],
+  2: ['yellow', 'Terlambat', true],
+  3: ['yellow', 'Pulang Sebelum Waktunya', true],
+  4: ['orange', 'Terlambat dan Pulang Sebelum Waktunya', true],
+  5: ['red', 'Tidak Hadir', false],
+  6: ['blue', 'Dinas', true],
+  7: ['gray', 'Akhir Pekan', false],
+  8: ['green', 'Cuti', false],
+  9: ['gray', 'Libur', false],
+  10: ['green', 'Cuti Sakit', false],
 };
 
 export default function ModalPresensiInfo(props: Props) {
@@ -25,22 +31,11 @@ export default function ModalPresensiInfo(props: Props) {
     return null;
   }
 
+  const showPresensi = MapPresensiColorText[Number(info.status) as keyof typeof MapPresensiColorText]?.[2];
+  const statusText = MapPresensiColorText[Number(info.status) as keyof typeof MapPresensiColorText]?.[1];
   const statusColor = `text-${
-    MapPresensiColor?.[info.status.toUpperCase() as keyof typeof MapPresensiColor] || 'gray'
+    MapPresensiColorText[Number(info.status) as keyof typeof MapPresensiColorText]?.[0] || 'gray'
   }-500`;
-
-  const additionalInfo = [
-    '5',
-    'Tidak Hadir',
-    '7',
-    'Libur Akhir Pekan',
-    '8',
-    'Cuti',
-    '9',
-    'Libur',
-    'Cuti Sakit',
-    '10',
-  ].includes(info.status);
 
   return (
     <Transition appear show={props.open} as={React.Fragment}>
@@ -74,7 +69,7 @@ export default function ModalPresensiInfo(props: Props) {
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
               <Dialog.Title as="div" className="flex justify-between">
                 <div className="relative">
-                  <dt className="flex">
+                  <div className="flex">
                     <svg viewBox="0 0 24 24" fill="currentColor" className={`h-6 w-6 ${statusColor}`}>
                       <path
                         fillRule="evenodd"
@@ -86,12 +81,12 @@ export default function ModalPresensiInfo(props: Props) {
                       <p className="text-lg font-medium leading-6 text-gray-900">Presensi</p>
                       <dd className="text-sm text-gray-500">{info.date}</dd>
                     </div>
-                  </dt>
+                  </div>
                 </div>
                 <XIcon className="h-5 cursor-pointer" onClick={() => props.toggleOpen(false)} />
               </Dialog.Title>
 
-              {!additionalInfo && (
+              {showPresensi && (
                 <div className="mx-12 mt-2 flex items-center justify-between">
                   <div className="flex h-24 flex-col items-center justify-around">
                     <div className="text-base text-gray-600">Presensi Masuk</div>
@@ -107,15 +102,19 @@ export default function ModalPresensiInfo(props: Props) {
 
               <div className="mt-5 ml-12">
                 <span className="text-sm text-gray-500">Status: </span>
-                <span className={`text-sm ${statusColor}`}>{info.status}</span>
+                <span className={`text-sm ${statusColor}`}>{statusText}</span>
               </div>
             </div>
           </Transition.Child>
 
           {/* precall tailwind class */}
           <div className="hidden">
+            <div className="text-blue-500" />
+            <div className="text-gray-500" />
             <div className="text-green-500" />
+            <div className="text-orange-500" />
             <div className="text-red-500" />
+            <div className="text-yellow-500" />
           </div>
         </div>
       </Dialog>
