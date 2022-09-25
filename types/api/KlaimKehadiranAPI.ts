@@ -71,4 +71,7 @@ export interface PostUpdatePengajuanReq {
   id: number;
   status_klaim: number;
   alasan_tolak: string;
+  user_id: number;
+  jenis_pengajuan: string;
+  tanggal_klaim: string;
 }
