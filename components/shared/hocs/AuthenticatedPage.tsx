@@ -17,10 +17,7 @@ interface WithAuthenticatedPageProps {
 }
 
 interface WithAuthenticatedPage {
-  (withProps?: Partial<WithAuthenticatedPageProps>): <
-    T extends React.FunctionComponent<P>,
-    P extends Record<string, unknown>
-  >(
+  (withProps?: Partial<WithAuthenticatedPageProps>): <T extends React.FunctionComponent<P>, P extends Record<any, any>>(
     Component: T
   ) => (props: P) => JSX.Element;
 }

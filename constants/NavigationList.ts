@@ -118,6 +118,17 @@ export const NavigationList: Navigation[] = [
           },
         ],
       },
+      {
+        id: NavigationId.KEPEGAWAIAN,
+        name: 'Data Master',
+        childMenu: [
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Hari Libur dan Ramadhan',
+            href: '/master/libur',
+          },
+        ],
+      },
     ],
   },
 ];

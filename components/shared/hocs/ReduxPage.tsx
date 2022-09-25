@@ -22,7 +22,7 @@ function logger({ getState }: MiddlewareAPI) {
 }
 
 interface WithReduxPage {
-  <T extends React.FunctionComponent<P>, P extends Record<string, unknown>>(Component: T): (props: P) => JSX.Element;
+  <T extends React.FunctionComponent<P>, P extends Record<any, any>>(Component: T): (props: P) => JSX.Element;
 }
 
 export const withReduxPage =
