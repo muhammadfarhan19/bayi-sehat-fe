@@ -4,15 +4,17 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../action/CommonAction';
-import { JabatanAPI, KepegawaianAPI, UnitKerjaAPI } from '../../../../constants/APIUrls';
+import { JabatanAPI, KepegawaianAPI, MasterAPI, UnitKerjaAPI } from '../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../reducer/CommonReducer';
 import { GetJabatanReq, JabatanData } from '../../../../types/api/JabatanAPI';
 import { PostPegawaiInsertReq, PostPegawaiInsertRes } from '../../../../types/api/KepegawaianAPI';
+import { GetMasterJenisGol } from '../../../../types/api/MasterAPI';
 import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
 import { Status } from '../../../../types/Common';
 import { callAPI } from '../../../../utils/Fetchers';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import AutoComplete from '../../../shared/Input/ComboBox';
+import Loader from '../../../shared/Loader/Loader';
 
 const statusPegawai = [
   { id: '3', title: 'CPNS', type: '3-status-pegawai' },
@@ -30,29 +32,6 @@ const statusNikah = [
   { id: '2', title: 'Kawin' },
   { id: '3', title: 'Cerai Mati' },
   { id: '4', title: 'Cerai Hidup' },
-];
-
-const golongan = [
-  //
-  { id: '19', title: '-' },
-  //
-  { id: '13', title: 'IV/e - Pembina Utama' },
-  { id: '14', title: 'I/a - Juru Muda' },
-  { id: '15', title: 'I/b - Juru Muda Tingkat I' },
-  { id: '16', title: 'I/c - Juru' },
-  { id: '17', title: 'I/d - Juru Tingkat I' },
-  { id: '1', title: 'II/a - Pengatur Muda' },
-  { id: '2', title: 'II/b - Pengatur Muda Tingkat I' },
-  { id: '3', title: 'II/c - Pengatur' },
-  { id: '4', title: 'II/d - Pengatur Tingkat I' },
-  { id: '5', title: 'III/a - Penata Muda' },
-  { id: '6', title: 'III/b - Penata Muda Tingkat I' },
-  { id: '7', title: 'III/c - Penata' },
-  { id: '8', title: 'III/d - Penata Tingkat I' },
-  { id: '9', title: 'IV/a - Pembina' },
-  { id: '10', title: 'IV/b - Pembina Tingkat I' },
-  { id: '11', title: 'IV/c - Pembina Utama Muda' },
-  { id: '12', title: 'IV/d - Pembina Utama Madya' },
 ];
 
 interface FormState {
@@ -76,6 +55,7 @@ interface FormState {
   jabatan_id: number;
   unit_kerja_id: number;
   jumlah_anak: number;
+  agama: string;
 }
 
 function MasterPnsForm() {
@@ -86,6 +66,8 @@ function MasterPnsForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<FormState>();
+  const [golongan, setGolongan] = React.useState<React.SetStateAction<any>>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
     UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
@@ -102,6 +84,20 @@ function MasterPnsForm() {
     { page: 1, per_page: 20, jabatan: queryJabatan },
     { method: 'GET' }
   );
+
+  React.useLayoutEffect(() => {
+    dataGolongan();
+  }, []);
+
+  const dataGolongan = async () => {
+    setIsLoading(true);
+    await callAPI<null, GetMasterJenisGol>(MasterAPI.GET_MASTER_JENIS_GOLONGAN, null, { method: 'GET' })
+      .then(res => {
+        res.data;
+        setGolongan(res?.data);
+      })
+      .finally(() => setIsLoading(false));
+  };
 
   const submitHandler = async (formData: FormState) => {
     console.log(formData);
@@ -154,6 +150,12 @@ function MasterPnsForm() {
       );
     }
   };
+
+  if (isLoading) {
+    <div className="relative h-[150px] w-full divide-y divide-gray-200">
+      <Loader />
+    </div>;
+  }
 
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
@@ -337,9 +339,15 @@ function MasterPnsForm() {
                     className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                   >
                     <option value="">Silahkan Pilih</option>
-                    {golongan.map(each => (
-                      <option value={each.id}>{each.title}</option>
-                    ))}
+                    {golongan?.data?.map(
+                      (each: {
+                        golongan_id: string | number | readonly string[] | undefined;
+                        golongan: any;
+                        pangkat: any;
+                      }) => (
+                        <option value={each?.golongan_id}>{`${each?.golongan}, ${each?.pangkat}`}</option>
+                      )
+                    )}
                     {errors.golongan_id && <p className="mt-1 text-xs text-red-500">{errors.golongan_id.message}</p>}
                   </select>
                 </div>
@@ -475,6 +483,37 @@ function MasterPnsForm() {
               </div>
             </div>
 
+            {/* <div className="mt-5 sm:col-span-6">
+              <div className="mt-[27px]">
+                <label htmlFor="agama" className="block text-sm font-medium text-gray-700">
+                  Agama
+                </label>
+                <div className="pt-1">
+                  <input
+                    className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                    name="agama"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </div> */}
+
+            {/* <div className="mt-5">
+              <label className="block text-sm font-medium text-gray-700">Golongan Darah</label>
+              <div className="pt-1 sm:col-span-2 sm:mt-0">
+                <select
+                  name="gol_darah"
+                  className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                >
+                  <option value="">Silahkan Pilih</option>
+                  <option value="A">A</option>
+                  <option value="AB">AB</option>
+                  <option value="B">B</option>
+                  <option value="O">O</option>
+                </select>
+              </div>
+            </div> */}
+
             <div className="mt-5 sm:col-span-6">
               <div className="mt-[27px]">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -531,7 +570,7 @@ function MasterPnsForm() {
             <div className="mt-5 sm:col-span-6">
               <div className="mt-[27px]">
                 <label htmlFor="bpjs" className="block text-sm font-medium text-gray-700">
-                  BPJS
+                  BPJS Kesehatan
                 </label>
                 <div className="pt-1">
                   <input
@@ -544,6 +583,21 @@ function MasterPnsForm() {
                 </div>
               </div>
             </div>
+
+            {/* <div className="mt-5 sm:col-span-6">
+              <div className="mt-[27px]">
+                <label htmlFor="bpjs_ketenagakerjaan" className="block text-sm font-medium text-gray-700">
+                  BPJS Ketenagakerjaan
+                </label>
+                <div className="pt-1">
+                  <input
+                    className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                    name="bpjs_ketenagakerjaan"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </div> */}
 
             <div className="mt-[3rem] flex w-full">
               <div className="ml-auto flex flex-row gap-x-[12px]">

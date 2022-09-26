@@ -12,6 +12,7 @@ export const UserAPI = {
   GET_USER_PROFILE: config.apiHost + '/user/profile',
   PUT_USER_PASSWORD: config.apiHost + '/user/password',
   POST_USER_UPDATE_PROFILE: config.apiHost + '/user/update-profile',
+  POST_USER_UPDATE_DATA_DIRI_PEGAWAI: config.apiHost + '/user/update-data-diri-pegawai',
 };
 
 export const RbacAPI = {
@@ -47,6 +48,7 @@ export const KepegawaianAPI = {
   GET_PEGAWAI_LIST: config.apiHost + '/pegawai/list',
   POST_PEGAWAI_INSERT: config.apiHost + '/pegawai/insert',
   POST_PEGAWAI_KARPEG_UPDATE: config.apiHost + '/pegawai/karpeg/update',
+  GET_DINAS_PEGAWAI_KALENDER: config.apiHost + '/dinas/pegawai/kalender',
 };
 
 export const PetaAPI = {
@@ -67,6 +69,7 @@ export const MasterAPI = {
   GET_MASTER_JENIS_BERKAS: config.apiHost + '/master/jenis-berkas',
   GET_PENDIDIKAN_ELIGIBLE_JENJANG: config.apiHost + '/pendidikan/eligible_jenjang',
   GET_MASTER_JENIS_KP: config.apiHost + '/master/jenis-kp',
+  GET_MASTER_JENIS_GOLONGAN: config.apiHost + '/master/golongan',
 };
 
 export const DocumentAPI = {
@@ -161,4 +164,34 @@ export const RiwayatSKPAPI = {
   POST_RIWAYAT_SKP_INSERT: config.apiHost + '/riwayat-skp/insert',
   POST_RIWAYAT_SKP_UPDATE: config.apiHost + '/riwayat-skp/update',
   POST_RIWAYAT_SKP_DELETE: config.apiHost + '/riwayat-skp/delete',
+};
+
+export const RiwayatPengangkatanPekerjaan = {
+  POST_RIWAYAT_PENGANGKATAN_DELETE: config.apiHost + '/riwayat-pengangkatan-perkerjaan/delete',
+  GET_RIWAYAT_PENGANGKATAN_DETAIL: config.apiHost + '/riwayat-pengangkatan-perkerjaan/detail',
+  GET_RIWAYAT_PENGANGKATAN_LIST: config.apiHost + '/riwayat-pengangkatan-perkerjaan/list',
+  POST_RIWAYAT_PENGANGKATAN_INSERT: config.apiHost + '/riwayat-pengangkatan-perkerjaan/insert',
+  POST_RIWAYAT_PENGANGKATAN_UPDATE: config.apiHost + '/riwayat-pengangkatan-perkerjaan/update',
+};
+
+export const KlaimKehadiranList = {
+  GET_KLAIM_KEHADIRAN_LIST: config.apiHost + '/klaim-kehadiran/list',
+  GET_KUOTA_KEHADIRAN_SUBMIT: config.apiHost + '/klaim-kehadiran/stat-pengajuan',
+  POST_KLAIM_KEHADIRAN_POST: config.apiHost + '/klaim-kehadiran/insert',
+  POST_KLAIM_KEHADIRAN_UPDATE: config.apiHost + '/klaim-kehadiran/update',
+};
+
+export const LogHarianAPI = {
+  GET_LOG_HARIAN_MONTH: config.apiHost + '/dailylog/list/month',
+  GET_LOG_HARIAN_WEEK: config.apiHost + '/dailylog/list/week',
+  POST_LOG_HARIAN_DELETE: config.apiHost + '/dailylog/delete',
+  POST_LOG_HARIAN_INSERT: config.apiHost + '/dailylog/insert',
+  POST_LOG_HARIAN_UPDATE: config.apiHost + '/dailylog/update',
+};
+
+export const PresensiAPI = {
+  PRESENSI_SHIFT_DATE_LIST: config.apiHost + '/presensi-shift-date/list',
+  PRESENSI_SHIFT_DATE_INSERT: config.apiHost + '/presensi-shift-date/insert',
+  PRESENSI_SHIFT_DATE_UPDATE: config.apiHost + '/presensi-shift-date/update',
+  PRESENSI_SHIFT_DATE_DELETE: config.apiHost + '/presensi-shift-date/delete',
 };

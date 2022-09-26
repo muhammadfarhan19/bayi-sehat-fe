@@ -53,4 +53,4 @@ function DataDiriPegawai() {
   );
 }
 
-export default withErrorBoundary<typeof DataDiriPegawai, unknown>(DataDiriPegawai);
+export default withErrorBoundary(DataDiriPegawai);

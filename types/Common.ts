@@ -21,6 +21,15 @@ export enum Gender {
   FEMALE = 2,
 }
 
+export enum Agama {
+  BUDDHA = 1,
+  HINDU = 2,
+  ISLAM = 3,
+  KATOLIK = 4,
+  PROTESTAN = 5,
+  OTHER = 0,
+}
+
 export enum StatusCpns {
   PNS = 1,
   PPNPN = 2,
@@ -40,4 +49,9 @@ export interface File {
 export interface Pagination {
   total_data: number;
   total_page: number;
+}
+
+export interface DocumentFile {
+  document_uuid: string;
+  document_name: string;
 }

@@ -66,6 +66,23 @@ export interface PenghargaanList {
   bukti_penghargaan: DocumentData[];
 }
 
+export interface PenghargaanListUpdated {
+  riwayat_id: number;
+  pegawai_id: number;
+  nama_penghargaan: string;
+  tingkat_penghargaan: string;
+  penyelenggara: string;
+  keterangan: string;
+  no_penghargaan: string;
+  tgl_penghargaan: string;
+  bukti_penghargaan: [
+    {
+      document_uuid: string;
+      document_name: string;
+    }
+  ];
+}
+
 export interface DocumentData {
   document_uuid: string;
   document_name: string;

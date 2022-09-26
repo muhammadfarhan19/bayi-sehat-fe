@@ -1,4 +1,6 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
+import useSWR from 'swr/immutable';
 
 import { AuthAPI, RbacAPI } from '../../../constants/APIUrls';
 import { NavigationId } from '../../../constants/NavigationList';
@@ -8,8 +10,6 @@ import { filterMenu } from '../../../utils/Components';
 import { removeCookie } from '../../../utils/CookieHandler';
 import { callAPI } from '../../../utils/Fetchers';
 import { AuthorizedMenuContext } from '../context/AuthorizedMenuContext';
-import Loader from '../Loader/Loader';
-import { Navigation } from '../MainLayout/NavigationProps';
 
 interface WithAuthenticatedPageProps {
   checkLogin: boolean;
@@ -17,7 +17,7 @@ interface WithAuthenticatedPageProps {
 }
 
 interface WithAuthenticatedPage {
-  (withProps?: Partial<WithAuthenticatedPageProps>): <T extends React.FunctionComponent<P>, P = unknown>(
+  (withProps?: Partial<WithAuthenticatedPageProps>): <T extends React.FunctionComponent<P>, P extends Record<any, any>>(
     Component: T
   ) => (props: P) => JSX.Element;
 }
@@ -28,67 +28,51 @@ export const withAuthenticatedPage: WithAuthenticatedPage =
     const { checkLogin = true, resourceId } = withProps;
 
     function AuthenticatedPage(props = {}) {
-      const [authPageState, setAuthPageState] = React.useState<{
-        loadPage: boolean;
-        navigation: Navigation[];
-      }>({
-        loadPage: false,
-        navigation: [],
-      });
+      const { asPath, push } = useRouter();
+      const [loaded, setLoaded] = React.useState(true);
+      const currentPath = typeof window !== 'undefined' ? new URL(asPath, window.location.href).pathname : '/';
 
-      React.useEffect(() => {
-        (async () => {
-          const infoRes = await callAPI<null, GetAuthInfoRes>(AuthAPI.GET_AUTH_INFO, null, {
-            method: 'get',
-          });
-          if (infoRes.status === 200 && infoRes.data?.data) {
-            if (checkLogin) {
-              // Check RBAC
-              const [filteredMenu, allowedMap] = await getAuthorizedNavigation(infoRes.data.data.user_id);
-              const authorizedNavigations = filteredMenu;
-              if (resourceId && !allowedMap[resourceId]) {
-                window.location.href = '/';
-                return null;
-              }
-
-              // Load page
-              setAuthPageState({
-                loadPage: true,
-                navigation: authorizedNavigations,
-              });
-            } else {
-              window.location.href = '/';
-            }
-          } else {
-            removeCookie('token');
-            removeCookie('refreshtoken');
-            removeCookie('lastrefresh');
-            if (checkLogin) {
-              window.location.href = '/login';
-            } else {
-              setAuthPageState({
-                loadPage: true,
-                navigation: [],
-              });
-            }
+      const swrFetcher = async (resourceIdParam: number | undefined) => {
+        const infoRes = await callAPI<null, GetAuthInfoRes>(AuthAPI.GET_AUTH_INFO, null, {
+          method: 'get',
+        });
+        if (infoRes.status === 200 && infoRes.data?.data) {
+          if (!checkLogin) {
+            setLoaded(false);
+            push('/');
           }
-        })();
-      }, []);
 
-      if (!authPageState.loadPage) {
-        return <Loader />;
-      }
+          // Check RBAC
+          const allowedMap = await getAuthorizedNavigation(infoRes.data.data.user_id);
+          if (resourceIdParam && !allowedMap[resourceIdParam]) {
+            setLoaded(false);
+            push('/');
+          }
+
+          return allowedMap;
+        }
+        removeCookie('token');
+        removeCookie('refreshtoken');
+        removeCookie('lastrefresh');
+        if (checkLogin) {
+          setLoaded(false);
+          push('/login');
+        }
+      };
+
+      const { data: authPageState, isValidating } = useSWR([resourceId], swrFetcher, {});
 
       return (
-        <AuthorizedMenuContext.Provider value={authPageState.navigation}>
-          <Component {...(props as any)} />
+        <AuthorizedMenuContext.Provider value={filterMenu(currentPath, authPageState)}>
+          {/* @ts-ignore */}
+          {!isValidating && loaded && <Component {...props} />}
         </AuthorizedMenuContext.Provider>
       );
     }
     return AuthenticatedPage;
   };
 
-const getAuthorizedNavigation = async (userId: number): Promise<[Navigation[], Record<number, boolean>]> => {
+const getAuthorizedNavigation = async (userId: number) => {
   const authRbacRes = await callAPI<PostRbacBulkAuthorizeReq, PostRbacAuthorizeRes>(RbacAPI.POST_RBAC_BULK_AUTHORIZE, {
     bulk_request: Object.keys(NavigationId).map(each => {
       const key = each as keyof typeof NavigationId;
@@ -100,13 +84,10 @@ const getAuthorizedNavigation = async (userId: number): Promise<[Navigation[], R
     }),
   });
   if (authRbacRes.status === 200 && authRbacRes.data && Array.isArray(authRbacRes.data?.data)) {
-    const allowedMap = authRbacRes.data.data.reduce<Record<number, boolean>>((res, each) => {
+    return authRbacRes.data.data.reduce<Record<number, boolean>>((res, each) => {
       res[each.resource_id] = each.is_authorized;
       return res;
     }, {});
-    const filteredMenu = filterMenu(allowedMap);
-
-    return [filteredMenu, allowedMap];
   }
-  return [[], {}];
+  return {};
 };

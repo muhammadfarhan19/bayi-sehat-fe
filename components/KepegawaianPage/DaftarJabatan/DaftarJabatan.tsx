@@ -53,7 +53,6 @@ function DaftarJabatan() {
     if (!pageAffected) {
       newState.page = 1;
     }
-
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -63,7 +62,7 @@ function DaftarJabatan() {
   const toggleAdvancedFilter = () => {
     const showState = !showAdvancedFilter;
     if (!showState) {
-      changeFilterState({ jenis_jabatan: undefined, kelas_jabatan: undefined });
+      changeFilterState({ jenis_jabatan: undefined, kelas_jabatan: undefined, is_dikti: undefined });
     }
     setshowAdvancedFilter(showState);
   };
@@ -178,6 +177,19 @@ function DaftarJabatan() {
                 defaultValue={{ text: 'Semua', value: '*' }}
                 options={['*', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17].map(each => ({
                   text: each === '*' ? 'Semua' : String(each),
+                  value: String(each),
+                }))}
+              />
+            </div>
+            <div className="w-[202px] pb-2">
+              <AutoComplete
+                label={'Status Jabatan'}
+                onChange={value => {
+                  changeFilterState({ is_dikti: value.value === '*' ? undefined : Number(value.value) });
+                }}
+                defaultValue={{ text: 'Semua', value: '*' }}
+                options={['*', 0, 1].map(each => ({
+                  text: each === '*' ? 'Semua' : each === 1 ? 'Dikti' : 'Non-Dikti',
                   value: String(each),
                 }))}
               />

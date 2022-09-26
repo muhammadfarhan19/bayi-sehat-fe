@@ -25,6 +25,8 @@ export default function DetailGolongan(props: ListGolonganProps) {
             {[
               { label: 'Jenis KP', value: detail?.tipe_kp_str || '-' },
               { label: 'Golongan', value: detail?.golongan },
+              // { label: 'Masa Kerja', value: detail?.masa_kerja },
+              { label: 'Masa Jabatan', value: detail?.masa_jabatan },
               { label: 'TMT', value: detail?.tmt?.split('T')[0] },
               { label: 'Sinkronisasi HR', value: detail?.verified_hr === 0 ? 'Tidak' : 'Ya' },
               { label: 'Berkas', value: detail?.files?.[0]?.document_name },

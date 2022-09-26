@@ -30,7 +30,7 @@ export default function DetailPenghargaan(props: DetailPenghargaanProps) {
         <span className="tracking-wide text-gray-600">Kembali</span>
       </div>
       <div>
-        <span className="mb-2 text-[24px] font-[600]">Riwayat Pendidikan</span>
+        <span className="mb-2 text-[24px] font-[600]">Riwayat Penghargaan</span>
         <table className="min-w-full divide-y divide-gray-200">
           <thead></thead>
           <tbody className="divide-y divide-gray-200 bg-white">

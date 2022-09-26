@@ -1,4 +1,5 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -14,16 +15,26 @@ import {
 import { Status } from '../../../types/Common';
 import { classNames } from '../../../utils/Components';
 import { callAPI } from '../../../utils/Fetchers';
+import { getQueryString } from '../../../utils/URLUtils';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 
 interface DetailProps {
   dinas_id: string;
+  viewOnly?: boolean;
 }
 
 function DetailRekapPage(props: DetailProps) {
   const dispatch = useDispatch();
-  const { dinas_id } = props;
+  const { dinas_id, viewOnly } = props;
+
+  const qs = getQueryString<{ pegawai_id?: string }>();
+  const redirectBackLink = qs.pegawai_id
+    ? '/dinas/pegawai/detail?pegawai_id=' + qs.pegawai_id
+    : viewOnly
+    ? '/'
+    : '/kepegawaian/rekap-dinas';
+
   const [confirmId, setConfirmId] = React.useState(0);
   const { data } = useCommonApi<GetRekapDetailReq, RekapDetailData>(
     RekapDinasAPI.GET_DINAS_DETAIL,
@@ -62,10 +73,12 @@ function DetailRekapPage(props: DetailProps) {
   return (
     <>
       <div className="rounded-lg bg-white shadow">
-        <a href="/kepegawaian/rekap-dinas" className="flex flex-row items-center gap-x-2 py-6 px-6">
-          <ChevronLeftIcon className="h-5 w-5" />
-          <div>Kembali</div>
-        </a>
+        <Link href={redirectBackLink}>
+          <span className="flex cursor-pointer flex-row items-center gap-x-2 py-6 px-6">
+            <ChevronLeftIcon className="h-5 w-5" />
+            <div>Kembali</div>
+          </span>
+        </Link>
         <div className="px-6 pb-6">
           <div className="flex flex-col">
             <p className="text-[24px] font-medium text-gray-900">Data Dinas</p>
@@ -131,24 +144,28 @@ function DetailRekapPage(props: DetailProps) {
               </table>
             </div>
           </div>
-          <div className="mt-[3rem] flex w-full">
-            <div className="ml-auto flex flex-row gap-x-[12px]">
-              <button
-                type="button"
-                className="rounded-[6px] bg-[#9CA3AF] py-[9px] px-[17px] text-[14px] text-gray-50"
-                onClick={() => setConfirmId(Number(data?.dinas_id))}
-              >
-                Hapus
-              </button>
-              <button
-                type="button"
-                className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-[14px] text-gray-50"
-                onClick={() => (window.location.href = `/kepegawaian/rekap-dinas?dinas_id=${data?.dinas_id}&type=edit`)}
-              >
-                Edit
-              </button>
+          {!viewOnly && (
+            <div className="mt-[3rem] flex w-full">
+              <div className="ml-auto flex flex-row gap-x-[12px]">
+                <button
+                  type="button"
+                  className="rounded-[6px] bg-[#9CA3AF] py-[9px] px-[17px] text-[14px] text-gray-50"
+                  onClick={() => setConfirmId(Number(data?.dinas_id))}
+                >
+                  Hapus
+                </button>
+                <button
+                  type="button"
+                  className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-[14px] text-gray-50"
+                  onClick={() =>
+                    (window.location.href = `/kepegawaian/rekap-dinas?dinas_id=${data?.dinas_id}&type=edit`)
+                  }
+                >
+                  Edit
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       <ConfirmDialog

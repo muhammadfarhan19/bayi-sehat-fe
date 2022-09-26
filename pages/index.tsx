@@ -1,22 +1,22 @@
-import * as React from 'react';
-
-import DetailPegawai from '../components/KepegawaianPage/DataKepegawaian/DetailPegawai/DetailPegawai';
+import DetailDinas from '../components/DinasPage/DataPegawai/DetailDinas';
 import { withAuthenticatedPage } from '../components/shared/hocs/AuthenticatedPage';
 import { withReduxPage } from '../components/shared/hocs/ReduxPage';
 import LeftMenu from '../components/shared/MainLayout/LeftMenu';
 import MainLayout from '../components/shared/MainLayout/MainLayout';
 
-function IndexPage() {
+function PegawaiJadwalKehadiran() {
   return (
     <MainLayout>
       <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-8">
         <LeftMenu />
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
-          <DetailPegawai />
+          <section aria-labelledby="section-1-title">
+            <DetailDinas />
+          </section>
         </div>
       </div>
     </MainLayout>
   );
 }
 
-export default withReduxPage()(withAuthenticatedPage()(IndexPage));
+export default withReduxPage()(withAuthenticatedPage()(PegawaiJadwalKehadiran));

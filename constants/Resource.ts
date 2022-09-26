@@ -1,4 +1,4 @@
-import { StatusMenikah, Gender, StatusCpns } from '../types/Common';
+import { StatusMenikah, Gender, StatusCpns, Agama } from '../types/Common';
 
 export const StatusMenikahText: Record<StatusMenikah, string> = {
   [StatusMenikah.MARRIED]: 'Menikah',
@@ -16,6 +16,15 @@ export const StatusPNSText: Record<StatusCpns, String> = {
   [StatusCpns.PNS]: 'PNS',
   [StatusCpns.PPNPN]: 'PPNPN',
   [StatusCpns.CPNS]: 'CPNS',
+};
+
+export const AgamaText: Record<Agama, string> = {
+  [Agama.BUDDHA]: 'Buddha',
+  [Agama.HINDU]: 'Hindu',
+  [Agama.ISLAM]: 'Islam',
+  [Agama.KATOLIK]: 'Katolik',
+  [Agama.PROTESTAN]: 'Protestan',
+  [Agama.OTHER]: 'Tidak dapat disebutkan',
 };
 
 export const JenisBerkas = {

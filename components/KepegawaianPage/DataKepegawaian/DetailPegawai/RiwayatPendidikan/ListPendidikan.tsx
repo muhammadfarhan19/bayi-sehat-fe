@@ -27,7 +27,7 @@ type ListPendidikanProps = {
   userId?: number;
 };
 
-export default function ListArsip(props: ListPendidikanProps) {
+export default function ListPendidikan(props: ListPendidikanProps) {
   const dispatch = useDispatch();
 
   const { onShowDetail, userId = 0 } = props;

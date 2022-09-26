@@ -29,4 +29,4 @@ function ArsipDigital() {
   );
 }
 
-export default withErrorBoundary<typeof ArsipDigital, unknown>(ArsipDigital);
+export default withErrorBoundary(ArsipDigital);

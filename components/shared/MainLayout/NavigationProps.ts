@@ -7,6 +7,7 @@ export interface User {
 export type Navigation = {
   id: number;
   name: string;
+  selectedHref?: string[];
   current?: boolean;
 } & (
   | {

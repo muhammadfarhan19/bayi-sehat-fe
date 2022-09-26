@@ -25,10 +25,12 @@ export interface GetJabatanReq {
   jabatan?: string;
   jenis_jabatan?: number;
   kelas_jabatan?: number;
+  is_dikti?: number;
 }
 
 export interface JabatanData {
   list: {
+    is_dikti: number;
     jabatan_id: number;
     name: string;
     jenis_jabatan: number;

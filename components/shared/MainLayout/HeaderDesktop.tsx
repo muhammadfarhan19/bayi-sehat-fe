@@ -1,6 +1,7 @@
 import { Popover } from '@headlessui/react';
 import { BellIcon, ChevronDownIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { UserCircleIcon } from '@heroicons/react/solid';
+import Link from 'next/link';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -101,7 +102,7 @@ export default function HeaderDesktop(props: NavigationProps) {
               <div className="hidden border-t border-white border-opacity-20 py-5 lg:block">
                 <div className="grid grid-cols-3 items-center gap-8">
                   <div className="col-span-2">
-                    <nav className="flex space-x-4">
+                    <nav className="flex min-h-[36px] space-x-4">
                       {navigation.map((item, index) =>
                         item.childMenu && Array.isArray(item.childMenu) ? (
                           <div key={index} className="relative flex">
@@ -110,18 +111,18 @@ export default function HeaderDesktop(props: NavigationProps) {
                             </MenuDropdown>
                           </div>
                         ) : (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className={classNames(
-                              item.current ? 'text-white' : 'text-indigo-100',
-                              'rounded-md bg-white bg-opacity-0 px-3 py-2 text-sm font-medium hover:bg-opacity-10'
-                            )}
-                            aria-current={item.current ? 'page' : undefined}
-                            {...(item.href === '#' ? { onClick: handleCustomMenuClick(item.name) } : {})}
-                          >
-                            {item.name}
-                          </a>
+                          <Link key={item.name} href={item.href || '/'}>
+                            <a
+                              className={classNames(
+                                item.current ? 'text-white' : 'text-indigo-100',
+                                'rounded-md bg-white bg-opacity-0 px-3 py-2 text-sm font-medium hover:bg-opacity-10'
+                              )}
+                              aria-current={item.current ? 'page' : undefined}
+                              {...(item.href === '#' ? { onClick: handleCustomMenuClick(item.name) } : {})}
+                            >
+                              {item.name}
+                            </a>
+                          </Link>
                         )
                       )}
                     </nav>

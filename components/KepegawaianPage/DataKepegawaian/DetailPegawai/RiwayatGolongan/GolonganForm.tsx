@@ -21,15 +21,15 @@ import { Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
-import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import AutoComplete, { OptionType } from '../../../../shared/Input/ComboBox';
 import DatePicker from '../../../../shared/Input/DatePicker';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
+import Loader from '../../../../shared/Loader/Loader';
 
 interface FormState {
   tmt: number;
-  tipe_kp: number;
+  tipe_kp: number | string | any;
   tahun: string;
   bulan: string;
   golongan: string;
@@ -61,6 +61,8 @@ export default function GolonganForm(props: GolonganFormProps) {
   const dispatch = useDispatch();
   const { onSuccess, open, setOpen, detail } = props;
   const [yearOptions, monthOptions] = yearMonthOption();
+  const [jenisKpList, setJenisKpList] = React.useState<React.SetStateAction<any>>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const isEditForm = !!detail?.riwayat_id;
 
   const {
@@ -69,28 +71,55 @@ export default function GolonganForm(props: GolonganFormProps) {
     formState: { errors },
     setValue,
     resetField,
+    watch,
+    getValues,
   } = useForm<FormState>({
     defaultValues: {
       tmt: Date.now(),
     },
   });
 
+  React.useLayoutEffect(() => {
+    dataGolongan();
+  }, []);
+
   const toggleModal = () => {
     setOpen(!open);
   };
 
-  const { data: jenisKp } = useCommonApi<null, MasterJenisKpData[]>(MasterAPI.GET_MASTER_JENIS_KP, null, {
-    method: 'GET',
-  });
+  React.useEffect(() => {
+    const valuesTahun = watch('tahun');
+    const valuesBulan = watch('bulan');
+    if (Number(valuesTahun) === 0 && Number(valuesBulan) === 0) {
+      resetField('bulan');
+      resetField('tahun');
+    }
+    if (Number(valuesTahun) === 0 && Number(valuesBulan) > 0) {
+      setValue('tahun', String(0));
+    }
+  }, [watch('bulan'), watch('tahun'), getValues('bulan'), getValues('tahun')]);
+
+  const dataGolongan = async () => {
+    setIsLoading(true);
+    await callAPI<null, MasterJenisKpData[]>(MasterAPI.GET_MASTER_JENIS_KP, null, { method: 'GET' })
+      .then(res => {
+        res.data;
+        setJenisKpList(res?.data);
+      })
+      .finally(() => setIsLoading(false));
+  };
 
   React.useEffect(() => {
     if (detail) {
+      setIsLoading(true);
       const masaJabatan = detail?.masa_jabatan.split(' ');
       setValue('file_id', String(detail?.files?.[0]?.document_uuid || ''));
       setValue('file_name', String(detail?.files?.[0]?.document_uuid || ''));
       setValue('tahun', masaJabatan?.[0]);
       setValue('bulan', masaJabatan?.[2]);
       setValue('tmt', Number(new Date(detail?.tmt).getTime()));
+      setValue('tipe_kp', detail?.tipe_kp);
+      setIsLoading(false);
     } else {
       resetField('golongan');
       resetField('file_id');
@@ -161,6 +190,12 @@ export default function GolonganForm(props: GolonganFormProps) {
       })
     );
   };
+
+  if (isLoading) {
+    <div className="relative h-[150px] w-full divide-y divide-gray-200">
+      <Loader />
+    </div>;
+  }
 
   return (
     <>
@@ -273,26 +308,11 @@ export default function GolonganForm(props: GolonganFormProps) {
                           onChange={value => onChange(value.value)}
                           label={'Jenis KP'}
                           placeholder={'Pilih jenis kp'}
-                          defaultValue={(() => {
-                            if ((jenisKp || []).length) {
-                              const selectedJenisKp = (jenisKp || [])?.filter(
-                                each => Number(each.id) === Number(detail?.tipe_kp)
-                              )[0] || {
-                                text: '',
-                                value: '',
-                              };
-                              return {
-                                text: selectedJenisKp.jenis_kp,
-                                value: String(selectedJenisKp.id),
-                              };
-                            }
-                          })()}
-                          options={(jenisKp || [])?.map(each => {
-                            return {
-                              text: each.jenis_kp,
-                              value: String(each.id),
-                            };
-                          })}
+                          defaultValue={{ text: detail?.tipe_kp_str || '', value: String(detail?.tipe_kp) || '' }}
+                          options={(jenisKpList?.data || []).map((each: { jenis_kp: any; id: any }) => ({
+                            text: each?.jenis_kp,
+                            value: String(each?.id),
+                          }))}
                         />
                       )}
                     />

@@ -38,8 +38,9 @@ interface FormState {
   no_penghargaan: string;
   tgl_penghargaan: string;
   document_uuid: string;
-  file_id: string;
-  file_name: string;
+  document_name: string;
+  file_id: any;
+  file_name: any;
 }
 
 export default function PendidikanForm(props: UploadFormProps) {
@@ -57,6 +58,15 @@ export default function PendidikanForm(props: UploadFormProps) {
     formState: { errors },
     setValue,
   } = useForm<FormState>();
+
+  React.useLayoutEffect(() => {
+    if (selectedId && data) {
+      const fileId = data?.[0]?.bukti_penghargaan?.[0]?.document_uuid;
+      const fileName = data?.[0]?.bukti_penghargaan?.[0]?.document_name;
+      setValue('file_id', fileId);
+      setValue('file_name', fileName);
+    }
+  }, [selectedId && data]);
 
   const submitHandler = async (formData: FormState) => {
     let resSubmit;

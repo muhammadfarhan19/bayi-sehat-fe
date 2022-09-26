@@ -23,8 +23,30 @@ export const NavigationList: Navigation[] = [
     childMenu: [
       {
         id: PUBLIC,
-        name: 'Biodata',
+        name: 'Jadwal',
         href: '/',
+        selectedHref: ['/kepegawaian/rekap-dinas/detail'],
+      },
+      {
+        id: PUBLIC,
+        name: 'Biodata',
+        href: '/pegawai/biodata',
+      },
+      {
+        id: PUBLIC,
+        name: 'Kehadiran',
+        childMenu: [
+          {
+            id: PUBLIC,
+            name: 'Klaim Kehadiran',
+            href: '/kehadiran',
+          },
+          // {
+          //   id: PUBLIC,
+          //   name: 'Log Harian',
+          //   href: '/log-harian',
+          // },
+        ],
       },
     ],
   },
@@ -58,11 +80,11 @@ export const NavigationList: Navigation[] = [
           },
         ],
       },
-      {
-        id: NavigationId.KEPEGAWAIAN,
-        name: 'Kepangkatan',
-        href: '/kepegawaian/kepangkatan',
-      },
+      // {
+      //   id: NavigationId.KEPEGAWAIAN,
+      //   name: 'Kepangkatan',
+      //   href: '/kepegawaian/kepangkatan',
+      // },
       {
         id: NavigationId.KEPEGAWAIAN,
         name: 'Dinas',
@@ -76,6 +98,34 @@ export const NavigationList: Navigation[] = [
             id: NavigationId.KEPEGAWAIAN,
             name: 'Data Dinas Pegawai',
             href: '/dinas/pegawai',
+            selectedHref: ['/dinas/pegawai/detail'],
+          },
+        ],
+      },
+      {
+        id: NavigationId.KEPEGAWAIAN,
+        name: 'Kehadiran',
+        childMenu: [
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Klaim Kehadiran',
+            href: '/kepegawaian/kehadiran',
+          },
+          // {
+          //   id: NavigationId.KEPEGAWAIAN,
+          //   name: 'Log Harian',
+          //   href: '/kepegawaian/log-harian',
+          // },
+        ],
+      },
+      {
+        id: NavigationId.KEPEGAWAIAN,
+        name: 'Data Master',
+        childMenu: [
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Hari Libur dan Ramadhan',
+            href: '/master/libur',
           },
         ],
       },

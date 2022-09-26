@@ -6,7 +6,7 @@ import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
 import Loader from '../../../shared/Loader/Loader';
 
-const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
+export const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
   if (!link) {
     return <>{value}</>;
   }
@@ -75,4 +75,4 @@ function DataDiriPribadi() {
   );
 }
 
-export default withErrorBoundary<typeof DataDiriPribadi, unknown>(DataDiriPribadi);
+export default withErrorBoundary(DataDiriPribadi);

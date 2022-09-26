@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
+import { DownloadIcon, XIcon } from '@heroicons/react/outline';
 import { UserCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
 
@@ -15,6 +15,7 @@ import Loader from '../../../shared/Loader/Loader';
 import ArsipDigital from './ArsipDigital';
 import DataDiriPegawai from './DataDiriPegawai';
 import DataDiriPribadi from './DataDiriPribadi';
+import DataDiriPribadiPpnpn from './DataDiriPribadiPpnpn';
 import ProfilePegawai from './ProfileSummaryPegawai/ProfilePegawai';
 import RiwayatBelajar from './RiwayatBelajar';
 import RiwayatDiklat from './RiwayatDiklat';
@@ -23,6 +24,7 @@ import RiwayatJabatan from './RiwayatJabatan';
 import RiwayatKeluarga from './RiwayatKeluarga';
 import RiwayatKGB from './RiwayatKGB';
 import RiwayatPendidikan from './RiwayatPendidikan';
+import RiwayatPengangkatan from './RiwayatPengangkatan';
 import RiwayatPenghargaan from './RiwayatPenghargaan';
 import RiwayatSkp from './RiwayatSkp';
 
@@ -46,18 +48,20 @@ function DetailPegawai() {
 
   const ppnpn = [
     { name: 'Data Diri Pribadi', href: '#' },
+    { name: 'Riwayat Pengangkatan Pekerjaan', href: '#' },
     { name: 'Riwayat Pendidikan', href: '#' },
     { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
     { name: 'Riwayat Keluarga', href: '#' },
     { name: 'Arsip Digital', href: '#' },
   ];
+  const personalPegawaiData = usePersonalData();
 
-  const tabs = type === 'pns' || typeof type === 'undefined' ? pns : ppnpn;
+  const tabs = personalPegawaiData?.status_cpns === 1 ? pns : ppnpn;
 
   const { tabName = tabs[0].name } = getQueryString<{ tabName: string }>();
   const [selected, setSelected] = React.useState(tabName);
   const [showImage, setShowImage] = React.useState(false);
-  const personalPegawaiData = usePersonalData();
+
   const [showComponent, setShowComponent] = React.useState(false);
   const { pegawai_id } = getQueryString<{ pegawai_id: string }>();
 
@@ -100,6 +104,14 @@ function DetailPegawai() {
     );
   }
 
+  const downloadImage = () => {
+    const link = document.createElement('a');
+    link.href = img;
+    link.setAttribute('download', `profile.jpg`);
+    link.click();
+    link.remove();
+  };
+
   return (
     <>
       <div className="flex flex-row flex-nowrap justify-between gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
@@ -109,7 +121,7 @@ function DetailPegawai() {
           ) : (
             <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
           )}
-          <div className="my-auto flex flex-col">
+          <div className="my-auto ml-2 flex flex-col">
             <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
             <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
           </div>
@@ -169,7 +181,7 @@ function DetailPegawai() {
           </div>
         </div>
         <div className="overflow-auto">
-          {type === 'pns' || typeof type === 'undefined' ? (
+          {type === 'pns' || (typeof type === 'undefined' && personalPegawaiData?.status_cpns === 1) ? (
             <>
               {selected === tabs[0]?.name ? <DataDiriPegawai /> : null}
               {selected === tabs[1]?.name ? <DataDiriPribadi /> : null}
@@ -186,11 +198,12 @@ function DetailPegawai() {
             </>
           ) : (
             <>
-              {selected === tabs[0]?.name ? <DataDiriPribadi /> : null}
-              {selected === tabs[1]?.name ? <RiwayatPendidikan /> : null}
-              {selected === tabs[2]?.name ? <RiwayatDiklat /> : null}
-              {selected === tabs[3]?.name ? <RiwayatKeluarga /> : null}
-              {selected === tabs[4]?.name ? <ArsipDigital /> : null}
+              {selected === tabs[0]?.name ? <DataDiriPribadiPpnpn /> : null}
+              {selected === tabs[1]?.name ? <RiwayatPengangkatan /> : null}
+              {selected === tabs[2]?.name ? <RiwayatPendidikan /> : null}
+              {selected === tabs[3]?.name ? <RiwayatDiklat /> : null}
+              {selected === tabs[4]?.name ? <RiwayatKeluarga /> : null}
+              {selected === tabs[5]?.name ? <ArsipDigital /> : null}
             </>
           )}
         </div>
@@ -223,10 +236,17 @@ function DetailPegawai() {
                 leaveTo="opacity-0 scale-95"
               >
                 <div className="my-8 inline-block w-full max-w-xs transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title as="div" className="flex justify-center">
+                  <div className="flex justify-center">
                     <img className="h-[250px] w-[250px] rounded-full" src={img} alt="" />
                     <XIcon className="h-5 cursor-pointer" onClick={() => setShowImage(!showImage)} />
-                  </Dialog.Title>
+                  </div>
+                  <hr className="mt-2" />
+                  <div className="mt-2 flex flex-col items-end">
+                    <div className="flex cursor-pointer flex-col items-center" onClick={downloadImage}>
+                      <DownloadIcon className="h-5 cursor-pointer" />
+                      <div className="text-xs">Unduh</div>
+                    </div>
+                  </div>
                 </div>
               </Transition.Child>
             </div>
