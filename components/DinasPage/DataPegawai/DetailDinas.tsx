@@ -36,15 +36,15 @@ export default function DetailDinas() {
           <div className="text-l basis-[200px] tracking-wider text-gray-700">Nama</div>
           <div className="text-l text-gray-700">{personalPegawai?.nama}</div>
         </div>
-        <div className="flex flex-row border-b-[1px] px-7 py-3">
+        {/* <div className="flex flex-row border-b-[1px] px-7 py-3">
           <div className="text-l basis-[200px] tracking-wider text-gray-700">Unit Kerja</div>
           <div className="text-l text-gray-700">{personalPegawai?.unit_kerja}</div>
-        </div>
+        </div> */}
       </div>
 
       <div className="mt-6 overflow-hidden rounded-lg bg-white shadow">
         <div className="flex flex-row items-center justify-between border-b-[1px] px-6 py-4">
-          <h3 className=" text-xl font-semibold tracking-wider text-gray-700">Jadwal Dinas</h3>
+          <h3 className=" text-xl font-semibold tracking-wider text-gray-700">Jadwal Dinas dan Presensi</h3>
           <button
             onClick={() => setFormModalState(!formModalState)}
             className="text-l rounded-[4px] bg-indigo-600 px-4   py-2 font-medium text-gray-50 focus:outline-none"
