@@ -15,7 +15,7 @@ interface ModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   selectedId?: number;
-  pegawaiIdSelected: number;
+  pegawaiIdSelected?: number;
   tanggalKlaimSelected: string;
   jenisPengajuanSelected: string;
 }
@@ -50,7 +50,7 @@ function KlaimModal(props: ModalProps) {
       {
         id: Number(selectedId),
         jenis_pengajuan: jenisPengajuanSelected,
-        user_id: pegawaiIdSelected,
+        user_id: Number(pegawaiIdSelected),
         tanggal_klaim: tanggalKlaimSelected,
         status_klaim: Number(formData?.status_klaim),
         alasan_tolak: formData?.alasan_tolak,
@@ -76,20 +76,12 @@ function KlaimModal(props: ModalProps) {
         })
       );
       setOpen(!open);
-      setTimeout(() => window.location.reload(), 1500);
     }
   };
 
   return (
     <Transition appear show={open} as={React.Fragment}>
-      <Dialog
-        as="div"
-        className="fixed inset-0 z-10 overflow-y-auto"
-        onClose={() => {
-          toggleModal();
-          setTimeout(() => window.location.reload(), 100);
-        }}
-      >
+      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={toggleModal}>
         <div className="min-h-screen px-4 text-center">
           <Transition.Child
             as={React.Fragment}
@@ -100,7 +92,7 @@ function KlaimModal(props: ModalProps) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0" />
+            <Dialog.Overlay className="fixed inset-0 backdrop-brightness-50" />
           </Transition.Child>
 
           <span className="inline-block h-screen align-middle" aria-hidden="true">
@@ -118,13 +110,7 @@ function KlaimModal(props: ModalProps) {
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-sm transition-all">
               <Dialog.Title as="div" className="flex justify-between">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">Klaim Pengajuan Kehadiran</h3>
-                <XIcon
-                  className="h-5 cursor-pointer"
-                  onClick={() => {
-                    toggleModal();
-                    setTimeout(() => window.location.reload(), 100);
-                  }}
-                />
+                <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
               <form onSubmit={handleSubmit(submitHandler)}>
                 <div className="mt-5 sm:col-span-6">
