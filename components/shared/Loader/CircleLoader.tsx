@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 const CircleLoader = () => {
-  const circleCommonClasses = 'h-1.5 w-1.5 bg-gray-400 rounded-full';
+  const circleCommonClasses = 'h-1.5 w-1.5 bg-gray-800 rounded-full';
 
   return (
     <div className="flex flex-col items-center">
