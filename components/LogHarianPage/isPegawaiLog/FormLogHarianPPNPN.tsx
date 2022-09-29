@@ -1,8 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { PlusCircleIcon, XIcon } from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
-// import { format } from 'date-fns';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
@@ -35,8 +34,6 @@ function FormLogHarianPPNPN(props: ModalProps) {
   const dispatch = useDispatch();
   const personalPegawaiData = usePersonalData();
 
-  const [moreComponentBox, setMoreComponentBox] = useState(1);
-
   const {
     register,
     handleSubmit,
@@ -49,7 +46,7 @@ function FormLogHarianPPNPN(props: ModalProps) {
       {
         peg_id: Number(personalPegawaiData?.pegawai_id),
         date: format(new Date(selectedId), 'yyyy-MM-dd'),
-        summary: new Array(formData?.summary),
+        summary: Array(formData?.summary),
       },
       { method: 'post' }
     );
@@ -73,10 +70,6 @@ function FormLogHarianPPNPN(props: ModalProps) {
       );
       setOpen(!open);
     }
-  };
-
-  const handleAddInput = () => {
-    setMoreComponentBox(moreComponentBox + 1);
   };
 
   return (
@@ -119,24 +112,19 @@ function FormLogHarianPPNPN(props: ModalProps) {
                     <label htmlFor="nama" className="block text-xs font-medium text-gray-700">
                       Isi Log / Jurnal Harian
                     </label>
-                    {Array.from({ length: moreComponentBox }).map(() => (
-                      <div className="mt-1">
-                        <input
-                          {...register('summary', {
-                            required: 'Silahkan masukkan Log Harian',
-                          })}
-                          className="inline-block h-24 w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                          name="summary"
-                          type="text"
-                        />
-                        {errors.summary && <p className="mt-1 text-xs text-red-500">{errors.summary.message}</p>}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-5 flex flex-row items-center justify-between sm:col-span-6">
-                    <div className="flex flex-1 border-t" />
-                    <PlusCircleIcon onClick={handleAddInput} width={32} height={32} color="#163CAA" className="mx-2" />
-                    <div className="flex flex-1 border-t" />
+                    {/* {Array.from({ length: moreComponentBox }).map(() => ( */}
+                    <div className="mt-1">
+                      <input
+                        {...register('summary', {
+                          required: 'Silahkan masukkan Log Harian',
+                        })}
+                        className="inline-block h-24 w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                        name="summary"
+                        type="text"
+                      />
+                      {errors.summary && <p className="mt-1 text-xs text-red-500">{errors.summary.message}</p>}
+                    </div>
+                    {/* ))} */}
                   </div>
                 </div>
                 <div className="mt-5">
@@ -144,7 +132,7 @@ function FormLogHarianPPNPN(props: ModalProps) {
                     type="submit"
                     className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
-                    Klaim
+                    Simpan
                   </button>
                 </div>
               </form>

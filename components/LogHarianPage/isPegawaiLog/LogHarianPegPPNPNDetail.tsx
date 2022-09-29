@@ -45,7 +45,7 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
     LogHarianAPI.GET_LOG_HARIAN_WEEK,
     { pegawai_id: Number(personalPegawaiData?.pegawai_id), year: Number(selectedYear), month: Number(selectedMonth) },
     { method: 'GET' },
-    { revalidateOnMount: true, skipCall: !selectedYear }
+    { revalidateOnMount: true }
   );
 
   const handleConfirm = async () => {
@@ -120,17 +120,27 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
               const matchData = (logHarianData || []).filter(
                 log => format(new Date(log?.log_date), 'E, dd MMMM') === formatData
               );
+              // const weekEnd = ["Sat","Sun"]
+              if (formatData.includes('Sat')) {
+                return;
+              }
+              if (formatData.includes('Sun')) {
+                return;
+              }
               return (
                 <tr key={data?.getDate()}>
-                  <td className="w-52 px-6 py-4 text-sm font-medium text-[#6B7280]">{formatData}</td>
-                  {/* <td className="w-1/2 px-6 py-4 text-sm font-medium text-[#6B7280]">
-                    {matchData?.length === 0 ? '-' : returnData}
-                  </td> */}
+                  <td
+                    className={`mt-5 font-bold ${
+                      matchData?.length === 0 ? 'inline-flex' : 'block'
+                    }  w-52 px-6 text-sm font-medium text-[#6B7280]`}
+                  >
+                    {formatData}
+                  </td>
                   {matchData?.length === 0 ? (
                     <div className="flex flex-row items-center justify-between">
-                      <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">-</td>
+                      <td className="flex flex-1 justify-end px-6 py-4 text-sm font-extrabold text-[#6B7280]">-</td>
                       {personalPegawaiData?.status_cpns === 2 ? (
-                        <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                        <td className="flex flex-1 justify-end px-6 py-4 text-sm font-medium text-[#6B7280]">
                           <button
                             onClick={() => {
                               handleShowForm(!formModalState.open);
@@ -138,29 +148,44 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
                             }}
                             className="inline-flex w-40 items-center justify-center rounded border bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
                           >
-                            Isi Log
+                            Tambah Log
                           </button>
                         </td>
                       ) : null}
                     </div>
                   ) : (
-                    matchData?.map(data => {
-                      return (
-                        <div key={data?.log_id} className="flex flex-row items-center justify-between">
-                          <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{data?.summary}</td>
-                          {personalPegawaiData?.status_cpns === 2 ? (
-                            <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
-                              <button
-                                onClick={() => setConfirmId(data?.log_id)}
-                                className="w-40 items-center justify-center rounded border bg-red-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
-                              >
-                                Hapus
-                              </button>
+                    <>
+                      {matchData?.map(cal => {
+                        return (
+                          <div key={cal?.log_id} className="flex flex-row items-center justify-end">
+                            <td className="flex flex-1 justify-end px-6 py-4 text-sm font-medium text-[#6B7280]">
+                              {cal?.summary}
                             </td>
-                          ) : null}
-                        </div>
-                      );
-                    })
+                            {personalPegawaiData?.status_cpns === 2 ? (
+                              <td className="flex flex-1 justify-end  px-6 py-4 text-sm font-medium text-[#6B7280]">
+                                <button
+                                  onClick={() => setConfirmId(cal?.log_id)}
+                                  className="w-40 items-center justify-center rounded border bg-red-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
+                                >
+                                  Hapus
+                                </button>
+                              </td>
+                            ) : null}
+                          </div>
+                        );
+                      })}
+                      <div className="flex justify-end px-6 py-4">
+                        <button
+                          onClick={() => {
+                            handleShowForm(!formModalState.open);
+                            setDateSubmitted(data);
+                          }}
+                          className="inline-flex w-40 items-center justify-center rounded border bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
+                        >
+                          Tambah Log
+                        </button>
+                      </div>
+                    </>
                   )}
                 </tr>
               );
@@ -171,7 +196,7 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
       {formModalState?.open && (
         <FormLogHarianPPNPN
           onSuccess={() => mutate()}
-          selectedId={dateSubmitted.toDateString()}
+          selectedId={dateSubmitted?.toDateString()}
           open={formModalState?.open}
           setOpen={(open: boolean) => handleShowForm(open)}
         />

@@ -1,5 +1,4 @@
 import { AdjustmentsIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
-import { ArchiveIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
 
 import { LogHarianAPI } from '../../../constants/APIUrls';
@@ -15,15 +14,11 @@ function LogHarianPegawai() {
   const [isShownEachDetailPage, setIsShownEachDetailPage] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [detailData, setDetailData] = React.useState({
-    month: 1,
-    year: 2022,
+    month: new Date().getMonth(),
+    year: new Date().getFullYear(),
   });
 
   const personalPegawaiData = usePersonalData();
-
-  //   const toggleDetailPage = () => {
-  //     setIsShownEachDetailPage(!isShownEachDetailPage);
-  //   };
 
   const { data: logHarianData, isValidating } = useCommonApi<GetLogHarianReqYear, GetLogHarianData[]>(
     LogHarianAPI.GET_LOG_HARIAN_MONTH,
@@ -64,7 +59,7 @@ function LogHarianPegawai() {
           selectedMonth={detailData?.month}
           onBack={() => {
             setIsShownEachDetailPage(false);
-            setTimeout(() => window.location.reload(), 50);
+            setTimeout(() => window.location.reload(), 500);
           }}
         />
       ) : (
@@ -152,8 +147,6 @@ function LogHarianPegawai() {
                         {newData.map(data => {
                           const submittedData = logHarianData?.filter(item => item?.log_month === data?.id);
                           const returnData = submittedData?.map(list => list?.submited_log);
-                          //   const detailMonth = submittedData?.map(month => month?.log_month);
-                          //   const detailYear = submittedData?.map(year => year?.log_year);
                           if (Number(selectedDate?.getFullYear()) > data?.year) {
                             return;
                           }
@@ -164,17 +157,17 @@ function LogHarianPegawai() {
                               <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900">
                                 {returnData?.[0] === undefined || returnData?.[0] === 0 ? (
                                   <div className="flex flex-row items-center space-x-2">
-                                    <XCircleIcon width={14.67} height={14.67} fill={'#F24E1E'} />
+                                    {/* <XCircleIcon width={14.67} height={14.67} fill={'#F24E1E'} /> */}
                                     <div className="text-[14px] text-red-600">Belum diisi</div>
                                   </div>
                                 ) : returnData?.[0] < 20 ? (
                                   <div className="flex flex-row items-center space-x-2">
-                                    <ArchiveIcon width={14.67} height={14.67} fill={'#FBBF24'} />
+                                    {/* <ArchiveIcon width={14.67} height={14.67} fill={'#FBBF24'} /> */}
                                     <div className="text-[14px] text-yellow-400">Sudah diisi {returnData?.[0]}</div>
                                   </div>
                                 ) : (
                                   <div className="flex flex-row items-center space-x-2">
-                                    <CheckCircleIcon width={14.67} height={14.67} fill={'#29CC6A'} />
+                                    {/* <CheckCircleIcon width={14.67} height={14.67} fill={'#29CC6A'} /> */}
                                     <div className="text-[14px] text-green-600">Sudah diisi {returnData?.[0]}</div>
                                   </div>
                                 )}
@@ -195,15 +188,10 @@ function LogHarianPegawai() {
                                     }, 500);
                                   }}
                                   type="button"
-                                  className={`inline-flex w-full ${
-                                    returnData?.[0] === undefined || returnData?.[0] < 20 ? 'bg-indigo-600' : 'bg-white'
-                                  } items-center justify-center rounded border border-indigo-600 px-2.5 py-2 text-center text-xs font-medium ${
-                                    returnData?.[0] === undefined || returnData?.[0] < 20
-                                      ? 'text-white'
-                                      : 'text-indigo-600'
-                                  }  shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200`}
+                                  className={`inline-flex w-full items-center justify-center rounded border border-indigo-600 bg-white px-2.5 py-2 text-center text-xs font-medium text-indigo-600 shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200`}
                                 >
-                                  {returnData?.[0] === undefined || returnData?.[0] < 20 ? 'Tulis Log' : 'Lihat Detail'}
+                                  {/* {returnData?.[0] === undefined || returnData?.[0] < 20 ? 'Tulis Log' : 'Lihat Detail'} */}
+                                  Lihat Detail
                                 </button>
                               </td>
                             </tr>
