@@ -5,6 +5,7 @@ export interface GetLogHarianData {
   log_month: number;
   log_year: number;
   submited_log: number;
+  number_of_day_filled: number;
 }
 
 export interface GetLogHarianReqYear {

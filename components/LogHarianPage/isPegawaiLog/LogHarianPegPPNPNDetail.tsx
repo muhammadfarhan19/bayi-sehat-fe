@@ -132,13 +132,19 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
                   <td
                     className={`mt-5 font-bold ${
                       matchData?.length === 0 ? 'inline-flex' : 'block'
-                    }  w-52 px-6 text-sm font-medium text-[#6B7280]`}
+                    }  w-52 px-6 text-[15px] font-medium text-[#000000]`}
                   >
                     {formatData}
                   </td>
                   {matchData?.length === 0 ? (
                     <div className="flex flex-row items-center justify-between">
-                      <td className="flex flex-1 justify-end px-6 py-4 text-sm font-extrabold text-[#6B7280]">-</td>
+                      <td
+                        className={`flex flex-1 ${
+                          personalPegawaiData?.status_cpns === 2 ? 'justify-end' : 'justify-center'
+                        } px-6 py-4 text-sm font-extrabold text-[#6B7280]`}
+                      >
+                        -
+                      </td>
                       {personalPegawaiData?.status_cpns === 2 ? (
                         <td className="flex flex-1 justify-end px-6 py-4 text-sm font-medium text-[#6B7280]">
                           <button
@@ -157,12 +163,21 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
                     <>
                       {matchData?.map(cal => {
                         return (
-                          <div key={cal?.log_id} className="flex flex-row items-center justify-end">
-                            <td className="flex flex-1 justify-end px-6 py-4 text-sm font-medium text-[#6B7280]">
+                          <div
+                            key={cal?.log_id}
+                            className={`flex flex-row flex-nowrap items-center ${
+                              personalPegawaiData?.status_cpns === 2 ? 'justify-end' : 'ml-20 justify-start'
+                            }`}
+                          >
+                            <td
+                              className={`${
+                                personalPegawaiData?.status_cpns === 2 ? 'ml-20' : null
+                              } list-item px-6 py-4 text-sm font-medium text-[#6B7280]`}
+                            >
                               {cal?.summary}
                             </td>
                             {personalPegawaiData?.status_cpns === 2 ? (
-                              <td className="flex flex-1 justify-end  px-6 py-4 text-sm font-medium text-[#6B7280]">
+                              <td className="flex flex-1 justify-end px-6 py-4 text-sm font-medium text-[#6B7280]">
                                 <button
                                   onClick={() => setConfirmId(cal?.log_id)}
                                   className="w-40 items-center justify-center rounded border bg-red-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
@@ -174,17 +189,19 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
                           </div>
                         );
                       })}
-                      <div className="flex justify-end px-6 py-4">
-                        <button
-                          onClick={() => {
-                            handleShowForm(!formModalState.open);
-                            setDateSubmitted(data);
-                          }}
-                          className="inline-flex w-40 items-center justify-center rounded border bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
-                        >
-                          Tambah Log
-                        </button>
-                      </div>
+                      {personalPegawaiData?.status_cpns === 2 ? (
+                        <div className="flex justify-end px-6 py-4">
+                          <button
+                            onClick={() => {
+                              handleShowForm(!formModalState.open);
+                              setDateSubmitted(data);
+                            }}
+                            className="inline-flex w-40 items-center justify-center rounded border bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
+                          >
+                            Tambah Log
+                          </button>
+                        </div>
+                      ) : null}
                     </>
                   )}
                 </tr>

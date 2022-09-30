@@ -146,7 +146,7 @@ function LogHarianPegawai() {
                       <tbody>
                         {newData.map(data => {
                           const submittedData = logHarianData?.filter(item => item?.log_month === data?.id);
-                          const returnData = submittedData?.map(list => list?.submited_log);
+                          const returnData = submittedData?.map(list => list?.number_of_day_filled);
                           if (Number(selectedDate?.getFullYear()) > data?.year) {
                             return;
                           }
