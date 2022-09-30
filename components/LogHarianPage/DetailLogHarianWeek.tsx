@@ -52,9 +52,9 @@ function DetailLogHarianWeek(props: DetailLogHarianProps) {
               {(logHarianData || []).map((data, dataIdx) => {
                 const formatDate = format(new Date(data?.log_date), 'EEEE, dd MMMM', { locale: id });
                 return (
-                  <tr key={dataIdx}>
-                    <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{formatDate}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{data?.summary}</td>
+                  <tr className="flex flex-row" key={dataIdx}>
+                    <td className="flex-0.5 mr-20 py-4 pl-6 text-sm font-medium text-[#6B7280]">{formatDate}</td>
+                    <td className="flex-1 px-6 py-4 text-sm text-gray-500">{data?.summary}</td>
                   </tr>
                 );
               })}
