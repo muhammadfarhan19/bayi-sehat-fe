@@ -5,6 +5,8 @@ import { LogHarianAPI } from '../../constants/APIUrls';
 import { GetLogHarianData, GetLogHarianReqYear } from '../../types/api/LogHarianAPI';
 import useCommonApi from '../shared/hooks/useCommonApi';
 import DetailLogHarianWeek from './DetailLogHarianWeek';
+import { CALENDAR_MOCKING } from './isPegawaiLog/Shared/_calendar';
+import DatePicker from './isPegawaiLog/Shared/DatePicker';
 
 interface DetailLogHarianProps {
   onBack?: () => void;
@@ -16,6 +18,12 @@ function DetailLogHarianMonth(props: DetailLogHarianProps) {
   const { onBack, pegawai_id, yearSelected } = props;
 
   const [isShownEachDetailPage, setIsShownEachDetailPage] = React.useState(false);
+  const [selectedDate, setSelectedDate] = React.useState<Date>();
+  const [detailData, setDetailData] = React.useState({
+    month: new Date().getMonth(),
+    year: new Date().getFullYear(),
+    pegawai_id: pegawai_id,
+  });
 
   const { data: logHarianData } = useCommonApi<GetLogHarianReqYear, GetLogHarianData[]>(
     LogHarianAPI.GET_LOG_HARIAN_MONTH,
@@ -24,7 +32,24 @@ function DetailLogHarianMonth(props: DetailLogHarianProps) {
     { revalidateOnMount: true }
   );
 
-  // console.log(logHarianData)
+  console.log(detailData?.pegawai_id);
+
+  let newData = CALENDAR_MOCKING;
+  const checkData = newData?.map(data => data?.year);
+  if (Number(selectedDate?.getFullYear()) >= checkData?.[0]) {
+    const currentMonth = new Date().getMonth() + 1;
+    const wholeMonth = 12;
+    const sliceMonth = wholeMonth - currentMonth;
+    newData = CALENDAR_MOCKING?.slice(sliceMonth, newData?.length);
+  }
+
+  const handleShowForm = (month: number, year: number, pegawai_id: number) => {
+    setDetailData({
+      month,
+      year,
+      pegawai_id,
+    });
+  };
 
   const toggleDetailPage = () => {
     setIsShownEachDetailPage(!isShownEachDetailPage);
@@ -33,7 +58,12 @@ function DetailLogHarianMonth(props: DetailLogHarianProps) {
   return (
     <>
       {isShownEachDetailPage ? (
-        <DetailLogHarianWeek onBack={toggleDetailPage} />
+        <DetailLogHarianWeek
+          selectedMonth={detailData?.month}
+          selectedYear={detailData?.year}
+          pegawai_id={detailData?.pegawai_id}
+          onBack={toggleDetailPage}
+        />
       ) : (
         <section aria-labelledby="section-1-title">
           <div className="overflow-hidden rounded-lg bg-white px-6 py-6 shadow">
@@ -47,18 +77,16 @@ function DetailLogHarianMonth(props: DetailLogHarianProps) {
 
             <div className="flex w-full flex-row gap-x-[16px]">
               <div className="w-[202px] pb-2">
-                <p className="mb-[4px] text-[14px] font-normal">Tahun</p>
-                <select
+                <div className="flex w-full flex-row">
+                  <DatePicker onChange={date => setSelectedDate(date)} />
+                </div>
+                {/* <select
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   //   onChange={e => search('unit_kerja_id', e.target.value)}
                 >
                   <option value="">Semua</option>
-                  {/* {(unitKerjaList || []).map((item, index) => (
-                <option key={`options-${index}`} value={item?.unit_kerja_id}>
-                  {item?.name}
-                </option>
-              ))} */}
-                </select>
+                
+                </select> */}
               </div>
             </div>
             <div className="my-[24px] overflow-x-auto sm:mx-0 ">
@@ -95,27 +123,62 @@ function DetailLogHarianMonth(props: DetailLogHarianProps) {
                       </tr>
                     </thead>
                     <tbody>
-                      {(logHarianData || []).map(data => (
-                        <tr key={data?.log_month_id} className={'bg-white hover:bg-gray-100'}>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">Bulan ke {data?.log_month}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.log_month}</td>
-                          <td
-                            className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900"
-                            onClick={() => null}
-                          >
-                            {data?.number_of_day_filled}
-                          </td>
-                          <td className="px-6 py-4 text-xs font-medium">
-                            <button
-                              onClick={toggleDetailPage}
-                              type="button"
-                              className="inline-flex w-full items-center justify-center rounded border border-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-indigo-600 shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
-                            >
-                              Lihat Detail
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
+                      {newData?.map(data => {
+                        const submittedData = logHarianData?.filter(item => item?.log_month === data?.id);
+
+                        const returnData = submittedData?.map(list => list?.number_of_day_filled);
+                        if (Number(selectedDate?.getFullYear()) > data?.year) {
+                          return;
+                        }
+                        return (
+                          <tr key={data?.id} className={'bg-white hover:bg-gray-100'}>
+                            <td className="px-6 py-4 text-xs font-normal text-gray-900">{data?.name}</td>
+                            <td className="px-6 py-4 text-xs text-[20px] font-bold text-gray-900">{data?.title}</td>
+                            <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900">
+                              {returnData?.[0] === undefined || returnData?.[0] === 0 ? (
+                                <div className="flex flex-row items-center space-x-2">
+                                  {/* <XCircleIcon width={14.67} height={14.67} fill={'#F24E1E'} /> */}
+                                  <div className="text-[14px] text-red-600">Belum diisi</div>
+                                </div>
+                              ) : returnData?.[0] < 20 ? (
+                                <div className="flex flex-row items-center space-x-2">
+                                  {/* <ArchiveIcon width={14.67} height={14.67} fill={'#FBBF24'} /> */}
+                                  <div className="text-[14px] text-yellow-400">Sudah diisi {returnData?.[0]}</div>
+                                </div>
+                              ) : (
+                                <div className="flex flex-row items-center space-x-2">
+                                  {/* <CheckCircleIcon width={14.67} height={14.67} fill={'#29CC6A'} /> */}
+                                  <div className="text-[14px] text-green-600">Sudah diisi {returnData?.[0]}</div>
+                                </div>
+                              )}
+                            </td>
+                            {/* <td
+                                className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900"
+                                onClick={() => null}
+                              >
+                         
+                              </td> */}
+                            <td className="px-6 py-4 text-xs font-medium">
+                              <button
+                                onClick={() => {
+                                  handleShowForm(
+                                    data?.id,
+                                    Number(selectedDate?.getFullYear()),
+                                    Number(logHarianData?.[0]?.peg_id)
+                                  );
+                                  setTimeout(() => {
+                                    setIsShownEachDetailPage(true);
+                                  }, 500);
+                                }}
+                                type="button"
+                                className={`inline-flex w-full items-center justify-center rounded border border-indigo-600 bg-white px-2.5 py-2 text-center text-xs font-medium text-indigo-600 shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200`}
+                              >
+                                Lihat Detail
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

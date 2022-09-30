@@ -80,11 +80,11 @@ export const NavigationList: Navigation[] = [
           },
         ],
       },
-      {
-        id: NavigationId.KEPEGAWAIAN,
-        name: 'Kepangkatan',
-        href: '/kepegawaian/kepangkatan',
-      },
+      // {
+      //   id: NavigationId.KEPEGAWAIAN,
+      //   name: 'Kepangkatan',
+      //   href: '/kepegawaian/kepangkatan',
+      // },
       {
         id: NavigationId.KEPEGAWAIAN,
         name: 'Dinas',
