@@ -5,6 +5,7 @@ import { KepegawaianAPI, UnitKerjaAPI } from '../../constants/APIUrls';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../types/api/KepegawaianAPI';
 import { GetUnitKerjaData } from '../../types/api/UnitKerjaAPI';
 import useCommonApi from '../shared/hooks/useCommonApi';
+import Loader from '../shared/Loader/Loader';
 import Pagination from '../shared/Pagination';
 import DetailLogHarianMonth from './DetailLogHarianMonth';
 
@@ -15,8 +16,9 @@ function LogHarian() {
   });
 
   const [isShownDetailPage, setIsShownDetailPage] = React.useState(true);
+  const [pegawaiId, setPegawaiId] = React.useState<number>();
 
-  const { data: pegawaiList } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
+  const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
     KepegawaianAPI.GET_PEGAWAI_LIST,
     filter,
     { method: 'GET' },
@@ -42,7 +44,11 @@ function LogHarian() {
   return (
     <>
       {!isShownDetailPage ? (
-        <DetailLogHarianMonth onBack={toggleAdvancedFilter} />
+        <DetailLogHarianMonth
+          yearSelected={new Date().getFullYear()}
+          pegawai_id={Number(pegawaiId)}
+          onBack={toggleAdvancedFilter}
+        />
       ) : (
         <section aria-labelledby="section-1-title">
           <div className="overflow-hidden rounded-lg bg-white px-6 py-6 shadow">
@@ -53,7 +59,7 @@ function LogHarian() {
                   type="text"
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   placeholder="Cari..."
-                  onChange={() => null}
+                  onChange={e => search('nama', e.target.value)}
                 />
                 <button
                   className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
@@ -80,80 +86,90 @@ function LogHarian() {
                 </select>
               </div>
             </div>
-            <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-              <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-                <div className="sm:rounded-lg">
-                  <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          No
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          NIP
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          Nama
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          Unit Kerja
-                        </th>
-                        <th
-                          scope="col"
-                          className="w-40 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          Aksi
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {(pegawaiList?.list || []).map((data, dataIdx) => (
-                        <tr className={'bg-white hover:bg-gray-100'}>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
-                          <td
-                            className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900"
-                            onClick={() => null}
+
+            {isValidating ? (
+              <div className="relative h-[150px] w-full divide-y divide-gray-200">
+                <Loader />
+              </div>
+            ) : (
+              <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+                <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+                  <div className="sm:rounded-lg">
+                    <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                           >
-                            {data?.name}
-                          </td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
-                          <td className="px-6 py-4 text-xs font-medium">
-                            <button
-                              onClick={toggleAdvancedFilter}
-                              type="button"
-                              className="inline-flex w-full items-center justify-center rounded border border-transparent bg-green-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
-                            >
-                              Log Harian
-                            </button>
-                          </td>
+                            No
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            NIP
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            Nama
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            Unit Kerja
+                          </th>
+                          <th
+                            scope="col"
+                            className="w-40 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            Aksi
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <Pagination
-                    onChange={value => {
-                      search('page', value);
-                    }}
-                    totalData={pegawaiList ? pegawaiList?.pagination?.total_data : 0}
-                    perPage={filter?.per_page}
-                    page={filter?.page}
-                  />
+                      </thead>
+                      <tbody>
+                        {(pegawaiList?.list || []).map((data, dataIdx) => (
+                          <tr className={'bg-white hover:bg-gray-100'}>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
+                            <td
+                              className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900"
+                              onClick={() => null}
+                            >
+                              {data?.name}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              <button
+                                onClick={() => {
+                                  setPegawaiId(data?.pegawai_id);
+                                  toggleAdvancedFilter();
+                                }}
+                                type="button"
+                                className="inline-flex w-full items-center justify-center rounded border border-transparent bg-green-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
+                              >
+                                Log Harian
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    <Pagination
+                      onChange={value => {
+                        search('page', value);
+                      }}
+                      totalData={pegawaiList ? pegawaiList?.pagination?.total_data : 0}
+                      perPage={filter?.per_page}
+                      page={filter?.page}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
       )}

@@ -1,5 +1,6 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
+import id from 'date-fns/locale/id';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -116,15 +117,16 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
           <thead></thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {getDaysInMonth(Number(selectedMonth), Number(selectedYear)).map(data => {
-              const formatData = format(data, 'E, dd MMMM');
+              const formatData = format(data, 'EEEE, dd MMMM', { locale: id });
               const matchData = (logHarianData || []).filter(
-                log => format(new Date(log?.log_date), 'E, dd MMMM') === formatData
+                log => format(new Date(log?.log_date), 'EEEE, dd MMMM', { locale: id }) === formatData
               );
-              // const weekEnd = ["Sat","Sun"]
-              if (formatData.includes('Sat')) {
+
+              // const weekEnd = ["Sab","Min"]
+              if (formatData.includes('Sabtu')) {
                 return;
               }
-              if (formatData.includes('Sun')) {
+              if (formatData.includes('Minggu')) {
                 return;
               }
               return (
