@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
+import id from 'date-fns/locale/id';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -45,7 +46,7 @@ function FormLogHarianPPNPN(props: ModalProps) {
       LogHarianAPI.POST_LOG_HARIAN_INSERT,
       {
         peg_id: Number(personalPegawaiData?.pegawai_id),
-        date: format(new Date(selectedId), 'yyyy-MM-dd'),
+        date: format(new Date(selectedId), 'yyyy-MM-dd', { locale: id }),
         summary: Array(formData?.summary),
       },
       { method: 'post' }
@@ -107,7 +108,9 @@ function FormLogHarianPPNPN(props: ModalProps) {
               </Dialog.Title>
               <form onSubmit={handleSubmit(submitHandler)}>
                 <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">{selectedId}</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    {format(selectedId, 'EEEE, dd MMMM yyyy', { locale: id })}
+                  </label>
                   <div className="mt-5 sm:col-span-6">
                     <label htmlFor="nama" className="block text-xs font-medium text-gray-700">
                       Isi Log / Jurnal Harian

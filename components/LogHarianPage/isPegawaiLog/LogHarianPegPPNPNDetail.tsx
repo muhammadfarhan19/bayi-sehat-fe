@@ -215,7 +215,7 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
       {formModalState?.open && (
         <FormLogHarianPPNPN
           onSuccess={() => mutate()}
-          selectedId={dateSubmitted?.toDateString()}
+          selectedId={dateSubmitted}
           open={formModalState?.open}
           setOpen={(open: boolean) => handleShowForm(open)}
         />
