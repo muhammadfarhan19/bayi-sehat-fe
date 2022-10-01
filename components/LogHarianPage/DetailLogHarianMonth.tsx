@@ -32,8 +32,6 @@ function DetailLogHarianMonth(props: DetailLogHarianProps) {
     { revalidateOnMount: true }
   );
 
-  console.log(detailData?.pegawai_id);
-
   let newData = CALENDAR_MOCKING;
   const checkData = newData?.map(data => data?.year);
   if (Number(selectedDate?.getFullYear()) >= checkData?.[0]) {
