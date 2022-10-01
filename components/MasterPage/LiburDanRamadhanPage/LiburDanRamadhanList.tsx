@@ -21,8 +21,8 @@ import Loader from '../../shared/Loader/Loader';
 import LiburDanRamadhanForm from './LiburDanRamadhanForm';
 
 const fromDate = new Date();
-fromDate.setMonth(fromDate.getMonth() - 1);
 const toDate = new Date();
+toDate.setFullYear(fromDate.getFullYear() + 1);
 
 interface Props {
   onShowDetail: (data: PresensiShiftDateData) => void;

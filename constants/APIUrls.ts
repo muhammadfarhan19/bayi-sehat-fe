@@ -194,4 +194,5 @@ export const PresensiAPI = {
   PRESENSI_SHIFT_DATE_INSERT: config.apiHost + '/presensi-shift-date/insert',
   PRESENSI_SHIFT_DATE_UPDATE: config.apiHost + '/presensi-shift-date/update',
   PRESENSI_SHIFT_DATE_DELETE: config.apiHost + '/presensi-shift-date/delete',
+  PRESENSI_SHIFT_LIST: config.apiHost + '/presensi-shift/list',
 };
