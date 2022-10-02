@@ -1,6 +1,4 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
-// import {format,parseISO} from 'date-fns';
-// import id from 'date-fns/locale/id';
 import React from 'react';
 
 import { LogHarianAPI } from '../../constants/APIUrls';
