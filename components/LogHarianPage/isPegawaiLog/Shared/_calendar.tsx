@@ -195,3 +195,9 @@ export const getDaysInMonth = (month: number, year: number) =>
     .fill('')
     .map((v, i) => new Date(year, month - 1, i + 1))
     .filter(v => v.getMonth() === month - 1);
+
+export const groupBy = <T, K extends keyof any>(arr: T[], key: (i: T) => K) =>
+  arr.reduce((groups, item) => {
+    (groups[key(item)] ||= []).push(item);
+    return groups;
+  }, {} as Record<K, T[]>);
