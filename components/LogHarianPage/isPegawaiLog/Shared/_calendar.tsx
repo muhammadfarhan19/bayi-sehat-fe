@@ -89,7 +89,7 @@ export const CALENDAR_MOCKING = [
   {
     id: 10,
     name: 'Bulan ke 10',
-    title: 'October',
+    title: 'Oktober',
     year: new Date().getFullYear(),
   },
   {

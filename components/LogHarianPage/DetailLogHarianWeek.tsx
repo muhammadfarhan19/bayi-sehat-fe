@@ -25,6 +25,8 @@ function DetailLogHarianWeek(props: DetailLogHarianProps) {
     { revalidateOnMount: true }
   );
 
+  console.log(logHarianData);
+
   React.useEffect(() => {
     if (isValidating) {
       setIsLoading(true);
@@ -33,8 +35,9 @@ function DetailLogHarianWeek(props: DetailLogHarianProps) {
 
   const datas = groupBy(logHarianData || [], log => log?.log_date);
 
-  const objectDateData = Object.keys(datas).toString();
-  const dateConstructor = new Date(objectDateData);
+  const objectDateData = Object.values(datas);
+
+  // const dateConstructor = new Date(objectDateData);
 
   if (!pegawai_id && !selectedYear && !selectedMonth && !logHarianData) {
     return (
@@ -51,7 +54,7 @@ function DetailLogHarianWeek(props: DetailLogHarianProps) {
         <span className="bg-white tracking-wide text-gray-600">Kembali</span>
       </div>
       <div className="bg-white">
-        <div className="mt-5 mb-5">
+        <div className="mt-5 mb-2">
           <span className="text-xl font-[600]">Log Harian</span>
         </div>
         {isLoading && isValidating ? (
@@ -64,19 +67,27 @@ function DetailLogHarianWeek(props: DetailLogHarianProps) {
           <table className="min-w-full divide-y divide-gray-200">
             <thead></thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              <tr className="">
-                <td className="mr-20 py-4 pl-6 text-sm font-medium text-[#6B7280]">
-                  {dateConstructor?.toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </td>
-                {(logHarianData || []).map(data => {
-                  return <td className="list-item px-6 py-4 text-sm text-gray-500">{data?.summary}</td>;
-                })}
-              </tr>
+              {objectDateData?.reverse().map((data, index) => {
+                const dateData = data?.[0]?.log_date;
+                const toDate = new Date(dateData).toLocaleDateString('id-ID', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                });
+                return (
+                  <tr className="" key={index}>
+                    <td className="mr-20 flex flex-1 py-4 pl-6 text-[15px] text-sm font-bold text-[#000000]">
+                      {toDate}
+                    </td>
+                    {data?.reverse().map((item, index) => (
+                      <td key={index} className="ml-20 list-item py-4 pl-6 text-sm font-medium text-[#6B7280]">
+                        {item?.summary}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}
