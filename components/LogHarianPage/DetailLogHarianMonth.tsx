@@ -11,11 +11,11 @@ import DatePicker from './isPegawaiLog/Shared/DatePicker';
 interface DetailLogHarianProps {
   onBack?: () => void;
   pegawai_id: number;
-  yearSelected: number;
+  yearSelected?: number;
 }
 
 function DetailLogHarianMonth(props: DetailLogHarianProps) {
-  const { onBack, pegawai_id, yearSelected } = props;
+  const { onBack, pegawai_id } = props;
 
   const [isShownEachDetailPage, setIsShownEachDetailPage] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>();
@@ -27,7 +27,7 @@ function DetailLogHarianMonth(props: DetailLogHarianProps) {
 
   const { data: logHarianData } = useCommonApi<GetLogHarianReqYear, GetLogHarianData[]>(
     LogHarianAPI.GET_LOG_HARIAN_MONTH,
-    { pegawai_id: Number(pegawai_id), year: Number(yearSelected) },
+    { pegawai_id: Number(pegawai_id), year: Number(selectedDate?.getFullYear()) },
     { method: 'GET' },
     { revalidateOnMount: true }
   );
