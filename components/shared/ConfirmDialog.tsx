@@ -48,7 +48,7 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
                   <p className="text-sm text-gray-500">{message}</p>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 flex justify-end">
                   <button
                     type="button"
                     className="inline-flex rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-900 hover:bg-indigo-200"
