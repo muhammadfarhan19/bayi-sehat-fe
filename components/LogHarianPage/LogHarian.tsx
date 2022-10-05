@@ -256,7 +256,7 @@ function LogHarian() {
                   type="text"
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   placeholder="Cari..."
-                  onChange={e => search('nama', e.target.value)}
+                  onChange={e => searches('nama', e.target.value)}
                 />
                 <button
                   className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
@@ -273,7 +273,7 @@ function LogHarian() {
                 <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
                 <select
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  onChange={e => search('unit_kerja_id', e.target.value)}
+                  onChange={e => searches('unit_kerja_id', e.target.value)}
                 >
                   <option value="">Semua</option>
                   {(unitKerjaList || []).map((item, index) => (
