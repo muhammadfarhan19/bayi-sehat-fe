@@ -53,7 +53,7 @@ function LogHarian() {
   };
 
   const searches = async <T extends keyof typeof filterPPNPN>(type: T, value: typeof filterPPNPN[T]) => {
-    const newState = { ...filter };
+    const newState = { ...filterPPNPN };
     newState[type] = value;
     setFilterPPNPN(newState);
   };
@@ -372,8 +372,8 @@ function LogHarian() {
                           searches('page', value);
                         }}
                         totalData={ppnpnList ? ppnpnList?.pagination.total_data : 0}
-                        perPage={filter.per_page}
-                        page={filter.page}
+                        perPage={filterPPNPN.per_page}
+                        page={filterPPNPN.page}
                       />
                     </div>
                   </div>
