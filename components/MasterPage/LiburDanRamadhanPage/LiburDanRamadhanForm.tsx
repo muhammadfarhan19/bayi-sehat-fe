@@ -25,6 +25,7 @@ import DatePickerCustom from '../../shared/Input/DatePicker';
 import Loader from '../../shared/Loader/Loader';
 
 const date = new Date();
+date.setDate(date.getDate() + 1);
 
 interface UploadFormProps {
   open: boolean;
@@ -129,13 +130,14 @@ export default function LiburDanRamadhanForm(props: UploadFormProps) {
       onSuccess();
       setOpen(!open);
     } else {
-      dispatch(
-        setSnackbar({
-          show: true,
-          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
-          type: SnackbarType.ERROR,
-        })
-      );
+      const errorMessage = resSubmit?.data?.error_message || '';
+      let message = 'Gagal menyimpan data. Mohon coba beberapa saat lagi.';
+      if (errorMessage.includes('back-date')) {
+        message = 'Gagal! tanggal yang diinput tidak boleh kurang dari atau sama dengan hari ini';
+      } else if (errorMessage.includes('duplicate')) {
+        message = 'Gagal! tanggal yang diinput sudah ada';
+      }
+      dispatch(setSnackbar({ show: true, message, type: SnackbarType.ERROR }));
     }
   };
 
@@ -213,6 +215,7 @@ export default function LiburDanRamadhanForm(props: UploadFormProps) {
                           dropdownMode="select"
                           selected={new Date(value)}
                           dateFormat="dd/MM/yyyy"
+                          minDate={date}
                           onChange={(date: Date) => onChange(format(date, 'yyyy-MM-dd'))}
                           customInput={
                             <input

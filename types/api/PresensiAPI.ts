@@ -27,6 +27,7 @@ export interface PostPresensiShiftDateInsertReq {
 export interface PostPresensiShiftDateInsertRes {
   status: Status;
   data: string;
+  error_message?: string;
 }
 
 export interface PostPresensiShiftDateUpdateReq {
@@ -39,6 +40,7 @@ export interface PostPresensiShiftDateUpdateReq {
 export interface PostPresensiShiftDateUpdateRes {
   status: Status;
   data: string;
+  error_message?: string;
 }
 
 export interface PostPresensiShiftDateDeleteReq {
