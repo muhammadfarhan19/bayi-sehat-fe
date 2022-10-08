@@ -15,6 +15,7 @@ export interface PresensiShiftDateData {
   id: number;
   tanggal: string;
   shift_id: number;
+  shift_str: string;
   remark: string;
 }
 
