@@ -17,7 +17,7 @@ import {
   PresensiShiftDateData,
 } from '../../../types/api/PresensiAPI';
 import { Status } from '../../../types/Common';
-import { classNames } from '../../../utils/Components';
+import { classNames, composeListDefaultValue } from '../../../utils/Components';
 import { callAPI } from '../../../utils/Fetchers';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
@@ -72,7 +72,7 @@ export default function LiburDanRamadhanForm(props: UploadFormProps) {
 
   React.useEffect(() => {
     if (TypeShiftList.length) {
-      setValue('shift_id', +TypeShiftList[0].value);
+      setValue('shift_id', data?.shift_id || +TypeShiftList[0].value);
       setLoaded(true);
     }
   }, [isValidating]);
@@ -80,7 +80,6 @@ export default function LiburDanRamadhanForm(props: UploadFormProps) {
   React.useEffect(() => {
     if (data) {
       setValue('id', data.id);
-      setValue('shift_id', data.shift_id);
       setValue('remark', data.remark);
       setValue('tanggal', format(new Date(data.tanggal), 'yyyy-MM-dd'));
     }
@@ -183,12 +182,12 @@ export default function LiburDanRamadhanForm(props: UploadFormProps) {
                     control={control}
                     name="shift_id"
                     rules={{ required: 'Mohon isi tipe shift' }}
-                    render={({ field: { onChange } }) =>
+                    render={({ field: { onChange, value } }) =>
                       TypeShiftList.length ? (
                         <AutoComplete
                           onChange={value => onChange(Number(value.value))}
                           label={'Tipe Shift'}
-                          defaultValue={TypeShiftList[0]}
+                          defaultValue={composeListDefaultValue(TypeShiftList, 'value', 'text', value)}
                           options={TypeShiftList}
                         />
                       ) : (
