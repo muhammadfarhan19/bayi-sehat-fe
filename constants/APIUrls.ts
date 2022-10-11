@@ -184,6 +184,7 @@ export const KlaimKehadiranList = {
 export const LogHarianAPI = {
   GET_LOG_HARIAN_MONTH: config.apiHost + '/dailylog/list/month',
   GET_LOG_HARIAN_WEEK: config.apiHost + '/dailylog/list/week',
+  GET_LOG_HARIAN_LIS_WEEK_V2: config.apiHost + '/dailylog/list/week/v2',
   POST_LOG_HARIAN_DELETE: config.apiHost + '/dailylog/delete',
   POST_LOG_HARIAN_INSERT: config.apiHost + '/dailylog/insert',
   POST_LOG_HARIAN_UPDATE: config.apiHost + '/dailylog/update',
