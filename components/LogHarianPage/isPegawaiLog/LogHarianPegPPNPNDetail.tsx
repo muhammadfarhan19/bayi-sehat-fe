@@ -131,13 +131,7 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
                   {format(new Date(data?.[0]), 'EEEE, dd MMMM', { locale: id })}
                 </td>
                 {data?.[1]?.length === 0 ? (
-                  <td
-                    className={`ml-20 flex ${
-                      personalPegawaiData?.status_cpns === 2 ? 'justify-end' : 'justify-center'
-                    } px-6 py-4 text-sm font-extrabold text-[#6B7280]`}
-                  >
-                    -
-                  </td>
+                  <td className={`flex ${'justify-center'} px-6 py-4 text-sm font-extrabold text-[#6B7280]`}>-</td>
                 ) : (
                   (data?.[1] || [])?.map((item: { summary: any; log_id: any; log_date: any }) => (
                     <div className="flex flex-row justify-between">
