@@ -115,12 +115,6 @@ function LogHarianPegawai() {
                           >
                             ISIAN LOG HARIAN
                           </th>
-                          {/* <th
-                            scope="col"
-                            className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                          >
-                            NILAI
-                          </th> */}
                           <th
                             scope="col"
                             className="w-50 px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -143,31 +137,21 @@ function LogHarianPegawai() {
                               <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900">
                                 {returnData?.[0] === undefined || returnData?.[0] === 0 ? (
                                   <div className="flex flex-row items-center space-x-2">
-                                    {/* <XCircleIcon width={14.67} height={14.67} fill={'#F24E1E'} /> */}
                                     <div className="text-[14px] text-red-600">Belum diisi</div>
                                   </div>
                                 ) : returnData?.[0] < 20 ? (
                                   <div className="flex flex-row items-center space-x-2">
-                                    {/* <ArchiveIcon width={14.67} height={14.67} fill={'#FBBF24'} /> */}
                                     <div className="text-[14px] text-yellow-400">Sudah diisi {returnData?.[0]}</div>
                                   </div>
                                 ) : (
                                   <div className="flex flex-row items-center space-x-2">
-                                    {/* <CheckCircleIcon width={14.67} height={14.67} fill={'#29CC6A'} /> */}
                                     <div className="text-[14px] text-green-600">Sudah diisi {returnData?.[0]}</div>
                                   </div>
                                 )}
                               </td>
-                              {/* <td
-                                className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900"
-                                onClick={() => null}
-                              >
-                         
-                              </td> */}
                               <td className="px-6 py-4 text-xs font-medium">
                                 <button
                                   onClick={() => {
-                                    // handleShowForm(Number(detailMonth?.[0]),Number(detailYear?.[0]));
                                     handleShowForm(data?.id, Number(selectedDate?.getFullYear()));
                                     setTimeout(() => {
                                       setIsShownEachDetailPage(true);
@@ -176,7 +160,6 @@ function LogHarianPegawai() {
                                   type="button"
                                   className={`inline-flex w-full items-center justify-center rounded border border-indigo-600 bg-white px-2.5 py-2 text-center text-xs font-medium text-indigo-600 shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200`}
                                 >
-                                  {/* {returnData?.[0] === undefined || returnData?.[0] < 20 ? 'Tulis Log' : 'Lihat Detail'} */}
                                   Lihat Detail
                                 </button>
                               </td>

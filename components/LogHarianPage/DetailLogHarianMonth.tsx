@@ -135,27 +135,18 @@ function DetailLogHarianMonth(props: DetailLogHarianProps) {
                             <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900">
                               {returnData?.[0] === undefined || returnData?.[0] === 0 ? (
                                 <div className="flex flex-row items-center space-x-2">
-                                  {/* <XCircleIcon width={14.67} height={14.67} fill={'#F24E1E'} /> */}
                                   <div className="text-[14px] text-red-600">Belum diisi</div>
                                 </div>
                               ) : returnData?.[0] < 20 ? (
                                 <div className="flex flex-row items-center space-x-2">
-                                  {/* <ArchiveIcon width={14.67} height={14.67} fill={'#FBBF24'} /> */}
                                   <div className="text-[14px] text-yellow-400">Sudah diisi {returnData?.[0]}</div>
                                 </div>
                               ) : (
                                 <div className="flex flex-row items-center space-x-2">
-                                  {/* <CheckCircleIcon width={14.67} height={14.67} fill={'#29CC6A'} /> */}
                                   <div className="text-[14px] text-green-600">Sudah diisi {returnData?.[0]}</div>
                                 </div>
                               )}
                             </td>
-                            {/* <td
-                                className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900"
-                                onClick={() => null}
-                              >
-                         
-                              </td> */}
                             <td className="px-6 py-4 text-xs font-medium">
                               <button
                                 onClick={() => {

@@ -8,8 +8,6 @@ import { setSnackbar } from '../../../action/CommonAction';
 import { LogHarianAPI } from '../../../constants/APIUrls';
 import { SnackbarType } from '../../../reducer/CommonReducer';
 import {
-  // GetLogHarianReqMonth,
-  // GetLogHarianWeekData,
   PostLogHarianDel,
   PostLogHarianRes,
 } from '../../../types/api/LogHarianAPI';
@@ -20,7 +18,6 @@ import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import Loader from '../../shared/Loader/Loader';
 import FormLogHarianPPNPN from './FormLogHarianPPNPN';
-// import { getDaysInMonth } from './Shared/_calendar';
 
 interface DetailLogHarianProps {
   onBack?: () => void;
@@ -42,13 +39,6 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
     open: false,
     selectedId: undefined,
   });
-
-  // const { data: logHarianData, mutate } = useCommonApi<GetLogHarianReqMonth, GetLogHarianWeekData[]>(
-  //   LogHarianAPI.GET_LOG_HARIAN_WEEK,
-  //   { pegawai_id: Number(personalPegawaiData?.pegawai_id), year: Number(selectedYear), month: Number(selectedMonth) },
-  //   { method: 'GET' },
-  //   { revalidateOnMount: true }
-  // );
 
   const { data: loglog, mutate } = useCommonApi<any, any>(
     LogHarianAPI.GET_LOG_HARIAN_LIS_WEEK_V2,

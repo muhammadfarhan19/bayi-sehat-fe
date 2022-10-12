@@ -115,7 +115,6 @@ function FormLogHarianPPNPN(props: ModalProps) {
                     <label htmlFor="nama" className="block text-xs font-medium text-gray-700">
                       Isi Log / Jurnal Harian
                     </label>
-                    {/* {Array.from({ length: moreComponentBox }).map(() => ( */}
                     <div className="mt-1">
                       <input
                         {...register('summary', {
@@ -127,7 +126,6 @@ function FormLogHarianPPNPN(props: ModalProps) {
                       />
                       {errors.summary && <p className="mt-1 text-xs text-red-500">{errors.summary.message}</p>}
                     </div>
-                    {/* ))} */}
                   </div>
                 </div>
                 <div className="mt-5">
