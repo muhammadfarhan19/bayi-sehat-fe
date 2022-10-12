@@ -13,20 +13,19 @@ import {
   PostPresensiShiftDateInsertRes,
   PostPresensiShiftDateUpdateReq,
   PostPresensiShiftDateUpdateRes,
+  PresensiShiftData,
   PresensiShiftDateData,
 } from '../../../types/api/PresensiAPI';
 import { Status } from '../../../types/Common';
-import { classNames } from '../../../utils/Components';
+import { classNames, composeListDefaultValue } from '../../../utils/Components';
 import { callAPI } from '../../../utils/Fetchers';
+import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
 import DatePickerCustom from '../../shared/Input/DatePicker';
+import Loader from '../../shared/Loader/Loader';
 
 const date = new Date();
-
-export const TypeShiftList = [
-  { value: '1', text: 'Libur' },
-  { value: '2', text: 'Ramadhan' },
-];
+date.setDate(date.getDate() + 1);
 
 interface UploadFormProps {
   open: boolean;
@@ -44,10 +43,20 @@ interface FormState {
 
 export default function LiburDanRamadhanForm(props: UploadFormProps) {
   const { open, setOpen, data, onSuccess } = props;
+  const [loaded, setLoaded] = React.useState(false);
+
   const dispatch = useDispatch();
   const toggleModal = () => {
     setOpen(!open);
   };
+
+  const { data: dataPresensi, isValidating } = useCommonApi<null, PresensiShiftData[]>(
+    PresensiAPI.PRESENSI_SHIFT_LIST,
+    null,
+    { method: 'get' }
+  );
+
+  const TypeShiftList = (dataPresensi || []).map(each => ({ text: each.nama_shift, value: String(each.id) }));
 
   const {
     control,
@@ -57,19 +66,32 @@ export default function LiburDanRamadhanForm(props: UploadFormProps) {
     setValue,
   } = useForm<FormState>({
     defaultValues: {
-      shift_id: Number(TypeShiftList[0].value),
       tanggal: format(date, 'yyyy-MM-dd'),
     },
   });
 
   React.useEffect(() => {
+    if (TypeShiftList.length) {
+      setValue('shift_id', data?.shift_id || +TypeShiftList[0].value);
+      setLoaded(true);
+    }
+  }, [isValidating]);
+
+  React.useEffect(() => {
     if (data) {
       setValue('id', data.id);
-      setValue('shift_id', data.shift_id);
       setValue('remark', data.remark);
       setValue('tanggal', format(new Date(data.tanggal), 'yyyy-MM-dd'));
     }
   }, [data]);
+
+  if (!loaded) {
+    return (
+      <div className="relative h-[150px] w-full divide-y divide-gray-200">
+        <Loader />
+      </div>
+    );
+  }
 
   const submitHandler = async (formData: FormState) => {
     let resSubmit;
@@ -107,13 +129,14 @@ export default function LiburDanRamadhanForm(props: UploadFormProps) {
       onSuccess();
       setOpen(!open);
     } else {
-      dispatch(
-        setSnackbar({
-          show: true,
-          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
-          type: SnackbarType.ERROR,
-        })
-      );
+      const errorMessage = resSubmit?.data?.error_message || '';
+      let message = 'Gagal menyimpan data. Mohon coba beberapa saat lagi.';
+      if (errorMessage.includes('back-date')) {
+        message = 'Gagal! tanggal yang diinput tidak boleh kurang dari atau sama dengan hari ini';
+      } else if (errorMessage.includes('duplicate')) {
+        message = 'Gagal! tanggal yang diinput sudah ada';
+      }
+      dispatch(setSnackbar({ show: true, message, type: SnackbarType.ERROR }));
     }
   };
 
@@ -159,14 +182,18 @@ export default function LiburDanRamadhanForm(props: UploadFormProps) {
                     control={control}
                     name="shift_id"
                     rules={{ required: 'Mohon isi tipe shift' }}
-                    render={({ field: { onChange } }) => (
-                      <AutoComplete
-                        onChange={value => onChange(Number(value.value))}
-                        label={'Tipe Shift'}
-                        defaultValue={TypeShiftList[0]}
-                        options={TypeShiftList}
-                      />
-                    )}
+                    render={({ field: { onChange, value } }) =>
+                      TypeShiftList.length ? (
+                        <AutoComplete
+                          onChange={value => onChange(Number(value.value))}
+                          label={'Tipe Shift'}
+                          defaultValue={composeListDefaultValue(TypeShiftList, 'value', 'text', value)}
+                          options={TypeShiftList}
+                        />
+                      ) : (
+                        <></>
+                      )
+                    }
                   />
                   {errors.shift_id && <p className="mt-1 text-xs text-red-500">{errors.shift_id.message}</p>}
                 </div>
@@ -187,6 +214,7 @@ export default function LiburDanRamadhanForm(props: UploadFormProps) {
                           dropdownMode="select"
                           selected={new Date(value)}
                           dateFormat="dd/MM/yyyy"
+                          minDate={date}
                           onChange={(date: Date) => onChange(format(date, 'yyyy-MM-dd'))}
                           customInput={
                             <input

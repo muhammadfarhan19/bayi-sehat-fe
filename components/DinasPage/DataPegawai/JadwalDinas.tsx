@@ -6,7 +6,7 @@ import React from 'react';
 import { RekapDinasAPI } from '../../../constants/APIUrls';
 import { JadwalDinasPegawai, JadwalDinasStatus } from '../../../types/api/RekapDinasAPI';
 import { callAPI } from '../../../utils/Fetchers';
-import { getQueryString } from '../../../utils/URLUtils';
+import usePersonalData from '../../shared/hooks/usePersonalData';
 
 interface DownloadJadwal {
   open: boolean;
@@ -20,6 +20,7 @@ const initialValue = {
 
 export default function JadwalDinas(props: DownloadJadwal) {
   const [dateDownload, setDateDownload] = React.useState(initialValue);
+  const personalPegawaiData = usePersonalData();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setDateDownload({
@@ -34,11 +35,14 @@ export default function JadwalDinas(props: DownloadJadwal) {
   const toggleView = () => setOpen(!open);
   const minDate = format(addMonths(new Date(dateDownload.dateStart), 3), 'yyyy-MM-dd');
 
-  const { id } = getQueryString<{ id: string }>();
   const jadwalDownload = () => {
     callAPI<JadwalDinasPegawai, JadwalDinasStatus>(
       RekapDinasAPI.GET_DINAS_PEGAWAI_REKAP,
-      { pegawai_id: Number(id), tgl_mulai: dateDownload.dateStart, tgl_selesai: dateDownload.dateEnd },
+      {
+        pegawai_id: Number(personalPegawaiData?.pegawai_id),
+        tgl_mulai: dateDownload.dateStart,
+        tgl_selesai: dateDownload.dateEnd,
+      },
       { isBlob: true, method: 'GET' }
     )
       .then(response => {

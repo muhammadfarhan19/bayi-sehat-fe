@@ -372,8 +372,8 @@ export default function PengangkatanForm(props: Props) {
                       <UploadWrapper
                         allowedTypes={['pdf']}
                         handleUploadChange={(files: FileObject[]) => {
-                          setValue('document_uuid', files[0].id);
-                          onChange(files[0].name);
+                          setValue('document_uuid', files?.[0]?.id);
+                          onChange(files?.[0]?.name);
                         }}
                       >
                         {({ loading }) => (

@@ -41,11 +41,11 @@ export const NavigationList: Navigation[] = [
             name: 'Klaim Kehadiran',
             href: '/kehadiran',
           },
-          // {
-          //   id: PUBLIC,
-          //   name: 'Log Harian',
-          //   href: '/log-harian',
-          // },
+          {
+            id: PUBLIC,
+            name: 'Log Harian',
+            href: '/log-harian',
+          },
         ],
       },
     ],
@@ -111,11 +111,16 @@ export const NavigationList: Navigation[] = [
             name: 'Klaim Kehadiran',
             href: '/kepegawaian/kehadiran',
           },
-          // {
-          //   id: NavigationId.KEPEGAWAIAN,
-          //   name: 'Log Harian',
-          //   href: '/kepegawaian/log-harian',
-          // },
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Log Harian',
+            href: '/kepegawaian/log-harian',
+          },
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Shift',
+            href: '/kepegawaian/shift',
+          },
         ],
       },
       {

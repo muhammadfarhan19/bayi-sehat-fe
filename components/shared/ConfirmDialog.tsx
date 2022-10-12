@@ -48,21 +48,23 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
                   <p className="text-sm text-gray-500">{message}</p>
                 </div>
 
-                <div className="mt-4">
-                  <button
-                    type="button"
-                    className="inline-flex rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-900 hover:bg-indigo-200"
-                    onClick={onConfirm}
-                  >
-                    Lanjut
-                  </button>
-                  <button
-                    type="button"
-                    className="ml-2 inline-flex rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700"
-                    onClick={onClose}
-                  >
-                    Batal
-                  </button>
+                <div className="mt-4 flex flex-col items-end">
+                  <div className="flex flex-row">
+                    <button
+                      type="button"
+                      className="inline-flex rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-900 hover:bg-indigo-200"
+                      onClick={onConfirm}
+                    >
+                      Lanjut
+                    </button>
+                    <button
+                      type="button"
+                      className="ml-2 inline-flex rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700"
+                      onClick={onClose}
+                    >
+                      Batal
+                    </button>
+                  </div>
                 </div>
               </div>
             </Transition.Child>

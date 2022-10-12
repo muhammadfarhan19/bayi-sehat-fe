@@ -1,17 +1,15 @@
 import React from 'react';
 
 import { classNames } from '../../../utils/Components';
-import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
-import { DataDinasPNS } from './DataDinasPNS/DataDinasPNS';
-import { DataDinasPPNPN } from './DataDinasPPNPN/DataDinasPPNPN';
+import ShiftPns from './ShiftPNS/ShiftPns';
 
-export function DataDinasPegawai() {
+export default function ShiftKepegawaian() {
   const tabs = [
-    { name: 'Master PNS', href: '#' },
-    { name: 'Master PPNPN', href: '#' },
+    { name: 'PNS', href: '#' },
+    { name: 'PPNPN', href: '#' },
   ];
 
-  const [selected, setSelected] = React.useState('Master PNS');
+  const [selected, setSelected] = React.useState('PNS');
 
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -53,9 +51,7 @@ export function DataDinasPegawai() {
           </div>
         </div>
       </div>
-      <div>{selected === 'Master PNS' ? <DataDinasPNS /> : <DataDinasPPNPN />}</div>
+      <div>{selected === 'PNS' ? <ShiftPns /> : <ShiftPns />}</div>
     </div>
   );
 }
-
-export default withErrorBoundary(DataDinasPegawai);

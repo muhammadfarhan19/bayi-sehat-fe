@@ -184,6 +184,7 @@ export const KlaimKehadiranList = {
 export const LogHarianAPI = {
   GET_LOG_HARIAN_MONTH: config.apiHost + '/dailylog/list/month',
   GET_LOG_HARIAN_WEEK: config.apiHost + '/dailylog/list/week',
+  GET_LOG_HARIAN_LIS_WEEK_V2: config.apiHost + '/dailylog/list/week/v2',
   POST_LOG_HARIAN_DELETE: config.apiHost + '/dailylog/delete',
   POST_LOG_HARIAN_INSERT: config.apiHost + '/dailylog/insert',
   POST_LOG_HARIAN_UPDATE: config.apiHost + '/dailylog/update',
@@ -194,4 +195,5 @@ export const PresensiAPI = {
   PRESENSI_SHIFT_DATE_INSERT: config.apiHost + '/presensi-shift-date/insert',
   PRESENSI_SHIFT_DATE_UPDATE: config.apiHost + '/presensi-shift-date/update',
   PRESENSI_SHIFT_DATE_DELETE: config.apiHost + '/presensi-shift-date/delete',
+  PRESENSI_SHIFT_LIST: config.apiHost + '/presensi-shift/list',
 };

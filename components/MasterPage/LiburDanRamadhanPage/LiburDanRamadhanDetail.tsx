@@ -23,7 +23,7 @@ export default function LiburDanRamadhanDetail(props: Props) {
           <tbody className="divide-y divide-gray-200 bg-white">
             {[
               { label: 'Tanggal', value: data.tanggal },
-              { label: 'Type Shift', value: data.shift_id === 1 ? 'Libur' : 'Ramadhan' },
+              { label: 'Tipe Shift', value: data.shift_str },
               { label: 'Keterangan', value: data.remark },
             ].map((each, index) => (
               <tr key={index}>

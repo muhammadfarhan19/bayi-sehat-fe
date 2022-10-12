@@ -21,8 +21,8 @@ import Loader from '../../shared/Loader/Loader';
 import LiburDanRamadhanForm from './LiburDanRamadhanForm';
 
 const fromDate = new Date();
-fromDate.setMonth(fromDate.getMonth() - 1);
 const toDate = new Date();
+toDate.setFullYear(fromDate.getFullYear() + 1);
 
 interface Props {
   onShowDetail: (data: PresensiShiftDateData) => void;
@@ -201,7 +201,7 @@ function LiburDanRamadhanList({ onShowDetail }: Props) {
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                         >
-                          Type Shift
+                          Tipe Shift
                         </th>
                         <th
                           scope="col"
@@ -225,7 +225,7 @@ function LiburDanRamadhanList({ onShowDetail }: Props) {
                         >
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tanggal}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.shift_id}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.shift_str}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.remark}</td>
                           <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
                             <div className="flex justify-between">
