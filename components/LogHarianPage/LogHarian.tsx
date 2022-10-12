@@ -1,5 +1,4 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import { KepegawaianAPI, UnitKerjaAPI } from '../../constants/APIUrls';
@@ -12,7 +11,6 @@ import Pagination from '../shared/Pagination';
 import DetailLogHarianMonth from './DetailLogHarianMonth';
 
 function LogHarian() {
-  const router = useRouter();
   const [selected, setSelected] = React.useState('Master PNS');
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
@@ -188,12 +186,7 @@ function LogHarian() {
                             <tr className={'bg-white hover:bg-gray-100'}>
                               <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
                               <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
-                              <td
-                                className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900"
-                                onClick={() => null}
-                              >
-                                {data?.name}
-                              </td>
+                              <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
                               <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                               <td className="px-6 py-4 text-xs font-medium">
                                 <button
@@ -340,14 +333,7 @@ function LogHarian() {
                               <td className="px-6 py-4 text-xs font-medium text-gray-900">
                                 {filterPPNPN.per_page * (filterPPNPN.page - 1) + (dataIdx + 1)}
                               </td>
-                              <td
-                                className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"
-                                onClick={() =>
-                                  router.push(`/kepegawaian/data-pegawai?pegawai_id=${data.pegawai_id}&type=ppnpn`)
-                                }
-                              >
-                                {data?.name}
-                              </td>
+                              <td className="px-6 py-4 text-xs font-medium text-indigo-800">{data?.name}</td>
                               <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
                               <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                               <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
