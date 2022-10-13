@@ -42,3 +42,4 @@ export interface PostLogHarianInsert {
   date?: string | number;
   summary: any;
 }
+

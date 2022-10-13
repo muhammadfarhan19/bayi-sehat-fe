@@ -257,7 +257,6 @@ function LogHarian() {
               </div>
             </div>
 
-            {/* {showAdvancedFilter && ( */}
             <div className="flex w-full flex-row gap-x-[16px]">
               <div className="w-[202px] pb-2">
                 <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
@@ -274,7 +273,7 @@ function LogHarian() {
                 </select>
               </div>
             </div>
-            {/* )} */}
+
             {isValidating ? (
               <div className="relative h-[150px] w-full divide-y divide-gray-200">
                 <Loader />
