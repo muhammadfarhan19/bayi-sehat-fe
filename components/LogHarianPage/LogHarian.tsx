@@ -251,10 +251,7 @@ function LogHarian() {
                   placeholder="Cari..."
                   onChange={e => searches('nama', e.target.value)}
                 />
-                <button
-                  className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
-                  onClick={toggleAdvancedFilter}
-                >
+                <button className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none">
                   <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
                 </button>
               </div>

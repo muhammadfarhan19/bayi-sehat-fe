@@ -7,10 +7,7 @@ import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../../../action/CommonAction';
 import { LogHarianAPI } from '../../../constants/APIUrls';
 import { SnackbarType } from '../../../reducer/CommonReducer';
-import {
-  PostLogHarianDel,
-  PostLogHarianRes,
-} from '../../../types/api/LogHarianAPI';
+import { PostLogHarianDel, PostLogHarianRes } from '../../../types/api/LogHarianAPI';
 import { Status } from '../../../types/Common';
 import { callAPI } from '../../../utils/Fetchers';
 import ConfirmDialog from '../../shared/ConfirmDialog';
