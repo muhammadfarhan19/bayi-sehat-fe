@@ -15,6 +15,7 @@ export default function ShiftPns() {
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
     per_page: 20,
+    status_cpns: [1, 3],
   });
 
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(

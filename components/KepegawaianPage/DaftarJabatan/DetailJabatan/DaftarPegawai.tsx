@@ -38,6 +38,7 @@ function DaftarPegawai() {
         jabatan: name,
         per_page: PER_PAGE,
         page: pageNumber,
+        status_cpns: [1, 3],
       },
       {
         method: 'GET',

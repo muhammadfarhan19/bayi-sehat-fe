@@ -15,6 +15,7 @@ function LogHarian() {
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
     per_page: 20,
+    status_cpns: [1, 3],
   });
 
   const [isShownDetailPage, setIsShownDetailPage] = React.useState(true);
@@ -30,6 +31,7 @@ function LogHarian() {
     page: 1,
     per_page: 20,
     is_ppnpn: true,
+    status_cpns: [2],
   });
 
   const { data: ppnpnList } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(

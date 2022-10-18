@@ -10,6 +10,7 @@ export default function AutoCompletePegawai(props) {
   const { onChange } = props;
   const [selectedValue] = React.useState('');
   const [filter, setFilter] = React.useState({
+    status_cpns: [0],
     page: 1,
     per_page: 20,
   });

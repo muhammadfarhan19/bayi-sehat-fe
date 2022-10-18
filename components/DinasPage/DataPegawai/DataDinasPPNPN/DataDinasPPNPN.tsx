@@ -19,6 +19,7 @@ export function DataDinasPPNPN() {
     page: 1,
     per_page: 20,
     is_ppnpn: true,
+    status_cpns: [2],
   });
 
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(

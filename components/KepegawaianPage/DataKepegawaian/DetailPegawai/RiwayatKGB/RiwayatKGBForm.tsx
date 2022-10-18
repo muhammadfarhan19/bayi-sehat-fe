@@ -58,7 +58,7 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
 
   const { data: pegawaiList } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
     KepegawaianAPI.GET_PEGAWAI_LIST,
-    { page: 1, per_page: 20, nama: queryPegawai },
+    { page: 1, per_page: 20, status_cpns: [0], nama: queryPegawai },
     { method: 'GET' }
   );
 

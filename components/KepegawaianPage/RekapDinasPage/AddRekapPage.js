@@ -145,7 +145,7 @@ function AddRekapPage(props) {
       if (dataAvail.status === 200) {
         const { data: dataProfilPegawai } = await callAPI(
           KepegawaianAPI.GET_PEGAWAI_LIST,
-          { nama: dataValue[0], page: 1, per_page: 10 },
+          { nama: dataValue[0], status_cpns: [0], page: 1, per_page: 10 },
           { method: 'GET' }
         );
 
@@ -353,7 +353,7 @@ function AddRekapPage(props) {
           if (dataAvail.status === 200) {
             const { data: dataProfilPegawai } = await callAPI(
               KepegawaianAPI.GET_PEGAWAI_LIST,
-              { nama: data.nama, page: 1, per_page: 10 },
+              { nama: data.nama, status_cpns: [0], page: 1, per_page: 10 },
               { method: 'GET' }
             );
 
