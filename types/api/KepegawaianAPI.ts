@@ -9,6 +9,7 @@ export interface GetPegawaiListReq {
   status_cpns: number[];
   page: number;
   per_page: number;
+  status_cpns?: number;
 }
 
 export interface GetPegawaiListRes {

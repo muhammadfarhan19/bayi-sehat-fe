@@ -17,6 +17,7 @@ export default function ListPegawaiKompetensi() {
     open: false,
     selectedId: undefined,
   });
+
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
     per_page: 20,
