@@ -34,6 +34,11 @@ export const NavigationList: Navigation[] = [
       },
       {
         id: PUBLIC,
+        name: 'Peningkatan Kompetensi',
+        href: '/peningkatankompetensi',
+      },
+      {
+        id: PUBLIC,
         name: 'Kehadiran',
         childMenu: [
           {
@@ -67,6 +72,11 @@ export const NavigationList: Navigation[] = [
             id: NavigationId.KEPEGAWAIAN,
             name: 'Data Pegawai',
             href: '/kepegawaian/data-pegawai',
+          },
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Peningkatan Kompetensi',
+            href: '/kepegawaian/peningkatan-kompetensi',
           },
           {
             id: NavigationId.KEPEGAWAIAN,

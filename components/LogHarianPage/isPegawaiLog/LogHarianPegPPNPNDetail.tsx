@@ -43,8 +43,6 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
     { method: 'GET' }
   );
 
-  console.log(loglog);
-
   const handleConfirm = async () => {
     const resDelete = await callAPI<PostLogHarianDel, PostLogHarianRes>(
       LogHarianAPI.POST_LOG_HARIAN_DELETE,
