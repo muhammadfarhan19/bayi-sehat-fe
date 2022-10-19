@@ -64,12 +64,11 @@ function FormLogHarianPPNPN(props: ModalProps) {
                 <h3 className="text-lg font-medium leading-6 text-gray-900">Tambah Peningkatan Kompetensi</h3>
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
-              {/* <form onSubmit={}> */}
               <div className="mt-5 sm:col-span-6">
                 <label className="block text-sm font-medium text-gray-700">Tahun</label>
                 <select
                   {...register('tahun', { required: 'Silahkan pilih Tahun.' })}
-                  name="jenjang_id"
+                  name="tahun"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 >
                   <option value={''}>Silahkan Pilih</option>
@@ -133,7 +132,6 @@ function FormLogHarianPPNPN(props: ModalProps) {
                   Tambah
                 </button>
               </div>
-              {/* </form> */}
             </div>
           </Transition.Child>
         </div>
