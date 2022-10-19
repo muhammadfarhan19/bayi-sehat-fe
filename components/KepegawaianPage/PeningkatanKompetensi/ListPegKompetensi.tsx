@@ -21,6 +21,7 @@ export default function ListPegawaiKompetensi() {
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
     per_page: 20,
+    status_cpns: [1, 3],
   });
 
   const [isShownDetailPage, setIsShownDetailPage] = React.useState<boolean>(false);
