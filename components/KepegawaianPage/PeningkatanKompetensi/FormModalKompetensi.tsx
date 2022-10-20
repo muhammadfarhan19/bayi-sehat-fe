@@ -7,6 +7,7 @@ import { classNames } from '../../../utils/Components';
 import { CircleProgress } from '../../shared/CircleProgress';
 import UploadWrapper, { FileObject } from '../../shared/Input/UploadWrapper';
 
+const dateToday = new Date();
 interface ModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -20,6 +21,7 @@ interface FormState {
 
 function FormLogHarianPPNPN(props: ModalProps) {
   const { open, setOpen } = props;
+  const selectedYear = dateToday.getFullYear() - 10;
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -72,15 +74,11 @@ function FormLogHarianPPNPN(props: ModalProps) {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 >
                   <option value={''}>Silahkan Pilih</option>
-                  <option value={'11'}>2022</option>
-                  <option value={'1'}>2021</option>
-                  <option value={'13'}>2020</option>
-                  <option value={'2'}>2019</option>
-                  <option value={'12'}>2018</option>
-                  <option value={'3'}>2017</option>
-                  <option value={'14'}>2016</option>
-                  <option value={'15'}>2015</option>
-                  <option value={'10'}>2014</option>
+                  {Array.from(new Array(21), (list, index) => (
+                    <option key={index} value={selectedYear + index}>
+                      {selectedYear + index}
+                    </option>
+                  ))}
                 </select>
                 {errors.tahun && <p className="mt-1 text-xs text-red-500">{errors.tahun.message}</p>}
               </div>

@@ -6,6 +6,7 @@ import {
   InputLabelled,
 } from '../DataKepegawaian/DetailPegawai/RiwayatKeluarga/Shared/KeluargaComponents';
 
+const dateToday = new Date();
 interface UploadFormProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -15,6 +16,7 @@ interface UploadFormProps {
 
 function FormTambahUpdateKomp(props: UploadFormProps) {
   const { open, setOpen, selectedId } = props;
+  const selectedYear = dateToday.getFullYear() - 10;
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -37,9 +39,12 @@ function FormTambahUpdateKomp(props: UploadFormProps) {
               name={'jenis_jabatan'}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             >
-              <option key={null} value={'1'}>
-                2022
-              </option>
+              <option value={'1'}>Silahkan Pilih</option>
+              {Array.from(new Array(21), (list, index) => (
+                <option key={index} value={selectedYear + index}>
+                  {selectedYear + index}
+                </option>
+              ))}
             </select>
           </div>
         </div>

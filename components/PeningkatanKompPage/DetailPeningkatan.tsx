@@ -42,15 +42,9 @@ function DetailPeningkatan() {
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        className="w-full px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
                         Peningkatan Kompetensi
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
-                        Tanggal Upload
                       </th>
                     </tr>
                   </thead>
@@ -58,10 +52,9 @@ function DetailPeningkatan() {
                     <tr className={'bg-white hover:bg-gray-100'}>
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{'1'}</td>
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{'2023'}</td>
-                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                      <td className="w-full cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
                         {'Manajemen Perencanaan Anggaran, Pengadaan Barang dan Jasa'}
                       </td>
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{'2022/04/12'}</td>
                     </tr>
                   </tbody>
                 </table>
