@@ -29,14 +29,21 @@ export const NavigationList: Navigation[] = [
       },
       {
         id: PUBLIC,
-        name: 'Biodata',
-        href: '/pegawai/biodata',
+        name: 'Data Pegawai',
+        childMenu: [
+          {
+            id: PUBLIC,
+            name: 'Biodata',
+            href: '/pegawai/biodata',
+          },
+          {
+            id: PUBLIC,
+            name: 'Peningkatan Kompetensi',
+            href: '/peningkatankompetensi',
+          },
+        ],
       },
-      {
-        id: PUBLIC,
-        name: 'Peningkatan Kompetensi',
-        href: '/peningkatankompetensi',
-      },
+
       {
         id: PUBLIC,
         name: 'Kehadiran',
