@@ -1,8 +1,18 @@
+import { UserCircleIcon } from '@heroicons/react/outline';
 import { ChevronLeftIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import React from 'react';
 
+import { LogHarianAPI, RekapDinasAPI, UserProfileAPI } from '../../../constants/APIUrls';
+import { GetLogHarianPegawaiReq, GetLogHarianPegawaiRes } from '../../../types/api/LogHarianAPI';
+import { GetOptPhotoReq, GetPhotoProfileRes } from '../../../types/api/ProfilePhotoAPI';
+import { GetRekapDinasPegawaiReq, GetRekapDinasPegawaiRes} from '../../../types/api/RekapDinasAPI';
+import { convertIndonesiaFormat } from '../../../utils/DateUtil';
+import { callAPI } from '../../../utils/Fetchers';
 import { getQueryString } from '../../../utils/URLUtils';
+import NotificationListPage from '../../Notification/NotificationListPage/NotificationListPage';
+import Card from '../../shared/Card';
+import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import DinasCalendar from './DinasCalendar';
 import JadwalDinas from './JadwalDinas';
@@ -11,9 +21,89 @@ export default function DetailDinas() {
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const [formModalState, setFormModalState] = React.useState(false);
   const personalPegawai = usePersonalData();
+  const [img, setImg] = React.useState('');
+  const [showImage, setShowImage] = React.useState(false);
+  const dateNowStr = new Date().toISOString().slice(0, 10);
+
+  const { data: profile } = useCommonApi<GetOptPhotoReq, GetPhotoProfileRes>(
+    UserProfileAPI.USER_PHOTO,
+    pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
+    { method: 'GET' }
+  );
+
+  const dataId = profile?.uuid_foto;
+  const userId = personalPegawai?.user_id;
+  const profileDataId = profile?.user_id;
+
+  const photos = () => {
+    if (dataId && userId === profileDataId) {
+      callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${dataId}`, null, {
+        method: 'GET',
+        isBlob: true,
+      }).then(res => {
+        let url = '';
+        if (res.status === 200 && res.data instanceof Blob) {
+          url = window.URL.createObjectURL(res.data);
+          setImg(url);
+        }
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    const unSubscribe = photos();
+    return () => unSubscribe;
+  }, [profileDataId === userId && dataId]);
+
+  const { data: logHarian, isValidating: loadLogHarian } = useCommonApi<GetLogHarianPegawaiReq, GetLogHarianPegawaiRes>(
+    LogHarianAPI.GET_LOG_HARIAN_PEGAWAI,
+    pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
+    { method: 'GET' },
+  );
+
+  const { data: dinas, isValidating: loadDinas } = useCommonApi<GetRekapDinasPegawaiReq, GetRekapDinasPegawaiRes>(
+    RekapDinasAPI.GET_DINAS_PEGAWAI,
+    pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
+    { method: 'GET' },
+  );
 
   return (
     <>
+      <div className="flex flex-row flex-nowrap justify-between gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow mb-[24px]">
+        <div className="flex flex-row">
+          {img.length >= 1 ? (
+            <img onClick={() => setShowImage(!showImage)} className="h-[88px] w-[88px] rounded-full" src={img} alt="" />
+          ) : (
+            <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
+          )}
+          <div className="my-auto ml-2 flex flex-col">
+            <p className="text-[14px] font-[500] text-[#4B5563]">Selamat Datang,</p>
+            <p className="text-[24px] font-[700]">{personalPegawai?.nama}</p>
+            <p className="text-[14px] font-[500] text-[#4B5563]">{personalPegawai?.jabatan}</p>
+          </div>
+        </div>
+      </div>
+
+      <NotificationListPage />
+
+      <div className='grid grid-cols-2 gap-[24px] mb-[24px]'>
+        <Card
+          title='Jadwal Dinas'
+          sub_title={`Dinas dibulan ${convertIndonesiaFormat(dateNowStr).split(' ')[1]}`}
+          link={`/jadwal-dinas`}
+          data={typeof dinas !== 'undefined' && dinas !== null ? String(dinas?.total_dinas) : '-'}
+          load={loadDinas}
+        />
+
+        <Card
+          title='Log Harian'
+          sub_title='Belum di isi'
+          link='/log-harian'
+          data={typeof logHarian !== 'undefined' && logHarian !== null ? String(logHarian?.number_of_day_unfilled) : '-'}
+          load={loadLogHarian}
+        />
+      </div>
+
       <div className="overflow-hidden rounded-lg bg-white pb-6 shadow">
         {pegawai_id && (
           <Link href="/dinas/pegawai">
@@ -58,3 +148,4 @@ export default function DetailDinas() {
     </>
   );
 }
+

@@ -23,7 +23,7 @@ export const NavigationList: Navigation[] = [
     childMenu: [
       {
         id: PUBLIC,
-        name: 'Jadwal',
+        name: 'Homepage',
         href: '/',
         selectedHref: ['/kepegawaian/rekap-dinas/detail'],
       },

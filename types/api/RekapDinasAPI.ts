@@ -10,6 +10,20 @@ export interface GetRekapReq {
   tgl_selesai?: string;
 }
 
+export interface GetRekapPegawaiReq {
+  pegawai_id?: number;
+}
+
+export interface RekapDataPegawai {
+  dinas_id: number;
+  no_sp: number;
+  unit_kerja_str: string;
+  tgl_mulai: number;
+  tgl_selesai: number;
+  jenis_dinas: string;
+  isi_penugasan: string;
+}
+
 export interface RekapData {
   list: {
     dinas_id: number;
@@ -104,4 +118,12 @@ export interface PostDinasDeleteReq {
 export interface PostDinasDeleteRes {
   status: Status;
   data: string;
+}
+
+export interface GetRekapDinasPegawaiReq {
+  pegawai_id?: number;
+}
+
+export interface GetRekapDinasPegawaiRes {
+  total_dinas: number;
 }

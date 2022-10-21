@@ -42,3 +42,14 @@ export interface PostLogHarianInsert {
   date?: string | number;
   summary: any;
 }
+
+export interface GetLogHarianPegawaiReq {
+  pegawai_id?: number;
+}
+
+export interface GetLogHarianPegawaiRes {
+  total_working_days: number,
+  number_of_day_filled: number,
+  number_of_day_unfilled: number,
+  score: number
+}

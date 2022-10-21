@@ -53,8 +53,8 @@ function AddRekapPage(props) {
       let dataPegawai = {
         pegawai_id: data.pegawai_id,
         nip: data.nip,
-        tanggal_mulai: data.tgl_available[0] + ' 00:00:00',
-        tanggal_selesai: data.tgl_available.slice(-1)[0] + ' 00:00:00',
+        tanggal_mulai: data.tgl_available[0],
+        tanggal_selesai: data.tgl_available.slice(-1)[0],
       };
       pegawai.push(dataPegawai);
     });
@@ -65,10 +65,10 @@ function AddRekapPage(props) {
           dinas_id: Number(dinas_id),
           no_sp: formData.no_sp,
           unit_kerja_id: parseInt(formData.unit_kerja_id),
-          tgl_surat: formData.tgl_surat + ' 00:00:00',
+          tgl_surat: formData.tgl_surat,
           jenis_dinas: parseInt(formData.jenis_dinas),
-          tgl_mulai: formData.tgl_mulai + ' 00:00:00',
-          tgl_selesai: formData.tgl_selesai + ' 00:00:00',
+          tgl_mulai: formData.tgl_mulai,
+          tgl_selesai: formData.tgl_selesai,
           lokasi: formData.lokasi,
           isi_penugasan: formData.isi_penugasan,
           surat_tugas: [
@@ -85,10 +85,10 @@ function AddRekapPage(props) {
         dinas: {
           no_sp: formData.no_sp,
           unit_kerja_id: parseInt(formData.unit_kerja_id),
-          tgl_surat: formData.tgl_surat + ' 00:00:00',
+          tgl_surat: formData.tgl_surat,
           jenis_dinas: parseInt(formData.jenis_dinas),
-          tgl_mulai: formData.tgl_mulai + ' 00:00:00',
-          tgl_selesai: formData.tgl_selesai + ' 00:00:00',
+          tgl_mulai: formData.tgl_mulai,
+          tgl_selesai: formData.tgl_selesai,
           lokasi: formData.lokasi,
           isi_penugasan: formData.isi_penugasan,
           surat_tugas: [

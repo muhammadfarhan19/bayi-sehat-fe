@@ -68,3 +68,14 @@ export function yearMonthDuration(start: string, end: string) {
   var diff = new Date(dateEnd.getTime() - dateStart.getTime());
   return [diff.getUTCFullYear() - 1970, diff.getUTCMonth()];
 }
+
+export const convertIndonesiaFormat = (date: string) => {
+  if (date) {
+      const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      const arr = date.split('-');
+
+      return arr[2].substring(0, 2) + ' ' + bulan[parseInt(arr[1]) - 1] + ' ' + arr[0];
+  } else {
+      return '-';
+  }
+}

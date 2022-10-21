@@ -110,6 +110,9 @@ export const RekapDinasAPI = {
   POST_DINAS_UPDATE: config.apiHost + '/dinas/update',
   GET_DINAS_PEGAWAI_REKAP: config.apiHost + '/dinas/pegawai/rekap',
   POST_DINAS_DELETE: config.apiHost + '/dinas/delete',
+  GET_DINAS_PEGAWAI: config.apiHost + '/dinas/pegawai/statistic',
+  GET_DINAS_PEGAWAI_SCHEDULE: config.apiHost + '/dinas/pegawai/schedule',
+  GET_DINAS_PEGAWAI_UPCOMING: config.apiHost + '/dinas/pegawai/upcoming',
 };
 
 export const KepangkatanAPI = {
@@ -188,6 +191,7 @@ export const LogHarianAPI = {
   POST_LOG_HARIAN_DELETE: config.apiHost + '/dailylog/delete',
   POST_LOG_HARIAN_INSERT: config.apiHost + '/dailylog/insert',
   POST_LOG_HARIAN_UPDATE: config.apiHost + '/dailylog/update',
+  GET_LOG_HARIAN_PEGAWAI: config.apiHost + '/dailylog/pegawai/statistic',
 };
 
 export const PresensiAPI = {
