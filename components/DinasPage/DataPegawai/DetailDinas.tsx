@@ -6,7 +6,7 @@ import React from 'react';
 import { LogHarianAPI, RekapDinasAPI, UserProfileAPI } from '../../../constants/APIUrls';
 import { GetLogHarianPegawaiReq, GetLogHarianPegawaiRes } from '../../../types/api/LogHarianAPI';
 import { GetOptPhotoReq, GetPhotoProfileRes } from '../../../types/api/ProfilePhotoAPI';
-import { GetRekapDinasPegawaiReq, GetRekapDinasPegawaiRes} from '../../../types/api/RekapDinasAPI';
+import { GetRekapDinasPegawaiReq, GetRekapDinasPegawaiRes } from '../../../types/api/RekapDinasAPI';
 import { convertIndonesiaFormat } from '../../../utils/DateUtil';
 import { callAPI } from '../../../utils/Fetchers';
 import { getQueryString } from '../../../utils/URLUtils';
@@ -58,18 +58,18 @@ export default function DetailDinas() {
   const { data: logHarian, isValidating: loadLogHarian } = useCommonApi<GetLogHarianPegawaiReq, GetLogHarianPegawaiRes>(
     LogHarianAPI.GET_LOG_HARIAN_PEGAWAI,
     pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
-    { method: 'GET' },
+    { method: 'GET' }
   );
 
   const { data: dinas, isValidating: loadDinas } = useCommonApi<GetRekapDinasPegawaiReq, GetRekapDinasPegawaiRes>(
     RekapDinasAPI.GET_DINAS_PEGAWAI,
     pegawai_id ? { pegawai_id: Number(pegawai_id) } : {},
-    { method: 'GET' },
+    { method: 'GET' }
   );
 
   return (
     <>
-      <div className="flex flex-row flex-nowrap justify-between gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow mb-[24px]">
+      <div className="mb-[24px] flex flex-row flex-nowrap justify-between gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
         <div className="flex flex-row">
           {img.length >= 1 ? (
             <img onClick={() => setShowImage(!showImage)} className="h-[88px] w-[88px] rounded-full" src={img} alt="" />
@@ -86,9 +86,9 @@ export default function DetailDinas() {
 
       <NotificationListPage />
 
-      <div className='grid grid-cols-2 gap-[24px] mb-[24px]'>
+      <div className="mb-[24px] grid grid-cols-2 gap-[24px]">
         <Card
-          title='Jadwal Dinas'
+          title="Jadwal Dinas"
           sub_title={`Dinas dibulan ${convertIndonesiaFormat(dateNowStr).split(' ')[1]}`}
           link={`/jadwal-dinas`}
           data={typeof dinas !== 'undefined' && dinas !== null ? String(dinas?.total_dinas) : '-'}
@@ -96,10 +96,12 @@ export default function DetailDinas() {
         />
 
         <Card
-          title='Log Harian'
-          sub_title='Belum di isi'
-          link='/log-harian'
-          data={typeof logHarian !== 'undefined' && logHarian !== null ? String(logHarian?.number_of_day_unfilled) : '-'}
+          title="Log Harian"
+          sub_title="Belum di isi"
+          link="/log-harian"
+          data={
+            typeof logHarian !== 'undefined' && logHarian !== null ? String(logHarian?.number_of_day_unfilled) : '-'
+          }
           load={loadLogHarian}
         />
       </div>
@@ -148,4 +150,3 @@ export default function DetailDinas() {
     </>
   );
 }
-

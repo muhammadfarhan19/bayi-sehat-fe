@@ -1,9 +1,8 @@
-import DetailDinas from "../../components/DinasPage/DataPegawai/DetailDinas";
-import JadwalDinasPage from "../../components/JadwalDinasPage/JadwalDinasPage";
-import { withAuthenticatedPage } from "../../components/shared/hocs/AuthenticatedPage";
-import { withReduxPage } from "../../components/shared/hocs/ReduxPage";
-import LeftMenu from "../../components/shared/MainLayout/LeftMenu";
-import MainLayout from "../../components/shared/MainLayout/MainLayout";
+import JadwalDinasPage from '../../components/JadwalDinasPage/JadwalDinasPage';
+import { withAuthenticatedPage } from '../../components/shared/hocs/AuthenticatedPage';
+import { withReduxPage } from '../../components/shared/hocs/ReduxPage';
+import LeftMenu from '../../components/shared/MainLayout/LeftMenu';
+import MainLayout from '../../components/shared/MainLayout/MainLayout';
 
 function JadwalDinas() {
   return (

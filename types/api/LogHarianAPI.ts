@@ -48,8 +48,8 @@ export interface GetLogHarianPegawaiReq {
 }
 
 export interface GetLogHarianPegawaiRes {
-  total_working_days: number,
-  number_of_day_filled: number,
-  number_of_day_unfilled: number,
-  score: number
+  total_working_days: number;
+  number_of_day_filled: number;
+  number_of_day_unfilled: number;
+  score: number;
 }

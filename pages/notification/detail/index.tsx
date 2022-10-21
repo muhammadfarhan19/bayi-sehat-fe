@@ -10,19 +10,18 @@ import MainLayout from '../../../components/shared/MainLayout/MainLayout';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function DetailNotification() {
-  const { date, dinas_id } = getQueryString<{ pegawai_id: string, date: string, dinas_id: string }>();
+  const { date, dinas_id } = getQueryString<{ pegawai_id: string; date: string; dinas_id: string }>();
   return (
     <MainLayout>
       <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-8">
         <LeftMenu />
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <CardHeader />
-          {
-            typeof date !== 'undefined' && date !== '' ?
-              <DetailNotificationPage />
-              :
-             <DetailRekapPage dinas_id={dinas_id} viewOnly={true} />
-          }
+          {typeof date !== 'undefined' && date !== '' ? (
+            <DetailNotificationPage />
+          ) : (
+            <DetailRekapPage dinas_id={dinas_id} viewOnly={true} />
+          )}
         </div>
       </div>
     </MainLayout>

@@ -71,11 +71,24 @@ export function yearMonthDuration(start: string, end: string) {
 
 export const convertIndonesiaFormat = (date: string) => {
   if (date) {
-      const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-      const arr = date.split('-');
+    const bulan = [
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
+    ];
+    const arr = date.split('-');
 
-      return arr[2].substring(0, 2) + ' ' + bulan[parseInt(arr[1]) - 1] + ' ' + arr[0];
+    return arr[2].substring(0, 2) + ' ' + bulan[parseInt(arr[1]) - 1] + ' ' + arr[0];
   } else {
-      return '-';
+    return '-';
   }
-}
+};
