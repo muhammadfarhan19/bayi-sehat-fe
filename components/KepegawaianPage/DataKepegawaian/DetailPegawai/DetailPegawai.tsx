@@ -124,6 +124,7 @@ function DetailPegawai() {
           <div className="my-auto ml-2 flex flex-col">
             <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
             <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
+            <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.unit_kerja}</p>
           </div>
         </div>
         <div className="self-center">
