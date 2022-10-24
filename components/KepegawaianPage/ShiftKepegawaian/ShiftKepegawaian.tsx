@@ -2,6 +2,7 @@ import React from 'react';
 
 import { classNames } from '../../../utils/Components';
 import ShiftPns from './ShiftPNS/ShiftPns';
+import ShiftPpnpn from './ShiftPPNPN/ShiftPpnpn';
 
 export default function ShiftKepegawaian() {
   const tabs = [
@@ -51,7 +52,7 @@ export default function ShiftKepegawaian() {
           </div>
         </div>
       </div>
-      <div>{selected === 'PNS' ? <ShiftPns /> : <ShiftPns />}</div>
+      <div>{selected === 'PNS' ? <ShiftPns /> : <ShiftPpnpn />}</div>
     </div>
   );
 }
