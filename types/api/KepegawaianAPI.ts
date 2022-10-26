@@ -6,6 +6,8 @@ export interface GetPegawaiListReq {
   tipe_jabatan?: string;
   jabatan?: string;
   status_cpns: number[];
+  range_umur?: string;
+  gender?: number;
   page: number;
   per_page: number;
 }
@@ -17,14 +19,19 @@ export interface GetPegawaiListRes {
 
 export interface GetPegawaiListData {
   list: {
-    golongan: string;
-    jabatan: string;
-    name: string;
-    nip: string;
-    pegawai_id: number;
-    tipe_jabatan: string;
-    unit_kerja: string;
     user_id: number;
+    pegawai_id: number;
+    nip: string;
+    name: string;
+    unit_kerja: string;
+    golongan: string;
+    tipe_jabatan: string;
+    jabatan: string;
+    status_cpns: number;
+    gender_id: number;
+    gender: string;
+    tgl_lahir: string;
+    usia: string;
   }[];
   pagination: Pagination;
 }

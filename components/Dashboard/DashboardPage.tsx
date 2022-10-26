@@ -1,212 +1,54 @@
-import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
-import React, { Dispatch, Fragment, SetStateAction, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
+import React, { useState } from 'react';
 
 import { StatisticAPI } from '../../constants/APIUrls';
-import {
-  GetStatisticDataRes,
-  GetStatisticReq,
-  StatisticMultipleBarChartData,
-  StatisticTableData,
-} from '../../types/api/StatisticAPI';
+import { GetStatisticDataRes, GetStatisticReq, StatisticTableData } from '../../types/api/StatisticAPI';
 import { Status } from '../../types/Common';
-import { callAPI, callAPIParallel } from '../../utils/Fetchers';
+import { classNames } from '../../utils/Components';
+import { callAPI } from '../../utils/Fetchers';
 import { withErrorBoundary } from '../shared/hocs/ErrorBoundary';
 import Loader from '../shared/Loader/Loader';
+import Graph from './Graph';
+import TwoGraph from './TwoGraph';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+const tabs = ['Data PNS', 'Data PPNPN'];
 
-const options = {
-  responsive: true,
-};
-
+const dateNowStr = new Date().toISOString().slice(0, 10);
 const STATISTIC_ID_TOTAL_PEGAWAI = 100001;
 const STATISTIC_ID_GOLONGAN = 100002;
 const STATISTIC_ID_JENJANG_PENDIDIKAN = 100003;
 const STATISTIC_ID_PRIA = 100004;
 const STATISTIC_ID_WANITA = 100005;
+const STATISTIC_ID_TUGAS_IJIN = 100006;
 
 type DataStatisticTable = Partial<StatisticTableData>;
-type DataStatisticMultipleChartBar = Partial<StatisticMultipleBarChartData>;
-
-function Selection({
-  options,
-  onChange,
-  value,
-}: {
-  options: string[];
-  onChange: Dispatch<SetStateAction<string>>;
-  value: string;
-}) {
-  return (
-    <Listbox value={value} onChange={onChange}>
-      {({ open }) => (
-        <>
-          <div className="relative mt-1">
-            <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-              <span className="block truncate text-sm leading-5 text-gray-700">{value}</span>
-              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-              </span>
-            </Listbox.Button>
-
-            <Transition
-              show={open}
-              as={Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {options.map((each, index) => (
-                  <Listbox.Option
-                    key={`options-${index}`}
-                    className={({ active }) =>
-                      classNames(
-                        active ? 'bg-indigo-600 text-white' : 'text-gray-900',
-                        'relative cursor-default select-none py-2 pl-3 pr-9'
-                      )
-                    }
-                    value={each}
-                  >
-                    {({ selected, active }) => (
-                      <>
-                        <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                          {each}
-                        </span>
-                        {selected ? (
-                          <span
-                            className={classNames(
-                              active ? 'text-white' : 'text-indigo-600',
-                              'absolute inset-y-0 right-0 flex items-center pr-4'
-                            )}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
-                      </>
-                    )}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </Transition>
-          </div>
-        </>
-      )}
-    </Listbox>
-  );
-}
 
 function DashboardPage() {
-  const [selectedDirectoratGolongan, setSelectedDirectoratGolongan] = useState<string>('');
-  const [selectedDirectoratJenjangPendidikan, setSelectedDirectoratJenjangPendidikan] = useState<string>('');
-  const [selectedDirectoratByGender, setSelectedDirectoratByGender] = useState<string>('');
-  const [dataStatisticTable, setDataStatisticTable] = useState<DataStatisticTable>({});
-  const [dataStatisticGolongan, setDataStatisticGolongan] = useState<DataStatisticMultipleChartBar>({});
-  const [dataStatisticJenjangPendidikan, setDataStatisticJenjangPendidikan] = useState<DataStatisticMultipleChartBar>(
-    {}
-  );
-  const [dataStatisticByMale, setDataStatisticByMale] = useState<DataStatisticMultipleChartBar>({});
-  const [dataStatisticByFemale, setDataStatisticByFemale] = useState<DataStatisticMultipleChartBar>({});
-
-  const [listDirectoratGolongan, setListDirectoratGolongan] = useState<Array<string>>();
-  const [listDirectoratJenjangPendidikan, setListDirectoratJenjangPendidikan] = useState<Array<string>>();
-  const [listDirectoratByGender, setListDirectoratByGender] = useState<Array<string>>([]);
-
   const [loaded, setLoaded] = useState<boolean>(false);
+  const [selectedTab, setSelectedTab] = useState<string>(tabs[0]);
+
+  const [dataStatisticTable, setDataStatisticTable] = useState<DataStatisticTable>({});
 
   React.useEffect(() => {
     getStatiscticData();
   }, []);
 
   const getStatiscticData = async () => {
-    const dateNowStr = new Date().toISOString().slice(0, 10);
     const apiReqTotalPegawai = {
       id: STATISTIC_ID_TOTAL_PEGAWAI,
       date: dateNowStr,
     };
 
-    const apiReqGolongan = {
-      id: STATISTIC_ID_GOLONGAN,
-      date: dateNowStr,
-    };
-
-    const apiReqJenjangPendidikan = {
-      id: STATISTIC_ID_JENJANG_PENDIDIKAN,
-      date: dateNowStr,
-    };
-
-    await callAPIParallel(() => [
-      callAPI<GetStatisticReq, GetStatisticDataRes>(StatisticAPI.GET_STATISTIC_FIND, apiReqTotalPegawai, {
-        method: 'get',
-      }),
-      callAPI<GetStatisticReq, GetStatisticDataRes>(StatisticAPI.GET_STATISTIC_FIND, apiReqGolongan, { method: 'get' }),
-      callAPI<GetStatisticReq, GetStatisticDataRes>(StatisticAPI.GET_STATISTIC_FIND, apiReqJenjangPendidikan, {
-        method: 'get',
-      }),
-      callAPI<GetStatisticReq, GetStatisticDataRes>(
-        StatisticAPI.GET_STATISTIC_FIND,
-        { id: STATISTIC_ID_PRIA, date: '2022-05-24' },
-        { method: 'get' }
-      ),
-      callAPI<GetStatisticReq, GetStatisticDataRes>(
-        StatisticAPI.GET_STATISTIC_FIND,
-        { id: STATISTIC_ID_WANITA, date: '2022-05-24' },
-        { method: 'get' }
-      ),
-    ]).then(res => {
+    callAPI<GetStatisticReq, GetStatisticDataRes>(StatisticAPI.GET_STATISTIC_FIND, apiReqTotalPegawai, {
+      method: 'get',
+    }).then(res => {
       let dataStatisticTableRes: DataStatisticTable = {};
-      let dataStatisticGolonganRes: DataStatisticMultipleChartBar = {};
-      let dataStatisticJenjangPendidikanRes: DataStatisticMultipleChartBar = {};
-      let dataStatisticByMaleRes: DataStatisticMultipleChartBar = {};
-      let dataStatisticByFemaleRes: DataStatisticMultipleChartBar = {};
 
-      if (res[0].status === 200 && res[0].data && res[0].data?.status === Status.OK) {
-        dataStatisticTableRes = { ...dataStatisticTableRes, ...res[0].data.data.data.data };
+      if (res.status === 200 && res.data && res.data?.status === Status.OK) {
+        dataStatisticTableRes = { ...dataStatisticTableRes, ...res.data.data.data.data };
         setDataStatisticTable(dataStatisticTableRes);
-      }
-      if (res[1].status === 200 && res[1].data && res[1].data?.status === Status.OK) {
-        dataStatisticGolonganRes = { ...dataStatisticGolonganRes, ...res[1].data.data.data.data };
-        setDataStatisticGolongan(dataStatisticGolonganRes);
-
-        const UniqueListGolongan = Array.from(
-          new Set(dataStatisticGolonganRes?.multiple_bar_charts?.map(item => item['chart_title']))
-        );
-        if (!selectedDirectoratGolongan && UniqueListGolongan[0]) {
-          setListDirectoratGolongan(UniqueListGolongan);
-          setSelectedDirectoratGolongan(UniqueListGolongan[0]);
-        }
-      }
-      if (res[2].status === 200 && res[2].data && res[2].data?.status === Status.OK) {
-        dataStatisticJenjangPendidikanRes = { ...dataStatisticJenjangPendidikanRes, ...res[2].data.data.data.data };
-        setDataStatisticJenjangPendidikan(dataStatisticJenjangPendidikanRes);
-
-        const UniqueListJenjangPendidikan = Array.from(
-          new Set(dataStatisticJenjangPendidikanRes?.multiple_bar_charts?.map(item => item['chart_title']))
-        );
-        if (!selectedDirectoratJenjangPendidikan && UniqueListJenjangPendidikan[0]) {
-          setListDirectoratJenjangPendidikan(UniqueListJenjangPendidikan);
-          setSelectedDirectoratJenjangPendidikan(UniqueListJenjangPendidikan[0]);
-        }
-      }
-      if (res[3].status === 200 && res[3].data && res[3].data?.status === Status.OK) {
-        dataStatisticByMaleRes = { ...dataStatisticByMaleRes, ...res[3].data.data.data.data };
-        setDataStatisticByMale(dataStatisticByMaleRes);
-        const UniqueListByGender = (dataStatisticByMaleRes?.multiple_bar_charts || []).map(item => item['chart_title']);
-        if (!selectedDirectoratByGender && UniqueListByGender[0]) {
-          setListDirectoratByGender(UniqueListByGender);
-          setSelectedDirectoratByGender(UniqueListByGender[0]);
-        }
-      }
-      if (res[4].status === 200 && res[4].data && res[4].data?.status === Status.OK) {
-        dataStatisticByFemaleRes = { ...dataStatisticByFemaleRes, ...res[4].data.data.data.data };
-        setDataStatisticByFemale(dataStatisticByFemaleRes);
       }
       setLoaded(true);
     });
@@ -223,23 +65,6 @@ function DashboardPage() {
   const totalPegawai = (index: number) => {
     const total = dataStatisticTable?.table?.rows.reduce((sum, i) => sum + parseInt(i[index]), 0);
     return total;
-  };
-
-  const GetStatisticGolonganByDirectorat = () => {
-    return dataStatisticGolongan?.multiple_bar_charts?.find(item => item.chart_title === selectedDirectoratGolongan);
-  };
-
-  const GetStatisticJenjangPendidikanByDirectorat = () => {
-    return dataStatisticJenjangPendidikan?.multiple_bar_charts?.find(
-      item => item.chart_title === selectedDirectoratJenjangPendidikan
-    );
-  };
-
-  const GetStatisticGenderByDirectorat = () => {
-    return [
-      dataStatisticByMale?.multiple_bar_charts?.find(item => item.chart_title === selectedDirectoratByGender),
-      dataStatisticByFemale?.multiple_bar_charts?.find(item => item.chart_title === selectedDirectoratByGender),
-    ];
   };
 
   return (
@@ -307,96 +132,66 @@ function DashboardPage() {
         </div>
       </section>
 
-      <section aria-labelledby="section-1-title">
+      <section aria-labelledby="filter">
         <div className="overflow-hidden rounded-lg bg-white shadow">
-          <div className="p-6">
-            <h3 className="text-xl font-medium leading-6 text-gray-900">Statistik Golongan Pegawai</h3>
-            <div className="grid grid-cols-1 py-2 sm:grid-cols-2">
-              <Selection
-                onChange={setSelectedDirectoratGolongan}
-                options={listDirectoratGolongan || []}
-                value={selectedDirectoratGolongan}
-              />
-            </div>
-            <p className="text-sm font-light leading-8 text-gray-500">
-              Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi
-            </p>
-            <Bar
-              options={options}
-              data={{
-                labels: GetStatisticGolonganByDirectorat()?.chart_data?.map(item => item.x_axis),
-                datasets: [
-                  {
-                    label: 'Golongan',
-                    data: GetStatisticGolonganByDirectorat()?.chart_data?.map(item => item.y_axis),
-                    backgroundColor: '#4F46E5',
-                  },
-                ],
-              }}
-            />
-          </div>
+          <nav className="-mb-px flex space-x-8 px-6" aria-label="Tabs">
+            {tabs.map(tab => (
+              <span
+                key={tab}
+                onClick={() => setSelectedTab(tab)}
+                className={classNames(
+                  tab === selectedTab
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                  'cursor-pointer border-b-2 py-4 px-1 text-sm font-medium'
+                )}
+              >
+                {tab}
+              </span>
+            ))}
+          </nav>
         </div>
       </section>
 
-      <section aria-labelledby="section-1-title">
-        <div className="overflow-hidden rounded-lg bg-white shadow">
-          <div className="p-6">
-            <h3 className="text-xl font-medium leading-6 text-gray-900">Statistik Pendidikan Pegawai</h3>
-            <div className="grid grid-cols-1 py-2 sm:grid-cols-2">
-              <Selection
-                onChange={setSelectedDirectoratJenjangPendidikan}
-                options={listDirectoratJenjangPendidikan || []}
-                value={selectedDirectoratJenjangPendidikan}
-              />
-            </div>
-            <p className="text-sm font-light leading-8 text-gray-500">
-              Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi
-            </p>
-            <Bar
-              options={options}
-              data={{
-                labels: GetStatisticJenjangPendidikanByDirectorat()?.chart_data?.map(item => item.x_axis),
-                datasets: [
-                  {
-                    label: 'Pendidikan',
-                    data: GetStatisticJenjangPendidikanByDirectorat()?.chart_data?.map(item => item.y_axis),
-                    backgroundColor: '#10B981',
-                  },
-                ],
-              }}
-            />
-          </div>
-        </div>
-      </section>
+      <Graph
+        bgColor="#4F46E5"
+        dateNowStr={dateNowStr}
+        id={STATISTIC_ID_GOLONGAN}
+        label="Golongan"
+        subTitle="Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi"
+        title="Statistik Golongan Pegawai"
+        typeChart="golongan"
+      />
 
-      <section aria-labelledby="section-1-title">
-        <div className="overflow-hidden rounded-lg bg-white shadow">
-          <div className="p-6">
-            <h3 className="text-xl font-medium leading-6 text-gray-900">Statistik Umur Dan Gender</h3>
-            <div className="grid grid-cols-1 py-2 sm:grid-cols-2">
-              <Selection
-                onChange={setSelectedDirectoratByGender}
-                options={listDirectoratByGender || []}
-                value={selectedDirectoratByGender}
-              />
-            </div>
-            <p className="text-sm font-light leading-8 text-gray-500">
-              Grafik sebaran umur dan gender di masing-masing direktorat
-            </p>
-            <Bar
-              options={options}
-              data={{
-                labels: GetStatisticGenderByDirectorat()?.[0]?.chart_data?.map(item => item.x_axis),
-                datasets: (GetStatisticGenderByDirectorat() || []).map((each, index) => ({
-                  label: ['Pria', 'Wanita'][index],
-                  data: each?.chart_data?.map(item => item.y_axis),
-                  backgroundColor: ['#1c99dc', '#a72881'][index],
-                })),
-              }}
-            />
-          </div>
-        </div>
-      </section>
+      <Graph
+        bgColor="#10B981"
+        dateNowStr={dateNowStr}
+        id={STATISTIC_ID_JENJANG_PENDIDIKAN}
+        label="Pendidikan"
+        subTitle="Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi"
+        title="Statistik Pendidikan Pegawai"
+        typeChart="pendidikan"
+      />
+
+      <TwoGraph
+        bgColor={['#1c99dc', '#a72881']}
+        dateNowStr={'2022-05-24'}
+        ids={[STATISTIC_ID_PRIA, STATISTIC_ID_WANITA]}
+        labels={['Pria', 'Wanita']}
+        subTitle="Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi"
+        title="Statistik Umur Dan Gender"
+        typeChart="jenis_kelamin"
+      />
+
+      <Graph
+        bgColor="#4F46E5"
+        dateNowStr={dateNowStr}
+        id={STATISTIC_ID_TUGAS_IJIN}
+        label="Tugas belajar"
+        subTitle="Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi"
+        title="Statistik Tugas Belajar dan Izin Belajar"
+        typeChart="jenis_belajar"
+      />
     </>
   );
 }
