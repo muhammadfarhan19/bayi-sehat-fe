@@ -1,3 +1,5 @@
+import { ChevronLeftIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
 import React from 'react';
 
 import { RekapDinasAPI } from '../../constants/APIUrls';
@@ -17,8 +19,14 @@ export default function JadwalDinasPage() {
   return (
     <>
       <div className="rounded-lg bg-white shadow">
+        <Link href={'/'}>
+          <span className="flex cursor-pointer flex-row items-center gap-x-2 py-6 px-6">
+            <ChevronLeftIcon className="h-5 w-5" />
+            <div>Kembali</div>
+          </span>
+        </Link>
         <div className="px-6">
-          <div className="flex flex-row py-6">
+          <div className="flex flex-row">
             <p className="text-lg font-medium text-gray-900">Rekap Dinas</p>
           </div>
         </div>

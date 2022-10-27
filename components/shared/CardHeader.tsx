@@ -48,14 +48,25 @@ export default function CardHeader() {
       <div className="mb-[24px] flex flex-row flex-nowrap justify-between gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
         <div className="flex flex-row">
           {img.length >= 1 ? (
-            <img onClick={() => setShowImage(!showImage)} className="h-[88px] w-[88px] rounded-full" src={img} alt="" />
+            <img
+              onClick={() => setShowImage(!showImage)}
+              className="my-auto h-[88px] w-[88px] rounded-full"
+              src={img}
+              alt=""
+            />
           ) : (
-            <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
+            <UserCircleIcon className="my-auto h-[88px] w-[88px] fill-indigo-500" />
           )}
           <div className="my-auto ml-2 flex flex-col">
             <p className="text-[14px] font-[500] text-[#4B5563]">Selamat Datang,</p>
             <p className="text-[24px] font-[700]">{personalPegawai?.nama}</p>
             <p className="text-[14px] font-[500] text-[#4B5563]">{personalPegawai?.jabatan}</p>
+            {personalPegawai?.jabatan !== '' && (
+              <p className="text-[14px] font-semibold text-[#4B5563]">{personalPegawai?.jabatan}</p>
+            )}
+            {personalPegawai?.unit_kerja !== '' && (
+              <p className="text-[12px] font-medium text-[#4B5563]">{personalPegawai?.unit_kerja}</p>
+            )}
           </div>
         </div>
       </div>
