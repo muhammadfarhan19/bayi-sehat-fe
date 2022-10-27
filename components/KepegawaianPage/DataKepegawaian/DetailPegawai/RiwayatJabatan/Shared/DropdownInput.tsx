@@ -2,7 +2,8 @@ import { Combobox } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { ChangeEvent, ReactNode, useState } from 'react';
 
-import { classNames } from '../../../utils/Components';
+// import { classNames } from '../../../utils/Components';
+import { classNames } from '../../../../../../utils/Components';
 
 export interface OptionType {
   text: string;
@@ -18,12 +19,13 @@ interface AutoCompleteProps {
   placeholder?: string;
   disabled?: boolean;
   additionalComponent?: any;
+  additionalValue?: string;
 }
 
-export default function AutoComplete(props: AutoCompleteProps) {
-  const { defaultValue, label, onChange, onQueryChange, options, placeholder, disabled } = props;
+export default function DropdownInput(props: AutoCompleteProps) {
+  const { defaultValue, label, onChange, onQueryChange, options, placeholder, disabled, additionalComponent } = props;
   const [query, setQuery] = useState('');
-  const [selectedValue, setSelectedValue] = useState<OptionType | undefined>(defaultValue);
+  const [selectedValue, setSelectedValue] = useState<OptionType | undefined | any>(defaultValue);
 
   const filteredOptions =
     query === ''
@@ -73,24 +75,28 @@ export default function AutoComplete(props: AutoCompleteProps) {
                   )
                 }
               >
-                {({ active, selected }) => (
-                  <>
-                    <span className={classNames('block truncate', selected ? 'font-semibold' : '')}>{option.text}</span>
-                    {selected && (
-                      <span
-                        className={classNames(
-                          'absolute inset-y-0 right-0 flex items-center pr-4',
-                          active ? 'text-white' : 'text-indigo-600'
-                        )}
-                      >
-                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                {({ active, selected }) => {
+                  return (
+                    <>
+                      <span className={classNames('block truncate', selected ? 'font-semibold' : '')}>
+                        {option.text}
                       </span>
-                    )}
-                  </>
-                )}
+                      {selected && (
+                        <span
+                          className={classNames(
+                            'absolute inset-y-0 right-0 flex items-center pr-4',
+                            active ? 'text-white' : 'text-indigo-600'
+                          )}
+                        >
+                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                      )}
+                    </>
+                  );
+                }}
               </Combobox.Option>
             ))}
-            {props.additionalComponent}
+            {additionalComponent}
           </Combobox.Options>
         )}
       </div>

@@ -32,6 +32,7 @@ import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import AutoComplete from '../../../../shared/Input/ComboBox';
 import DatePicker from '../../../../shared/Input/DatePicker';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
+import DropdownInput from './Shared/DropdownInput';
 
 interface FormState {
   tipe_jabatan: string;
@@ -41,6 +42,7 @@ interface FormState {
   file_name: string;
   file_id: string;
   unit_kerja_id: string;
+  custom_unit_kerja: string;
 }
 
 interface UploadFormProps {
@@ -59,6 +61,10 @@ export default function JabatanForm(props: UploadFormProps) {
   const [queryJabatan, setQueryJabatan] = React.useState('');
   const debounce = React.useRef<number>(0);
   const [loadDetail, setLoadDetail] = React.useState(false);
+  const [isFungsional, setIsFungsional] = React.useState<boolean>(true);
+  const [formUnitState, setFormUnitState] = React.useState<string>('');
+  const [customUnitKerja, setCustomUnitKerja] = React.useState<string>('');
+  const [switchOptions, setSwitchOptions] = React.useState<boolean>(false);
   const [formJabatanState, setFormJabatanState] = React.useState<{ text?: string; value?: string }>({
     text: undefined,
     value: undefined,
@@ -71,17 +77,40 @@ export default function JabatanForm(props: UploadFormProps) {
     formState: { errors },
     setValue,
     getValues,
+    watch,
   } = useForm<FormState>({
     defaultValues: {
       tmt: Date.now(),
     },
   });
 
+  const jabatanFungsional = watch('tipe_jabatan');
+
+  React.useEffect(() => {
+    if (Number(jabatanFungsional) === 2) {
+      setIsFungsional(true);
+    } else {
+      setIsFungsional(false);
+    }
+  }, [jabatanFungsional]);
+
+  React.useEffect(() => {
+    const timeOut = setTimeout(() => {
+      if (customUnitKerja?.length <= 1) {
+        setSwitchOptions(false);
+        setFormUnitState('');
+      }
+    }, 10);
+    return () => clearTimeout(timeOut);
+  }, [customUnitKerja]);
+
   const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
     UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
     null,
     { method: 'GET' }
   );
+
+  const isData = unitKerjaList?.filter(item => item?.name !== 'Lainnya');
 
   const { data: jenisJabatan } = useCommonApi<null, JenisJabatanListData[]>(MasterAPI.GET_JENIS_JABATAN_LIST, null, {
     method: 'GET',
@@ -148,6 +177,7 @@ export default function JabatanForm(props: UploadFormProps) {
       setValue('file_name', '');
       setValue('kumulatif', '');
       setValue('unit_kerja_id', '');
+      setValue('custom_unit_kerja', '');
     }
   }, [jenisJabatan, selectedId]);
 
@@ -159,8 +189,10 @@ export default function JabatanForm(props: UploadFormProps) {
         {
           pegawai_id: dataApiRes?.pegawai_id || 0,
           jabatan_id: Number(formData.jabatan_id),
-          unit_kerja_id: Number(formData.unit_kerja_id),
+          unit_kerja_id: switchOptions ? 0 : Number(formData.unit_kerja_id),
           tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
+          custom_jabatan_name: '',
+          custom_unit_kerja_name: customUnitKerja?.length === 1 ? '' : customUnitKerja,
           tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
           angka_kredit: Number(formData.kumulatif),
           surat_keputusan: [
@@ -178,7 +210,10 @@ export default function JabatanForm(props: UploadFormProps) {
         {
           jabatan_pegawai_id: Number(selectedId),
           jabatan_id: Number(formData.jabatan_id),
-          unit_kerja_id: Number(formData.unit_kerja_id),
+          unit_kerja_id: switchOptions ? 0 : Number(formData.unit_kerja_id),
+          //Rediscuss with Back-End Dev and Product for these both custom
+          custom_jabatan_name: '',
+          custom_unit_kerja_name: customUnitKerja?.length === 1 ? '' : customUnitKerja,
           tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
           tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
           angka_kredit: Number(formData.kumulatif),
@@ -202,6 +237,7 @@ export default function JabatanForm(props: UploadFormProps) {
         })
       );
       onSuccess();
+      setCustomUnitKerja('');
       setOpen(!open);
     } else {
       dispatch(
@@ -314,26 +350,77 @@ export default function JabatanForm(props: UploadFormProps) {
                       }
                     />
                   </div>
-
-                  <div className="mt-5 sm:col-span-6">
-                    <label className="block text-sm font-medium text-gray-700">Unit Organisasi</label>
-                    <div className="pt-1 sm:col-span-2 sm:mt-0">
-                      <select
-                        className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-                        {...register('unit_kerja_id', { required: 'Silahkan masukan unit organisasi.' })}
-                      >
-                        <option value="">Silahkan Pilih</option>
-                        {(unitKerjaList || []).map((item, index) => (
-                          <option key={`options-${index}`} value={item?.unit_kerja_id}>
-                            {item?.name}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.unit_kerja_id && (
-                        <p className="mt-1 text-xs text-red-500">{errors.unit_kerja_id.message}</p>
+                  {switchOptions ? (
+                    <div className="mt-5 sm:col-span-6">
+                      <label htmlFor="nama" className="block text-sm font-medium text-gray-700">
+                        Unit Organisasi
+                      </label>
+                      <div className="mt-1">
+                        <input
+                          {...register('custom_unit_kerja', { required: false })}
+                          className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                          name="custom_unit_kerja"
+                          placeholder="Lainnya"
+                          type="text"
+                          onChange={e => {
+                            setCustomUnitKerja(e.target.value);
+                          }}
+                          value={customUnitKerja}
+                        />
+                      </div>
+                      {errors.custom_unit_kerja && (
+                        <p className="mt-1 text-xs text-red-500">{errors.custom_unit_kerja.message}</p>
                       )}
                     </div>
-                  </div>
+                  ) : (
+                    <div className="mt-5 sm:col-span-6">
+                      <Controller
+                        control={control}
+                        name="unit_kerja_id"
+                        rules={{ required: 'Mohon isi data jabatan' }}
+                        render={({ field: { onChange } }) => {
+                          return (
+                            <>
+                              <DropdownInput
+                                onChange={value => {
+                                  onChange(value.value);
+                                }}
+                                label={'Unit Organisasi'}
+                                options={(isData || []).map(each => ({
+                                  text: each.name,
+                                  value: String(each.unit_kerja_id),
+                                }))}
+                                additionalComponent={
+                                  <div className="-top-10 mx-2 mt-1 mb-2">
+                                    <input
+                                      className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                                      name="custom_unit_kerja"
+                                      placeholder="Lainnya"
+                                      type="text"
+                                      onChange={e => setFormUnitState(e.target.value)}
+                                      value={formUnitState}
+                                      onKeyDown={e => {
+                                        if (e.key === 'Enter') {
+                                          setSwitchOptions(true);
+                                          setTimeout(() => {
+                                            setCustomUnitKerja(formUnitState);
+                                          }, 20);
+                                        }
+                                      }}
+                                      onBlur={() => {
+                                        setSwitchOptions(true);
+                                      }}
+                                    />
+                                  </div>
+                                }
+                              />
+                            </>
+                          );
+                        }}
+                      />
+                      {errors.jabatan_id && <p className="mt-1 text-xs text-red-500">{errors.jabatan_id.message}</p>}
+                    </div>
+                  )}
 
                   <div className="mt-5 sm:col-span-6">
                     <Controller
@@ -362,23 +449,28 @@ export default function JabatanForm(props: UploadFormProps) {
                     />
                     {errors.jabatan_id && <p className="mt-1 text-xs text-red-500">{errors.jabatan_id.message}</p>}
                   </div>
-                  <div className="mt-5 sm:col-span-6">
-                    <label className="block text-sm font-medium text-gray-700">KUMULATIF</label>
-                    <div className="mt-1">
-                      <input
-                        {...register('kumulatif', { required: 'Mohon masukkan informasi kumulatif.' })}
-                        autoComplete={'off'}
-                        className={classNames(
-                          'block w-full rounded-md shadow-sm sm:text-sm',
-                          errors.kumulatif
-                            ? 'ring-red-500 focus:border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
-                        )}
-                        type="text"
-                      />
-                      {errors.kumulatif && <p className="mt-1 text-xs text-red-500">{errors.kumulatif.message}</p>}
+                  {isFungsional ? (
+                    <div className="mt-5 sm:col-span-6">
+                      <label className="block text-sm font-medium text-gray-700">KUMULATIF</label>
+                      <div className="mt-1">
+                        <input
+                          {...register('kumulatif', {
+                            required: isFungsional ? false : 'Mohon masukkan informasi kumulatif.',
+                          })}
+                          autoComplete={'off'}
+                          className={classNames(
+                            'block w-full rounded-md shadow-sm sm:text-sm',
+                            errors.kumulatif
+                              ? 'ring-red-500 focus:border-red-500 focus:ring-red-500'
+                              : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
+                          )}
+                          type="text"
+                        />
+                        {errors.kumulatif && <p className="mt-1 text-xs text-red-500">{errors.kumulatif.message}</p>}
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
+
                   <div className="mt-5 sm:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">TMT</label>
                     <div className="mt-1">

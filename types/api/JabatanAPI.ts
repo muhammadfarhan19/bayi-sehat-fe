@@ -70,6 +70,8 @@ export interface UpdateJabatanReq {
   unit_kerja_id: number;
   tgl_pengangkatan: string;
   tgl_mulai: string;
+  custom_unit_kerja_name: string;
+  custom_jabatan_name: string;
   angka_kredit: number;
   surat_keputusan: {
     document_uuid: string;
@@ -128,6 +130,8 @@ export interface PostRiwayatJabatanUpdateReq {
   unit_kerja_id: number;
   tgl_pengangkatan: string;
   tgl_mulai: string;
+  custom_jabatan_name: string;
+  custom_unit_kerja_name: string;
   angka_kredit: number;
   surat_keputusan: {
     document_uuid: string;
