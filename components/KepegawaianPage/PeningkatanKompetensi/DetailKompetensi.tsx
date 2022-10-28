@@ -1,4 +1,5 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
 import React from 'react';
 
 import { PeningkatanKompAPI } from '../../../constants/APIUrls';
@@ -130,13 +131,18 @@ function DetailKompetensi(props: DetailLogHarianProps) {
                       </thead>
                       <tbody>
                         {(listKompetensi || [])?.map((each, index) => (
-                          <tr className={'bg-white hover:bg-gray-100'}>
+                          <tr
+                            key={each?.id}
+                            className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                          >
                             <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
                             <td className="px-6 py-4 text-xs font-medium text-gray-900">{each?.tahun}</td>
                             <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
                               {each?.peningkatan_kompetensi}
                             </td>
-                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{'2022/04/12'}</td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                              {format(new Date(each?.created_at), 'dd/mm/yyyy')}
+                            </td>
                             <td className="px-6 py-4 text-sm text-gray-500">
                               <div className="flex">
                                 <button

@@ -17,6 +17,7 @@ export interface GetPeningkatanRes {
   ];
   created_by: string;
   updated_by: string;
+  created_at: string;
 }
 
 export interface PostPeningkatanReq {
