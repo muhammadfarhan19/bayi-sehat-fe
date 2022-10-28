@@ -141,7 +141,7 @@ function DetailKompetensi(props: DetailLogHarianProps) {
                               {each?.peningkatan_kompetensi}
                             </td>
                             <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                              {format(new Date(each?.created_at), 'dd/mm/yyyy')}
+                              {format(new Date(each?.created_at), 'dd/MM/yyyy')}
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-500">
                               <div className="flex">
