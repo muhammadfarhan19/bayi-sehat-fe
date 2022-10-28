@@ -25,9 +25,14 @@ export default function ListPegawaiKompetensi() {
   });
 
   const [isShownDetailPage, setIsShownDetailPage] = React.useState<boolean>(false);
-  const [pegawaiData, setPegawaiData] = React.useState<{ pegawai_nama: string; pegawai_nip: string }>({
+  const [pegawaiData, setPegawaiData] = React.useState<{
+    pegawai_nama: string;
+    pegawai_nip: string;
+    pegawai_id?: number;
+  }>({
     pegawai_nama: '',
     pegawai_nip: '',
+    pegawai_id: undefined,
   });
 
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
@@ -52,10 +57,11 @@ export default function ListPegawaiKompetensi() {
     setshowAdvancedFilter(!showAdvancedFilter);
   };
 
-  const handleShowDetail = (pegawai_nama: string, pegawai_nip: string) => {
+  const handleShowDetail = (pegawai_nama: string, pegawai_nip: string, pegawai_id: number) => {
     setPegawaiData({
       pegawai_nama,
       pegawai_nip,
+      pegawai_id,
     });
   };
 
@@ -78,6 +84,7 @@ export default function ListPegawaiKompetensi() {
         <DetailKompetensi
           pegawai_nama={pegawaiData?.pegawai_nama}
           pegawai_nip={pegawaiData?.pegawai_nip}
+          pegawai_id={Number(pegawaiData?.pegawai_id)}
           onBack={() => setIsShownDetailPage(false)}
         />
       ) : (
@@ -210,7 +217,7 @@ export default function ListPegawaiKompetensi() {
                           </td>
                           <td
                             onClick={() => {
-                              handleShowDetail(data?.name, data?.nip);
+                              handleShowDetail(data?.name, data?.nip, data?.pegawai_id);
                               setIsShownDetailPage(true);
                             }}
                             className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"

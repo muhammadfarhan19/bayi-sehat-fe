@@ -1,9 +1,19 @@
 import React from 'react';
 
+import { PeningkatanKompAPI } from '../../constants/APIUrls';
+import { GetPeningkatanReq, GetPeningkatanRes } from '../../types/api/PeningkatanKompetensiAPI';
+import useCommonApi from '../shared/hooks/useCommonApi';
 import usePersonalData from '../shared/hooks/usePersonalData';
 
 function DetailPeningkatan() {
   const personalPegawai = usePersonalData();
+
+  const { data: listKompetensi } = useCommonApi<GetPeningkatanReq, GetPeningkatanRes[]>(
+    PeningkatanKompAPI.GET_PENINGKATAN_KOMP_LIST,
+    { pegawai_id: Number(personalPegawai?.pegawai_id) },
+    { method: 'GET' },
+    { revalidateOnMount: true, skipCall: !personalPegawai?.pegawai_id }
+  );
 
   return (
     <>
@@ -49,13 +59,18 @@ function DetailPeningkatan() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className={'bg-white hover:bg-gray-100'}>
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{'1'}</td>
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{'2023'}</td>
-                      <td className="w-full cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
-                        {'Manajemen Perencanaan Anggaran, Pengadaan Barang dan Jasa'}
-                      </td>
-                    </tr>
+                    {(listKompetensi || []).map((each, index) => (
+                      <tr
+                        key={each.id}
+                        className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                      >
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{each?.tahun}</td>
+                        <td className="w-full cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                          {each?.peningkatan_kompetensi}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

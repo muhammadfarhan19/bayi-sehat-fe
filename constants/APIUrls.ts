@@ -201,3 +201,8 @@ export const PresensiAPI = {
   PRESENSI_SHIFT_DATE_DELETE: config.apiHost + '/presensi-shift-date/delete',
   PRESENSI_SHIFT_LIST: config.apiHost + '/presensi-shift/list',
 };
+
+export const PeningkatanKompAPI = {
+  GET_PENINGKATAN_KOMP_LIST: config.apiHost + '/peningkatan-kompetensi/list',
+  POST_PENINGKATAN_KOMP_INSERT: config.apiHost + '/peningkatan-kompetensi/insert',
+};

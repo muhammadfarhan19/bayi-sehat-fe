@@ -1,16 +1,21 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import React from 'react';
 
+import { PeningkatanKompAPI } from '../../../constants/APIUrls';
+import { GetPeningkatanReq, GetPeningkatanRes } from '../../../types/api/PeningkatanKompetensiAPI';
+import useCommonApi from '../../shared/hooks/useCommonApi';
+import Loader from '../../shared/Loader/Loader';
 import FormTambahUpdateKomp from './FormTambahUpdateKomp';
 
 interface DetailLogHarianProps {
   onBack?: () => void;
   pegawai_nip: string;
   pegawai_nama: string;
+  pegawai_id: number;
 }
 
 function DetailKompetensi(props: DetailLogHarianProps) {
-  const { onBack, pegawai_nama, pegawai_nip } = props;
+  const { onBack, pegawai_nama, pegawai_nip, pegawai_id } = props;
 
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: number }>({
     open: false,
@@ -24,13 +29,28 @@ function DetailKompetensi(props: DetailLogHarianProps) {
     });
   };
 
+  const { data: listKompetensi } = useCommonApi<GetPeningkatanReq, GetPeningkatanRes[]>(
+    PeningkatanKompAPI.GET_PENINGKATAN_KOMP_LIST,
+    { pegawai_id: pegawai_id },
+    { method: 'GET' },
+    { revalidateOnMount: true, skipCall: !pegawai_id }
+  );
+
+  if (!pegawai_id) {
+    return (
+      <div className="relative h-[150px] w-full divide-y divide-gray-200">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
       {formModalState?.open ? (
         <FormTambahUpdateKomp
           open={formModalState?.open}
           setOpen={(open: boolean) => handleShowForm(open)}
-          selectedId={formModalState?.selectedId}
+          selectedId={pegawai_id}
         />
       ) : (
         <>
@@ -109,31 +129,33 @@ function DetailKompetensi(props: DetailLogHarianProps) {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr className={'bg-white hover:bg-gray-100'}>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{'1'}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{'2023'}</td>
-                          <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
-                            {'Manajemen Perencanaan Anggaran, Pengadaan Barang dan Jasa'}
-                          </td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{'2022/04/12'}</td>
-                          <td className="px-6 py-4 text-sm text-gray-500">
-                            <div className="flex justify-between">
-                              <button
-                                type="button"
-                                className="mr-2 inline-flex items-center rounded border border-indigo-600 bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                                onClick={() => handleShowForm(!formModalState?.open, 1)}
-                              >
-                                Edit
-                              </button>
-                              <button
-                                type="button"
-                                className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
-                              >
-                                Hapus
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
+                        {(listKompetensi || [])?.map((each, index) => (
+                          <tr className={'bg-white hover:bg-gray-100'}>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{each?.tahun}</td>
+                            <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                              {each?.peningkatan_kompetensi}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{'2022/04/12'}</td>
+                            <td className="px-6 py-4 text-sm text-gray-500">
+                              <div className="flex">
+                                <button
+                                  type="button"
+                                  className="mr-2 inline-flex items-center rounded border border-indigo-600 bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                                  onClick={() => handleShowForm(!formModalState?.open, each?.id)}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                                >
+                                  Hapus
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
