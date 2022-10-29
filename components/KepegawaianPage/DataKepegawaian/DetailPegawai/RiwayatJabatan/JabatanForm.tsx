@@ -146,7 +146,17 @@ export default function JabatanForm(props: UploadFormProps) {
         setValue('tipe_jabatan', String(getDataJabatan?.id));
         setValue('tmt', Number(new Date(detailForm?.tmt)));
         setValue('kumulatif', String(detailForm?.kumulatif));
-        setValue('unit_kerja_id', String(detailForm?.unit_kerja_id));
+        if (detailForm?.unit_kerja_id === 0) {
+          setSwitchOptions(true);
+          setValue('custom_unit_kerja', detailForm?.nama_unit_kerja);
+          setCustomUnitKerja(detailForm?.nama_unit_kerja);
+          setFormUnitState(detailForm?.nama_unit_kerja);
+        } else if (detailForm?.unit_kerja_id !== 0) {
+          setSwitchOptions(false);
+          setFormUnitState('');
+          setCustomUnitKerja('');
+          setValue('unit_kerja_id', String(detailForm.unit_kerja_id));
+        }
         (async () => {
           setLoadDetail(true);
           const { data: daftarJabatanDetail } = await callAPI<GetJabatanReq, JabatanDataDetail>(
@@ -324,8 +334,8 @@ export default function JabatanForm(props: UploadFormProps) {
                     <Controller
                       control={control}
                       name="tipe_jabatan"
-                      render={({ field: { onChange, value } }) =>
-                        value ? (
+                      render={({ field: { onChange, value } }) => {
+                        return value ? (
                           <AutoComplete
                             onChange={value => {
                               onChange(value.value);
@@ -346,8 +356,8 @@ export default function JabatanForm(props: UploadFormProps) {
                             type="text"
                             placeholder={'Jenis Jabatan'}
                           />
-                        )
-                      }
+                        );
+                      }}
                     />
                   </div>
                   {switchOptions ? (
@@ -378,13 +388,19 @@ export default function JabatanForm(props: UploadFormProps) {
                         control={control}
                         name="unit_kerja_id"
                         rules={{ required: 'Mohon isi data jabatan' }}
-                        render={({ field: { onChange } }) => {
+                        render={({ field: { onChange, value } }) => {
                           return (
                             <>
                               <DropdownInput
                                 onChange={value => {
                                   onChange(value.value);
                                 }}
+                                defaultValue={composeListDefaultValue(
+                                  riwayatJabatan!,
+                                  'unit_kerja_id',
+                                  'nama_unit_kerja',
+                                  value
+                                )}
                                 label={'Unit Organisasi'}
                                 options={(isData || []).map(each => ({
                                   text: each.name,
