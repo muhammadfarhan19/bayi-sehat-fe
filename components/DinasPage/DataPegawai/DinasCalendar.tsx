@@ -85,7 +85,7 @@ export default function DinasCalendar() {
   };
 
   return (
-    <div className="lg:flex lg:h-full lg:flex-col">
+    <div className="h-full lg:flex lg:flex-col">
       <header className="relative z-10 flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none">
         <MonthPicker onChange={date => setSelectedDate(date)} />
       </header>
@@ -114,7 +114,7 @@ export default function DinasCalendar() {
           </div>
         </div>
         <div className="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
-          <div className="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
+          <div className=" grid w-full grid-cols-7 grid-rows-6 gap-px">
             {generateDays(selectedDate?.getFullYear() || 2000, selectedDate?.getMonth() || 0, eventList).map(
               (day, index) => (
                 <div

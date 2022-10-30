@@ -1,5 +1,5 @@
 import { Popover } from '@headlessui/react';
-import { BellIcon, ChevronDownIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
+import { BellIcon, ChevronDownIcon, MenuIcon } from '@heroicons/react/outline';
 import { UserCircleIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import * as React from 'react';
@@ -23,6 +23,7 @@ export default function HeaderDesktop(props: NavigationProps) {
   const dispatch = useDispatch();
   const { navigation, userNavigation } = props;
   const [img, setImg] = React.useState('');
+  const [expand, setExpand] = React.useState(false);
 
   const { data: isAdmin, isValidating } = useCommonApi<GetOptPhotoReq, GetPhotoProfileRes>(
     UserProfileAPI.USER_PHOTO,
@@ -51,18 +52,25 @@ export default function HeaderDesktop(props: NavigationProps) {
 
   return (
     <>
-      <Popover as="header" className="bg-indigo-600 pb-24">
+      <Popover
+        as="header"
+        className={classNames(
+          expand ? 'max-h-[30rem] lg:max-h-fit' : 'max-h-[4rem] lg:max-h-fit',
+          'sticky top-0 z-20 bg-indigo-600 lg:static lg:pb-24'
+        )}
+        style={{ transition: 'max-height 0.3s ease' }}
+      >
         {({ open }) => (
           <>
             <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-              <div className="relative flex items-center justify-center py-5 lg:justify-between">
+              <div className=" relative flex items-center justify-center py-8 lg:justify-between lg:py-5">
                 {/* Logo */}
                 <div className="absolute left-0 flex flex-shrink-0 items-center lg:static">
                   <a href="#">
                     <span className="sr-only">IntraDikti</span>
                     <img className="h-8 w-auto" src="/icon-192x192.png" alt="IntraDikti" />
                   </a>
-                  <h1 className="ml-2 hidden text-xl tracking-wider text-white lg:block">Intra DIKTI</h1>
+                  <h1 className="ml-2 text-xl tracking-wider text-white">Intra DIKTI</h1>
                 </div>
 
                 {/* Right section on desktop */}
@@ -87,16 +95,21 @@ export default function HeaderDesktop(props: NavigationProps) {
                 </div>
 
                 {/* Menu button */}
-                <div className="absolute right-0 flex-shrink-0 lg:hidden">
+                <div className="absolute right-0 inline-flex flex-shrink-0 lg:hidden">
                   {/* Mobile menu button */}
-                  <Popover.Button className="inline-flex items-center justify-center rounded-md bg-transparent p-2 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
+                  <Popover.Button className="mr-1.5 inline-flex items-center justify-center rounded-md bg-transparent p-1 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-1 focus:ring-white">
                     <span className="sr-only">Open main menu</span>
-                    {open ? (
-                      <XIcon className="block h-6 w-6" aria-hidden="true" />
-                    ) : (
-                      <MenuIcon className="block h-6 w-6" aria-hidden="true" />
-                    )}
+                    <MenuIcon className="block h-6 w-6" aria-hidden="true" onClick={() => setExpand(!open)} />
                   </Popover.Button>
+
+                  <MenuDropdown navigation={userNavigation}>
+                    <span className="sr-only">Open user menu</span>
+                    {img.length >= 1 ? (
+                      <img className="h-8 w-8 rounded-full" src={img} alt="" />
+                    ) : (
+                      <UserCircleIcon className="h-8 w-8 rounded-full fill-white" />
+                    )}
+                  </MenuDropdown>
                 </div>
               </div>
               <div className="hidden border-t border-white border-opacity-20 py-5 lg:block">
@@ -130,7 +143,7 @@ export default function HeaderDesktop(props: NavigationProps) {
                 </div>
               </div>
             </div>
-            <HeaderMobile {...props} />
+            <HeaderMobile {...props} expand={expand} />
           </>
         )}
       </Popover>

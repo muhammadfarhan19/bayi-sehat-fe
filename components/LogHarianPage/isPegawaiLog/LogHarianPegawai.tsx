@@ -69,17 +69,15 @@ function LogHarianPegawai() {
               <h3 className="text-xl font-medium leading-6 text-gray-900">Log Harian</h3>
             </div>
             {personalPegawaiData?.status_cpns === 1 ? (
-              <div className="mb-5 mt-2 flex flex-row items-center space-x-2">
+              <div className="mb-5 mt-2 inline-flex flex-wrap items-center space-x-2">
                 <ExclamationCircleIcon width={20} height={20} color="#FBBF24" />
-                <div className="flex flex-row items-center space-x-1">
-                  <p className="text-[16px] font-normal">Mohon isi log harian di web</p>
-                  <a
-                    href="http://skp.sdm.kemdikbud.go.id/skp/site/login.jsp"
-                    className="text-[16px] font-normal text-indigo-600 underline"
-                  >
-                    {` http://skp.sdm.kemdikbud.go.id/skp/site/login.jsp`}
-                  </a>
-                </div>
+                <p className="text-[16px] font-normal">Mohon isi log harian di web</p>
+                <a
+                  href="http:skp.sdm.kemdikbud.go.id/skp/site/login.jsp"
+                  className="text-[12px] font-normal text-indigo-600 underline lg:text-[16px]"
+                >
+                  {` http:skp.sdm.kemdikbud.go.id/skp/site/login.jsp`}
+                </a>
               </div>
             ) : null}
             <div className="flex w-full flex-row">

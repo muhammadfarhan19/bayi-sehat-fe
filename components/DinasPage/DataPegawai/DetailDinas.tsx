@@ -68,25 +68,29 @@ export default function DetailDinas() {
   return (
     <>
       <div className="mb-[24px] flex flex-row flex-nowrap justify-between gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
-        <div className="flex flex-row">
+        <div className="flex w-full flex-col lg:flex-row">
           {img.length >= 1 ? (
             <img
               onClick={() => setShowImage(!showImage)}
-              className="my-auto h-[88px] w-[88px] rounded-full"
+              className="my-auto mx-auto h-[88px] w-[88px] rounded-full lg:mx-0"
               src={img}
               alt=""
             />
           ) : (
-            <UserCircleIcon className="my-auto h-[88px] w-[88px] fill-indigo-500" />
+            <UserCircleIcon className="my-auto mx-auto h-[88px] w-[88px] fill-indigo-500 lg:mx-0" />
           )}
           <div className="my-auto ml-2 flex flex-col">
-            <p className="text-[14px] font-[500] text-[#4B5563]">Selamat Datang,</p>
-            <p className="text-[24px] font-[700]">{personalPegawai?.nama}</p>
+            <p className="text-center text-[14px] font-[500] text-[#4B5563] lg:text-left">Selamat Datang,</p>
+            <p className="text-center text-[24px] font-[700] lg:text-left">{personalPegawai?.nama}</p>
             {personalPegawai?.jabatan !== '' && (
-              <p className="text-[14px] font-semibold text-[#4B5563]">{personalPegawai?.jabatan}</p>
+              <p className="text-center text-[14px] font-semibold text-[#4B5563] lg:text-left">
+                {personalPegawai?.jabatan}
+              </p>
             )}
             {personalPegawai?.unit_kerja !== '' && (
-              <p className="text-[12px] font-medium text-[#4B5563]">{personalPegawai?.unit_kerja}</p>
+              <p className="text-center text-[12px] font-medium text-[#4B5563] lg:text-left">
+                {personalPegawai?.unit_kerja}
+              </p>
             )}
           </div>
         </div>
@@ -94,7 +98,7 @@ export default function DetailDinas() {
 
       <NotificationListPage />
 
-      <div className="mb-[24px] grid grid-cols-2 gap-[24px]">
+      <div className="grid-grid-cols-1 mb-[24px] grid gap-[24px] lg:grid-cols-2">
         <Card
           title="Jadwal Dinas"
           sub_title={`Dinas dibulan ${convertIndonesiaFormat(dateNowStr).split(' ')[1]}`}
@@ -143,11 +147,11 @@ export default function DetailDinas() {
       </div> */}
 
       <div className="mt-6 overflow-hidden rounded-lg bg-white shadow">
-        <div className="flex flex-row items-center justify-between border-b-[1px] px-6 py-4">
-          <h3 className=" text-xl font-semibold tracking-wider text-gray-700">Jadwal Pegawai</h3>
+        <div className="flex flex-row flex-wrap items-center justify-between border-b-[1px] px-6 py-4">
+          <h3 className="text-md font-semibold tracking-wider text-gray-700 lg:text-xl">Jadwal Pegawai</h3>
           <button
             onClick={() => setFormModalState(!formModalState)}
-            className="text-l rounded-[4px] bg-indigo-600 px-4   py-2 font-medium text-gray-50 focus:outline-none"
+            className="lg:text-md mt-2 rounded-[4px] bg-indigo-600 px-4 py-2 text-sm font-medium text-gray-50 focus:outline-none"
           >
             Download Jadwal Dinas
           </button>

@@ -116,34 +116,34 @@ function DetailPegawai() {
 
   return (
     <>
-      <div className="flex flex-row flex-nowrap justify-between gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
-        <div className="flex flex-row">
-          {img.length >= 1 ? (
-            <img onClick={() => setShowImage(!showImage)} className="h-[88px] w-[88px] rounded-full" src={img} alt="" />
-          ) : (
-            <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
-          )}
+      <div className="flex flex-row gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
+        {img.length >= 1 ? (
+          <img onClick={() => setShowImage(!showImage)} className="h-[88px] w-[88px] rounded-full" src={img} alt="" />
+        ) : (
+          <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
+        )}
+        <div className="flex w-full flex-col gap-y-2 lg:flex-row">
           <div className="my-auto ml-2 flex flex-col">
             <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
             <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
             <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.unit_kerja}</p>
           </div>
-        </div>
-        <div className="self-center">
-          <button
-            onClick={() => {
-              setShowComponent(!showComponent);
-            }}
-            type="button"
-            className="mr-2 mb-2 inline-flex items-center rounded border border-transparent bg-green-600 py-1.5 px-2.5 text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200 disabled:text-gray-200"
-          >
-            Download Riwayat Hidup
-          </button>
+          <div className="my-auto ml-2 lg:ml-auto">
+            <button
+              onClick={() => {
+                setShowComponent(!showComponent);
+              }}
+              type="button"
+              className="mr-2 mb-2 inline-flex w-fit items-center rounded border border-transparent bg-green-600 py-1.5 px-2.5 text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200 disabled:text-gray-200"
+            >
+              Download Riwayat Hidup
+            </button>
+          </div>
         </div>
       </div>
       <div className="mt-[12px] rounded-[8px] bg-white py-6 px-[24px] shadow">
         <div className="flex flex-row gap-x-[20px] overflow-auto">
-          <div className="sm:hidden">
+          <div className="w-full sm:hidden">
             <label htmlFor="tabs" className="sr-only">
               Pilih tab
             </label>
@@ -156,9 +156,9 @@ function DetailPegawai() {
                 setSelected(event.target.value);
               }}
             >
-              {tabs.map(tab => {
-                <option key={tab.name}>{tab.name}</option>;
-              })}
+              {tabs.map(tab => (
+                <option key={tab.name}>{tab.name}</option>
+              ))}
             </select>
           </div>
           <div className="hidden sm:block">

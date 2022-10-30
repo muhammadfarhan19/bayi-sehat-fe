@@ -59,7 +59,7 @@ export default function LeftMenu() {
   return (
     <div className="grid grid-cols-1 gap-4">
       <form className="flex" action="#">
-        <div className="min-w-0 flex-1">
+        <div className="hidden min-w-0 flex-1 lg:block">
           <label htmlFor="search" className="sr-only">
             Search
           </label>
@@ -79,7 +79,7 @@ export default function LeftMenu() {
         </div>
       </form>
 
-      <nav className="flex-1 rounded-md bg-white" aria-label="Sidebar">
+      <nav className="hidden flex-1 rounded-md bg-white lg:block" aria-label="Sidebar">
         {(filteredNavigation || []).map((item, index) =>
           !item.childMenu ? (
             <div key={index}>

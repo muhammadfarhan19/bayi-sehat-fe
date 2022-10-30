@@ -21,6 +21,7 @@ export type Navigation = {
 );
 
 export interface NavigationProps {
+  expand?: boolean;
   user: User;
   navigation: Navigation[];
   userNavigation: Navigation[];

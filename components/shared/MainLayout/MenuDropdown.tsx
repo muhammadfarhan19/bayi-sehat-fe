@@ -20,9 +20,9 @@ export default function MenuDropdown(props: MenuDropdownProps) {
   const {
     children,
     menuAs = 'div',
-    menuClassName = 'relative ml-4 flex-shrink-0',
+    menuClassName = 'relative lg:ml-4 flex-shrink-0 my-auto',
     buttonAs = 'div',
-    buttonClassName = 'relative ml-4 flex-shrink-0 cursor-pointer',
+    buttonClassName = 'relative lg:ml-4 flex-shrink-0 cursor-pointer',
     navigation,
     position = '-right-2',
   } = props;
