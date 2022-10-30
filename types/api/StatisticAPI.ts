@@ -20,11 +20,14 @@ export interface StatisticTableData {
 export type ChartData = {
   x_axis: string;
   y_axis: string;
+  info?: Record<string, string>;
+  golongan_id?: string;
 };
 
 export interface StatisticMultipleBarChart {
   chart_title: string;
   chart_data: Array<ChartData>;
+  unit_kerja_id?: number;
 }
 
 export interface StatisticMultipleBarChartData {

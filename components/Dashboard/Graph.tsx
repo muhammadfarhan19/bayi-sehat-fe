@@ -1,14 +1,20 @@
 import { ActiveElement, Chart, ChartEvent } from 'chart.js';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 import { StatisticAPI } from '../../constants/APIUrls';
-import { GetStatisticReq, StatisticData, StatisticMultipleBarChartData } from '../../types/api/StatisticAPI';
+import {
+  GetStatisticReq,
+  StatisticData,
+  StatisticMultipleBarChart,
+  StatisticMultipleBarChartData,
+} from '../../types/api/StatisticAPI';
+import { PegawaiType } from '../KepegawaianPage/DataKepegawaian/DetailPegawai/DetailPegawai';
 import { withErrorBoundary } from '../shared/hocs/ErrorBoundary';
 import useCommonApi from '../shared/hooks/useCommonApi';
 import Loader from '../shared/Loader/Loader';
-import { TypeChart } from './DashboardDetailPage';
+import { QueryString, TypeChart } from './DashboardDetailPage';
 import Selection from './Selection';
 
 type Props = {
@@ -19,6 +25,56 @@ type Props = {
   subTitle: string;
   title: string;
   typeChart: TypeChart;
+  typePegawai: 'pns' | 'ppnpn';
+  joinChart?: boolean;
+  bgColorSecond?: string;
+};
+
+export const chartOptions = (props: {
+  typePegawai: PegawaiType;
+  typeChart: TypeChart;
+  router: NextRouter;
+  statistic?: StatisticMultipleBarChart;
+}) => {
+  const { typePegawai, typeChart, router, statistic } = props;
+
+  return {
+    responsive: true,
+    onClick: (event: ChartEvent, elements: ActiveElement[], chart: Chart) => {
+      console.log(event, elements);
+      const label = chart.tooltip?.dataPoints?.[0]?.dataset?.label || '';
+      const index = elements?.[0]?.index;
+      const datasetIndex = elements?.[0]?.datasetIndex;
+
+      const params = { detail: typeChart, typePegawai } as QueryString;
+      if (typeChart === 'golongan') {
+        params.golongan = statistic?.chart_data?.[index]?.x_axis || '';
+        params.golonganId = statistic?.chart_data?.[index]?.golongan_id || '';
+        params.unitKerjaId = String(statistic?.unit_kerja_id);
+      } else if (typeChart === 'jenis_kelamin') {
+        params.jenisKelamin = label === 'Pria' ? '1' : '2';
+        params.unitKerjaId = statistic?.chart_data?.[index]?.info?.['unit_kerja_id'] || '';
+        params.rangeUmur = statistic?.chart_data?.[index]?.x_axis;
+      } else if (typeChart === 'jenis_belajar') {
+        params.jenisBelajar = statistic?.chart_data?.[datasetIndex]?.info?.['jenis_belajar'] || '';
+        params.unitKerjaId = statistic?.chart_data?.[datasetIndex]?.info?.['unit_kerja_id'] || '';
+      } else if (typeChart === 'pendidikan') {
+        params.jenjangId = statistic?.chart_data?.[index]?.info?.['jenjang_id'] || '';
+        params.unitKerjaId = statistic?.chart_data?.[index]?.info?.['unit_kerja_id'] || '';
+      }
+
+      const mapParams: <T extends keyof QueryString>(key: T, index: number) => string = (key, index) => {
+        return `${!index ? '?' : '&'}${key}=${encodeURIComponent(params[key] || '')}`;
+      };
+
+      router.push(
+        '/kepegawaian' +
+          Object.keys(params)
+            .map((key, index) => mapParams(key as keyof QueryString, index))
+            .join('')
+      );
+    },
+  };
 };
 
 function Graph(props: Props) {
@@ -60,26 +116,6 @@ function Graph(props: Props) {
     return null;
   }
 
-  const chartOptions = {
-    responsive: true,
-    onClick: (event: ChartEvent, elements: ActiveElement[], chart: Chart) => {
-      const title = (chart.tooltip?.title || []).join('');
-      const label = chart.tooltip?.dataPoints?.[0]?.dataset?.label;
-      const queryString = [
-        'detail=',
-        encodeURIComponent(props.typeChart),
-        '&title=',
-        encodeURIComponent(title),
-        '&label=',
-        encodeURIComponent(String(label || '')),
-        '&unitKerja=',
-        encodeURIComponent(selectedUnit),
-      ];
-
-      router.push('/kepegawaian?' + queryString.join(''));
-    },
-  };
-
   const statistic = barChartsData?.multiple_bar_charts?.find(item => item.chart_title === selectedUnit);
 
   return (
@@ -93,16 +129,22 @@ function Graph(props: Props) {
             </div>
             <p className="text-sm font-light leading-8 text-gray-500">{props.subTitle}</p>
             <Bar
-              options={chartOptions}
+              options={chartOptions({ typePegawai: props.typePegawai, typeChart: props.typeChart, router, statistic })}
               data={{
-                labels: statistic?.chart_data?.map(item => item.x_axis),
-                datasets: [
-                  {
-                    label: props.label,
-                    data: statistic?.chart_data?.map(item => item.y_axis),
-                    backgroundColor: props.bgColor,
-                  },
-                ],
+                labels: props.joinChart ? [props.label] : statistic?.chart_data?.map(item => item.x_axis),
+                datasets: props.joinChart
+                  ? (statistic?.chart_data || []).map((item, idx) => ({
+                      label: item.x_axis || '',
+                      data: [item.y_axis || ''],
+                      backgroundColor: idx % 2 === 0 ? props.bgColor : props.bgColorSecond,
+                    }))
+                  : [
+                      {
+                        label: props.label,
+                        data: statistic?.chart_data?.map(item => item.y_axis),
+                        backgroundColor: props.bgColor,
+                      },
+                    ],
               }}
             />
           </div>

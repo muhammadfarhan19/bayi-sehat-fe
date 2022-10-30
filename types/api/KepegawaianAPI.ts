@@ -1,13 +1,14 @@
 import { Pagination, Status } from '../Common';
 
 export interface GetPegawaiListReq {
-  unit_kerja_id?: string;
-  nama?: string;
-  tipe_jabatan?: string;
-  jabatan?: string;
-  status_cpns: number[];
-  range_umur?: string;
   gender?: number;
+  jabatan?: string;
+  jenjang_id?: number;
+  nama?: string;
+  range_umur?: string;
+  status_cpns: number[];
+  tipe_jabatan?: string;
+  unit_kerja_id?: string;
   page: number;
   per_page: number;
 }
@@ -111,4 +112,26 @@ export interface Dinas {
   tgl_selesai: string;
   jenis_dinas: string;
   lokasi: string;
+}
+
+export interface GetPegawaiStatisticListReq {
+  unit_kerja_id: number;
+  golongan_id: number;
+  status_cpns: number[];
+}
+
+export interface GetPegawaiStatisticListRes {
+  status: string;
+  data: {
+    pegawai_id?: number;
+    user_id: number;
+    nip: string;
+    nama: string;
+    golongan_id: number;
+    golongan: string;
+    unit_kerja_id: number;
+    unit_kerja: string;
+    pangkat: string;
+    tmt_golongan: string;
+  }[];
 }

@@ -1,17 +1,19 @@
-import { ActiveElement, Chart, ChartEvent } from 'chart.js';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 import { StatisticAPI } from '../../constants/APIUrls';
 import { GetStatisticReq, StatisticData, StatisticMultipleBarChartData } from '../../types/api/StatisticAPI';
+import { PegawaiType } from '../KepegawaianPage/DataKepegawaian/DetailPegawai/DetailPegawai';
 import { withErrorBoundary } from '../shared/hocs/ErrorBoundary';
 import useCommonApi from '../shared/hooks/useCommonApi';
 import Loader from '../shared/Loader/Loader';
 import { TypeChart } from './DashboardDetailPage';
+import { chartOptions } from './Graph';
 import Selection from './Selection';
 
 type Props = {
+  typePegawai: PegawaiType;
   ids: number[];
   dateNowStr: string;
   typeChart: TypeChart;
@@ -74,26 +76,6 @@ function TwoGraph(props: Props) {
     );
   }
 
-  const chartOptions = {
-    responsive: true,
-    onClick: (event: ChartEvent, elements: ActiveElement[], chart: Chart) => {
-      const title = (chart.tooltip?.title || []).join('');
-      const label = chart.tooltip?.dataPoints?.[0]?.dataset?.label;
-      const queryString = [
-        'detail=',
-        encodeURIComponent(props.typeChart),
-        '&title=',
-        encodeURIComponent(title),
-        '&label=',
-        encodeURIComponent(String(label || '')),
-        '&unitKerja=',
-        encodeURIComponent(selectedUnit),
-      ];
-
-      router.push('/kepegawaian?' + queryString.join(''));
-    },
-  };
-
   const statistic = barChartsData?.multiple_bar_charts?.find(item => item.chart_title === selectedUnit);
   const statisticSecond = barSecondChartsData?.multiple_bar_charts?.find(item => item.chart_title === selectedUnit);
 
@@ -108,7 +90,7 @@ function TwoGraph(props: Props) {
             </div>
             <p className="text-sm font-light leading-8 text-gray-500">{props.subTitle}</p>
             <Bar
-              options={chartOptions}
+              options={chartOptions({ typePegawai: props.typePegawai, typeChart: props.typeChart, router, statistic })}
               data={{
                 labels: statistic?.chart_data?.map(item => item.x_axis),
                 datasets: [

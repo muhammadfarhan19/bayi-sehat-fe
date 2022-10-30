@@ -28,8 +28,10 @@ import RiwayatPengangkatan from './RiwayatPengangkatan';
 import RiwayatPenghargaan from './RiwayatPenghargaan';
 import RiwayatSkp from './RiwayatSkp';
 
+export type PegawaiType = 'pns' | 'ppnpn';
+
 function DetailPegawai() {
-  const { type } = getQueryString();
+  const { type } = getQueryString() as { type: PegawaiType };
 
   const pns = [
     { name: 'Data Diri Pegawai', href: '#' },

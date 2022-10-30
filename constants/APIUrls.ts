@@ -49,6 +49,7 @@ export const KepegawaianAPI = {
   POST_PEGAWAI_INSERT: config.apiHost + '/pegawai/insert',
   POST_PEGAWAI_KARPEG_UPDATE: config.apiHost + '/pegawai/karpeg/update',
   GET_DINAS_PEGAWAI_KALENDER: config.apiHost + '/dinas/pegawai/kalender',
+  GET_PEGAWAI_STATISTIC_LIST: config.apiHost + '/pegawai/statistic/list',
 };
 
 export const PetaAPI = {
@@ -133,6 +134,7 @@ export const RiwayatBelajarAPI = {
   GET_RIWAYAT_BELAJAR_DETAIl: config.apiHost + '/riwayat-belajar/detail',
   POST_RIWAYAT_BELAJAR_UPDATE: config.apiHost + '/riwayat-belajar/update',
   POST_RIWAYAT_BELAJAR_DELETE: config.apiHost + '/riwayat-belajar/delete',
+  POST_RIWAYAT_BELAJAR_STATISTIC_LIST: config.apiHost + '/riwayat-belajar/statistic/list',
 };
 
 export const UserProfileAPI = {

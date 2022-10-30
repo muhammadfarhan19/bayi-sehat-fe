@@ -1,4 +1,4 @@
-import { Status } from '../Common';
+import { Pagination, Status } from '../Common';
 
 export interface GetRiwayatBelajarListReq {
   pegawai_id?: number;
@@ -99,4 +99,33 @@ export interface RiwayatBelajarDetailData {
   tahun_mulai: string;
   tahun_selesai: string;
   files: DocumentData[];
+}
+
+export interface GetRiwayatBelajarStatisticListReq {
+  jenis_belajar: number;
+  unit_kerja_id: number;
+  status_cpns: number[];
+  page: number;
+  per_page: number;
+}
+
+export interface GetRiwayatBelajarStatisticListRes {
+  status: string;
+  data: {
+    list: {
+      riwayat_id: number;
+      pegawai_id: number;
+      nama_pegawai: string;
+      nip: string;
+      unit_kerja_str: string;
+      golongan_str: string;
+      jenis_belajar: number;
+      jenis_belajar_str: string;
+      tahun_mulai: string;
+      tahun_selesai: string;
+      jenjang_id: number;
+      jenjang_str: string;
+    }[];
+    pagination: Pagination;
+  };
 }
