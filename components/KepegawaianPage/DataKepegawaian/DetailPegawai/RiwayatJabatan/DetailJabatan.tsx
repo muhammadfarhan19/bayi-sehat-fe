@@ -22,6 +22,7 @@ export default function DetailJabatan(props: ListJabatanProps) {
   );
 
   const detailForm = riwayatJabatan?.find(each => each.jabatan_pegawai_id === Number(riwayatJabatanId));
+  const isFungsional = detailForm?.unit_kerja_id === 0;
 
   return (
     <>
@@ -33,22 +34,44 @@ export default function DetailJabatan(props: ListJabatanProps) {
         <span className="mb-2 text-[24px] font-[600]">Riwayat Jabatan</span>
         <table className="min-w-full divide-y divide-gray-200">
           <thead></thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {[
-              { label: 'Tipe Jabatan', value: detailForm?.jenis_jabatan },
-              { label: 'Unit Kerja', value: detailForm?.nama_unit_kerja },
-              { label: 'Jabatan', value: detailForm?.nama_jabatan },
-              // { label: 'Kumulatif', value: detailForm?.kumulatif },
-              { label: 'TMT Jabatan', value: detailForm?.tmt.split('T')[0] },
-              { label: 'Masa Jabatan', value: detailForm?.masa_kerja },
-              { label: 'Bukti SK', value: detailForm?.files?.[0]?.document_name },
-            ].map((each, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
-                <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
-              </tr>
-            ))}
-          </tbody>
+          {!isFungsional ? (
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {[
+                { label: 'Tipe Jabatan', value: detailForm?.jenis_jabatan },
+                { label: 'Unit Kerja', value: detailForm?.nama_unit_kerja },
+                { label: 'Jabatan', value: detailForm?.nama_jabatan },
+                { label: 'TMT Jabatan', value: detailForm?.tmt.split('T')[0] },
+                { label: 'Masa Jabatan', value: detailForm?.masa_kerja },
+                { label: 'Bukti SK', value: detailForm?.files?.[0]?.document_name },
+              ].map((each, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.label}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{each?.value}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          ) : (
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {[
+                { label: 'Tipe Jabatan', value: detailForm?.jenis_jabatan },
+                { label: 'Unit Kerja', value: detailForm?.nama_unit_kerja },
+                { label: 'Jabatan', value: detailForm?.nama_jabatan },
+                { label: 'Kumulatif', value: detailForm?.kumulatif },
+                { label: 'TMT Jabatan', value: detailForm?.tmt.split('T')[0] },
+                { label: 'Masa Jabatan', value: detailForm?.masa_kerja },
+                { label: 'Bukti SK', value: detailForm?.files?.[0]?.document_name },
+              ].map((each, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.label}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{each?.value}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          )}
         </table>
       </div>
       <div>
