@@ -69,7 +69,8 @@ function DashboardPage() {
     );
   }
 
-  const typePegawai = selectedTab === 'Data PNS' ? 'pns' : 'ppnpn';
+  const isPNS = selectedTab === 'Data PNS';
+  const typePegawai = isPNS ? 'pns' : 'ppnpn';
   const totalPegawai = (index: number) => {
     const total = dataStatisticTable?.table?.rows.reduce((sum, i) => sum + parseInt(i[index]), 0);
     return total;
@@ -161,24 +162,24 @@ function DashboardPage() {
         </div>
       </section>
 
-      <Graph
-        typePegawai={typePegawai}
-        bgColor="#4F46E5"
-        dateNowStr={dateNowStr}
-        id={STATISTIC_ID_GOLONGAN}
-        label="Golongan"
-        subTitle="Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi"
-        title="Statistik Golongan Pegawai"
-        typeChart="golongan"
-      />
+      {isPNS && (
+        <Graph
+          typePegawai={typePegawai}
+          bgColor="#4F46E5"
+          dateNowStr={dateNowStr}
+          id={STATISTIC_ID_GOLONGAN}
+          label="Golongan"
+          title="Statistik Golongan Pegawai"
+          typeChart="golongan"
+        />
+      )}
 
       <Graph
         typePegawai={typePegawai}
         bgColor="#10B981"
         dateNowStr={dateNowStr}
-        id={selectedTab === 'Data PPNPN' ? STATISTIC_ID_JENJANG_PENDIDIKAN_PPNPN : STATISTIC_ID_JENJANG_PENDIDIKAN}
+        id={isPNS ? STATISTIC_ID_JENJANG_PENDIDIKAN : STATISTIC_ID_JENJANG_PENDIDIKAN_PPNPN}
         label="Pendidikan"
-        subTitle="Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi"
         title="Statistik Pendidikan Pegawai"
         typeChart="pendidikan"
       />
@@ -187,29 +188,25 @@ function DashboardPage() {
         typePegawai={typePegawai}
         bgColor={['#1c99dc', '#a72881']}
         dateNowStr={dateNowStr}
-        ids={
-          selectedTab === 'Data PPNPN'
-            ? [STATISTIC_ID_PRIA_PPNPN, STATISTIC_ID_WANITA_PPNPN]
-            : [STATISTIC_ID_PRIA, STATISTIC_ID_WANITA]
-        }
+        ids={isPNS ? [STATISTIC_ID_PRIA, STATISTIC_ID_WANITA] : [STATISTIC_ID_PRIA_PPNPN, STATISTIC_ID_WANITA_PPNPN]}
         labels={['Pria', 'Wanita']}
-        subTitle="Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi"
         title="Statistik Umur Dan Gender"
         typeChart="jenis_kelamin"
       />
 
-      <Graph
-        typePegawai={typePegawai}
-        bgColor="#4F46E5"
-        dateNowStr={dateNowStr}
-        id={STATISTIC_ID_TUGAS_IJIN}
-        label="Jenis belajar"
-        subTitle="Grafik sebaran pegawai di unit kerja sekretariat direktorat jenderal pendidikan tinggi"
-        title="Statistik Tugas Belajar dan Izin Belajar"
-        typeChart="jenis_belajar"
-        joinChart={true}
-        bgColorSecond="#10B981"
-      />
+      {isPNS && (
+        <Graph
+          typePegawai={typePegawai}
+          bgColor="#4F46E5"
+          dateNowStr={dateNowStr}
+          id={STATISTIC_ID_TUGAS_IJIN}
+          label="Jenis belajar"
+          title="Statistik Tugas Belajar dan Izin Belajar"
+          typeChart="jenis_belajar"
+          joinChart={true}
+          bgColorSecond="#10B981"
+        />
+      )}
     </>
   );
 }

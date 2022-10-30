@@ -22,7 +22,6 @@ type Props = {
   dateNowStr: string;
   id: number;
   label: string;
-  subTitle: string;
   title: string;
   typeChart: TypeChart;
   typePegawai: 'pns' | 'ppnpn';
@@ -127,7 +126,7 @@ function Graph(props: Props) {
             <div className="grid grid-cols-1 py-2 sm:grid-cols-2">
               <Selection onChange={setSelectedUnit} options={uniqueList || []} value={selectedUnit} />
             </div>
-            <p className="text-sm font-light leading-8 text-gray-500">{props.subTitle}</p>
+            <p className="text-sm font-light leading-8 text-gray-500">Grafik sebaran pegawai di {selectedUnit}</p>
             <Bar
               options={chartOptions({ typePegawai: props.typePegawai, typeChart: props.typeChart, router, statistic })}
               data={{
