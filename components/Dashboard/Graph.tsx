@@ -40,7 +40,6 @@ export const chartOptions = (props: {
   return {
     responsive: true,
     onClick: (event: ChartEvent, elements: ActiveElement[], chart: Chart) => {
-      console.log(event, elements);
       const label = chart.tooltip?.dataPoints?.[0]?.dataset?.label || '';
       const index = elements?.[0]?.index;
       const datasetIndex = elements?.[0]?.datasetIndex;

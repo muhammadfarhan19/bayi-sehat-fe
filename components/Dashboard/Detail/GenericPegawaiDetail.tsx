@@ -82,9 +82,7 @@ function GenericPegawaiDetail() {
             {queryString.detail === 'pendidikan' ? (
               <p className="text-lg font-medium text-gray-900">Pendidikan dari Riwayat Pendidikan</p>
             ) : queryString.detail === 'jenis_kelamin' ? (
-              <p className="text-lg font-medium text-gray-900">Umur dan Jenis Kelamin</p>
-            ) : queryString.detail === 'jenis_belajar' ? (
-              <p className="text-lg font-medium text-gray-900">Tugas Belajar</p>
+              <p className="text-lg font-medium text-gray-900">Umur Dan Gender</p>
             ) : (
               <p className="text-lg font-medium text-gray-900">Data Pegawai</p>
             )}
