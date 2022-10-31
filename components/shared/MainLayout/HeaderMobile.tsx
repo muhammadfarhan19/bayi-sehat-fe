@@ -9,8 +9,8 @@ export default function HeaderMobile(props: NavigationProps) {
 
   return (
     <>
-      <div className="block py-4 lg:hidden">
-        <div className={classNames(expand ? 'opacity-100' : 'opacity-0 delay-150', 'flex flex-col px-2')}>
+      <div className={classNames(expand ? 'block' : 'invisible', 'py-4 lg:hidden')}>
+        <div className="flex flex-col px-2">
           {navigation.map(({ current, childMenu, name, href }, index) =>
             childMenu && Array.isArray(childMenu) ? (
               <MenuDropdown key={index} {...MenuDropdown.SimpleMobileProps} navigation={childMenu}>

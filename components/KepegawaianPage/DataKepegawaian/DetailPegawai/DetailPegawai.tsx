@@ -1,7 +1,7 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { DownloadIcon, XIcon } from '@heroicons/react/outline';
+import { Dialog, Listbox, Transition } from '@headlessui/react';
+import { CheckIcon, DownloadIcon, SelectorIcon, XIcon } from '@heroicons/react/outline';
 import { UserCircleIcon } from '@heroicons/react/solid';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import { UserProfileAPI } from '../../../../constants/APIUrls';
 import { GetOptPhotoReq, GetPhotoProfileRes } from '../../../../types/api/ProfilePhotoAPI';
@@ -142,25 +142,71 @@ function DetailPegawai() {
         </div>
       </div>
       <div className="mt-[12px] rounded-[8px] bg-white py-6 px-[24px] shadow">
+        <div className="block lg:hidden">
+          <label htmlFor="tabs" className="sr-only">
+            Pilih tab
+          </label>
+          <Listbox value={selected} onChange={setSelected}>
+            {({ open }) => (
+              <>
+                <Listbox.Label className="block text-sm font-medium text-gray-700">Pilih Tab</Listbox.Label>
+                <div className="relative mt-1">
+                  <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                    <span className="block truncate">{selected}</span>
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                    </span>
+                  </Listbox.Button>
+
+                  <Transition
+                    show={open}
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      {tabs.map(each => (
+                        <Listbox.Option
+                          key={each.name}
+                          className={({ active }) =>
+                            classNames(
+                              active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                              'relative cursor-default select-none py-2 pl-3 pr-9'
+                            )
+                          }
+                          value={each.name}
+                        >
+                          {({ selected, active }) => (
+                            <>
+                              <span
+                                className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}
+                              >
+                                {each.name}
+                              </span>
+
+                              {selected ? (
+                                <span
+                                  className={classNames(
+                                    active ? 'text-white' : 'text-indigo-600',
+                                    'absolute inset-y-0 right-0 flex items-center pr-4'
+                                  )}
+                                >
+                                  <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                </span>
+                              ) : null}
+                            </>
+                          )}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </div>
+              </>
+            )}
+          </Listbox>
+        </div>
         <div className="flex flex-row gap-x-[20px] overflow-auto">
-          <div className="w-full sm:hidden">
-            <label htmlFor="tabs" className="sr-only">
-              Pilih tab
-            </label>
-            <select
-              id="tabs"
-              name="tabs"
-              className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              defaultValue={tabs[0].name}
-              onChange={event => {
-                setSelected(event.target.value);
-              }}
-            >
-              {tabs.map(tab => (
-                <option key={tab.name}>{tab.name}</option>
-              ))}
-            </select>
-          </div>
           <div className="hidden sm:block">
             <div className="border-b border-gray-200">
               <nav className="-mb-px flex flex-wrap space-x-8 space-x-reverse" aria-label="Tabs">
