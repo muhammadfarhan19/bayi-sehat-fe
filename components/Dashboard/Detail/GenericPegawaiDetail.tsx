@@ -38,10 +38,12 @@ function GenericPegawaiDetail() {
       page: 1,
       per_page: 20,
       status_cpns: queryString.typePegawai === 'pns' ? [1, 3] : [2],
+      unit_kerja_id: queryString.unitKerjaId,
     } as GetPegawaiListReq;
 
     switch (queryString.detail) {
       case 'pendidikan':
+        preFilter['jenjang_id'] = queryString.jenjangId ? +queryString.jenjangId : 0;
         break;
       case 'jenis_kelamin':
         preFilter['gender'] = queryString.jenisKelamin ? +queryString.jenisKelamin : 0;
