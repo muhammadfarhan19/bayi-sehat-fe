@@ -32,10 +32,18 @@ export function validateFile(option: {
   fileObject: File;
 }) {
   const { allowedSize, allowedTypes, fileNameMaxLength = 50, fileObject } = option;
-
   const { name, type, size } = fileObject;
   const allowedType = allowedTypes.some(allowedType => {
-    return type.toLowerCase().includes(allowedType.toLowerCase());
+    let allowed = allowedType.toLowerCase();
+    if (['xlsx'].includes(allowed)) {
+      allowed = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    }
+
+    if (['xls'].includes(allowed)) {
+      allowed = 'application/vnd.ms-excel';
+    }
+
+    return type.toLowerCase().includes(allowed);
   });
 
   const splitFile = name.split('.');

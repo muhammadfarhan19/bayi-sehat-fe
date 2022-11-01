@@ -136,8 +136,9 @@ function FormLogHarianPPNPN(props: ModalProps) {
                     rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
                     render={({ field: { onChange, value } }) => (
                       <UploadWrapper
-                        allowedTypes={['csv']}
+                        allowedTypes={['xlsx', 'xls']}
                         handleUploadChange={(files: FileObject[]) => {
+                          console.log(files);
                           setValue('file_id', files[0].id);
                           onChange(files[0].name);
                         }}
@@ -151,7 +152,7 @@ function FormLogHarianPPNPN(props: ModalProps) {
                           >
                             <div>
                               <div className="text-sm text-gray-600">{value || 'File Kompetensi'}</div>
-                              <div className="text-xs text-gray-400">(csv)</div>
+                              <div className="text-xs text-gray-400">(xlsx, xls)</div>
                             </div>
                             <button
                               disabled={loading}

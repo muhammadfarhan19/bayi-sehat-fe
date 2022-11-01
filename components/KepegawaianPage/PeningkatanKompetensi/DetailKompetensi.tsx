@@ -66,7 +66,8 @@ function DetailKompetensi(props: DetailLogHarianProps) {
               </div>
               <div className="mr-5 mb-5 flex">
                 <button
-                  className="ml-1 inline-flex w-[220px] items-center justify-center rounded-md border border-indigo-600 bg-indigo-600 p-2 px-3 text-sm text-white hover:bg-indigo-700 focus:outline-none"
+                  disabled
+                  className="ml-1 inline-flex w-[220px] items-center justify-center rounded-md bg-indigo-600  p-2 px-3 text-sm text-white hover:bg-indigo-700 focus:outline-none disabled:bg-gray-300"
                   onClick={() => handleShowForm(!formModalState?.open)}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -146,15 +147,17 @@ function DetailKompetensi(props: DetailLogHarianProps) {
                             <td className="px-6 py-4 text-sm text-gray-500">
                               <div className="flex">
                                 <button
+                                  disabled
                                   type="button"
-                                  className="mr-2 inline-flex items-center rounded border border-indigo-600 bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                                  className="mr-2 inline-flex items-center rounded border border-indigo-600 bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:bg-gray-300 disabled:text-gray-50 disabled:text-indigo-200"
                                   onClick={() => handleShowForm(!formModalState?.open, each?.id)}
                                 >
                                   Edit
                                 </button>
                                 <button
+                                  disabled
                                   type="button"
-                                  className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                                  className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-gray-300 disabled:bg-red-200 disabled:text-gray-50 disabled:text-gray-200"
                                 >
                                   Hapus
                                 </button>

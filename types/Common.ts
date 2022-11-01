@@ -1,6 +1,6 @@
 export type Action = 'read' | 'write';
 
-export type AcceptedType = 'pdf' | 'jpg' | 'jpeg' | 'png' | 'csv';
+export type AcceptedType = 'pdf' | 'jpg' | 'jpeg' | 'png' | 'csv' | 'xlsx' | 'xls';
 
 export enum Status {
   BAD_REQUEST = 'BAD_REQUEST',
