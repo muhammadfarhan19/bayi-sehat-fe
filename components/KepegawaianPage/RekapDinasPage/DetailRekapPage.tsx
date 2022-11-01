@@ -154,7 +154,7 @@ function DetailRekapPage(props: DetailProps) {
                 >
                   Hapus
                 </button>
-                <button
+                {/* <button
                   type="button"
                   className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-[14px] text-gray-50"
                   onClick={() =>
@@ -162,7 +162,7 @@ function DetailRekapPage(props: DetailProps) {
                   }
                 >
                   Edit
-                </button>
+                </button> */}
               </div>
             </div>
           )}
