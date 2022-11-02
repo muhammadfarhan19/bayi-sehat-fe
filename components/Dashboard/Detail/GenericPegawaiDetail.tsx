@@ -38,7 +38,7 @@ function GenericPegawaiDetail() {
       page: 1,
       per_page: 20,
       status_cpns: queryString.typePegawai === 'pns' ? [1, 3] : [2],
-      unit_kerja_id: queryString.unitKerjaId,
+      unit_kerja_id: queryString?.unitKerjaId || null,
     } as GetPegawaiListReq;
 
     switch (queryString.detail) {

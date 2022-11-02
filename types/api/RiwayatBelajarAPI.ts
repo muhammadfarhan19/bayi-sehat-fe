@@ -103,7 +103,7 @@ export interface RiwayatBelajarDetailData {
 
 export interface GetRiwayatBelajarStatisticListReq {
   jenis_belajar: number;
-  unit_kerja_id: number;
+  unit_kerja_id: number | null;
   status_cpns: number[];
   page: number;
   per_page: number;

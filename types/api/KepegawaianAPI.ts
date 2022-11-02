@@ -8,7 +8,7 @@ export interface GetPegawaiListReq {
   range_umur?: string;
   status_cpns: number[];
   tipe_jabatan?: string;
-  unit_kerja_id?: string;
+  unit_kerja_id?: string | null;
   page: number;
   per_page: number;
 }
@@ -115,23 +115,27 @@ export interface Dinas {
 }
 
 export interface GetPegawaiStatisticListReq {
-  unit_kerja_id: number;
+  unit_kerja_id: number | null;
   golongan_id: number;
-  status_cpns: number[];
+  page: number;
+  per_page: number;
 }
 
 export interface GetPegawaiStatisticListRes {
   status: string;
   data: {
-    pegawai_id?: number;
-    user_id: number;
-    nip: string;
-    nama: string;
-    golongan_id: number;
-    golongan: string;
-    unit_kerja_id: number;
-    unit_kerja: string;
-    pangkat: string;
-    tmt_golongan: string;
-  }[];
+    list: {
+      pegawai_id?: number;
+      user_id: number;
+      nip: string;
+      nama: string;
+      golongan_id: number;
+      golongan: string;
+      unit_kerja_id: number;
+      unit_kerja: string;
+      pangkat: string;
+      tmt_golongan: string;
+    }[];
+    pagination: Pagination;
+  };
 }

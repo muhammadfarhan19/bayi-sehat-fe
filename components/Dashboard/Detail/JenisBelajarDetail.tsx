@@ -25,7 +25,7 @@ function JenisBelajarDetail() {
     per_page: 20,
     status_cpns: queryString.typePegawai === 'pns' ? [1, 3] : [2],
     jenis_belajar: Number(queryString?.jenisBelajar || 0),
-    unit_kerja_id: Number(queryString?.unitKerjaId || 0),
+    unit_kerja_id: queryString?.unitKerjaId ? +queryString?.unitKerjaId : null,
   });
 
   const labelAndValue = {
