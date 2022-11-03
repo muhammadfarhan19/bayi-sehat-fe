@@ -14,11 +14,12 @@ interface ImgFileProps {
 
 export default function FileLoader(props: ImgFileProps) {
   const { children, uuid, asLink = false } = props;
-  const [fileUrl, setFileUrl] = React.useState('');
+  const fileUrl = React.useRef('');
   const [isImg, setIsImg] = React.useState(false);
+  const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {
-    if (!!fileUrl || !uuid) return;
+    if (!!fileUrl.current || !uuid) return;
     (async () => {
       const fileRes = await callAPI<null, GetDocumentRes>(DocumentAPI.GET_DOCUMENT.replace(':uuid', uuid), null, {
         method: 'get',
@@ -26,25 +27,31 @@ export default function FileLoader(props: ImgFileProps) {
       });
 
       if (fileRes.status === 200 && fileRes.data instanceof Blob) {
-        setFileUrl(window.URL.createObjectURL(fileRes.data));
+        fileUrl.current = window.URL.createObjectURL(fileRes.data);
       }
 
       if ([MimeType.JPG, MimeType.PNG].includes(fileRes?.headers?.['content-type'] || '')) {
         setIsImg(true);
       }
+
+      setLoaded(true);
     })();
   }, [uuid]);
 
-  if (!fileUrl) {
+  if (!loaded) {
     return <CircleLoader />;
   }
 
+  if (!fileUrl.current) {
+    return null;
+  }
+
   if (isImg && !asLink) {
-    return <img src={fileUrl} />;
+    return <img src={fileUrl.current} />;
   }
 
   return (
-    <a target={'_blank'} href={fileUrl}>
+    <a target={'_blank'} href={fileUrl.current}>
       {children || 'Download file'}
     </a>
   );

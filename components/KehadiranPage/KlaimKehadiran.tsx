@@ -31,6 +31,7 @@ import UploadWrapper, { FileObject } from '../shared/Input/UploadWrapper';
 import Loader from '../shared/Loader/Loader';
 import Pagination from '../shared/Pagination';
 import ModalKehadiran from './ModalKehadiran';
+import ModalDetail from './shared/ModalDetail';
 
 interface FormState {
   user_id: number;
@@ -56,6 +57,14 @@ function KlaimKehadiran() {
   const dispatch = useDispatch();
 
   const personalPegawaiData = usePersonalData();
+
+  const [detailModalState, setDetailModalState] = React.useState<{
+    status: 'success' | 'failed';
+    message: string | null;
+  }>({
+    status: 'success',
+    message: null,
+  });
 
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: number }>({
     open: false,
@@ -410,7 +419,33 @@ function KlaimKehadiran() {
                             </FileLoader>
                           )}
                         </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.status_klaim_str}</td>
+                        {data?.status_klaim === 2 ? (
+                          <td
+                            className="cursor-pointer px-6 py-4 text-xs font-medium text-green-700"
+                            onClick={() => {
+                              setDetailModalState({
+                                status: 'success',
+                                message: data?.alasan_tolak || '-',
+                              });
+                            }}
+                          >
+                            {data?.status_klaim_str}
+                          </td>
+                        ) : data?.status_klaim === 3 ? (
+                          <td
+                            className="cursor-pointer px-6 py-4 text-xs font-medium text-red-700"
+                            onClick={() => {
+                              setDetailModalState({
+                                status: 'failed',
+                                message: data?.alasan_tolak || '-',
+                              });
+                            }}
+                          >
+                            {data?.status_klaim_str}
+                          </td>
+                        ) : (
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.status_klaim_str}</td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -428,6 +463,12 @@ function KlaimKehadiran() {
           </div>
         </div>
       </section>
+      <ModalDetail
+        open={!!detailModalState.message}
+        setOpen={() => setDetailModalState({ ...detailModalState, message: null })}
+        status={detailModalState.status}
+        message={detailModalState.message || ''}
+      />
     </React.Fragment>
   );
 }
