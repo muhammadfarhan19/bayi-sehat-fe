@@ -22,7 +22,7 @@ export default function DetailJabatan(props: ListJabatanProps) {
   );
 
   const detailForm = riwayatJabatan?.find(each => each.jabatan_pegawai_id === Number(riwayatJabatanId));
-  const isFungsional = detailForm?.unit_kerja_id === 0;
+  const isFungsional = detailForm?.jenis_jabatan === 'Jabatan Fungsional';
 
   return (
     <>
