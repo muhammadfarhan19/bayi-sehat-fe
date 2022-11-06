@@ -32,6 +32,7 @@ import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import AutoComplete from '../../../../shared/Input/ComboBox';
 import DatePicker from '../../../../shared/Input/DatePicker';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
+import AutoCompleteCustom from '../RiwayatKGB/Shared/CustomComboBox';
 import DropdownInput from './Shared/DropdownInput';
 
 interface FormState {
@@ -85,6 +86,8 @@ export default function JabatanForm(props: UploadFormProps) {
   });
 
   const jabatanFungsional = watch('tipe_jabatan');
+
+  const isFilledJabatan = watch('jabatan_id');
 
   React.useEffect(() => {
     if (Number(jabatanFungsional) === 2) {
@@ -198,10 +201,10 @@ export default function JabatanForm(props: UploadFormProps) {
         JabatanAPI.UPDATE_JABATAN,
         {
           pegawai_id: dataApiRes?.pegawai_id || 0,
-          jabatan_id: Number(formData.jabatan_id),
+          jabatan_id: Number.isNaN(Number(isFilledJabatan)) ? 0 : Number(formData?.jabatan_id),
           unit_kerja_id: switchOptions ? 0 : Number(formData.unit_kerja_id),
           tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
-          custom_jabatan_name: '',
+          custom_jabatan_name: Number.isNaN(Number(isFilledJabatan)) ? queryJabatan : '',
           custom_unit_kerja_name: customUnitKerja?.length === 1 ? '' : customUnitKerja,
           tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
           angka_kredit: Number(formData.kumulatif),
@@ -219,10 +222,10 @@ export default function JabatanForm(props: UploadFormProps) {
         JabatanAPI.POST_RIWAYAT_JABATAN_UPDATE,
         {
           jabatan_pegawai_id: Number(selectedId),
-          jabatan_id: Number(formData.jabatan_id),
+          jabatan_id: Number.isNaN(Number(isFilledJabatan)) ? 0 : Number(formData.jabatan_id),
           unit_kerja_id: switchOptions ? 0 : Number(formData.unit_kerja_id),
           //Rediscuss with Back-End Dev and Product for these both custom
-          custom_jabatan_name: '',
+          custom_jabatan_name: Number.isNaN(Number(isFilledJabatan)) ? queryJabatan : '',
           custom_unit_kerja_name: customUnitKerja?.length === 1 ? '' : customUnitKerja,
           tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
           tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
@@ -444,8 +447,10 @@ export default function JabatanForm(props: UploadFormProps) {
                       name="jabatan_id"
                       rules={{ required: 'Mohon isi data jabatan' }}
                       render={({ field: { onChange } }) => (
-                        <AutoComplete
-                          onChange={value => onChange(value.value)}
+                        <AutoCompleteCustom
+                          onChange={input => {
+                            onChange(input?.value);
+                          }}
                           label={'Nama Jabatan'}
                           defaultValue={{ text: formJabatanState.text || '', value: formJabatanState.value || '' }}
                           onQueryChange={queryText => {
