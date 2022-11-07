@@ -63,6 +63,8 @@ export interface RekapDetailData {
   tgl_mulai: string;
   tgl_selesai: string;
   lokasi: string;
+  pic: string;
+  pic_id: number;
   isi_penugasan: string;
   surat_tugas: DocumentData[];
   pegawai: PegawaiData[];

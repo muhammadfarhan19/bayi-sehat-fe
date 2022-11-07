@@ -14,6 +14,7 @@ import { CircleProgress } from '../../shared/CircleProgress';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoCompletePegawai from '../../shared/Input/AutoCompletePegawai';
 import UploadWrapper from '../../shared/Input/UploadWrapper';
+import AutoCompleteCustom from '../DataKepegawaian/DetailPegawai/RiwayatKGB/Shared/CustomComboBox';
 
 function AddRekapPage(props) {
   const { dinas_id, type } = props;
@@ -23,7 +24,9 @@ function AddRekapPage(props) {
   const [reload, setReload] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [load, setLoad] = React.useState(false);
+  const debounce = React.useRef(0);
   const [selectedId, setSelectedId] = React.useState('');
+  const [queryPegawai, setQueryPegawai] = React.useState('');
   const [editForm, setEditForm] = React.useState({
     flag: '',
     tgl_available: [],
@@ -70,6 +73,7 @@ function AddRekapPage(props) {
           tgl_mulai: formData.tgl_mulai,
           tgl_selesai: formData.tgl_selesai,
           lokasi: formData.lokasi,
+          pic: Number(formData.pic),
           isi_penugasan: formData.isi_penugasan,
           surat_tugas: [
             {
@@ -90,6 +94,7 @@ function AddRekapPage(props) {
           tgl_mulai: formData.tgl_mulai,
           tgl_selesai: formData.tgl_selesai,
           lokasi: formData.lokasi,
+          pic: Number(formData.pic),
           isi_penugasan: formData.isi_penugasan,
           surat_tugas: [
             {
@@ -423,9 +428,17 @@ function AddRekapPage(props) {
     return id;
   };
 
+  const { data: pegawaiList } = useCommonApi(
+    KepegawaianAPI.GET_PEGAWAI_LIST,
+    { page: 1, per_page: 20, status_cpns: [0], nama: queryPegawai },
+    { method: 'GET' }
+  );
+
   if (throwError) {
     throw throwError;
   }
+
+  console.log(listPegawai);
 
   return (
     <>
@@ -587,6 +600,39 @@ function AddRekapPage(props) {
               </div>
 
               <div className="mt-5">
+                <div className="pt-1 sm:col-span-2 sm:mt-0">
+                  <Controller
+                    control={control}
+                    name="pic"
+                    rules={{ required: 'Mohon isi PIC Kegiatan' }}
+                    render={({ field: { onChange } }) => (
+                      <AutoCompleteCustom
+                        onChange={input => {
+                          console.log(input);
+                          onChange(input?.value);
+                        }}
+                        label={'PIC Kegiatan'}
+                        defaultValue={{ text: '', value: '' }}
+                        onQueryChange={queryText => {
+                          if (debounce.current) {
+                            clearTimeout(debounce.current);
+                          }
+                          debounce.current = window.setTimeout(() => {
+                            setQueryPegawai(queryText);
+                          }, 500);
+                        }}
+                        options={(pegawaiList?.list || []).map(each => ({
+                          text: each.name,
+                          value: each.pegawai_id,
+                        }))}
+                      />
+                    )}
+                  />
+                  {errors.pic && <p className="mt-1 text-xs text-red-500">{errors.pic.message}</p>}
+                </div>
+              </div>
+
+              <div className="mt-5">
                 <label className="block text-sm font-medium text-gray-700">Lokasi Dinas</label>
                 <div className="pt-1 sm:col-span-2 sm:mt-0">
                   <input
@@ -716,8 +762,14 @@ function AddRekapPage(props) {
                             {each?.flag === 0 ? 'Not Available' : each?.flag === 1 ? 'Partialy Available' : 'Available'}
                             ,
                           </p>
-                          <p className="text-[14px]">
-                            {each.flag !== 0 &&
+                          <p className="max-w-[400px] text-[14px] tracking-normal">
+                            {each.flag === 1 &&
+                              each.tgl_available.map((date, idx) =>
+                                idx === each.tgl_available.length - 1
+                                  ? `${format(new Date(date), 'dd MMM yyyy')}`
+                                  : `${format(new Date(date), 'dd MMM yyyy')}, `
+                              )}
+                            {each.flag === 2 &&
                               format(new Date(each.tgl_available[0]), 'dd MMM yyyy') +
                                 ' - ' +
                                 format(new Date(each.tgl_available.slice(-1)), 'dd MMM yyyy')}
@@ -817,7 +869,7 @@ function AddRekapPage(props) {
                             <p className="text-[14px]">
                               {' '}
                               {format(new Date(each?.tgl_available?.[0]), 'dd MMM yyyy')} -{' '}
-                              {format(new Date(each?.tgl_available?.[1]), 'dd MMM yyyy')}{' '}
+                              {format(new Date(each.tgl_available.slice(-1)), 'dd MMM yyyy')}
                             </p>
                           )}
                         </div>

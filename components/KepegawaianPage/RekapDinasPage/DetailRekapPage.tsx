@@ -95,6 +95,7 @@ function DetailRekapPage(props: DetailProps) {
                     { label: 'Tanggal Surat', value: data?.tgl_surat },
                     { label: 'Tanggal Dinas', value: data?.tgl_mulai + ' - ' + data?.tgl_selesai },
                     { label: 'Jenis Dinas', value: data?.jenis_dinas },
+                    { label: 'PIC Kegiatan', value: data?.pic || '-' },
                     { label: 'Lokasi Dinas', value: data?.lokasi },
                     {
                       label: 'Isi Penugasan',
