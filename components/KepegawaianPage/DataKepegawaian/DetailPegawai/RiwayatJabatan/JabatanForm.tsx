@@ -138,7 +138,6 @@ export default function JabatanForm(props: UploadFormProps) {
   React.useEffect(() => {
     if (selectedId) {
       const detailForm = riwayatJabatan?.find(each => each.jabatan_pegawai_id === Number(selectedId));
-      console.log(detailForm);
       if (detailForm) {
         const kodeJabatan = detailForm?.jenis_jabatan.split(':')[0];
         const getDataJabatan = jenisJabatan?.find(each => each.tipe_jabatan === kodeJabatan);
@@ -146,7 +145,7 @@ export default function JabatanForm(props: UploadFormProps) {
           setValue('file_id', String(detailForm?.files?.[0]?.document_uuid));
           setValue('file_name', String(detailForm?.files?.[0]?.document_name));
         }
-        setValue('tipe_jabatan', String(getDataJabatan?.id));
+        setValue('tipe_jabatan', String(getDataJabatan?.jenis_jabatan));
         setValue('tmt', Number(new Date(detailForm?.tmt)));
         setValue('kumulatif', String(detailForm?.kumulatif));
         if (detailForm?.unit_kerja_id === 0) {
@@ -177,6 +176,7 @@ export default function JabatanForm(props: UploadFormProps) {
               text: detailForm?.nama_jabatan,
               value: String(0),
             });
+            setQueryJabatan(detailForm?.nama_jabatan);
             setValue('jabatan_id', detailForm?.nama_jabatan);
           } else {
             setFormJabatanState({
@@ -356,12 +356,15 @@ export default function JabatanForm(props: UploadFormProps) {
                               setQueryJabatan('');
                             }}
                             label={'Jenis Jabatan'}
-                            defaultValue={composeListDefaultValue(jenisJabatan!, 'id', 'jenis_jabatan', value)}
+                            defaultValue={composeListDefaultValue(
+                              jenisJabatan!,
+                              'jenis_jabatan',
+                              'jenis_jabatan',
+                              value
+                            )}
                             options={(jenisJabatan || [])?.map(each => ({
                               text: each.jenis_jabatan,
-                              value: Number.isNaN(Number(isFilledJabatan))
-                                ? String(each.jenis_jabatan)
-                                : String(each?.id),
+                              value: String(each?.jenis_jabatan),
                             }))}
                           />
                         ) : (
