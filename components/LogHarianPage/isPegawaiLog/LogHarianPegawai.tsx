@@ -19,6 +19,7 @@ function LogHarianPegawai() {
   });
 
   const personalPegawaiData = usePersonalData();
+  const isPpnpn = Number(personalPegawaiData?.status_cpns || 0) === 2;
 
   const { data: logHarianData, isValidating } = useCommonApi<GetLogHarianReqYear, GetLogHarianData[]>(
     LogHarianAPI.GET_LOG_HARIAN_MONTH,
@@ -112,12 +113,14 @@ function LogHarianPegawai() {
                           >
                             BULAN
                           </th>
-                          <th
-                            scope="col"
-                            className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                          >
-                            NILAI
-                          </th>
+                          {!isPpnpn && (
+                            <th
+                              scope="col"
+                              className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                            >
+                              NILAI
+                            </th>
+                          )}
                           <th
                             scope="col"
                             className="w-30 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -142,7 +145,7 @@ function LogHarianPegawai() {
                             <tr key={data?.id} className={'bg-white hover:bg-gray-100'}>
                               <td className="px-6 py-4 text-xs font-normal text-gray-900">{data?.name}</td>
                               <td className="px-6 py-4 text-xs text-[20px] font-bold text-gray-900">{data?.title}</td>
-                              <td className="px-6 py-4">{submittedData?.score || 0}</td>
+                              {!isPpnpn && <td className="px-6 py-4">{submittedData?.score || 0}</td>}
                               <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900">
                                 {!submittedData?.number_of_day_filled ? (
                                   <div className="flex flex-row items-center space-x-2">

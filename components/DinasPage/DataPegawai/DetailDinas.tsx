@@ -1,7 +1,8 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { DownloadIcon, UserCircleIcon, XIcon } from '@heroicons/react/outline';
+import { UserCircleIcon } from '@heroicons/react/outline';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
+import { setShowProfPic } from '../../../action/CommonAction';
 import { LogHarianAPI, RekapDinasAPI, UserProfileAPI } from '../../../constants/APIUrls';
 import { GetLogHarianPegawaiReq, GetLogHarianPegawaiRes } from '../../../types/api/LogHarianAPI';
 import { GetOptPhotoReq, GetPhotoProfileRes } from '../../../types/api/ProfilePhotoAPI';
@@ -19,9 +20,11 @@ import JadwalDinas from './JadwalDinas';
 export default function DetailDinas() {
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const [formModalState, setFormModalState] = React.useState(false);
+
+  const dispatch = useDispatch();
   const personalPegawai = usePersonalData();
   const [img, setImg] = React.useState('');
-  const [showImage, setShowImage] = React.useState(false);
+
   const dateNowStr = new Date().toISOString().slice(0, 10);
 
   const { data: profile } = useCommonApi<GetOptPhotoReq, GetPhotoProfileRes>(
@@ -66,21 +69,13 @@ export default function DetailDinas() {
     { method: 'GET' }
   );
 
-  const downloadImage = () => {
-    const link = document.createElement('a');
-    link.href = img;
-    link.setAttribute('download', `profile.jpg`);
-    link.click();
-    link.remove();
-  };
-
   return (
     <>
       <div className="mb-[24px] flex flex-row flex-nowrap justify-between gap-x-[20px] rounded-[8px] bg-white py-6 px-[24px] shadow">
         <div className="flex w-full flex-col lg:flex-row">
           {img.length >= 1 ? (
             <img
-              onClick={() => setShowImage(!showImage)}
+              onClick={() => dispatch(setShowProfPic(true))}
               className="my-auto mx-auto h-[88px] w-[88px] cursor-pointer rounded-full lg:mx-0"
               src={img}
               alt=""
@@ -104,52 +99,6 @@ export default function DetailDinas() {
           </div>
         </div>
       </div>
-
-      {showImage && (
-        <Transition appear show={showImage} as={React.Fragment}>
-          <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={() => setShowImage(!showImage)}>
-            <div className="min-h-screen px-4 text-center">
-              <Transition.Child
-                as={React.Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <Dialog.Overlay className="fixed inset-0 backdrop-brightness-50" />
-              </Transition.Child>
-              <span className="inline-block h-screen align-middle" aria-hidden="true">
-                &#8203;
-              </span>
-              <Transition.Child
-                as={React.Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <div className="my-8 inline-block w-full max-w-xs transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <div className="flex justify-center">
-                    <img className="h-[250px] w-[250px] rounded-full" src={img} alt="" />
-                    <XIcon className="h-5 cursor-pointer" onClick={() => setShowImage(!showImage)} />
-                  </div>
-                  <hr className="mt-2" />
-                  <div className="mt-2 flex flex-col items-end">
-                    <div className="flex cursor-pointer flex-col items-center" onClick={downloadImage}>
-                      <DownloadIcon className="h-5 cursor-pointer" />
-                      <div className="text-xs">Unduh</div>
-                    </div>
-                  </div>
-                </div>
-              </Transition.Child>
-            </div>
-          </Dialog>
-        </Transition>
-      )}
 
       <NotificationListPage />
 

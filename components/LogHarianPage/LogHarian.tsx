@@ -77,6 +77,7 @@ function LogHarian() {
           yearSelected={new Date().getFullYear()}
           pegawai_id={Number(pegawaiId)}
           onBack={toggleAdvancedFilter}
+          isPpnpn={selected === 'Master PPNPN'}
         />
       ) : selected === 'Master PNS' ? (
         <>
