@@ -44,7 +44,14 @@ export const callAPI: CallAPI = async (url, requestData, options) => {
     method,
     timeout: config.apiTimeoutMs, // Timeout 15 seconds
     url,
-    paramsSerializer: { indexes: null },
+    paramsSerializer: {
+      indexes: null,
+      serialize: (params: Record<string, any>) => {
+        return Object.keys(params)
+          .map(key => key + '=' + (params[key] === 'null' || params[key] === 'undefined' ? '' : params[key] || ''))
+          .join('&');
+      },
+    },
   };
 
   if (isBlob) {
