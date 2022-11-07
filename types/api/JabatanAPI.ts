@@ -70,6 +70,7 @@ export interface UpdateJabatanReq {
   unit_kerja_id: number;
   tgl_pengangkatan: string;
   tgl_mulai: string;
+  custom_jenis_jabatan: string;
   custom_unit_kerja_name: string;
   custom_jabatan_name: string;
   angka_kredit: number;
@@ -130,6 +131,7 @@ export interface PostRiwayatJabatanUpdateReq {
   unit_kerja_id: number;
   tgl_pengangkatan: string;
   tgl_mulai: string;
+  custom_jenis_jabatan: string;
   custom_jabatan_name: string;
   custom_unit_kerja_name: string;
   angka_kredit: number;

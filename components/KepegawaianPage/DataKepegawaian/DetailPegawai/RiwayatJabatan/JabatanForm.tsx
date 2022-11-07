@@ -86,11 +86,10 @@ export default function JabatanForm(props: UploadFormProps) {
   });
 
   const jabatanFungsional = watch('tipe_jabatan');
-
   const isFilledJabatan = watch('jabatan_id');
 
   React.useEffect(() => {
-    if (Number(jabatanFungsional) === 2) {
+    if (Number(jabatanFungsional) === 2 || jabatanFungsional === 'Jabatan Fungsional') {
       setIsFungsional(true);
     } else {
       setIsFungsional(false);
@@ -139,6 +138,7 @@ export default function JabatanForm(props: UploadFormProps) {
   React.useEffect(() => {
     if (selectedId) {
       const detailForm = riwayatJabatan?.find(each => each.jabatan_pegawai_id === Number(selectedId));
+      console.log(detailForm);
       if (detailForm) {
         const kodeJabatan = detailForm?.jenis_jabatan.split(':')[0];
         const getDataJabatan = jenisJabatan?.find(each => each.tipe_jabatan === kodeJabatan);
@@ -172,11 +172,19 @@ export default function JabatanForm(props: UploadFormProps) {
             },
             { method: 'GET' }
           );
-          setFormJabatanState({
-            text: daftarJabatanDetail?.data?.list?.[0]?.name,
-            value: String(daftarJabatanDetail?.data?.list?.[0]?.jabatan_id),
-          });
-          setValue('jabatan_id', String(daftarJabatanDetail?.data?.list?.[0]?.jabatan_id));
+          if (daftarJabatanDetail?.data?.list?.length === 0) {
+            setFormJabatanState({
+              text: detailForm?.nama_jabatan,
+              value: String(0),
+            });
+            setValue('jabatan_id', detailForm?.nama_jabatan);
+          } else {
+            setFormJabatanState({
+              text: daftarJabatanDetail?.data?.list?.[0]?.name,
+              value: String(daftarJabatanDetail?.data?.list?.[0]?.jabatan_id),
+            });
+            setValue('jabatan_id', String(daftarJabatanDetail?.data?.list?.[0]?.jabatan_id));
+          }
           setLoadDetail(false);
         })();
       }
@@ -204,6 +212,7 @@ export default function JabatanForm(props: UploadFormProps) {
           jabatan_id: Number.isNaN(Number(isFilledJabatan)) ? 0 : Number(formData?.jabatan_id),
           unit_kerja_id: switchOptions ? 0 : Number(formData.unit_kerja_id),
           tgl_pengangkatan: format(formData.tmt, 'yyyy-MM-dd'),
+          custom_jenis_jabatan: formData?.tipe_jabatan,
           custom_jabatan_name: Number.isNaN(Number(isFilledJabatan)) ? queryJabatan : '',
           custom_unit_kerja_name: customUnitKerja?.length === 1 ? '' : customUnitKerja,
           tgl_mulai: format(formData.tmt, 'yyyy-MM-dd'),
@@ -225,6 +234,7 @@ export default function JabatanForm(props: UploadFormProps) {
           jabatan_id: Number.isNaN(Number(isFilledJabatan)) ? 0 : Number(formData.jabatan_id),
           unit_kerja_id: switchOptions ? 0 : Number(formData.unit_kerja_id),
           //Rediscuss with Back-End Dev and Product for these both custom
+          custom_jenis_jabatan: formData?.tipe_jabatan,
           custom_jabatan_name: Number.isNaN(Number(isFilledJabatan)) ? queryJabatan : '',
           custom_unit_kerja_name: customUnitKerja?.length === 1 ? '' : customUnitKerja,
           tgl_pengangkatan: format(formData.tmt, 'yyyy-MM-dd'),
@@ -349,7 +359,9 @@ export default function JabatanForm(props: UploadFormProps) {
                             defaultValue={composeListDefaultValue(jenisJabatan!, 'id', 'jenis_jabatan', value)}
                             options={(jenisJabatan || [])?.map(each => ({
                               text: each.jenis_jabatan,
-                              value: String(each.id),
+                              value: Number.isNaN(Number(isFilledJabatan))
+                                ? String(each.jenis_jabatan)
+                                : String(each?.id),
                             }))}
                           />
                         ) : (
