@@ -203,10 +203,10 @@ export default function JabatanForm(props: UploadFormProps) {
           pegawai_id: dataApiRes?.pegawai_id || 0,
           jabatan_id: Number.isNaN(Number(isFilledJabatan)) ? 0 : Number(formData?.jabatan_id),
           unit_kerja_id: switchOptions ? 0 : Number(formData.unit_kerja_id),
-          tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
+          tgl_pengangkatan: format(formData.tmt, 'yyyy-MM-dd'),
           custom_jabatan_name: Number.isNaN(Number(isFilledJabatan)) ? queryJabatan : '',
           custom_unit_kerja_name: customUnitKerja?.length === 1 ? '' : customUnitKerja,
-          tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
+          tgl_mulai: format(formData.tmt, 'yyyy-MM-dd'),
           angka_kredit: Number(formData.kumulatif),
           surat_keputusan: [
             {
@@ -227,8 +227,8 @@ export default function JabatanForm(props: UploadFormProps) {
           //Rediscuss with Back-End Dev and Product for these both custom
           custom_jabatan_name: Number.isNaN(Number(isFilledJabatan)) ? queryJabatan : '',
           custom_unit_kerja_name: customUnitKerja?.length === 1 ? '' : customUnitKerja,
-          tgl_pengangkatan: format(formData.tmt, 'yyyy/MM/dd'),
-          tgl_mulai: format(formData.tmt, 'yyyy/MM/dd'),
+          tgl_pengangkatan: format(formData.tmt, 'yyyy-MM-dd'),
+          tgl_mulai: format(formData.tmt, 'yyyy-MM-dd'),
           angka_kredit: Number(formData.kumulatif),
           surat_keputusan: [
             {
