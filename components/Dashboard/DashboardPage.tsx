@@ -198,13 +198,14 @@ function DashboardPage() {
         <Graph
           typePegawai={typePegawai}
           bgColor="#4F46E5"
+          bgColorSecond="#10B981"
           dateNowStr={dateNowStr}
           id={STATISTIC_ID_TUGAS_IJIN}
           label="Jenis belajar"
+          labelMap={['Tugas Belajar', 'Izin Belajar']}
           title="Statistik Tugas Belajar dan Izin Belajar"
           typeChart="jenis_belajar"
           joinChart={true}
-          bgColorSecond="#10B981"
         />
       )}
     </>

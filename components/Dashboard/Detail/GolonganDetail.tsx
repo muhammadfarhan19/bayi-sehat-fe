@@ -102,8 +102,7 @@ function GolonganDetail() {
                         <td
                           className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"
                           onClick={() =>
-                            data?.pegawai_id &&
-                            router.push(`/kepegawaian/data-pegawai?pegawai_id=${data.pegawai_id}&type=pns`)
+                            data?.pegawai_id && router.push(`/kepegawaian/data-pegawai?pegawai_id=${data.pegawai_id}`)
                           }
                         >
                           {data.nama}

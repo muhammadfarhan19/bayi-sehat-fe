@@ -58,7 +58,8 @@ function DetailPegawai() {
   ];
   const personalPegawaiData = usePersonalData();
 
-  const tabs = personalPegawaiData?.status_cpns === 1 ? pns : ppnpn;
+  const isPNS = [1, 3].includes(personalPegawaiData?.status_cpns || 0) || type === 'pns';
+  const tabs = isPNS ? pns : ppnpn;
 
   const { tabName = tabs[0].name } = getQueryString<{ tabName: string }>();
   const [selected, setSelected] = React.useState(tabName);
@@ -92,6 +93,13 @@ function DetailPegawai() {
       });
     }
   };
+
+  React.useEffect(() => {
+    setSelected(tabs[0].name);
+    return () => {
+      setSelected(tabs[0].name);
+    };
+  }, [personalPegawaiData?.status_cpns]);
 
   React.useEffect(() => {
     const unSubscribe = photos();
@@ -230,7 +238,7 @@ function DetailPegawai() {
           </div>
         </div>
         <div className="overflow-auto">
-          {type === 'pns' || (typeof type === 'undefined' && personalPegawaiData?.status_cpns === 1) ? (
+          {isPNS ? (
             <>
               {selected === tabs[0]?.name ? <DataDiriPegawai /> : null}
               {selected === tabs[1]?.name ? <DataDiriPribadi /> : null}
