@@ -5,6 +5,14 @@ export const formatDate = (date: Date | number, formatString = 'dd-MMM-yyyy, HH:
   return format(date, formatString, { locale: id });
 };
 
+export const formatStringDate = (date: string | number, formatString = 'dd-MMM-yyyy, HH:mm:ss') => {
+  try {
+    return date ? format(new Date(date), formatString, { locale: id }) : '';
+  } catch (error) {
+    return '';
+  }
+};
+
 export interface EventDate {
   id: number;
   color: string;

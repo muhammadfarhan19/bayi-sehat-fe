@@ -1,5 +1,4 @@
 import { PlusIcon } from '@heroicons/react/outline';
-import { format } from 'date-fns';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -15,6 +14,7 @@ import {
 } from '../../../../../types/api/PendidikanAPI';
 import { AuthorizeData, PostRbacBulkAuthorizeReq } from '../../../../../types/api/RbacAPI';
 import { Status } from '../../../../../types/Common';
+import { formatStringDate } from '../../../../../utils/DateUtil';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { getQueryString } from '../../../../../utils/URLUtils';
 import ConfirmDialog from '../../../../shared/ConfirmDialog';
@@ -179,7 +179,7 @@ export default function ListPendidikan(props: ListPendidikanProps) {
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.pt}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.prodi}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  <div className="whitespace-nowrap">{format(new Date(each.tanggal_lulus), 'dd MMM yyyy')}</div>
+                  <div className="whitespace-nowrap">{formatStringDate(each.tanggal_lulus, 'dd MMM yyyy')}</div>
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   {each.verified_by_bkn ? 'Ya' : 'Tidak'}

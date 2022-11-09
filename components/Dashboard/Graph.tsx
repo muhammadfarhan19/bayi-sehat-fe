@@ -22,6 +22,7 @@ type Props = {
   dateNowStr: string;
   id: number;
   label: string;
+  labelMap?: string[];
   title: string;
   typeChart: TypeChart;
   typePegawai: 'pns' | 'ppnpn';
@@ -131,11 +132,15 @@ function Graph(props: Props) {
               data={{
                 labels: props.joinChart ? [props.label] : statistic?.chart_data?.map(item => item.x_axis),
                 datasets: props.joinChart
-                  ? (statistic?.chart_data || []).map((item, idx) => ({
-                      label: item.x_axis || '',
-                      data: [item.y_axis || ''],
-                      backgroundColor: idx % 2 === 0 ? props.bgColor : props.bgColorSecond,
-                    }))
+                  ? (props?.labelMap || []).map((itemLabel, idx) => {
+                      const item = (statistic?.chart_data || []).filter(each => each.x_axis === itemLabel)?.[0];
+                      const showData = item?.x_axis === itemLabel;
+                      return {
+                        label: itemLabel || '',
+                        data: [showData ? item?.y_axis || '' : ''],
+                        backgroundColor: idx % 2 === 0 ? props.bgColor : props.bgColorSecond,
+                      };
+                    })
                   : [
                       {
                         label: props.label,
