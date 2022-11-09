@@ -17,7 +17,9 @@ import { classNames } from '../../../utils/Components';
 import { callAPI } from '../../../utils/Fetchers';
 import { getQueryString } from '../../../utils/URLUtils';
 import ConfirmDialog from '../../shared/ConfirmDialog';
+import FileLoader from '../../shared/FileLoader';
 import useCommonApi from '../../shared/hooks/useCommonApi';
+import { PDFIcon } from '../../shared/icons/PDFIcon';
 
 interface DetailProps {
   dinas_id: string;
@@ -108,6 +110,17 @@ function DetailRekapPage(props: DetailProps) {
                     </tr>
                   ))}
                   <tr>
+                    <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">Berkas</td>
+                    <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
+                      <FileLoader uuid={data?.surat_tugas?.[0]?.document_uuid}>
+                        <div className="flex items-center">
+                          <PDFIcon />
+                          <span className="ml-1 whitespace-nowrap text-blue-500 underline">{'Surat Tugas'} </span>
+                        </div>
+                      </FileLoader>
+                    </td>
+                  </tr>
+                  <tr>
                     <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">Pegawai</td>
                     <td className="px-4">
                       {data?.pegawai?.map(each => (
@@ -155,7 +168,7 @@ function DetailRekapPage(props: DetailProps) {
                 >
                   Hapus
                 </button>
-                {/* <button
+                <button
                   type="button"
                   className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-[14px] text-gray-50"
                   onClick={() =>
@@ -163,7 +176,7 @@ function DetailRekapPage(props: DetailProps) {
                   }
                 >
                   Edit
-                </button> */}
+                </button>
               </div>
             </div>
           )}
