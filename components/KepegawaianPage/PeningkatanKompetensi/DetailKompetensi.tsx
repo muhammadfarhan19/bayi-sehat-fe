@@ -1,9 +1,20 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
+import { setSnackbar } from '../../../action/CommonAction';
 import { PeningkatanKompAPI } from '../../../constants/APIUrls';
-import { GetPeningkatanReq, GetPeningkatanRes } from '../../../types/api/PeningkatanKompetensiAPI';
+import { SnackbarType } from '../../../reducer/CommonReducer';
+import {
+  GetPeningkatanReq,
+  GetPeningkatanRes,
+  PostDeletePeningkatanReq,
+  PostDeletePeningkatanRes,
+} from '../../../types/api/PeningkatanKompetensiAPI';
+import { Status } from '../../../types/Common';
+import { callAPI } from '../../../utils/Fetchers';
+import ConfirmDialog from '../../shared/ConfirmDialog';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import FormTambahUpdateKomp from './FormTambahUpdateKomp';
@@ -17,6 +28,8 @@ interface DetailLogHarianProps {
 
 function DetailKompetensi(props: DetailLogHarianProps) {
   const { onBack, pegawai_nama, pegawai_nip, pegawai_id } = props;
+  const [confirmId, setConfirmId] = React.useState(0);
+  const dispatch = useDispatch();
 
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: number }>({
     open: false,
@@ -30,12 +43,37 @@ function DetailKompetensi(props: DetailLogHarianProps) {
     });
   };
 
-  const { data: listKompetensi } = useCommonApi<GetPeningkatanReq, GetPeningkatanRes[]>(
+  const { data: listKompetensi, mutate } = useCommonApi<GetPeningkatanReq, GetPeningkatanRes[]>(
     PeningkatanKompAPI.GET_PENINGKATAN_KOMP_LIST,
     { pegawai_id: pegawai_id },
     { method: 'GET' },
     { revalidateOnMount: true, skipCall: !pegawai_id }
   );
+
+  const handleConfirm = async () => {
+    const resDelete = await callAPI<PostDeletePeningkatanReq, PostDeletePeningkatanRes>(
+      PeningkatanKompAPI.POST_PENINGKATAN_KOMP_DELETE,
+      { id: confirmId },
+      { method: 'post' }
+    );
+    let snackbarProps;
+    if (resDelete.status === 200 && resDelete.data?.status === Status.OK) {
+      snackbarProps = {
+        show: true,
+        message: 'Data terhapus.',
+        type: SnackbarType.INFO,
+      };
+    } else {
+      snackbarProps = {
+        show: true,
+        message: 'Gagal menghapus data.',
+        type: SnackbarType.ERROR,
+      };
+    }
+    dispatch(setSnackbar(snackbarProps));
+    setConfirmId(0);
+    mutate();
+  };
 
   if (!pegawai_id) {
     return (
@@ -50,8 +88,9 @@ function DetailKompetensi(props: DetailLogHarianProps) {
       {formModalState?.open ? (
         <FormTambahUpdateKomp
           open={formModalState?.open}
+          onSuccess={() => mutate()}
           setOpen={(open: boolean) => handleShowForm(open)}
-          selectedId={pegawai_id}
+          selectedId={formModalState?.selectedId}
         />
       ) : (
         <>
@@ -66,7 +105,6 @@ function DetailKompetensi(props: DetailLogHarianProps) {
               </div>
               <div className="mr-5 mb-5 flex">
                 <button
-                  disabled
                   className="ml-1 inline-flex w-[220px] items-center justify-center rounded-md bg-indigo-600  p-2 px-3 text-sm text-white hover:bg-indigo-700 focus:outline-none disabled:bg-gray-300"
                   onClick={() => handleShowForm(!formModalState?.open)}
                 >
@@ -147,7 +185,6 @@ function DetailKompetensi(props: DetailLogHarianProps) {
                             <td className="px-6 py-4 text-sm text-gray-500">
                               <div className="flex">
                                 <button
-                                  disabled
                                   type="button"
                                   className="mr-2 inline-flex items-center rounded border border-indigo-600 bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:bg-gray-300 disabled:text-gray-50 disabled:text-indigo-200"
                                   onClick={() => handleShowForm(!formModalState?.open, each?.id)}
@@ -155,9 +192,9 @@ function DetailKompetensi(props: DetailLogHarianProps) {
                                   Edit
                                 </button>
                                 <button
-                                  disabled
                                   type="button"
                                   className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-gray-300 disabled:bg-red-200 disabled:text-gray-50 disabled:text-gray-200"
+                                  onClick={() => setConfirmId(each.id)}
                                 >
                                   Hapus
                                 </button>
@@ -172,6 +209,12 @@ function DetailKompetensi(props: DetailLogHarianProps) {
               </div>
             </div>
           </section>
+          <ConfirmDialog
+            open={!!confirmId}
+            message="Anda yakin ingin menghapus data ini?"
+            onClose={() => setConfirmId(0)}
+            onConfirm={handleConfirm}
+          />
         </>
       )}
     </>
