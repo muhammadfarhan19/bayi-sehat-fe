@@ -67,3 +67,13 @@ export interface PostDeletePeningkatanRes {
   status: string;
   data: string;
 }
+export interface PostInsertPeningkatanReq {
+  pegawai_id?: number;
+  tahun: number;
+  peningkatan_kompetensi: string;
+}
+
+export interface PostInsertPeningkatanRes {
+  status: string;
+  data: string;
+}

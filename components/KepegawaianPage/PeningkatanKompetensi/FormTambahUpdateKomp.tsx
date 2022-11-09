@@ -8,6 +8,8 @@ import { SnackbarType } from '../../../reducer/CommonReducer';
 import {
   GetDetailPeningkatanReq,
   GetDetailPeningkatanRes,
+  PostInsertPeningkatanReq,
+  PostInsertPeningkatanRes,
   PostPeningkatanRes,
   PostUpdatePeningkatanReq,
 } from '../../../types/api/PeningkatanKompetensiAPI';
@@ -27,6 +29,7 @@ interface UploadFormProps {
   setOpen: (open: boolean) => void;
   onSuccess: () => void;
   selectedId?: number;
+  peg_id?: number;
 }
 
 interface FormState {
@@ -36,7 +39,7 @@ interface FormState {
 }
 
 function FormTambahUpdateKomp(props: UploadFormProps) {
-  const { open, setOpen, selectedId, onSuccess } = props;
+  const { open, setOpen, selectedId, onSuccess, peg_id } = props;
   const selectedYear = dateToday.getFullYear() - 10;
   const dispatch = useDispatch();
   const [year, setYear] = React.useState<number>(selectedYear);
@@ -72,6 +75,16 @@ function FormTambahUpdateKomp(props: UploadFormProps) {
         PeningkatanKompAPI.POST_PENINGKATAN_KOMP_UPDATE,
         {
           id: selectedId,
+          tahun: year,
+          peningkatan_kompetensi: formData?.peningkatan_kompetensi,
+        },
+        { method: 'post' }
+      );
+    } else if (selectedId === undefined) {
+      resSubmit = await callAPI<PostInsertPeningkatanReq, PostInsertPeningkatanRes>(
+        PeningkatanKompAPI.POST_PENINGKATAN_KOMP_INSERT,
+        {
+          pegawai_id: peg_id,
           tahun: year,
           peningkatan_kompetensi: formData?.peningkatan_kompetensi,
         },

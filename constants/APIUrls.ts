@@ -207,7 +207,7 @@ export const PresensiAPI = {
 export const PeningkatanKompAPI = {
   GET_PENINGKATAN_KOMP_LIST: config.apiHost + '/peningkatan-kompetensi/list',
   GET_PENINGKATAN_KOMP_DETAIL: config.apiHost + '/peningkatan-kompetensi/detail',
-  POST_PENINGKATAN_KOMP_INSERT: config.apiHost + '/peningkatan-kompetensi/insert',
+  POST_PENINGKATAN_KOMP_INSERT: config.apiHost + '/peningkatan-kompetensi/insert-per-peg',
   POST_PENINGKATAN_KOMP_UPDATE: config.apiHost + '/peningkatan-kompetensi/update',
   POST_PENINGKATAN_KOMP_DELETE: config.apiHost + '/peningkatan-kompetensi/delete',
 };

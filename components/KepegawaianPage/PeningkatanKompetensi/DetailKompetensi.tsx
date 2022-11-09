@@ -91,6 +91,7 @@ function DetailKompetensi(props: DetailLogHarianProps) {
           onSuccess={() => mutate()}
           setOpen={(open: boolean) => handleShowForm(open)}
           selectedId={formModalState?.selectedId}
+          peg_id={pegawai_id}
         />
       ) : (
         <>
