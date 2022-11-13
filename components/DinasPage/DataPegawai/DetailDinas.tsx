@@ -1,4 +1,4 @@
-import { UserCircleIcon } from '@heroicons/react/outline';
+import { UserCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -33,6 +33,7 @@ export default function DetailDinas() {
     { method: 'GET' }
   );
 
+  const isOwnProfile = !pegawai_id;
   const dataId = profile?.uuid_foto;
   const userId = personalPegawai?.user_id;
   const profileDataId = profile?.user_id;
@@ -81,10 +82,12 @@ export default function DetailDinas() {
               alt=""
             />
           ) : (
-            <UserCircleIcon className="my-auto mx-auto h-[88px] w-[88px] fill-indigo-500 lg:mx-0" />
+            <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
           )}
           <div className="my-auto ml-2 flex flex-col">
-            <p className="text-center text-[14px] font-[500] text-[#4B5563] lg:text-left">Selamat Datang,</p>
+            {isOwnProfile && (
+              <p className="text-center text-[14px] font-[500] text-[#4B5563] lg:text-left">Selamat Datang,</p>
+            )}
             <p className="text-center text-[24px] font-[700] lg:text-left">{personalPegawai?.nama}</p>
             {personalPegawai?.jabatan !== '' && (
               <p className="text-center text-[14px] font-semibold text-[#4B5563] lg:text-left">
@@ -100,7 +103,7 @@ export default function DetailDinas() {
         </div>
       </div>
 
-      <NotificationListPage />
+      {isOwnProfile && <NotificationListPage />}
 
       <div className="grid-grid-cols-1 mb-[24px] grid gap-[24px] lg:grid-cols-2">
         <Card
