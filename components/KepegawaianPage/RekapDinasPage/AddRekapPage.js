@@ -13,8 +13,9 @@ import { callAPI } from '../../../utils/Fetchers';
 import { CircleProgress } from '../../shared/CircleProgress';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoCompletePegawai from '../../shared/Input/AutoCompletePegawai';
+import AutoComplete from '../../shared/Input/ComboBox';
 import UploadWrapper from '../../shared/Input/UploadWrapper';
-import AutoCompleteCustom from '../DataKepegawaian/DetailPegawai/RiwayatKGB/Shared/CustomComboBox';
+import Loader from '../../shared/Loader/Loader';
 
 function AddRekapPage(props) {
   const { dinas_id, type } = props;
@@ -27,9 +28,14 @@ function AddRekapPage(props) {
   const debounce = React.useRef(0);
   const [selectedId, setSelectedId] = React.useState('');
   const [queryPegawai, setQueryPegawai] = React.useState('');
+  const [loadDetail, setLoadDetail] = React.useState(false);
   const [editForm, setEditForm] = React.useState({
     flag: '',
     tgl_available: [],
+  });
+  const [defaultValue, setDefaultValue] = React.useState({
+    text: undefined,
+    value: undefined,
   });
   const dispatch = useDispatch();
 
@@ -383,6 +389,7 @@ function AddRekapPage(props) {
 
   React.useEffect(() => {
     (async () => {
+      setLoadDetail(true);
       if (type === 'edit') {
         const detailForm = await callAPI(RekapDinasAPI.GET_DINAS_DETAIL, { dinas_id: dinas_id }, { method: 'get' });
 
@@ -398,6 +405,11 @@ function AddRekapPage(props) {
           setValue('isi_penugasan', detailForm?.data?.data?.isi_penugasan);
           setValue('document_uuid', detailForm?.data?.data?.surat_tugas?.[0]?.document_uuid);
           setValue('document_name', detailForm?.data?.data?.surat_tugas?.[0]?.document_name);
+          setValue('pic', detailForm?.data?.data?.pic_id);
+          setDefaultValue({
+            text: detailForm?.data?.data?.pic,
+            value: String(detailForm?.data?.data?.pic_id),
+          });
 
           {
             detailForm?.data?.data?.pegawai.map(each => {
@@ -415,6 +427,7 @@ function AddRekapPage(props) {
           setListPegawai(newState);
         }
       }
+      setLoadDetail(false);
     })();
   }, []);
 
@@ -438,7 +451,13 @@ function AddRekapPage(props) {
     throw throwError;
   }
 
-  console.log(listPegawai);
+  if (loadDetail) {
+    return (
+      <div className="relative h-[150px] w-full divide-y divide-gray-200">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -606,13 +625,12 @@ function AddRekapPage(props) {
                     name="pic"
                     rules={{ required: 'Mohon isi PIC Kegiatan' }}
                     render={({ field: { onChange } }) => (
-                      <AutoCompleteCustom
+                      <AutoComplete
                         onChange={input => {
-                          console.log(input);
                           onChange(input?.value);
                         }}
                         label={'PIC Kegiatan'}
-                        defaultValue={{ text: '', value: '' }}
+                        defaultValue={{ text: defaultValue.text || '', value: defaultValue.value || '' }}
                         onQueryChange={queryText => {
                           if (debounce.current) {
                             clearTimeout(debounce.current);

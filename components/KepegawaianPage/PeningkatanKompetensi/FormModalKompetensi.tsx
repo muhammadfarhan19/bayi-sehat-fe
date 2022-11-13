@@ -138,7 +138,6 @@ function FormLogHarianPPNPN(props: ModalProps) {
                       <UploadWrapper
                         allowedTypes={['xlsx', 'xls']}
                         handleUploadChange={(files: FileObject[]) => {
-                          console.log(files);
                           setValue('file_id', files[0].id);
                           onChange(files[0].name);
                         }}

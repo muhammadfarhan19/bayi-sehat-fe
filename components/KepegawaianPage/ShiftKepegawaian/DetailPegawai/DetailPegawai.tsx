@@ -150,7 +150,7 @@ function DetailPegawai() {
       </div>
       {formModalState.open ? (
         <ShiftPnsForm
-          onSuccess={() => console.log('hai')}
+          onSuccess={() => null}
           open={formModalState.open}
           setOpen={(open: boolean) => handleShowForm(open)}
           selectedId={formModalState?.selectedId}

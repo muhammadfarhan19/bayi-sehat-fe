@@ -39,3 +39,41 @@ export interface PostDetailPeningkatanReq {
   tahun: number;
   peningkatan_kompetensi: string;
 }
+
+export interface PostUpdatePeningkatanReq {
+  id: number;
+  tahun: number;
+  peningkatan_kompetensi: string;
+}
+
+export interface GetDetailPeningkatanReq {
+  id?: number;
+}
+
+export interface GetDetailPeningkatanRes {
+  id: number;
+  pegawai_id: number;
+  tahun: number;
+  peningkatan_kompetensi: string;
+  files: any;
+  created_by: string;
+  created_at: string;
+}
+
+export interface PostDeletePeningkatanReq {
+  id?: number;
+}
+export interface PostDeletePeningkatanRes {
+  status: string;
+  data: string;
+}
+export interface PostInsertPeningkatanReq {
+  pegawai_id?: number;
+  tahun: number;
+  peningkatan_kompetensi: string;
+}
+
+export interface PostInsertPeningkatanRes {
+  status: string;
+  data: string;
+}
