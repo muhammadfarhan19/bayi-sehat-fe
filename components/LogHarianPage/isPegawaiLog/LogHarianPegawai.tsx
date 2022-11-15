@@ -145,7 +145,7 @@ function LogHarianPegawai() {
                             <tr key={data?.id} className={'bg-white hover:bg-gray-100'}>
                               <td className="px-6 py-4 text-xs font-normal text-gray-900">{data?.name}</td>
                               <td className="px-6 py-4 text-xs text-[20px] font-bold text-gray-900">{data?.title}</td>
-                              {!isPpnpn && <td className="px-6 py-4">{submittedData?.score || 0}</td>}
+                              {!isPpnpn && <td className="px-6 py-4 text-[14px]">{submittedData?.score || 0}</td>}
                               <td className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900">
                                 {!submittedData?.number_of_day_filled ? (
                                   <div className="flex flex-row items-center space-x-2">
