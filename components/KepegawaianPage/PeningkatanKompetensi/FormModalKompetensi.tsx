@@ -45,7 +45,7 @@ function FormLogHarianPPNPN(props: ModalProps) {
 
   const submitHandler = async (formData: FormState) => {
     const resSubmit = await callAPI<PostPeningkatanReq, PostPeningkatanRes>(
-      PeningkatanKompAPI.POST_PENINGKATAN_KOMP_INSERT,
+      PeningkatanKompAPI.POST_PENINGKATAN_KOMP_INSERT_MODAL,
       {
         tahun: year,
         files: [

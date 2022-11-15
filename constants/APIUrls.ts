@@ -210,4 +210,5 @@ export const PeningkatanKompAPI = {
   POST_PENINGKATAN_KOMP_INSERT: config.apiHost + '/peningkatan-kompetensi/insert-per-peg',
   POST_PENINGKATAN_KOMP_UPDATE: config.apiHost + '/peningkatan-kompetensi/update',
   POST_PENINGKATAN_KOMP_DELETE: config.apiHost + '/peningkatan-kompetensi/delete',
+  POST_PENINGKATAN_KOMP_INSERT_MODAL: config.apiHost + '/peningkatan-kompetensi/insert',
 };
