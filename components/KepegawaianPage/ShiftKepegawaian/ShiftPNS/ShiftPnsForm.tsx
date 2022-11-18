@@ -1,30 +1,140 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
+import { setSnackbar } from '../../../../action/CommonAction';
+import { PresensiAPI, PresensiShiftPegawaiAPI } from '../../../../constants/APIUrls';
+import { SnackbarType } from '../../../../reducer/CommonReducer';
+import { PresensiShiftData } from '../../../../types/api/PresensiAPI';
+import {
+  PresensiShiftPegawaiData,
+  PresensiShiftPegawaiInsertReq,
+  PresensiShiftPegawaiInsertRes,
+  PresensiShiftPegawaiUpdateReq,
+  PresensiShiftPegawaiUpdateRes,
+} from '../../../../types/api/PresensiShiftPegawaiAPI';
+import { Status } from '../../../../types/Common';
+import { callAPI } from '../../../../utils/Fetchers';
+import useCommonApi from '../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
+import AutoComplete from '../../../shared/Input/ComboBox';
 
 interface UploadFormProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  selectedId?: string;
+  data?: PresensiShiftPegawaiData;
   onSuccess: () => void;
 }
 
+interface FormState {
+  id?: number;
+  pegawai_id: number;
+  tanggal: string;
+  shift_id: number;
+  remark: string;
+}
+
 export default function ShiftPnsForm(props: UploadFormProps) {
-  const { open, setOpen, onSuccess } = props;
+  const { open, setOpen, onSuccess, data } = props;
+  const dispatch = useDispatch();
   const personalData = usePersonalData();
+  const [load, setLoad] = React.useState(true);
+  const [defaultValue, setDefaultValue] = React.useState({
+    text: '',
+    value: '',
+  });
+
+  const {
+    control,
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<FormState>();
+
+  const { data: dataPresensi, isValidating } = useCommonApi<null, PresensiShiftData[]>(
+    PresensiAPI.PRESENSI_SHIFT_LIST,
+    null,
+    { method: 'get' }
+  );
+
+  React.useEffect(() => {
+    if (data) {
+      if (!isValidating) {
+        const defaultType = dataPresensi?.find(each => each.id === data?.shift_id);
+        setDefaultValue({
+          text: String(defaultType?.nama_shift),
+          value: String(defaultType?.id),
+        });
+        setValue('shift_id', Number(defaultType?.id));
+        setValue('tanggal', data?.tanggal);
+        setLoad(false);
+      }
+    } else {
+      setLoad(false);
+    }
+  }, [dataPresensi]);
+
+  const submitHandler = async (formData: FormState) => {
+    let resSubmit;
+    if (data) {
+      resSubmit = await callAPI<PresensiShiftPegawaiUpdateReq, PresensiShiftPegawaiUpdateRes>(
+        PresensiShiftPegawaiAPI.PRESENSI_SHIFT_PEGAWAI_UPDATE,
+        {
+          id: Number(data?.id),
+          pegawai_id: Number(personalData?.pegawai_id),
+          tanggal: String(formData.tanggal),
+          shift_id: Number(formData.shift_id),
+          remark: String(data?.remark),
+        },
+        { method: 'post' }
+      );
+    } else {
+      resSubmit = await callAPI<PresensiShiftPegawaiInsertReq, PresensiShiftPegawaiInsertRes>(
+        PresensiShiftPegawaiAPI.PRESENSI_SHIFT_PEGAWAI_INSERT,
+        {
+          pegawai_id: Number(personalData?.pegawai_id),
+          tanggal: String(formData.tanggal),
+          shift_id: Number(formData.shift_id),
+          remark: String(''),
+        },
+        { method: 'post' }
+      );
+    }
+
+    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Data berhasil tersimpan.',
+          type: SnackbarType.INFO,
+        })
+      );
+      onSuccess();
+      setOpen(!open);
+    } else {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
+          type: SnackbarType.ERROR,
+        })
+      );
+    }
+  };
+
   const toggleModal = () => {
     setOpen(!open);
   };
 
-  const { handleSubmit } = useForm();
+  if (load) {
+    return <></>;
+  }
 
-  const submitHandler = async () => {
-    onSuccess();
-    setOpen(!open);
-  };
+  console.log(watch());
 
   return (
     <Transition appear show={open} as={React.Fragment}>
@@ -89,17 +199,26 @@ export default function ShiftPnsForm(props: UploadFormProps) {
                     />
                   </div>
                 </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="nama" className="block text-sm font-medium text-gray-700">
-                    Shift
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                      name="nama"
-                      type="text"
-                    />
-                  </div>
+                <div className="pt-5 sm:col-span-2 sm:mt-0">
+                  <Controller
+                    control={control}
+                    name="shift_id"
+                    rules={{ required: 'Mohon isi Shift' }}
+                    render={({ field: { onChange } }) => (
+                      <AutoComplete
+                        onChange={input => {
+                          onChange(input?.value);
+                        }}
+                        label={'Shift'}
+                        defaultValue={{ text: defaultValue.text || '', value: defaultValue.value || '' }}
+                        options={(dataPresensi || []).map(each => ({
+                          text: String(each?.nama_shift),
+                          value: String(each?.id),
+                        }))}
+                      />
+                    )}
+                  />
+                  {errors.shift_id && <p className="mt-1 text-xs text-red-500">{errors.shift_id.message}</p>}
                 </div>
                 <div className="mt-5 sm:col-span-6">
                   <label htmlFor="nama" className="block text-sm font-medium text-gray-700">
@@ -107,10 +226,12 @@ export default function ShiftPnsForm(props: UploadFormProps) {
                   </label>
                   <div className="mt-1">
                     <input
+                      {...register('tanggal', { required: 'Mohon isi tanggal' })}
                       className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                      name="nama"
+                      name="tanggal"
                       type="date"
                     />
+                    {errors.tanggal && <p className="mt-1 text-xs text-red-500">{errors.tanggal.message}</p>}
                   </div>
                 </div>
 

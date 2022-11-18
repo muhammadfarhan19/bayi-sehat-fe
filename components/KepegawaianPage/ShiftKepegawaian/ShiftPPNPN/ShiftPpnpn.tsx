@@ -12,10 +12,6 @@ import Pagination from '../../../shared/Pagination';
 export default function ShiftPpnpn() {
   const router = useRouter();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
-  const toggleAdvancedFilter = () => {
-    setshowAdvancedFilter(!showAdvancedFilter);
-  };
-
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
     per_page: 20,
@@ -33,6 +29,10 @@ export default function ShiftPpnpn() {
     null,
     { method: 'GET' }
   );
+
+  const toggleAdvancedFilter = () => {
+    setshowAdvancedFilter(!showAdvancedFilter);
+  };
 
   const search = async <T extends keyof typeof filter>(type: T, value: typeof filter[T]) => {
     const newState = { ...filter };
@@ -58,9 +58,23 @@ export default function ShiftPpnpn() {
             >
               <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
             </button>
+            <div className="flex">
+              <button
+                className="ml-1 inline-flex items-center rounded-md border border-green-600 bg-green-600 p-2 px-3 text-sm text-white hover:bg-green-700 focus:outline-none"
+                onClick={() => (window.location.href = '/kepegawaian/data-pegawai?action=add&type=ppnpn')}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fillRule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Import Data Shift
+              </button>
+            </div>
           </div>
         </div>
-
         {showAdvancedFilter && (
           <div className="flex w-full flex-row gap-x-[16px]">
             <div className="w-[202px] pb-2">
@@ -80,84 +94,89 @@ export default function ShiftPpnpn() {
           </div>
         )}
       </div>
-
       {isValidating ? (
         <div className="relative h-[150px] w-full divide-y divide-gray-200">
           <Loader />
         </div>
       ) : (
         <div className="flex">
-          <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+          <div className="my-[24px] w-full  sm:mx-0">
             <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-              <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
-                <table className="w-full table-fixed rounded-lg bg-gray-100">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              <table className="w-full table-auto rounded-lg bg-gray-100">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      No
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Nama
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      NIP
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Unit Kerja
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(pegawaiList?.list || []).map((data, dataIdx) => (
+                    <tr
+                      key={dataIdx}
+                      className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                    >
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                        {filter.per_page * (filter.page - 1) + (dataIdx + 1)}
+                      </td>
+                      <td
+                        className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"
+                        onClick={() => router.push(`/kepegawaian/shift?pegawai_id=${data.pegawai_id}&type=ppnpn`)}
                       >
-                        No
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
-                        Nama
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
-                        NIK
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
-                        Unit Kerja
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
-                        Jabatan
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(pegawaiList?.list || []).map((data, dataIdx) => (
-                      <tr
-                        key={dataIdx}
-                        className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
-                      >
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                          {filter.per_page * (filter.page - 1) + (dataIdx + 1)}
-                        </td>
-                        <td
-                          className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800"
-                          onClick={() =>
-                            router.push(`/kepegawaian/data-pegawai?pegawai_id=${data.pegawai_id}&type=ppnpn`)
-                          }
+                        {data.name}
+                      </td>
+                      <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                        <button
+                          type="button"
+                          className="rounded-md bg-[#4F46E5] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-indigo-700 focus:outline-none"
+                          onClick={() => {
+                            window.location.href = `/kepegawaian/shift?pegawai_id=${data?.pegawai_id}&type=pns`;
+                          }}
                         >
-                          {data?.name}
-                        </td>
-                        <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <Pagination
-                  onChange={value => {
-                    search('page', value);
-                  }}
-                  totalData={pegawaiList ? pegawaiList?.pagination.total_data : 0}
-                  perPage={filter.per_page}
-                  page={filter.page}
-                />
-              </div>
+                          Lihat
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Pagination
+                onChange={value => {
+                  search('page', value);
+                }}
+                totalData={pegawaiList ? pegawaiList?.pagination.total_data : 0}
+                perPage={filter.per_page}
+                page={filter.page}
+              />
             </div>
           </div>
         </div>

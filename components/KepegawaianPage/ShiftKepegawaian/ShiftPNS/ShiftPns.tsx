@@ -8,6 +8,7 @@ import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
+import BulkForm from '../BulkForm';
 
 export default function ShiftPns() {
   const router = useRouter();
@@ -29,6 +30,16 @@ export default function ShiftPns() {
     null,
     { method: 'GET' }
   );
+
+  const [formModalState, setFormModalState] = React.useState<{ open: boolean }>({
+    open: false,
+  });
+
+  const handleShowForm = (open: boolean) => {
+    setFormModalState({
+      open,
+    });
+  };
 
   const toggleAdvancedFilter = () => {
     setshowAdvancedFilter(!showAdvancedFilter);
@@ -61,7 +72,7 @@ export default function ShiftPns() {
             <div className="flex">
               <button
                 className="ml-1 inline-flex items-center rounded-md border border-green-600 bg-green-600 p-2 px-3 text-sm text-white hover:bg-green-700 focus:outline-none"
-                onClick={() => (window.location.href = '/kepegawaian/data-pegawai?action=add&type=pns')}
+                onClick={() => handleShowForm(!formModalState.open)}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path
@@ -178,6 +189,9 @@ export default function ShiftPns() {
                 page={filter.page}
               />
             </div>
+            {formModalState.open ? (
+              <BulkForm open={formModalState.open} setOpen={(open: boolean) => handleShowForm(open)} />
+            ) : null}
           </div>
         </div>
       )}
