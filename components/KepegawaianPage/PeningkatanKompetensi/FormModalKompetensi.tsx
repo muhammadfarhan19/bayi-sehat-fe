@@ -12,6 +12,7 @@ import { Status } from '../../../types/Common';
 import { classNames } from '../../../utils/Components';
 import { callAPI } from '../../../utils/Fetchers';
 import { CircleProgress } from '../../shared/CircleProgress';
+import TemplateFile from '../../shared/FileLoader';
 import UploadWrapper, { FileObject } from '../../shared/Input/UploadWrapper';
 
 const dateToday = new Date();
@@ -42,6 +43,18 @@ function FormLogHarianPPNPN(props: ModalProps) {
     setValue,
     handleSubmit,
   } = useForm<FormState>();
+
+  // const downloadForm = async() => {
+  //   await
+  //
+  // const downloadImage = () => {
+  //   // if (!img) return;
+  //   const link = document.createElement('a');
+  //   link.href = 'https://intradikti.kemdikbud.go.id/api/document/48157624-b8ec-42d9-ba46-36972efecc01';
+  //   link.setAttribute('download', `profile.jpg`);
+  //   link.click();
+  //   link.remove();
+  // };
 
   const submitHandler = async (formData: FormState) => {
     const resSubmit = await callAPI<PostPeningkatanReq, PostPeningkatanRes>(
@@ -167,6 +180,16 @@ function FormLogHarianPPNPN(props: ModalProps) {
                       </UploadWrapper>
                     )}
                   ></Controller>
+                </div>
+
+                <div className="mt-5 flex flex-row items-center justify-end space-x-1 sm:col-span-6">
+                  <p className="font-sans text-[13px]">File template Peningkatan Kompetensi:</p>
+                  <TemplateFile
+                    style="text-[13px] text-indigo-600 font-sans font-bold"
+                    uuid="48157624-b8ec-42d9-ba46-36972efecc01"
+                  >
+                    Unduh disini
+                  </TemplateFile>
                 </div>
                 <div className="mt-5">
                   <button
