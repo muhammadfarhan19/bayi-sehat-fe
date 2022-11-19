@@ -31,7 +31,7 @@ function FormLogHarianPPNPN(props: ModalProps) {
   const { open, setOpen } = props;
   const selectedYear = dateToday.getFullYear() - 10;
   const dispatch = useDispatch();
-  const [year, setYear] = React.useState<number>(selectedYear);
+  const isEmptyString = '';
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -44,23 +44,11 @@ function FormLogHarianPPNPN(props: ModalProps) {
     handleSubmit,
   } = useForm<FormState>();
 
-  // const downloadForm = async() => {
-  //   await
-  //
-  // const downloadImage = () => {
-  //   // if (!img) return;
-  //   const link = document.createElement('a');
-  //   link.href = 'https://intradikti.kemdikbud.go.id/api/document/48157624-b8ec-42d9-ba46-36972efecc01';
-  //   link.setAttribute('download', `profile.jpg`);
-  //   link.click();
-  //   link.remove();
-  // };
-
   const submitHandler = async (formData: FormState) => {
     const resSubmit = await callAPI<PostPeningkatanReq, PostPeningkatanRes>(
       PeningkatanKompAPI.POST_PENINGKATAN_KOMP_INSERT_MODAL,
       {
-        tahun: year,
+        tahun: Number(formData?.tahun),
         files: [
           {
             document_name: formData?.file_name,
@@ -127,17 +115,18 @@ function FormLogHarianPPNPN(props: ModalProps) {
                 <div className="mt-5 sm:col-span-6">
                   <label className="block text-sm font-medium text-gray-700">Tahun</label>
                   <select
-                    {...register('tahun', { required: 'Silahkan pilih Tahun.' })}
-                    onChange={e => setYear(Number(e.target.value))}
+                    {...register('tahun', { required: 'Silahkan Pilih Tahun' })}
                     name="tahun"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   >
-                    <option value={0}>Silahkan Pilih</option>
-                    {Array.from(new Array(21), (list, index) => (
-                      <option key={index} value={selectedYear + index}>
-                        {selectedYear + index}
-                      </option>
-                    ))}
+                    <option value={isEmptyString}>Silahkan Pilih</option>
+                    {Array.from(new Array(21), (list, index) => {
+                      return (
+                        <option key={index} value={selectedYear + index}>
+                          {selectedYear + index}
+                        </option>
+                      );
+                    })}
                   </select>
                   {errors.tahun && <p className="mt-1 text-xs text-red-500">{errors.tahun.message}</p>}
                 </div>
