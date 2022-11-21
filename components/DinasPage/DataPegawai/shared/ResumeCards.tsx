@@ -8,7 +8,9 @@ import useCommonApi from '../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
 
 const now = new Date();
+now.setDate(0);
 const bulanText = format(now, 'MMMM', { locale: id });
+
 type SummaryKey = keyof GetPresensiPegawaiSummaryRes['data'];
 const Cards = [
   { field: 'masuk', text: 'Kehadiran' },
