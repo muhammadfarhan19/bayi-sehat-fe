@@ -16,6 +16,7 @@ import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import DinasCalendar from './DinasCalendar';
 import JadwalDinas from './JadwalDinas';
+import { ResumeCards } from './shared/ResumeCards';
 
 export default function DetailDinas() {
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
@@ -103,7 +104,12 @@ export default function DetailDinas() {
         </div>
       </div>
 
-      {isOwnProfile && <NotificationListPage />}
+      {isOwnProfile && (
+        <>
+          <NotificationListPage />
+          <ResumeCards />
+        </>
+      )}
 
       <div className="grid-grid-cols-1 mb-[24px] grid gap-[24px] lg:grid-cols-2">
         <Card
