@@ -29,7 +29,7 @@ interface UploadFormProps {
   setOpen: (open: boolean) => void;
   onSuccess: () => void;
   selectedId?: number;
-  peg_id?: number;
+  peg_id: number;
 }
 
 interface FormState {
@@ -75,6 +75,7 @@ function FormTambahUpdateKomp(props: UploadFormProps) {
         PeningkatanKompAPI.POST_PENINGKATAN_KOMP_UPDATE,
         {
           id: selectedId,
+          pegawai_id: peg_id,
           tahun: Number(formData?.tahun),
           peningkatan_kompetensi: formData?.peningkatan_kompetensi,
         },
