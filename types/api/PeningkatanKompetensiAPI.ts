@@ -30,6 +30,17 @@ export interface PostPeningkatanReq {
   ];
 }
 
+export interface PostModalPeningkatanRes {
+  status: Status;
+  data: {
+    description: string[];
+    invalid_file: string;
+    total_data: number;
+    total_success_insert: number;
+    valid_file: string;
+  };
+}
+
 export interface PostPeningkatanRes {
   status: Status;
   data: string;

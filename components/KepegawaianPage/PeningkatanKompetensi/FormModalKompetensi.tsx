@@ -8,7 +8,7 @@ import { setSnackbar } from '../../../action/CommonAction';
 import { PeningkatanKompAPI } from '../../../constants/APIUrls';
 import { TEMPLATE_FILE_FORMAT, TEMPLATE_FILE_NAME, UUID_FILE } from '../../../constants/Resource';
 import { SnackbarType } from '../../../reducer/CommonReducer';
-import { PostPeningkatanReq, PostPeningkatanRes } from '../../../types/api/PeningkatanKompetensiAPI';
+import { PostModalPeningkatanRes, PostPeningkatanReq } from '../../../types/api/PeningkatanKompetensiAPI';
 import { Status } from '../../../types/Common';
 import { classNames } from '../../../utils/Components';
 import { callAPI } from '../../../utils/Fetchers';
@@ -47,7 +47,7 @@ function FormLogHarianPPNPN(props: ModalProps) {
   } = useForm<FormState>();
 
   const submitHandler = async (formData: FormState) => {
-    const resSubmit = await callAPI<PostPeningkatanReq, PostPeningkatanRes>(
+    const resSubmit = await callAPI<PostPeningkatanReq, PostModalPeningkatanRes>(
       PeningkatanKompAPI.POST_PENINGKATAN_KOMP_INSERT_MODAL,
       {
         tahun: Number(formData?.tahun),
@@ -61,6 +61,19 @@ function FormLogHarianPPNPN(props: ModalProps) {
       { method: 'post' }
     );
     if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
+      const isEmptyFieldAsString = 0;
+      const UUID_DATA = {
+        Valid: resSubmit?.data?.data?.valid_file,
+        Invalid: resSubmit?.data?.data?.invalid_file,
+      };
+      const FILE_NAME = {
+        Valid: 'File_Peningkatan_Kompetensi_Valid',
+        Invalid: 'File_Peningkatan_Kompetensi_Invalid',
+      };
+      if (UUID_DATA?.Invalid?.length > isEmptyFieldAsString) {
+        fileDownloader(UUID_DATA?.Invalid, FILE_NAME.Invalid, TEMPLATE_FILE_FORMAT.xlsx);
+      }
+      fileDownloader(UUID_DATA?.Valid, FILE_NAME.Valid, TEMPLATE_FILE_FORMAT.xlsx);
       dispatch(
         setSnackbar({
           show: true,
