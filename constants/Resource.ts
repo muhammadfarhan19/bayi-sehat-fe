@@ -1,4 +1,4 @@
-import { StatusMenikah, Gender, StatusCpns, Agama } from '../types/Common';
+import { Agama, Gender, StatusCpns, StatusMenikah } from '../types/Common';
 
 export const StatusMenikahText: Record<StatusMenikah, string> = {
   [StatusMenikah.MARRIED]: 'Menikah',
@@ -12,7 +12,7 @@ export const GenderText: Record<Gender, string> = {
   [Gender.MALE]: 'Pria',
 };
 
-export const StatusPNSText: Record<StatusCpns, String> = {
+export const StatusPNSText: Record<StatusCpns, string> = {
   [StatusCpns.PNS]: 'PNS',
   [StatusCpns.PPNPN]: 'PPNPN',
   [StatusCpns.CPNS]: 'CPNS',
@@ -74,3 +74,15 @@ export const Golongan = [
   { value: '11', text: 'IV/c - Pembina Utama Muda' },
   { value: '12', text: 'IV/d - Pembina Utama Madya' },
 ];
+
+export const UUID_FILE = {
+  PeningkatanKompetensi: '48157624-b8ec-42d9-ba46-36972efecc01',
+};
+
+export const TEMPLATE_FILE_NAME = {
+  PeningkatanKompetensi: 'Template_File_Peningkatan_Kompetensi',
+};
+
+export const TEMPLATE_FILE_FORMAT = {
+  xlsx: 'xlsx',
+};

@@ -6,13 +6,14 @@ import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../action/CommonAction';
 import { PeningkatanKompAPI } from '../../../constants/APIUrls';
+import { TEMPLATE_FILE_FORMAT, TEMPLATE_FILE_NAME, UUID_FILE } from '../../../constants/Resource';
 import { SnackbarType } from '../../../reducer/CommonReducer';
 import { PostPeningkatanReq, PostPeningkatanRes } from '../../../types/api/PeningkatanKompetensiAPI';
 import { Status } from '../../../types/Common';
 import { classNames } from '../../../utils/Components';
 import { callAPI } from '../../../utils/Fetchers';
 import { CircleProgress } from '../../shared/CircleProgress';
-import TemplateFile from '../../shared/FileLoader';
+import useFileDownloader from '../../shared/hooks/useFileDownloader';
 import UploadWrapper, { FileObject } from '../../shared/Input/UploadWrapper';
 
 const dateToday = new Date();
@@ -29,6 +30,7 @@ interface FormState {
 
 function FormLogHarianPPNPN(props: ModalProps) {
   const { open, setOpen } = props;
+  const { fileDownloader } = useFileDownloader();
   const selectedYear = dateToday.getFullYear() - 10;
   const dispatch = useDispatch();
   const isEmptyString = '';
@@ -173,12 +175,18 @@ function FormLogHarianPPNPN(props: ModalProps) {
 
                 <div className="mt-5 flex flex-row items-center justify-end space-x-1 sm:col-span-6">
                   <p className="font-sans text-[13px]">File template Peningkatan Kompetensi:</p>
-                  <TemplateFile
-                    style="text-[13px] text-indigo-600 font-sans font-bold"
-                    uuid="48157624-b8ec-42d9-ba46-36972efecc01"
+                  <a
+                    onClick={() => {
+                      fileDownloader(
+                        UUID_FILE.PeningkatanKompetensi,
+                        TEMPLATE_FILE_NAME.PeningkatanKompetensi,
+                        TEMPLATE_FILE_FORMAT.xlsx
+                      );
+                    }}
+                    className="cursor-pointer font-sans text-[13px] font-bold text-indigo-600"
                   >
                     Unduh disini
-                  </TemplateFile>
+                  </a>
                 </div>
                 <div className="mt-5">
                   <button
