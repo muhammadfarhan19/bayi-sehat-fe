@@ -21,6 +21,8 @@ export const getAcceptedType = (argType: AcceptedType) => {
     return MimeType.XLS;
   } else if ('xlsx' === type) {
     return MimeType.XLSX;
+  } else if ('csv' === type) {
+    return MimeType.CSV;
   }
   return type.toLowerCase();
 };
@@ -41,6 +43,10 @@ export function validateFile(option: {
 
     if (['xls'].includes(allowed)) {
       allowed = 'application/vnd.ms-excel';
+    }
+
+    if (['csv'].includes(allowed)) {
+      allowed = 'text/csv';
     }
 
     return type.toLowerCase().includes(allowed);

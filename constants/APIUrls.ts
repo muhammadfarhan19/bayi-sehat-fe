@@ -50,6 +50,7 @@ export const KepegawaianAPI = {
   POST_PEGAWAI_KARPEG_UPDATE: config.apiHost + '/pegawai/karpeg/update',
   GET_DINAS_PEGAWAI_KALENDER: config.apiHost + '/dinas/pegawai/kalender',
   GET_PEGAWAI_STATISTIC_LIST: config.apiHost + '/pegawai/statistic/list',
+  GET_PEGAWAI_PRESENSI_SUMMARY: config.apiHost + '/presensi-pegawai/summary',
 };
 
 export const PetaAPI = {
@@ -210,4 +211,13 @@ export const PeningkatanKompAPI = {
   POST_PENINGKATAN_KOMP_INSERT: config.apiHost + '/peningkatan-kompetensi/insert-per-peg',
   POST_PENINGKATAN_KOMP_UPDATE: config.apiHost + '/peningkatan-kompetensi/update',
   POST_PENINGKATAN_KOMP_DELETE: config.apiHost + '/peningkatan-kompetensi/delete',
+  POST_PENINGKATAN_KOMP_INSERT_MODAL: config.apiHost + '/peningkatan-kompetensi/insert',
+};
+
+export const PresensiShiftPegawaiAPI = {
+  PRESENSI_SHIFT_PEGAWAI_LIST: config.apiHost + '/presensi-shift-pegawai/list',
+  PRESENSI_SHIFT_PEGAWAI_INSERT: config.apiHost + '/presensi-shift-pegawai/insert',
+  PRESENSI_SHIFT_PEGAWAI_UPDATE: config.apiHost + '/presensi-shift-pegawai/update',
+  PRESENSI_SHIFT_PEGAWAI_DELETE: config.apiHost + '/presensi-shift-pegawai/delete',
+  PRESENSI_SHIFT_PEGAWAI_BULK: config.apiHost + '/presensi-shift-pegawai/bulk-insert',
 };

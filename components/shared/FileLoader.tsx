@@ -10,10 +10,11 @@ interface ImgFileProps {
   uuid?: string;
   children?: React.ReactNode;
   asLink?: boolean;
+  style?: string;
 }
 
 export default function FileLoader(props: ImgFileProps) {
-  const { children, uuid, asLink = false } = props;
+  const { children, uuid, asLink = false, style } = props;
   const fileUrl = React.useRef('');
   const [isImg, setIsImg] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
@@ -51,7 +52,7 @@ export default function FileLoader(props: ImgFileProps) {
   }
 
   return (
-    <a target={'_blank'} href={fileUrl.current}>
+    <a className={style} target={'_blank'} href={fileUrl.current}>
       {children || 'Download file'}
     </a>
   );

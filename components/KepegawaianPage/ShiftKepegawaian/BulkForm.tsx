@@ -5,62 +5,65 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../action/CommonAction';
-import { PeningkatanKompAPI } from '../../../constants/APIUrls';
-import { TEMPLATE_FILE_FORMAT, TEMPLATE_FILE_NAME, UUID_FILE } from '../../../constants/Resource';
+import { PresensiShiftPegawaiAPI } from '../../../constants/APIUrls';
 import { SnackbarType } from '../../../reducer/CommonReducer';
-import { PostPeningkatanReq, PostPeningkatanRes } from '../../../types/api/PeningkatanKompetensiAPI';
+import { PresensiShiftPegawaiBulkRes } from '../../../types/api/PresensiShiftPegawaiAPI';
 import { Status } from '../../../types/Common';
 import { classNames } from '../../../utils/Components';
 import { callAPI } from '../../../utils/Fetchers';
 import { CircleProgress } from '../../shared/CircleProgress';
-import useFileDownloader from '../../shared/hooks/useFileDownloader';
 import UploadWrapper, { FileObject } from '../../shared/Input/UploadWrapper';
 
-const dateToday = new Date();
 interface ModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
 interface FormState {
-  tahun: number;
   file_name: string;
   file_id: string;
 }
 
-function FormLogHarianPPNPN(props: ModalProps) {
+export default function BulkForm(props: ModalProps) {
   const { open, setOpen } = props;
-  const { fileDownloader } = useFileDownloader();
-  const selectedYear = dateToday.getFullYear() - 10;
   const dispatch = useDispatch();
-  const isEmptyString = '';
+
+  const {
+    control,
+    formState: { errors },
+    setValue,
+  } = useForm<FormState>();
+
   const toggleModal = () => {
     setOpen(!open);
   };
 
-  const {
-    control,
-    register,
-    formState: { errors },
-    setValue,
-    handleSubmit,
-  } = useForm<FormState>();
+  const shiftUploadHandler = async (fileObject: File) => {
+    const bodyRequest = {
+      file: fileObject,
+    };
 
-  const submitHandler = async (formData: FormState) => {
-    const resSubmit = await callAPI<PostPeningkatanReq, PostPeningkatanRes>(
-      PeningkatanKompAPI.POST_PENINGKATAN_KOMP_INSERT_MODAL,
+    const formdata = new FormData();
+    Object.keys(bodyRequest).forEach(each => {
+      const key = each as keyof typeof bodyRequest;
+      if (bodyRequest[key] instanceof File) {
+        formdata.append(key, bodyRequest[key] as File);
+      } else {
+        formdata.append(key, String(bodyRequest[key]));
+      }
+    });
+
+    const uploadRes = await callAPI<FormData, PresensiShiftPegawaiBulkRes>(
+      PresensiShiftPegawaiAPI.PRESENSI_SHIFT_PEGAWAI_BULK,
+      formdata,
       {
-        tahun: Number(formData?.tahun),
-        files: [
-          {
-            document_name: formData?.file_name,
-            document_uuid: formData?.file_id,
-          },
-        ],
-      },
-      { method: 'post' }
+        isMultipart: true,
+        method: 'post',
+      }
     );
-    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
+
+    console.log(uploadRes);
+    if (uploadRes.status === 200 && uploadRes.data?.status === Status.OK) {
       dispatch(
         setSnackbar({
           show: true,
@@ -69,15 +72,10 @@ function FormLogHarianPPNPN(props: ModalProps) {
         })
       );
       setOpen(!open);
-    } else {
-      dispatch(
-        setSnackbar({
-          show: true,
-          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
-          type: SnackbarType.ERROR,
-        })
-      );
+
+      return { id: String(uploadRes?.data) };
     }
+    throw 'failed to upload';
   };
 
   return (
@@ -110,29 +108,10 @@ function FormLogHarianPPNPN(props: ModalProps) {
           >
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
               <Dialog.Title as="div" className="flex justify-between">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">Tambah Peningkatan Kompetensi</h3>
+                <h3 className="text-lg font-medium leading-6 text-gray-900">Import Data Shift Pegawai</h3>
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
-              <form onSubmit={handleSubmit(submitHandler)} className="mt-2">
-                <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Tahun</label>
-                  <select
-                    {...register('tahun', { required: 'Silahkan Pilih Tahun' })}
-                    name="tahun"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  >
-                    <option value={isEmptyString}>Silahkan Pilih</option>
-                    {Array.from(new Array(21), (list, index) => {
-                      return (
-                        <option key={index} value={selectedYear + index}>
-                          {selectedYear + index}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  {errors.tahun && <p className="mt-1 text-xs text-red-500">{errors.tahun.message}</p>}
-                </div>
-
+              <form className="mt-2">
                 <div className="mt-5 sm:col-span-6">
                   <Controller
                     control={control}
@@ -140,7 +119,8 @@ function FormLogHarianPPNPN(props: ModalProps) {
                     rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
                     render={({ field: { onChange, value } }) => (
                       <UploadWrapper
-                        allowedTypes={['xlsx', 'xls']}
+                        allowedTypes={['csv']}
+                        uploadHandler={shiftUploadHandler}
                         handleUploadChange={(files: FileObject[]) => {
                           setValue('file_id', files[0].id);
                           onChange(files[0].name);
@@ -154,8 +134,8 @@ function FormLogHarianPPNPN(props: ModalProps) {
                             )}
                           >
                             <div>
-                              <div className="text-sm text-gray-600">{value || 'File Kompetensi'}</div>
-                              <div className="text-xs text-gray-400">(xlsx, xls)</div>
+                              <div className="text-sm text-gray-600">{value || 'File Shift Pegawai'}</div>
+                              <div className="text-xs text-gray-400">(csv)</div>
                             </div>
                             <button
                               disabled={loading}
@@ -172,30 +152,6 @@ function FormLogHarianPPNPN(props: ModalProps) {
                     )}
                   ></Controller>
                 </div>
-
-                <div className="mt-5 flex flex-row items-center justify-end space-x-1 sm:col-span-6">
-                  <p className="font-sans text-[13px]">File template Peningkatan Kompetensi:</p>
-                  <a
-                    onClick={() => {
-                      fileDownloader(
-                        UUID_FILE.PeningkatanKompetensi,
-                        TEMPLATE_FILE_NAME.PeningkatanKompetensi,
-                        TEMPLATE_FILE_FORMAT.xlsx
-                      );
-                    }}
-                    className="cursor-pointer font-sans text-[13px] font-bold text-indigo-600"
-                  >
-                    Unduh disini
-                  </a>
-                </div>
-                <div className="mt-5">
-                  <button
-                    type="submit"
-                    className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    Tambah
-                  </button>
-                </div>
               </form>
             </div>
           </Transition.Child>
@@ -204,5 +160,3 @@ function FormLogHarianPPNPN(props: ModalProps) {
     </Transition>
   );
 }
-
-export default FormLogHarianPPNPN;

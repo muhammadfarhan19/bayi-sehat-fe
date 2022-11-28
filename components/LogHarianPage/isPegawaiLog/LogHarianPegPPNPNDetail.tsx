@@ -112,7 +112,7 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
           <tbody className="divide-y divide-gray-200 bg-white">
             {Object?.entries(loglog?.[`minggu ${week}`] || []).map((data: any, dataIdx) => (
               <tr key={dataIdx}>
-                <td className={`mt-5 inline-flex w-52 px-4 text-[15px] font-bold font-medium text-[#000000]`}>
+                <td className={`mt-5 inline-flex w-52 px-4 font-sans text-[15px] font-bold text-[#000000]`}>
                   {format(new Date(data?.[0]), 'EEEE, dd MMMM', { locale: id })}
                 </td>
                 {data?.[1]?.length === 0 ? (
@@ -123,7 +123,7 @@ function LogHarianPegPPNPNDetail(props: DetailLogHarianProps) {
                       <td
                         className={`ml-20 list-item ${
                           personalPegawaiData?.status_cpns === 2 ? 'justify-end' : 'justify-center'
-                        } px-6 py-4 text-sm font-extrabold text-[#6B7280]`}
+                        } px-6 py-4 font-sans text-sm font-medium text-[#6B7280]`}
                       >
                         {item?.summary}
                       </td>

@@ -1,4 +1,3 @@
-import MasterPnsForm from '../../../components/KepegawaianPage/DataKepegawaian/MasterPNS/MasterPnsForm';
 import DetailPegawai from '../../../components/KepegawaianPage/ShiftKepegawaian/DetailPegawai/DetailPegawai';
 import ShiftKepegawaian from '../../../components/KepegawaianPage/ShiftKepegawaian/ShiftKepegawaian';
 import { withAuthenticatedPage } from '../../../components/shared/hocs/AuthenticatedPage';
@@ -9,7 +8,7 @@ import { NavigationId } from '../../../constants/NavigationList';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function ShiftPegawai() {
-  const { pegawai_id, action, type } = getQueryString();
+  const { pegawai_id } = getQueryString();
 
   return (
     <MainLayout>
@@ -18,15 +17,7 @@ function ShiftPegawai() {
 
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <section aria-labelledby="section-1-title">
-            <div>
-              {action === 'add' && type === 'pns' ? (
-                <MasterPnsForm />
-              ) : typeof pegawai_id === 'undefined' ? (
-                <ShiftKepegawaian />
-              ) : (
-                <DetailPegawai />
-              )}
-            </div>
+            <div>{typeof pegawai_id === 'undefined' ? <ShiftKepegawaian /> : <DetailPegawai />}</div>
           </section>
         </div>
       </div>

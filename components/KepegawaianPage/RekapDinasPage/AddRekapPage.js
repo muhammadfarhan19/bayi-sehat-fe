@@ -55,10 +55,16 @@ function AddRekapPage(props) {
   const submitHandler = async formData => {
     let post,
       data = '';
+    let errors = false;
 
     setLoad(true);
     let pegawai = [];
     listPegawai.map(data => {
+      if (!data.tgl_available.length) {
+        errors = true;
+        return;
+      }
+
       let dataPegawai = {
         pegawai_id: data.pegawai_id,
         nip: data.nip,
@@ -68,78 +74,89 @@ function AddRekapPage(props) {
       pegawai.push(dataPegawai);
     });
 
-    if (type === 'edit') {
-      data = {
-        dinas: {
-          dinas_id: Number(dinas_id),
-          no_sp: formData.no_sp,
-          unit_kerja_id: parseInt(formData.unit_kerja_id),
-          tgl_surat: formData.tgl_surat,
-          jenis_dinas: parseInt(formData.jenis_dinas),
-          tgl_mulai: formData.tgl_mulai,
-          tgl_selesai: formData.tgl_selesai,
-          lokasi: formData.lokasi,
-          pic: Number(formData.pic),
-          isi_penugasan: formData.isi_penugasan,
-          surat_tugas: [
-            {
-              document_uuid: formData.document_uuid,
-              document_name: formData.document_name,
-            },
-          ],
-        },
-        dinas_pegawai: pegawai,
-      };
-    } else {
-      data = {
-        dinas: {
-          no_sp: formData.no_sp,
-          unit_kerja_id: parseInt(formData.unit_kerja_id),
-          tgl_surat: formData.tgl_surat,
-          jenis_dinas: parseInt(formData.jenis_dinas),
-          tgl_mulai: formData.tgl_mulai,
-          tgl_selesai: formData.tgl_selesai,
-          lokasi: formData.lokasi,
-          pic: Number(formData.pic),
-          isi_penugasan: formData.isi_penugasan,
-          surat_tugas: [
-            {
-              document_uuid: formData.document_uuid,
-              document_name: formData.document_name,
-            },
-          ],
-        },
-        dinas_pegawai: pegawai,
-      };
-    }
-
-    try {
-      {
-        type === 'edit'
-          ? (post = await callAPI(RekapDinasAPI.POST_DINAS_UPDATE, data))
-          : (post = await callAPI(RekapDinasAPI.POST_DINAS_INSERT, data));
-      }
-      if (post.status === 200) {
-        window.location.href = '/kepegawaian/rekap-dinas';
+    if (!errors) {
+      if (type === 'edit') {
+        data = {
+          dinas: {
+            dinas_id: Number(dinas_id),
+            no_sp: formData.no_sp,
+            unit_kerja_id: parseInt(formData.unit_kerja_id),
+            tgl_surat: formData.tgl_surat,
+            jenis_dinas: parseInt(formData.jenis_dinas),
+            tgl_mulai: formData.tgl_mulai,
+            tgl_selesai: formData.tgl_selesai,
+            lokasi: formData.lokasi,
+            pic: Number(formData.pic),
+            isi_penugasan: formData.isi_penugasan,
+            surat_tugas: [
+              {
+                document_uuid: formData.document_uuid,
+                document_name: formData.document_name,
+              },
+            ],
+          },
+          dinas_pegawai: pegawai,
+        };
       } else {
+        data = {
+          dinas: {
+            no_sp: formData.no_sp,
+            unit_kerja_id: parseInt(formData.unit_kerja_id),
+            tgl_surat: formData.tgl_surat,
+            jenis_dinas: parseInt(formData.jenis_dinas),
+            tgl_mulai: formData.tgl_mulai,
+            tgl_selesai: formData.tgl_selesai,
+            lokasi: formData.lokasi,
+            pic: Number(formData.pic),
+            isi_penugasan: formData.isi_penugasan,
+            surat_tugas: [
+              {
+                document_uuid: formData.document_uuid,
+                document_name: formData.document_name,
+              },
+            ],
+          },
+          dinas_pegawai: pegawai,
+        };
+      }
+
+      try {
+        {
+          type === 'edit'
+            ? (post = await callAPI(RekapDinasAPI.POST_DINAS_UPDATE, data))
+            : (post = await callAPI(RekapDinasAPI.POST_DINAS_INSERT, data));
+        }
+        if (post.status === 200) {
+          window.location.href = '/kepegawaian/rekap-dinas';
+        } else {
+          dispatch(
+            setSnackbar({
+              show: true,
+              message: 'Gagal menyimpan data. Pegawai tidak tersedia.',
+              type: SnackbarType.ERROR,
+            })
+          );
+        }
+        setLoad(false);
+      } catch (e) {
         dispatch(
           setSnackbar({
             show: true,
-            message: 'Gagal menyimpan data. Pegawai tidak tersedia.',
+            message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
             type: SnackbarType.ERROR,
           })
         );
+        setLoad(false);
       }
+    } else {
       setLoad(false);
-    } catch (e) {
       dispatch(
         setSnackbar({
           show: true,
-          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
+          message: 'Gagal menyimpan data. Pegawai tidak tersedia.',
           type: SnackbarType.ERROR,
         })
       );
-      setLoad(false);
     }
   };
 

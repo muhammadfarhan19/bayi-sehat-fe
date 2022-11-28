@@ -133,11 +133,11 @@ export const NavigationList: Navigation[] = [
             name: 'Log Harian',
             href: '/kepegawaian/log-harian',
           },
-          // {
-          //   id: NavigationId.KEPEGAWAIAN,
-          //   name: 'Shift',
-          //   href: '/kepegawaian/shift',
-          // },
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Shift',
+            href: '/kepegawaian/shift',
+          },
         ],
       },
       {

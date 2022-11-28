@@ -81,7 +81,7 @@ function DetailLogHarianWeek(props: DetailLogHarianProps) {
             <tbody className="divide-y divide-gray-200 bg-white">
               {Object.entries(loglog?.[`minggu ${week}`] || []).map((data: any, dataIdx) => (
                 <tr className="" key={dataIdx}>
-                  <td className="mr-20 flex flex-1 py-4 pl-6 text-[15px] text-sm font-bold text-[#000000]">
+                  <td className="mr-20 flex flex-1 py-4 pl-6 font-sans text-[15px] text-sm font-bold text-[#000000]">
                     {format(new Date(data?.[0]), 'EEEE, dd MMMM', { locale: id })}
                   </td>
                   {data?.[1]?.length === 0 ? (
@@ -90,7 +90,10 @@ function DetailLogHarianWeek(props: DetailLogHarianProps) {
                     </td>
                   ) : (
                     (data?.[1] || [])?.map((item: { summary: any }, dataIdx: React.Key | null | undefined) => (
-                      <td key={dataIdx} className="ml-20 list-item py-4 pl-6 text-sm font-medium text-[#6B7280]">
+                      <td
+                        key={dataIdx}
+                        className="ml-20 list-item py-4 pl-6 font-sans text-sm font-medium text-[#6B7280]"
+                      >
                         {item.summary}
                       </td>
                     ))

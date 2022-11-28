@@ -163,7 +163,7 @@ function DetailRekapPage(props: DetailProps) {
               <div className="ml-auto flex flex-row gap-x-[12px]">
                 <button
                   type="button"
-                  className="rounded-[6px] bg-[#9CA3AF] py-[9px] px-[17px] text-[14px] text-gray-50"
+                  className="rounded-[6px] bg-red-600 py-[9px] px-[17px] text-[14px] text-gray-50"
                   onClick={() => setConfirmId(Number(data?.dinas_id))}
                 >
                   Hapus

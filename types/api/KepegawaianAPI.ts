@@ -139,3 +139,21 @@ export interface GetPegawaiStatisticListRes {
     pagination: Pagination;
   };
 }
+
+export interface GetPresensiPegawaiSummaryReq {
+  pegawai_id: number;
+  month: number;
+  year: number;
+}
+
+export interface GetPresensiPegawaiSummaryRes {
+  status: string;
+  data: {
+    masuk: number;
+    dinas: number;
+    terlambat: number;
+    pulang_terlambat: number;
+    terlambat_pulang_awal: number;
+    tidak_hadir: number;
+  };
+}

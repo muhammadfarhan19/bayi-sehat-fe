@@ -42,6 +42,7 @@ export interface PostDetailPeningkatanReq {
 
 export interface PostUpdatePeningkatanReq {
   id: number;
+  pegawai_id: number;
   tahun: number;
   peningkatan_kompetensi: string;
 }

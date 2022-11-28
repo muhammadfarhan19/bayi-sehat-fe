@@ -29,7 +29,7 @@ interface UploadFormProps {
   setOpen: (open: boolean) => void;
   onSuccess: () => void;
   selectedId?: number;
-  peg_id?: number;
+  peg_id: number;
 }
 
 interface FormState {
@@ -42,7 +42,7 @@ function FormTambahUpdateKomp(props: UploadFormProps) {
   const { open, setOpen, selectedId, onSuccess, peg_id } = props;
   const selectedYear = dateToday.getFullYear() - 10;
   const dispatch = useDispatch();
-  const [year, setYear] = React.useState<number>(selectedYear);
+  const isEmptyString = '';
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -63,7 +63,7 @@ function FormTambahUpdateKomp(props: UploadFormProps) {
 
   useEffect(() => {
     if (!isValidating && selectedId && editPeningkatan) {
-      setYear(editPeningkatan?.tahun);
+      setValue('tahun', editPeningkatan?.tahun);
       setValue('peningkatan_kompetensi', editPeningkatan?.peningkatan_kompetensi);
     }
   }, [selectedId, !isValidating]);
@@ -75,7 +75,8 @@ function FormTambahUpdateKomp(props: UploadFormProps) {
         PeningkatanKompAPI.POST_PENINGKATAN_KOMP_UPDATE,
         {
           id: selectedId,
-          tahun: year,
+          pegawai_id: peg_id,
+          tahun: Number(formData?.tahun),
           peningkatan_kompetensi: formData?.peningkatan_kompetensi,
         },
         { method: 'post' }
@@ -85,7 +86,7 @@ function FormTambahUpdateKomp(props: UploadFormProps) {
         PeningkatanKompAPI.POST_PENINGKATAN_KOMP_INSERT,
         {
           pegawai_id: peg_id,
-          tahun: year,
+          tahun: Number(formData?.tahun),
           peningkatan_kompetensi: formData?.peningkatan_kompetensi,
         },
         { method: 'post' }
@@ -136,11 +137,12 @@ function FormTambahUpdateKomp(props: UploadFormProps) {
             <div className="mt-1 sm:col-span-2 sm:mt-0">
               <select
                 {...register('tahun', { required: 'Silahkan pilih Tahun.' })}
-                onChange={e => setYear(Number(e.target.value))}
-                name={'jenis_jabatan'}
+                name={'tahun'}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               >
-                <option value={selectedId ? year : 0}>{selectedId ? year : 'Silahkan Pilih'}</option>
+                <option value={selectedId ? editPeningkatan?.tahun : isEmptyString}>
+                  {selectedId ? editPeningkatan?.tahun : 'Silahkan Pilih'}
+                </option>
                 {Array.from(new Array(21), (list, index) => (
                   <option key={index} value={selectedYear + index}>
                     {selectedYear + index}
