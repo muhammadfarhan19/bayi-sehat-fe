@@ -76,7 +76,8 @@ export const Golongan = [
 ];
 
 export const UUID_FILE = {
-  PeningkatanKompetensi: '48157624-b8ec-42d9-ba46-36972efecc01',
+  PeningkatanKompetensi_Staging: '48157624-b8ec-42d9-ba46-36972efecc01',
+  PeningkatanKompetensi_Production: ' 9556ab8c-8ab3-453d-af99-519dc0d30cc1',
 };
 
 export const TEMPLATE_FILE_NAME = {
