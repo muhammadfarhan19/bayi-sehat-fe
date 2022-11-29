@@ -70,10 +70,16 @@ function FormLogHarianPPNPN(props: ModalProps) {
         Valid: 'File_Peningkatan_Kompetensi_Valid',
         Invalid: 'File_Peningkatan_Kompetensi_Invalid',
       };
-      if (UUID_DATA?.Invalid?.length > isEmptyFieldAsString) {
+      const isInvalidFile = UUID_DATA?.Invalid?.length > isEmptyFieldAsString;
+      const isValidFile = UUID_DATA?.Valid?.length > isEmptyFieldAsString;
+      if (isInvalidFile) {
         fileDownloader(UUID_DATA?.Invalid, FILE_NAME.Invalid, TEMPLATE_FILE_FORMAT.xlsx);
+      } else if (isValidFile) {
+        fileDownloader(UUID_DATA?.Valid, FILE_NAME.Valid, TEMPLATE_FILE_FORMAT.xlsx);
+      } else if (UUID_DATA?.Invalid && UUID_DATA?.Valid) {
+        fileDownloader(UUID_DATA?.Invalid, FILE_NAME.Invalid, TEMPLATE_FILE_FORMAT.xlsx);
+        fileDownloader(UUID_DATA?.Valid, FILE_NAME.Valid, TEMPLATE_FILE_FORMAT.xlsx);
       }
-      fileDownloader(UUID_DATA?.Valid, FILE_NAME.Valid, TEMPLATE_FILE_FORMAT.xlsx);
       dispatch(
         setSnackbar({
           show: true,
