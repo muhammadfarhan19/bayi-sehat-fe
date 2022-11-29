@@ -11,6 +11,8 @@ interface TextInput {
   maxLength?: number;
   value?: string;
   isUneditable?: boolean;
+  additionalStyle?: string;
+  additionalLabelStyle?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -103,7 +105,7 @@ export function ButtonRows(props: ButtonRows) {
 export function InputLabelled(props: TextInput) {
   return (
     <div className="mt-5 sm:col-span-6">
-      <label htmlFor="nama" className="block text-sm font-medium text-gray-700">
+      <label htmlFor="nama" className={`block text-sm font-medium text-gray-700 ${props.additionalLabelStyle}`}>
         {props.label}
       </label>
       <div className="mt-1">
@@ -112,7 +114,7 @@ export function InputLabelled(props: TextInput) {
           disabled={props.isUneditable}
           value={props.value}
           {...props.validation}
-          className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+          className={`block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm ${props.additionalStyle}`}
           name={props.name}
           type={props.type}
           maxLength={props.maxLength}

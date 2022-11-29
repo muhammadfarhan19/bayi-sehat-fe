@@ -1,5 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { UploadIcon, XIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
+import add from 'date-fns/add';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -89,7 +91,16 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm<FormState>();
+
+  const watchTMTKGB = watch('tmt_kgb');
+  React.useEffect(() => {
+    const incrementDateOneYear = add(new Date(watchTMTKGB), { years: 1 });
+    if (watchTMTKGB) {
+      setValue('tmt_kgb_selanjutnya', format(new Date(incrementDateOneYear), 'yyyy-MM-dd'));
+    }
+  }, [watchTMTKGB]);
 
   React.useLayoutEffect(() => {
     if (selectedId && data) {
@@ -313,10 +324,12 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
                 <InputLabelled
                   name="tmt_kgb_selanjutnya"
                   type="date"
+                  additionalLabelStyle="hidden"
+                  additionalStyle="hidden"
                   label="TMT KGB Selanjutnya"
                   errorMessage={errors.tmt_kgb_selanjutnya?.message}
                   isError={errors.tmt_kgb_selanjutnya}
-                  validation={{ ...register('tmt_kgb_selanjutnya', { required: 'Silahkan Masukkan TMT KGB' }) }}
+                  validation={{ ...register('tmt_kgb_selanjutnya', { required: false }) }}
                 />
                 <div className="mt-5 sm:col-span-6">
                   <Controller

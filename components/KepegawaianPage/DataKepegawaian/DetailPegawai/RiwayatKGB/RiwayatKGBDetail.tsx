@@ -37,8 +37,8 @@ function RiwayatKGBDetail(props: DetailKGBProps) {
               { label: 'Tanggal KGB', value: data?.tanggal_kgb },
               { label: 'TMT KGB', value: data?.tmt_kgb },
               { label: 'Pejabat Penandatangan KGB', value: data?.penandatangan },
-              { label: 'Jabatan Penandatangan', value: data?.jabatan_id_str },
-              { label: 'TMT KGB Selanjutnya', value: data?.tmt_kgb_selanjutnya },
+              // { label: 'Jabatan Penandatangan', value: data?.jabatan_id_str },
+              // { label: 'TMT KGB Selanjutnya', value: data?.tmt_kgb_selanjutnya },
               { label: 'Bukti SK', value: data?.files?.[0]?.document_name },
             ].map((each, index) => (
               <tr key={index}>
