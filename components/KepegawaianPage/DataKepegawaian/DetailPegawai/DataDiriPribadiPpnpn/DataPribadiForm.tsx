@@ -23,8 +23,8 @@ import { CircleProgress } from '../../../../shared/CircleProgress';
 import useAllowAdmin from '../../../../shared/hooks/useAllowAdmin';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
-import AutoComplete from '../../../../shared/Input/ComboBox';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
+import AutoCompleteCustom from '../RiwayatKGB/Shared/CustomComboBox';
 
 interface UploadFormProps {
   open: boolean;
@@ -60,13 +60,13 @@ interface FormState {
   jabatan: string;
   jenis_kelamin: number;
   unit_kerja_id: number;
+  custom_unit_kerja: string;
 }
 
 export default function DataPribadiForm(props: UploadFormProps) {
   const { open, setOpen, onSuccess } = props;
   const isAllowAdmin = useAllowAdmin();
   const pegawai = usePersonalData();
-  // console.log(pegawai)
   const dispatch = useDispatch();
   const debounce = React.useRef<number>(0);
   const [queryJabatan, setQueryJabatan] = React.useState('');
@@ -104,6 +104,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
     { method: 'GET' }
   );
 
+  console.log(getJabatan);
   const submitHandler = async (formData: FormState) => {
     const updateDataPribadi = await callAPI<PostUserProfileReq, PostUserProfileRes>(
       UserAPI.POST_USER_UPDATE_PROFILE,
@@ -158,7 +159,8 @@ export default function DataPribadiForm(props: UploadFormProps) {
         tanggal_lahir: String(formData?.tanggal_lahir),
         tmt_cpns: String(pegawai?.tmt_cpns),
         status_cpns: Number(pegawai?.status_cpns),
-        jabatan: Number(formData?.jabatan),
+        jabatan: Number.isNaN(Number(formData?.jabatan)) ? 0 : Number(formData?.jabatan),
+        custom_jabatan_name: Number.isNaN(Number(formData?.jabatan)) ? formData?.jabatan : '',
         tmt_golongan: String(pegawai?.tmt_golongan),
         pangkat: Number(pegawai?.golongan_id),
         masa_kerja: String(pegawai?.masa_kerja),
@@ -239,11 +241,11 @@ export default function DataPribadiForm(props: UploadFormProps) {
       setValue('tanggal_lahir', String(pegawai?.tanggal_lahir));
       setValue('tempat_lahir', String(pegawai?.tempat_lahir));
       setValue('jenis_kelamin', Number(pegawai?.jenis_kelamin));
-      setValue('jabatan', String(getJabatan?.list?.[0].jabatan_id));
+      setValue('jabatan', String(getJabatan?.list?.[0]?.jabatan_id || pegawai?.jabatan));
 
       setFormJabatanState({
-        text: getJabatan?.list?.[0].name,
-        value: String(getJabatan?.list?.[0].jabatan_id),
+        text: getJabatan?.list?.[0]?.name || pegawai?.jabatan,
+        value: String(getJabatan?.list?.[0]?.jabatan_id || pegawai?.jabatan),
       });
     }
   }, [open]);
@@ -317,7 +319,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
                     <select
                       className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                       {...register('unit_kerja_id', { required: 'Silahkan masukan unit kerja.' })}
-                      disabled={isAllowAdmin ? false : true}
+                      disabled={!isAllowAdmin}
                     >
                       <option value="">Silahkan Pilih</option>
                       {(unitKerjaList || []).map((item, index) => (
@@ -339,7 +341,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
                       className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                       name="tempat_lahir"
                       type="text"
-                      disabled={isAllowAdmin ? false : true}
+                      disabled={!isAllowAdmin}
                     />
                     {errors.tempat_lahir && <p className="mt-1 text-xs text-red-500">{errors.tempat_lahir.message}</p>}
                   </div>
@@ -352,7 +354,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
                       className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                       name="tanggal_lahir"
                       type="date"
-                      disabled={isAllowAdmin ? false : true}
+                      disabled={!isAllowAdmin}
                     />
                     {errors.tanggal_lahir && (
                       <p className="mt-1 text-xs text-red-500">{errors.tanggal_lahir.message}</p>
@@ -366,8 +368,8 @@ export default function DataPribadiForm(props: UploadFormProps) {
                       name="jabatan"
                       rules={{ required: 'Mohon isi data jabatan' }}
                       render={({ field: { onChange } }) => (
-                        <AutoComplete
-                          disabled={isAllowAdmin ? false : true}
+                        <AutoCompleteCustom
+                          disabled={true}
                           onChange={value => onChange(value.value)}
                           label={'Nama Jabatan'}
                           defaultValue={{ text: formJabatanState.text || '', value: formJabatanState.value || '' }}
@@ -395,7 +397,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
                     <select
                       className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                       {...register('jenis_kelamin', { required: 'Silahkan masukan jenis kelamin.' })}
-                      disabled
+                      disabled={!isAllowAdmin}
                     >
                       {Object.keys(GenderText)?.map((each, index) => {
                         return (

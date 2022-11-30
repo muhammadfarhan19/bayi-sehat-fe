@@ -146,6 +146,7 @@ export interface PostUserUpdateDataDiriPegawaiReq {
   masa_kerja: string;
   masa_kerja_kepangkatan: string;
   karpeg: string;
+  custom_jabatan_name: string;
   karpeg_file: {
     document_uuid: string;
     document_name: string;
