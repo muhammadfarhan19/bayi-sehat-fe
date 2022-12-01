@@ -181,7 +181,7 @@ function DaftarJabatan() {
                 }))}
               />
             </div>
-            <div className="w-[202px] pb-2">
+            {/* <div className="w-[202px] pb-2">
               <AutoComplete
                 label={'Status Jabatan'}
                 onChange={value => {
@@ -193,7 +193,7 @@ function DaftarJabatan() {
                   value: String(each),
                 }))}
               />
-            </div>
+            </div> */}
           </div>
         )}
       </div>

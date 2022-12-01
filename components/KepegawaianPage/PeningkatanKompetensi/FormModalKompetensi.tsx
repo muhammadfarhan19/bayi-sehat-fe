@@ -11,6 +11,7 @@ import { SnackbarType } from '../../../reducer/CommonReducer';
 import { PostModalPeningkatanRes, PostPeningkatanReq } from '../../../types/api/PeningkatanKompetensiAPI';
 import { Status } from '../../../types/Common';
 import { classNames } from '../../../utils/Components';
+import config from '../../../utils/Config';
 import { callAPI } from '../../../utils/Fetchers';
 import { CircleProgress } from '../../shared/CircleProgress';
 import useFileDownloader from '../../shared/hooks/useFileDownloader';
@@ -37,6 +38,11 @@ function FormLogHarianPPNPN(props: ModalProps) {
   const toggleModal = () => {
     setOpen(!open);
   };
+
+  const envTypeUUID =
+    config.environment === 'development' || config.environment === 'staging'
+      ? UUID_FILE.PeningkatanKompetensi_Staging
+      : UUID_FILE.PeningkatanKompetensi_Production;
 
   const {
     control,
@@ -70,10 +76,16 @@ function FormLogHarianPPNPN(props: ModalProps) {
         Valid: 'File_Peningkatan_Kompetensi_Valid',
         Invalid: 'File_Peningkatan_Kompetensi_Invalid',
       };
-      if (UUID_DATA?.Invalid?.length > isEmptyFieldAsString) {
+      const isInvalidFile = UUID_DATA?.Invalid?.length > isEmptyFieldAsString;
+      const isValidFile = UUID_DATA?.Valid?.length > isEmptyFieldAsString;
+      if (isInvalidFile && !isValidFile) {
         fileDownloader(UUID_DATA?.Invalid, FILE_NAME.Invalid, TEMPLATE_FILE_FORMAT.xlsx);
+      } else if (isValidFile && !isInvalidFile) {
+        fileDownloader(UUID_DATA?.Valid, FILE_NAME.Valid, TEMPLATE_FILE_FORMAT.xlsx);
+      } else if (isValidFile && isInvalidFile) {
+        fileDownloader(UUID_DATA?.Invalid, FILE_NAME.Invalid, TEMPLATE_FILE_FORMAT.xlsx);
+        fileDownloader(UUID_DATA?.Valid, FILE_NAME.Valid, TEMPLATE_FILE_FORMAT.xlsx);
       }
-      fileDownloader(UUID_DATA?.Valid, FILE_NAME.Valid, TEMPLATE_FILE_FORMAT.xlsx);
       dispatch(
         setSnackbar({
           show: true,
@@ -190,11 +202,7 @@ function FormLogHarianPPNPN(props: ModalProps) {
                   <p className="font-sans text-[13px]">File template Peningkatan Kompetensi:</p>
                   <a
                     onClick={() => {
-                      fileDownloader(
-                        UUID_FILE.PeningkatanKompetensi,
-                        TEMPLATE_FILE_NAME.PeningkatanKompetensi,
-                        TEMPLATE_FILE_FORMAT.xlsx
-                      );
+                      fileDownloader(envTypeUUID, TEMPLATE_FILE_NAME.PeningkatanKompetensi, TEMPLATE_FILE_FORMAT.xlsx);
                     }}
                     className="cursor-pointer font-sans text-[13px] font-bold text-indigo-600"
                   >
