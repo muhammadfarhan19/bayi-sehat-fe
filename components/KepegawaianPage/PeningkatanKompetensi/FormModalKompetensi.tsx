@@ -78,11 +78,11 @@ function FormLogHarianPPNPN(props: ModalProps) {
       };
       const isInvalidFile = UUID_DATA?.Invalid?.length > isEmptyFieldAsString;
       const isValidFile = UUID_DATA?.Valid?.length > isEmptyFieldAsString;
-      if (isInvalidFile) {
+      if (isInvalidFile && !isValidFile) {
         fileDownloader(UUID_DATA?.Invalid, FILE_NAME.Invalid, TEMPLATE_FILE_FORMAT.xlsx);
-      } else if (isValidFile) {
+      } else if (isValidFile && !isInvalidFile) {
         fileDownloader(UUID_DATA?.Valid, FILE_NAME.Valid, TEMPLATE_FILE_FORMAT.xlsx);
-      } else if (UUID_DATA?.Invalid && UUID_DATA?.Valid) {
+      } else if (isValidFile && isInvalidFile) {
         fileDownloader(UUID_DATA?.Invalid, FILE_NAME.Invalid, TEMPLATE_FILE_FORMAT.xlsx);
         fileDownloader(UUID_DATA?.Valid, FILE_NAME.Valid, TEMPLATE_FILE_FORMAT.xlsx);
       }
