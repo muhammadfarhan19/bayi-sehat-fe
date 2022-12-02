@@ -151,6 +151,11 @@ export const NavigationList: Navigation[] = [
           },
         ],
       },
+      {
+        id: NavigationId.KEPEGAWAIAN,
+        name: 'Role User',
+        href: '/kepegawaian/role-user',
+      },
     ],
   },
 ];
