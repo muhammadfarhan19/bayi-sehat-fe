@@ -156,7 +156,7 @@ function ListRoleUser() {
         <DialogConfirmation
           label="Yakin ingin dihapus?"
           open={!!confirmId}
-          message="Apakah Anda yakin ingin mengapus ini?"
+          message="Anda yakin ingin menghapus data ini?"
           onClose={() => setConfirmId(0)}
           onConfirm={() => setConfirmId(0)}
           leftButtonTitle="Tidak"
