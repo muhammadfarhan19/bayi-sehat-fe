@@ -25,7 +25,7 @@ export default function DinasCalendar() {
   let endDateStr = '';
   if (selectedDate) {
     const nextMonth = selectedDate.getMonth() + 1;
-    const endDate = new Date(selectedDate.getFullYear(), nextMonth > 11 ? 0 : nextMonth, 0);
+    const endDate = new Date(selectedDate.getFullYear(), nextMonth, 0);
     endDateStr = format(endDate, 'yyyy-MM-dd');
   }
 
