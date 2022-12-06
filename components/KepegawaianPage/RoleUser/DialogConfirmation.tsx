@@ -5,7 +5,7 @@ import React from 'react';
 import { DialogConfirmation } from './Shared/types';
 
 function DialogConfirmation(props: DialogConfirmation) {
-  const { message, onClose, onConfirm, open, leftButtonTitle, rightButtonTitle, label } = props;
+  const { message, onClose, form, buttonType, open, onConfirm, leftButtonTitle, rightButtonTitle, label } = props;
 
   return (
     <Transition appear show={open} as={React.Fragment}>
@@ -55,7 +55,8 @@ function DialogConfirmation(props: DialogConfirmation) {
                   {leftButtonTitle}
                 </button>
                 <button
-                  type="button"
+                  form={form}
+                  type={buttonType}
                   className="inline-flex flex-1 justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-[14px] font-medium text-white hover:bg-indigo-200"
                   onClick={onConfirm}
                 >

@@ -149,12 +149,12 @@ export const NavigationList: Navigation[] = [
             name: 'Hari Libur dan Ramadhan',
             href: '/master/libur',
           },
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Role User',
+            href: '/master/role-user',
+          },
         ],
-      },
-      {
-        id: NavigationId.KEPEGAWAIAN,
-        name: 'Role User',
-        href: '/kepegawaian/role-user',
       },
     ],
   },
