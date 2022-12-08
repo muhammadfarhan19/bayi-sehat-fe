@@ -168,10 +168,10 @@ function ListRoleUser() {
                         <td className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800">{data?.name}</td>
                         <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan_name}</td>
-                        {(data?.roles || [])?.map(item => {
-                          return (
-                            <React.Fragment key={item.role_id}>
-                              <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          {(data?.roles || [])?.map(item => {
+                            return (
+                              <React.Fragment key={item.role_id}>
                                 <div className="mb-5 flex space-x-10 text-xs font-medium text-gray-900">
                                   <p className='text-gray-900" text-xs font-medium'>{item.role}</p>
                                   <button
@@ -188,10 +188,10 @@ function ListRoleUser() {
                                     Hapus
                                   </button>
                                 </div>
-                              </td>
-                            </React.Fragment>
-                          );
-                        })}
+                              </React.Fragment>
+                            );
+                          })}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

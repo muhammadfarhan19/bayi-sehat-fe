@@ -63,6 +63,7 @@ function FormRoleUser(props: ModalProps) {
       );
       setOpen(!open);
       setConfirmId(0);
+      window.location.reload();
     } else if (resSubmit.status === 401) {
       dispatch(
         setSnackbar({
