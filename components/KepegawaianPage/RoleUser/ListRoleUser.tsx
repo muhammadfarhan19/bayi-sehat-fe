@@ -44,6 +44,7 @@ function ListRoleUser() {
   } = useCommonApi<null, GetAdminList[]>(RbacAPI.GET_RBAC_USER_ADMIN_LIST, null, {
     method: 'GET',
   });
+  console.log(listUser?.length);
 
   const handleConfirm = async () => {
     const resDelete = await callAPI<PostRBACRolesReq, PostRBACRolesRes>(
@@ -81,12 +82,6 @@ function ListRoleUser() {
       role_id: undefined,
     });
     mutate();
-  };
-
-  const totalData = () => {
-    if (listUser) {
-      return listUser?.length - 1;
-    }
   };
 
   return (
@@ -202,7 +197,7 @@ function ListRoleUser() {
                   }}
                   totalData={listUser?.length ?? 0}
                   perPage={listUser?.length ?? 0}
-                  page={totalData() ?? 0}
+                  page={1}
                 />
               </div>
             </div>
