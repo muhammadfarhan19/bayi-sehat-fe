@@ -21,6 +21,11 @@ export const RbacAPI = {
   GET_RBAC_RESOURCE_GET_PARENT: config.apiHost + '/rbac-resource-get-parent',
   POST_RBAC_AUTHORIZE: config.apiHost + '/rbac/authorize',
   POST_RBAC_BULK_AUTHORIZE: config.apiHost + '/rbac/bulk-authorize',
+  //Admin-Role
+  GET_RBAC_USER_ADMIN_LIST: config.apiHost + '/rbac/admin/user-list',
+  GET_RBAC_USER_ADMIN_ROLES: config.apiHost + '/rbac/role/admin-roles',
+  POST_RBAC_SET_USER_ROLES: config.apiHost + '/rbac/set-user-role',
+  POST_RBAC_REMOVE_USER_ROLES: config.apiHost + '/rbac/remove-user-role',
 };
 
 export const UnitKerjaAPI = {

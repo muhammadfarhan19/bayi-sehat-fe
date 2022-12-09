@@ -55,7 +55,8 @@ export interface PostPegawaiInsertReq {
   tmt_golongan: string;
   golongan_id: number;
   karpeg: string;
-  jabatan_id: number;
+  jabatan_id?: number;
+  jabatan?: string;
   unit_kerja_id: number;
   jumlah_anak: number;
 }

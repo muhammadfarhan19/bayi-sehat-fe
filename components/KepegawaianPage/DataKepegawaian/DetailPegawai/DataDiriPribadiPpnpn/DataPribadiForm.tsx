@@ -104,7 +104,6 @@ export default function DataPribadiForm(props: UploadFormProps) {
     { method: 'GET' }
   );
 
-  console.log(getJabatan);
   const submitHandler = async (formData: FormState) => {
     const updateDataPribadi = await callAPI<PostUserProfileReq, PostUserProfileRes>(
       UserAPI.POST_USER_UPDATE_PROFILE,
