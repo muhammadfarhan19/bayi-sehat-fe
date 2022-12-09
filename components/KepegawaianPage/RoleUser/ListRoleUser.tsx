@@ -44,7 +44,6 @@ function ListRoleUser() {
   } = useCommonApi<null, GetAdminList[]>(RbacAPI.GET_RBAC_USER_ADMIN_LIST, null, {
     method: 'GET',
   });
-  console.log(listUser?.length);
 
   const handleConfirm = async () => {
     const resDelete = await callAPI<PostRBACRolesReq, PostRBACRolesRes>(
