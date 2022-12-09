@@ -44,6 +44,8 @@ function FormRoleUser(props: ModalProps) {
   );
 
   const submitHandler = async (formData: FormState) => {
+    const USER_HAS_ROLE = 400;
+    const SUPER_ADMIN_ACCESS = 401;
     const resSubmit = await callAPI<PostRBACRolesReq, PostRBACRolesRes>(
       RbacAPI.POST_RBAC_SET_USER_ROLES,
       {
@@ -64,7 +66,17 @@ function FormRoleUser(props: ModalProps) {
       setOpen(!open);
       setConfirmId(0);
       window.location.reload();
-    } else if (resSubmit.status === 401) {
+    } else if (resSubmit.status === USER_HAS_ROLE) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Mohon maaf User terpilih sudah memiliki Role tersebut.',
+          type: SnackbarType.ERROR,
+        })
+      );
+      setOpen(!open);
+      setConfirmId(0);
+    } else if (resSubmit.status === SUPER_ADMIN_ACCESS) {
       dispatch(
         setSnackbar({
           show: true,

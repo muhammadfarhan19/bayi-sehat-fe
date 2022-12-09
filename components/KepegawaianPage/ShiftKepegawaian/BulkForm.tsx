@@ -62,7 +62,6 @@ export default function BulkForm(props: ModalProps) {
       }
     );
 
-    console.log(uploadRes);
     if (uploadRes.status === 200 && uploadRes.data?.status === Status.OK) {
       dispatch(
         setSnackbar({

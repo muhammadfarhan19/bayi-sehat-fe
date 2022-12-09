@@ -53,6 +53,7 @@ interface FormState {
   golongan_id: number;
   karpeg: string;
   jabatan_id: number;
+  jabatan: string;
   unit_kerja_id: number;
   jumlah_anak: number;
   agama: string;
@@ -100,8 +101,6 @@ function MasterPnsForm() {
   };
 
   const submitHandler = async (formData: FormState) => {
-    console.log(formData);
-
     const resSubmit = await callAPI<PostPegawaiInsertReq, PostPegawaiInsertRes>(
       KepegawaianAPI.POST_PEGAWAI_INSERT,
       {
@@ -122,7 +121,7 @@ function MasterPnsForm() {
         tmt_golongan: formData.tmt_golongan,
         golongan_id: Number(formData.golongan_id),
         karpeg: formData.karpeg,
-        jabatan_id: Number(formData.jabatan_id),
+        jabatan: formData?.jabatan,
         unit_kerja_id: Number(formData.unit_kerja_id),
         jumlah_anak: Number(formData.jumlah_anak),
       },
@@ -303,7 +302,7 @@ function MasterPnsForm() {
               <div className="pt-1 sm:col-span-2 sm:mt-0">
                 <Controller
                   control={control}
-                  name="jabatan_id"
+                  name="jabatan"
                   rules={{ required: 'Silahakan masukan jabatan' }}
                   render={({ field: { onChange } }) => (
                     <AutoComplete
@@ -320,7 +319,7 @@ function MasterPnsForm() {
                       }}
                       options={(daftarJabatan?.list || []).map(each => ({
                         text: each.name,
-                        value: String(each.jabatan_id),
+                        value: each?.name,
                       }))}
                     />
                   )}
