@@ -142,7 +142,7 @@ function ListRoleUser() {
                         scope="col"
                         className="w-48 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
-                        Jabatan
+                        Unit Kerja
                       </th>
                       <th
                         scope="col"
@@ -161,7 +161,7 @@ function ListRoleUser() {
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
                         <td className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800">{data?.name}</td>
                         <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan_name}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja_name}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                           {(data?.roles || [])?.map(item => {
                             return (
