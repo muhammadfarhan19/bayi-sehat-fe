@@ -4,6 +4,7 @@ export interface GetAdminList {
   nip: string;
   name: string;
   jabatan_name: string;
+  unit_kerja_name: string;
   roles: [
     {
       role_id: number;
