@@ -30,7 +30,7 @@ export default function DinasCalendar() {
   }
 
   const { data: kalendarData } = useCommonApi<GetDinasPegawaiKalenderReq, DinasPegawaiKalenderData>(
-    KepegawaianAPI.GET_DINAS_PEGAWAI_KALENDER,
+    KepegawaianAPI.GET_DINAS_PEGAWAI_KALENDER_V2,
     {
       pegawai_id: personalPegawai?.pegawai_id || 0,
       tgl_mulai: format(selectedDate || new Date(), 'yyyy-MM-dd'),

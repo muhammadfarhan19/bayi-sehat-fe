@@ -98,6 +98,7 @@ export interface DinasPegawaiKalenderData {
 
 export interface Presensi {
   presensi_id: number;
+  list_dinas: Dinas[];
   date: string;
   check_in: string;
   check_out: string;
