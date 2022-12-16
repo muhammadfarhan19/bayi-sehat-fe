@@ -41,26 +41,30 @@ export default function DinasCalendar() {
   );
 
   const eventList = {} as Record<number, EventDate[]>;
-  (kalendarData?.list_dinas || []).forEach(each => {
-    const start = Number(each.tgl_mulai.split('-')[2]);
-    const until = Number(each.tgl_selesai.split('-')[2]);
 
-    for (let key = start; key <= until; key++) {
-      if (!eventList[key]) {
-        eventList[key] = [];
-      }
+  (kalendarData?.list_presensi || [])
+    .filter(item => !!item?.list_dinas)
+    .forEach(each =>
+      each?.list_dinas?.map(item => {
+        const start = Number(item?.tgl_mulai?.split('-')[2]);
+        const until = Number(item?.tgl_selesai?.split('-')[2]);
+        for (let key = start; key <= until; key++) {
+          if (!eventList[key]) {
+            eventList[key] = [];
+          }
+          const dateTime = item.tgl_mulai.split('-').slice(0, 1);
+          dateTime.push(String(key));
+          eventList[key].push({
+            id: item.dinas_id,
+            color: MapEventColor[item.jenis_dinas.toUpperCase() as keyof typeof MapEventColor] || 'blue',
+            datetime: dateTime.join('-'),
+            name: item.jenis_dinas,
+            infoType: 'dinas',
+          });
+        }
+      })
+    );
 
-      const dateTime = each.tgl_mulai.split('-').slice(0, 1);
-      dateTime.push(String(key));
-      eventList[key].push({
-        id: each.dinas_id,
-        color: MapEventColor[each.jenis_dinas.toUpperCase() as keyof typeof MapEventColor] || 'blue',
-        datetime: dateTime.join('-'),
-        name: each.jenis_dinas,
-        infoType: 'dinas',
-      });
-    }
-  });
   (kalendarData?.list_presensi || []).forEach(each => {
     const key = Number(each.date.split('-')[2]);
     if (!eventList[key]) {
