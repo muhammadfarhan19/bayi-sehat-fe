@@ -43,48 +43,48 @@ export default function DinasCalendar() {
   const eventList = {} as Record<number, EventDate[]>;
 
   (kalendarData?.list_presensi || [])
-    .filter(item => !!item?.list_dinas)
-    .forEach(each =>
-      each?.list_dinas?.map(item => {
-        const start = Number(item?.tgl_mulai?.split('-')[2]);
-        const until = Number(item?.tgl_selesai?.split('-')[2]);
-        for (let key = start; key <= until; key++) {
-          if (!eventList[key]) {
-            eventList[key] = [];
-          }
+    .filter(each => !!each?.date)
+    .forEach(each => {
+      const key = Number(each.date.split('-')[2]);
+      if (!eventList[key]) {
+        eventList[key] = [];
+      }
+
+      if (each.list_dinas && each.list_dinas.length) {
+        (each.list_dinas || []).forEach(item => {
           const dateTime = item.tgl_mulai.split('-').slice(0, 1);
           dateTime.push(String(key));
           eventList[key].push({
             id: item.dinas_id,
             color: MapEventColor[item.jenis_dinas.toUpperCase() as keyof typeof MapEventColor] || 'blue',
+            dateKey: each.date,
             datetime: dateTime.join('-'),
             name: item.jenis_dinas,
             infoType: 'dinas',
           });
-        }
-      })
-    );
+        });
+        return;
+      }
 
-  (kalendarData?.list_presensi || []).forEach(each => {
-    const key = Number(each.date.split('-')[2]);
-    if (!eventList[key]) {
-      eventList[key] = [];
-    }
-
-    eventList[key].push({
-      id: each.presensi_id,
-      color: String(MapPresensiColorText[each.status as keyof typeof MapPresensiColorText]?.[0]) || 'gray',
-      datetime: each.date,
-      name: 'Presensi',
-      infoType: 'presensi',
+      eventList[key].push({
+        id: each.presensi_id,
+        color: String(MapPresensiColorText[each.status as keyof typeof MapPresensiColorText]?.[0]) || 'gray',
+        dateKey: each.date,
+        datetime: each.date,
+        name: 'Presensi',
+        infoType: 'presensi',
+      });
     });
-  });
 
   const handleClick = (event: EventDate) => () => {
     if (event.infoType === 'presensi') {
       setSelectedPresensi((kalendarData?.list_presensi || []).filter(each => each.presensi_id === event.id)?.[0]);
     } else if (event.infoType === 'dinas') {
-      setSelectedDinas((kalendarData?.list_dinas || []).filter(each => each.dinas_id === event.id)?.[0]);
+      setSelectedDinas(
+        ((kalendarData?.list_presensi || []).filter(each => each.date === event.dateKey)?.[0]?.list_dinas || []).filter(
+          each => each.dinas_id === event.id
+        )?.[0]
+      );
     }
   };
 

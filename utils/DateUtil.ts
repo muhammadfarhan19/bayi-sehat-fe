@@ -18,6 +18,7 @@ export interface EventDate {
   color: string;
   name: string;
   time?: string;
+  dateKey: string;
   datetime: string;
   infoType: 'presensi' | 'dinas';
 }
