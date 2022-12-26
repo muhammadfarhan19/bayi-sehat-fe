@@ -20,7 +20,7 @@ export default function DinasCalendar() {
   const personalPegawai = usePersonalData();
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [selectedPresensi, setSelectedPresensi] = React.useState<Presensi>();
-  const [selectedDinas, setSelectedDinas] = React.useState<Dinas>();
+  const [selectedDinas, setSelectedDinas] = React.useState<Dinas[]>();
 
   let endDateStr = '';
   if (selectedDate) {
@@ -81,9 +81,7 @@ export default function DinasCalendar() {
       setSelectedPresensi((kalendarData?.list_presensi || []).filter(each => each.presensi_id === event.id)?.[0]);
     } else if (event.infoType === 'dinas') {
       setSelectedDinas(
-        ((kalendarData?.list_presensi || []).filter(each => each.date === event.dateKey)?.[0]?.list_dinas || []).filter(
-          each => each.dinas_id === event.id
-        )?.[0]
+        (kalendarData?.list_presensi || []).filter(each => each.date === event.dateKey)?.[0]?.list_dinas || []
       );
     }
   };
@@ -173,7 +171,7 @@ export default function DinasCalendar() {
             <ModalEventInfo
               open={!!selectedDinas}
               toggleOpen={(open: boolean) => setSelectedDinas(!open ? undefined : selectedDinas)}
-              info={selectedDinas}
+              infos={selectedDinas}
             />
 
             {/* precall tailwind class */}

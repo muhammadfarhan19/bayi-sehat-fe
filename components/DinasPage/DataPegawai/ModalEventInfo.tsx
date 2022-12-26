@@ -1,5 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
+import { CalendarIcon, XIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 import Link from 'next/link';
 import React from 'react';
 
@@ -9,7 +11,7 @@ import { getQueryString } from '../../../utils/URLUtils';
 interface Props {
   open: boolean;
   toggleOpen: (open: boolean) => void;
-  info?: Dinas;
+  infos?: Dinas[];
 }
 
 export const MapEventColor = {
@@ -18,21 +20,15 @@ export const MapEventColor = {
 };
 
 export default function ModalEventInfo(props: Props) {
-  const { info } = props;
-  if (!info) {
+  const { infos } = props;
+  if (!(infos && infos.length)) {
     return null;
   }
 
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
-  const redirectLink = [
-    pegawai_id ? '/kepegawaian/rekap-dinas' : '/kepegawaian/rekap-dinas/detail',
-    '?dinas_id=' + info?.dinas_id,
-    pegawai_id ? '&pegawai_id=' + pegawai_id : '',
-  ].join('');
-
-  const statusColor = `text-${
-    MapEventColor?.[info.jenis_dinas.toUpperCase() as keyof typeof MapEventColor] || 'blue'
-  }-500`;
+  const kepegawaianLink = pegawai_id
+    ? '/kepegawaian/rekap-dinas?pegawai_id=' + pegawai_id
+    : '/kepegawaian/rekap-dinas/detail?';
 
   return (
     <Transition appear show={props.open} as={React.Fragment}>
@@ -63,80 +59,84 @@ export default function ModalEventInfo(props: Props) {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="my-8 inline-block w-full max-w-lg transform space-y-4 rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+            <div className="my-8 inline-block w-full max-w-lg transform space-y-4 rounded-2xl bg-slate-50 p-6 text-left align-middle shadow-xl transition-all">
               <Dialog.Title as="div" className="flex justify-between">
-                <div className="relative">
-                  <div className="flex">
-                    <svg viewBox="0 0 24 24" fill="currentColor" className={`h-6 w-6 ${statusColor}`}>
-                      <path
-                        fillRule="evenodd"
-                        d="M4.5 7.5a3 3 0 013-3h9a3 3 0 013 3v9a3 3 0 01-3 3h-9a3 3 0 01-3-3v-9z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <div className="ml-9">
-                      <p className="text-lg font-medium leading-6 text-gray-900">{info.jenis_dinas}</p>
-                      <dd className="text-sm text-gray-500">
-                        {info.tgl_mulai} - {info.tgl_selesai}
-                      </dd>
-                    </div>
-                  </div>
-                </div>
+                <div className="text-lg font-medium leading-6 text-gray-900">Jadwal Dinas</div>
                 <XIcon className="h-5 cursor-pointer" onClick={() => props.toggleOpen(false)} />
               </Dialog.Title>
 
-              <div className="flex justify-between">
-                <div className="relative">
-                  <dt className="flex">
-                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5"
-                      />
-                    </svg>
-                    <p className="ml-9 text-base leading-6 text-gray-900">{info.isi_penugasan}</p>
-                  </dt>
-                </div>
+              <div className="space-y-2">
+                {infos.map(info => {
+                  const redirectLink = kepegawaianLink + '&dinas_id=' + info?.dinas_id;
+                  return (
+                    <div className="space-y-1 bg-white p-4 shadow">
+                      <div className="flex justify-between">
+                        <div className="relative">
+                          <dt className="flex items-center">
+                            <div className="w-5">
+                              <CalendarIcon strokeWidth={1.5} className="w-full text-gray-500" />
+                            </div>
+                            <p className="ml-4 text-base leading-6 text-gray-900">
+                              {(() => {
+                                try {
+                                  return [
+                                    format(new Date(info.tgl_mulai), 'dd MMM yyyy', { locale: id }),
+                                    format(new Date(info.tgl_selesai), 'dd MMM yyyy', { locale: id }),
+                                  ].join(' - ');
+                                } catch (error) {
+                                  return '';
+                                }
+                              })()}
+                            </p>
+                          </dt>
+                        </div>
+                      </div>
+                      <div>
+                        <Link href={redirectLink}>
+                          <a className="cursor-pointer font-medium leading-6 text-indigo-600 underline">
+                            {info.jenis_dinas}
+                          </a>
+                        </Link>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="relative">
+                          <dt className="flex items-center">
+                            <div className="w-5">
+                              <svg
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="w-full text-gray-400"
+                              >
+                                <path
+                                  fill="rgb(156 163 175)"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                                />
+                                <path
+                                  fill="#fff"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                              </svg>
+                            </div>
+                            <p className="ml-4 text-base leading-6 text-gray-900">{info.lokasi}</p>
+                          </dt>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                <Link href={'/jadwal-dinas' + (pegawai_id ? '?pegawai_id=' + pegawai_id : '')}>
+                  <button className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Dinas Lainnya
+                  </button>
+                </Link>
               </div>
-
-              <div className="flex justify-between">
-                <div className="relative">
-                  <dt className="flex">
-                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
-                      />
-                    </svg>
-                    <p className="ml-9 text-base leading-6 text-gray-900">{info.no_sp}</p>
-                  </dt>
-                </div>
-              </div>
-
-              <div className="flex justify-between">
-                <div className="relative">
-                  <dt className="flex">
-                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                      />
-                    </svg>
-
-                    <p className="ml-9 text-base leading-6 text-gray-900">{info.lokasi}</p>
-                  </dt>
-                </div>
-              </div>
-
-              <Link href={redirectLink}>
-                <button className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                  Detail
-                </button>
-              </Link>
             </div>
           </Transition.Child>
 
