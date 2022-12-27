@@ -5,9 +5,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../action/CommonAction';
-import { UserAPI } from '../../../../constants/APIUrls';
+import { MasterAPI, UserAPI } from '../../../../constants/APIUrls';
 import { GenderText, StatusMenikahText } from '../../../../constants/Resource';
 import { SnackbarType } from '../../../../reducer/CommonReducer';
+import { GetListBankRes } from '../../../../types/api/BankAPI';
 import {
   GetUserProfileData,
   GetUserProfileReq,
@@ -15,7 +16,7 @@ import {
   PostUserProfileRes,
 } from '../../../../types/api/UserAPI';
 import { Status, StatusMenikah } from '../../../../types/Common';
-import { classNames } from '../../../../utils/Components';
+import { classNames, composeListDefaultValue } from '../../../../utils/Components';
 import { callAPI } from '../../../../utils/Fetchers';
 import { getQueryString } from '../../../../utils/URLUtils';
 import { CircleProgress } from '../../../shared/CircleProgress';
@@ -23,6 +24,7 @@ import FileLoader from '../../../shared/FileLoader';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import UploadWrapper, { FileObject } from '../../../shared/Input/UploadWrapper';
 import Loader from '../../../shared/Loader/Loader';
+import DropdownInput from './RiwayatJabatan/Shared/DropdownInput';
 
 type FormType = Omit<PostUserProfileReq, 'uuid_ktp' | 'uuid_bpjs' | 'uuid_npwp'> & {
   uuid_ktp: string;
@@ -34,12 +36,13 @@ export default function UpdateDataDiriPribadi() {
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
   const { pegawai_id } = getQueryString<{ pegawai_id: string }>();
-
   const { data, isValidating } = useCommonApi<GetUserProfileReq, GetUserProfileData>(
     UserAPI.GET_USER_PROFILE,
     { pegawai_id: Number(pegawai_id) },
     { method: 'GET' }
   );
+
+  const { data: listBank } = useCommonApi<null, GetListBankRes[]>(MasterAPI.GET_BANK_LIST, null, { method: 'GET' });
 
   const {
     control,
@@ -426,6 +429,54 @@ export default function UpdateDataDiriPribadi() {
               )}
             </div>
           </div>
+          <div className="flex flex-row items-center px-7">
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nomor Rekening</div>
+            <div className="flex w-full flex-auto flex-col">
+              <input
+                type="text"
+                className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+          <div className="flex flex-row items-center px-7">
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">
+              Nama tertera di Rekening
+            </div>
+            <div className="flex w-full flex-auto flex-col">
+              <input
+                type="text"
+                className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+          <div className="flex flex-row items-center px-7">
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nama Bank</div>
+            <div className="w-full">
+              <Controller
+                control={control}
+                name="agama"
+                rules={{ required: 'Mohon isi Nama Bank' }}
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <>
+                      <DropdownInput
+                        onChange={value => {
+                          onChange(value.value);
+                        }}
+                        defaultValue={composeListDefaultValue(listBank!, 'nama', 'nama', value)}
+                        label={''}
+                        options={(listBank || []).map(each => ({
+                          text: each.nama,
+                          value: String(each.id),
+                        }))}
+                      />
+                    </>
+                  );
+                }}
+              />
+            </div>
+          </div>
+
           <div className="flex flex-auto flex-col items-end px-7">
             <div className="flex">
               <a
