@@ -30,6 +30,14 @@ export interface GetUserProfileData {
     document_name: string;
   }[];
   hp: string;
+  uuid_rekening: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  nama_rekening: string;
+  nomor_rekening: string;
+  bank_id: number;
+  bank_str: string;
 }
 
 export interface GetUserPersonalPegawaiData {

@@ -110,7 +110,7 @@ export default function UpdateDataDiriPribadi() {
         },
       ],
       nomor_rekening: formData?.nomor_rekening,
-      nama_rekening: formData?.nama_rekening,
+      nama_rekening: formData?.nama_rekening?.toUpperCase(),
       bank_id: 1,
       uuid_rekening: [
         {
@@ -440,6 +440,9 @@ export default function UpdateDataDiriPribadi() {
               )}
             </div>
           </div>
+          <div className="mt-5 mb-6 px-7 py-1">
+            <h3 className="text-xl font-semibold tracking-wider text-gray-700">Data Rekening</h3>
+          </div>
           <div className="flex flex-row items-center px-7">
             <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nomor Rekening</div>
             <div className="flex w-full flex-auto flex-col">
@@ -451,9 +454,7 @@ export default function UpdateDataDiriPribadi() {
             </div>
           </div>
           <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">
-              Nama tertera di Rekening
-            </div>
+            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Atas Nama Rekening</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('nama_rekening', { required: false })}
@@ -489,56 +490,61 @@ export default function UpdateDataDiriPribadi() {
               />
             </div>
           </div>
-          <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
-            <Controller
-              control={control}
-              name="file_uuid_rek"
-              rules={{ required: false }}
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <div className="flex items-center">
-                    <UploadWrapper
-                      allowedTypes={['jpg', 'jpeg', 'png', 'pdf']}
-                      handleUploadChange={(files: FileObject[]) => {
-                        const fileIndex = files?.length - 1;
-                        setValue('file_uuid_rek', files?.[fileIndex]?.id);
-                        setValue('file_name_rek', files?.[fileIndex].name);
-                        onChange(files?.[fileIndex].id);
-                      }}
-                    >
-                      {({ loading }) => (
-                        <div className="flex items-center">
-                          <button
-                            disabled={loading}
-                            type="button"
-                            className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
-                          >
-                            {loading ? <CircleProgress /> : null}
-                            <UploadIcon className="mr-1 h-4" />
-                            Upload
-                          </button>
-                          {!value && (
-                            <div
-                              className={classNames(
-                                'ml-2 text-xs',
-                                errors.file_uuid_rek ? 'text-red-400' : 'text-gray-400'
-                              )}
+          <div className="flex flex-row">
+            <div className="basis-[200px] px-7 text-sm font-medium tracking-wider text-[#6B7280]">
+              Dokumen Bank/Rekening
+            </div>
+            <div className="flex w-full flex-auto flex-col pl-5">
+              <Controller
+                control={control}
+                name="file_uuid_rek"
+                rules={{ required: false }}
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <div className="flex items-center">
+                      <UploadWrapper
+                        allowedTypes={['jpg', 'jpeg', 'png', 'pdf']}
+                        handleUploadChange={(files: FileObject[]) => {
+                          const fileIndex = files?.length - 1;
+                          setValue('file_uuid_rek', files?.[fileIndex]?.id);
+                          setValue('file_name_rek', files?.[fileIndex].name);
+                          onChange(files?.[fileIndex].id);
+                        }}
+                      >
+                        {({ loading }) => (
+                          <div className="flex items-center">
+                            <button
+                              disabled={loading}
+                              type="button"
+                              className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
                             >
-                              (jpg,jpeg,png,pdf)
-                            </div>
-                          )}
-                        </div>
+                              {loading ? <CircleProgress /> : null}
+                              <UploadIcon className="mr-1 h-4" />
+                              Upload
+                            </button>
+                            {!value && (
+                              <div
+                                className={classNames(
+                                  'ml-2 text-xs',
+                                  errors.file_uuid_rek ? 'text-red-400' : 'text-gray-400'
+                                )}
+                              >
+                                (jpg,jpeg,png,pdf)
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </UploadWrapper>
+                      {!!value && (
+                        <FileLoader uuid={value} asLink>
+                          <a className="ml-2 whitespace-nowrap text-blue-500 underline">Dokumen Bank</a>
+                        </FileLoader>
                       )}
-                    </UploadWrapper>
-                    {!!value && (
-                      <FileLoader uuid={value} asLink>
-                        <a className="ml-2 whitespace-nowrap text-blue-500 underline">Dokumen Bank</a>
-                      </FileLoader>
-                    )}
-                  </div>
-                );
-              }}
-            />
+                    </div>
+                  );
+                }}
+              />
+            </div>
           </div>
 
           <div className="flex flex-auto flex-col items-end px-7">
