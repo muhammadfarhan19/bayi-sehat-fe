@@ -68,6 +68,28 @@ export default function ModalEventInfo(props: Props) {
               <div className="space-y-2">
                 {infos.map(info => {
                   const redirectLink = kepegawaianLink + '&dinas_id=' + info?.dinas_id;
+                  const dateString = (() => {
+                    try {
+                      if (info.tgl_mulai === info.tgl_selesai) {
+                        return format(new Date(info.tgl_mulai), 'dd MMM yyyy', { locale: id });
+                      }
+
+                      const breakStart = info.tgl_mulai.split('-'),
+                        breakEnd = info.tgl_selesai.split('-');
+                      breakStart.pop();
+                      breakEnd.pop();
+
+                      const dateStartFormat = breakStart.join('') === breakEnd.join('') ? 'dd' : 'dd MMM yyyy';
+                      return [
+                        format(new Date(info.tgl_mulai), dateStartFormat, { locale: id }),
+                        format(new Date(info.tgl_selesai), 'dd MMM yyyy', { locale: id }),
+                      ].join(' - ');
+                    } catch (error) {
+                      console.error(error);
+                      return '';
+                    }
+                  })();
+
                   return (
                     <div className="space-y-1 bg-white p-4 shadow">
                       <div className="flex justify-between">
@@ -76,18 +98,7 @@ export default function ModalEventInfo(props: Props) {
                             <div className="w-5">
                               <CalendarIcon strokeWidth={1.5} className="w-full text-gray-500" />
                             </div>
-                            <p className="ml-4 text-base leading-6 text-gray-900">
-                              {(() => {
-                                try {
-                                  return [
-                                    format(new Date(info.tgl_mulai), 'dd MMM yyyy', { locale: id }),
-                                    format(new Date(info.tgl_selesai), 'dd MMM yyyy', { locale: id }),
-                                  ].join(' - ');
-                                } catch (error) {
-                                  return '';
-                                }
-                              })()}
-                            </p>
+                            <p className="ml-4 text-base leading-6 text-gray-900">{dateString}</p>
                           </dt>
                         </div>
                       </div>
@@ -130,12 +141,6 @@ export default function ModalEventInfo(props: Props) {
                     </div>
                   );
                 })}
-
-                <Link href={'/jadwal-dinas' + (pegawai_id ? '?pegawai_id=' + pegawai_id : '')}>
-                  <button className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    Dinas Lainnya
-                  </button>
-                </Link>
               </div>
             </div>
           </Transition.Child>
