@@ -124,6 +124,15 @@ export interface PostUserProfileReq {
   agama?: number;
   golongan_darah?: string;
   no_bpjs_kt?: string;
+  nomor_rekening?: string;
+  nama_rekening?: string;
+  bank_id?: number;
+  uuid_rekening?: [
+    {
+      document_uuid?: string;
+      document_name?: string;
+    }
+  ];
 }
 
 export interface PostUserProfileRes {

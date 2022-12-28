@@ -30,6 +30,8 @@ type FormType = Omit<PostUserProfileReq, 'uuid_ktp' | 'uuid_bpjs' | 'uuid_npwp'>
   uuid_ktp: string;
   uuid_bpjs: string;
   uuid_npwp: string;
+  file_uuid_rek: string;
+  file_name_rek: string;
 };
 
 export default function UpdateDataDiriPribadi() {
@@ -105,6 +107,15 @@ export default function UpdateDataDiriPribadi() {
         {
           document_name: 'NPWP',
           document_uuid: formData.uuid_npwp,
+        },
+      ],
+      nomor_rekening: formData?.nomor_rekening,
+      nama_rekening: formData?.nama_rekening,
+      bank_id: 1,
+      uuid_rekening: [
+        {
+          document_name: formData?.file_name_rek,
+          document_uuid: formData?.file_uuid_rek,
         },
       ],
     });
@@ -393,7 +404,7 @@ export default function UpdateDataDiriPribadi() {
                             <div
                               className={classNames(
                                 'ml-2 text-xs',
-                                errors.uuid_bpjs ? 'text-red-400' : 'text-gray-400'
+                                errors.file_uuid_rek ? 'text-red-400' : 'text-gray-400'
                               )}
                             >
                               (jpg,jpeg,png,pdf)
@@ -433,6 +444,7 @@ export default function UpdateDataDiriPribadi() {
             <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nomor Rekening</div>
             <div className="flex w-full flex-auto flex-col">
               <input
+                {...register('nomor_rekening', { required: false })}
                 type="text"
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               />
@@ -444,6 +456,7 @@ export default function UpdateDataDiriPribadi() {
             </div>
             <div className="flex w-full flex-auto flex-col">
               <input
+                {...register('nama_rekening', { required: false })}
                 type="text"
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               />
@@ -455,7 +468,7 @@ export default function UpdateDataDiriPribadi() {
               <Controller
                 control={control}
                 name="agama"
-                rules={{ required: 'Mohon isi Nama Bank' }}
+                rules={{ required: false }}
                 render={({ field: { onChange, value } }) => {
                   return (
                     <>
@@ -475,6 +488,57 @@ export default function UpdateDataDiriPribadi() {
                 }}
               />
             </div>
+          </div>
+          <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
+            <Controller
+              control={control}
+              name="file_uuid_rek"
+              rules={{ required: false }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <div className="flex items-center">
+                    <UploadWrapper
+                      allowedTypes={['jpg', 'jpeg', 'png', 'pdf']}
+                      handleUploadChange={(files: FileObject[]) => {
+                        const fileIndex = files?.length - 1;
+                        setValue('file_uuid_rek', files?.[fileIndex]?.id);
+                        setValue('file_name_rek', files?.[fileIndex].name);
+                        onChange(files?.[fileIndex].id);
+                      }}
+                    >
+                      {({ loading }) => (
+                        <div className="flex items-center">
+                          <button
+                            disabled={loading}
+                            type="button"
+                            className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                          >
+                            {loading ? <CircleProgress /> : null}
+                            <UploadIcon className="mr-1 h-4" />
+                            Upload
+                          </button>
+                          {!value && (
+                            <div
+                              className={classNames(
+                                'ml-2 text-xs',
+                                errors.file_uuid_rek ? 'text-red-400' : 'text-gray-400'
+                              )}
+                            >
+                              (jpg,jpeg,png,pdf)
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </UploadWrapper>
+                    {!!value && (
+                      <FileLoader uuid={value} asLink>
+                        <a className="ml-2 whitespace-nowrap text-blue-500 underline">Dokumen Bank</a>
+                      </FileLoader>
+                    )}
+                  </div>
+                );
+              }}
+            />
           </div>
 
           <div className="flex flex-auto flex-col items-end px-7">
