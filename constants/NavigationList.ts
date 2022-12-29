@@ -158,4 +158,15 @@ export const NavigationList: Navigation[] = [
       },
     ],
   },
+  {
+    id: NavigationId.KEUANGAN,
+    name: 'Keuangan',
+    childMenu: [
+      {
+        id: NavigationId.KEUANGAN,
+        name: 'Dinas',
+        href: '/keuangan/daftar-dinas',
+      },
+    ],
+  },
 ];
