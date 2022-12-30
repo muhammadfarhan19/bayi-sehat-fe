@@ -6,16 +6,16 @@ import { KepegawaianAPI } from '../../../constants/APIUrls';
 import { classNames } from '../../../utils/Components';
 import useCommonApi from '../hooks/useCommonApi';
 
-export default function AutoCompletePegawai(props) {
+export default function AutoCompleteEksternal(props) {
   const { onChange, label, placeholder, placeholderDisabled, disabled = false } = props;
   const [selectedValue] = React.useState('');
   const [filter, setFilter] = React.useState({
-    status_cpns: [0],
+    nama_pegawai: '',
     page: 1,
     per_page: 20,
   });
 
-  const { data: pegawaiList } = useCommonApi(KepegawaianAPI.GET_PEGAWAI_LIST, filter, { method: 'GET' });
+  const { data: pegawaiList } = useCommonApi(KepegawaianAPI.GET_PEGAWAI_PEGAWAI_EKSTERNAL, filter, { method: 'GET' });
 
   const handleOnChange = comboBoxValue => {
     onChange(comboBoxValue);
@@ -46,7 +46,7 @@ export default function AutoCompletePegawai(props) {
             {(pegawaiList?.list || []).map((each, index) => (
               <Combobox.Option
                 key={index}
-                value={each.name + '|' + each.pegawai_id}
+                value={each.nama + '|' + each.pegawai_id}
                 className={({ active }) =>
                   classNames(
                     'relative cursor-default select-none py-2 pl-3 pr-9',
@@ -57,9 +57,9 @@ export default function AutoCompletePegawai(props) {
                 {({ active, selected }) => (
                   <>
                     <span className={classNames('block truncate', selected ? 'font-semibold' : '')}>
-                      {each.name}
+                      {each.nama}
                       {' - '}
-                      {each.unit_kerja}
+                      {each.instansi}
                     </span>
                     {selected && (
                       <span

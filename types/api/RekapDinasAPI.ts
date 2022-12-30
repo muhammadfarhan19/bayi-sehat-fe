@@ -65,9 +65,12 @@ export interface RekapDetailData {
   lokasi: string;
   pic: string;
   pic_id: number;
+  pic_pumk: string;
+  pic_pumk_id: number;
   isi_penugasan: string;
   surat_tugas: DocumentData[];
   pegawai: PegawaiData[];
+  pegawai_external: PegawaiData[];
 }
 
 export interface DocumentData {

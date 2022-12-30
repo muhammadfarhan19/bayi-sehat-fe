@@ -57,6 +57,7 @@ export const KepegawaianAPI = {
   GET_DINAS_PEGAWAI_KALENDER_V2: config.apiHost + '/dinas/pegawai/kalender/v2',
   GET_PEGAWAI_STATISTIC_LIST: config.apiHost + '/pegawai/statistic/list',
   GET_PEGAWAI_PRESENSI_SUMMARY: config.apiHost + '/presensi-pegawai/summary',
+  GET_PEGAWAI_PEGAWAI_EKSTERNAL: config.apiHost + '/user/external/list',
 };
 
 export const PetaAPI = {
@@ -78,6 +79,7 @@ export const MasterAPI = {
   GET_PENDIDIKAN_ELIGIBLE_JENJANG: config.apiHost + '/pendidikan/eligible_jenjang',
   GET_MASTER_JENIS_KP: config.apiHost + '/master/jenis-kp',
   GET_MASTER_JENIS_GOLONGAN: config.apiHost + '/master/golongan',
+  GET_MASTER_HOTEL: config.apiHost + '/master/hotel/list',
   GET_BANK_LIST: config.apiHost + '/master/bank',
 };
 

@@ -98,6 +98,7 @@ function DetailRekapPage(props: DetailProps) {
                     { label: 'Tanggal Dinas', value: data?.tgl_mulai + ' - ' + data?.tgl_selesai },
                     { label: 'Jenis Dinas', value: data?.jenis_dinas },
                     { label: 'PIC Kegiatan', value: data?.pic || '-' },
+                    { label: 'PIC PUMK', value: data?.pic_pumk || '-' },
                     { label: 'Lokasi Dinas', value: data?.lokasi },
                     {
                       label: 'Isi Penugasan',
@@ -146,6 +147,24 @@ function DetailRekapPage(props: DetailProps) {
                                 : 'Available'}
                               ,
                             </p>
+                            <p className="text-[14px]">
+                              {each.tgl_mulai} - {each.tgl_selesai}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">Tim Eksternal</td>
+                    <td className="px-4">
+                      {data?.pegawai_external?.map(each => (
+                        <div className="my-4 flex flex-col gap-y-[8px]">
+                          <p className="px-2 text-[14px]">{each.nama_pegawai}</p>
+                          <p className="px-2 text-[12px] text-[#6B7280]">{each.unit_kerja_str}</p>
+
+                          <div className="flex flex-row">
+                            <p className="px-2 text-[14px] text-[#10B981]">Available,</p>
                             <p className="text-[14px]">
                               {each.tgl_mulai} - {each.tgl_selesai}
                             </p>
