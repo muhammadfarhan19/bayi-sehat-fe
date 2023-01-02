@@ -1,46 +1,45 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
+import { RekapDinasAPI } from '../../../constants/APIUrls';
+import { GetRekapDinasKeuanganRes, GetRekapReq } from '../../../types/api/RekapDinasAPI';
+import { formatDate } from '../../../utils/DateUtil';
+import useCommonApi from '../../shared/hooks/useCommonApi';
+import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
-
-const MOCK_USER = [
-  {
-    id: 1,
-    no_surat: '4070/E1/TI.02.00/2021',
-    isi_penugasan: 'Rapat Sosialisasi PKKM',
-    unit_kerja: 'Sekretariat Direktorat Jenderal Pendidikan Tinggi',
-    tgl_dinas: '13-14 Juni 2022',
-    pic_bpp: 'Sutikno',
-    pic_pumk: 'Ipong',
-    status: 'Menunggu PUMK Memproses',
-  },
-  {
-    id: 2,
-    no_surat: '4070/E1/TI.02.00/2021',
-    isi_penugasan: 'Rapat Sosialisasi PKKM',
-    unit_kerja: 'Direktorat Kelembagaan',
-    tgl_dinas: '18-24 Juni 2022',
-    pic_bpp: 'Sutikno',
-    pic_pumk: 'Ipong',
-    status: 'Selesai',
-  },
-  {
-    id: 3,
-    no_surat: '4070/E1/TI.02.00/2021',
-    isi_penugasan: 'Rapat Sosialisasi PKKM',
-    unit_kerja: 'Direktorat Riset Teknologi dan Pengabdian Masyarakat',
-    tgl_dinas: '13-17 Juni 2022',
-    pic_bpp: 'Sutikno',
-    pic_pumk: 'Ipong',
-    status: 'Diajukan PUMK Kepada BPP',
-  },
-];
 
 function ListDaftarDinas() {
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const [filterState, setFilterState] = React.useState<GetRekapReq>({
+    page: 1,
+    per_page: 20,
+  });
 
   const toggleAdvancedFilter = () => {
     setshowAdvancedFilter(!showAdvancedFilter);
+  };
+
+  const { data: listKeuanganDinas, isValidating: loadingListKeuanganDinas } = useCommonApi<
+    GetRekapReq,
+    GetRekapDinasKeuanganRes
+  >(RekapDinasAPI.GET_DINAS_LIST, filterState, { method: 'GET' }, { revalidateOnMount: true });
+
+  const changeFilterState = (inputState: Partial<GetRekapReq>) => {
+    const pageAffected = Object.keys(inputState).includes('page');
+    const newState = {
+      ...filterState,
+      ...inputState,
+    };
+
+    if (!pageAffected) {
+      newState.page = 1;
+    }
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
 
   return (
@@ -53,7 +52,9 @@ function ListDaftarDinas() {
               type="text"
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               placeholder="Cari..."
-              // onChange={e => search('nama', e.target.value)}
+              onChange={e => {
+                changeFilterState({ isi_penugasan: e.target.value === '' ? undefined : e.target.value });
+              }}
             />
             <button
               className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
@@ -73,16 +74,18 @@ function ListDaftarDinas() {
             </div>
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Dari Tanggal</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                <option value="">Semua</option>
-              </select>
+              <input
+                type="date"
+                onChange={e => changeFilterState({ tgl_mulai: e.target.value === '' ? undefined : e.target.value })}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              />
             </div>
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Sampai Tanggal</p>
               <input
-                type="text"
+                type="date"
+                onChange={e => changeFilterState({ tgl_selesai: e.target.value === '' ? undefined : e.target.value })}
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Nama Jabatan"
               />
             </div>
             <div className="w-[202px] pb-2">
@@ -96,102 +99,96 @@ function ListDaftarDinas() {
           </div>
         )}
       </div>
-      <div className="flex">
-        <div className="my-[24px] w-full overflow-x-auto sm:mx-0">
-          <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-            <table className="w-full table-auto rounded-lg bg-gray-100">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    No
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    SURAT DINAS
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    ISI PENUGASAN
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    UNIT KERJA
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    TANGGAL DINAS
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    PIC BPP
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    PIC PUMK
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    STATUS
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {(MOCK_USER || []).map((data, dataIdx) => (
-                  <tr
-                    key={dataIdx}
-                    className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
-                  >
-                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
-                    <td className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800 underline">
-                      {data.no_surat}
-                    </td>
-                    <td className="px-6 text-xs font-medium text-gray-900">{data?.isi_penugasan}</td>
-                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
-                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.tgl_dinas}</td>
-                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.pic_bpp}</td>
-                    <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.pic_pumk}</td>
-                    <td className="px-6 py-4 text-center text-[10px] font-medium text-gray-900">
-                      <div
-                        className={`rounded-md px-8 py-1 text-white ${
-                          data?.id === 1 ? 'bg-[#248DDA]' : data?.id === 2 ? 'bg-[#9EDE73]' : 'bg-[#FB923C]'
-                        }`}
-                      >
-                        {data?.status}
-                      </div>
-                    </td>
+      {loadingListKeuanganDinas ? (
+        <div className="relative h-[150px] w-full divide-y divide-gray-200">
+          <Loader />
+        </div>
+      ) : (
+        <div className="flex">
+          <div className="my-[24px] w-full overflow-x-auto sm:mx-0">
+            <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+              <table className="w-full table-auto rounded-lg bg-gray-100">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      No
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      SURAT DINAS
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      ISI PENUGASAN
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      UNIT KERJA
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      TANGGAL DINAS
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      PIC PUMK
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      STATUS
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <Pagination
-              onChange={() => {
-                return null;
-              }}
-              totalData={3}
-              perPage={3}
-              page={1}
-            />
+                </thead>
+                <tbody>
+                  {(listKeuanganDinas?.list || []).map((data, dataIdx) => (
+                    <tr
+                      key={dataIdx}
+                      className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                    >
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800 underline">
+                        {data?.no_sp}
+                      </td>
+                      <td className="px-6 text-xs font-medium text-gray-900">{data?.isi_penugasan}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja_str}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                        {data?.tgl_mulai?.substring(0, 2)}-{formatDate(new Date(data?.tgl_selesai), 'dd MMMM yyyy')}
+                      </td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.pic_pumk}</td>
+                      <td className="px-6 py-4 text-center text-[10px] font-medium text-gray-900">
+                        <div className={`rounded-md bg-[#9EDE73] px-8 py-1 text-white`}>{'-'}</div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Pagination
+                onChange={value => {
+                  changeFilterState({ page: value });
+                }}
+                totalData={listKeuanganDinas ? listKeuanganDinas?.pagination?.total_data : 0}
+                perPage={filterState?.per_page}
+                page={filterState?.page}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      {/* )} */}
+      )}
     </div>
   );
 }

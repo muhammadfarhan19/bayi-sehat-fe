@@ -132,3 +132,12 @@ export interface GetRekapDinasPegawaiReq {
 export interface GetRekapDinasPegawaiRes {
   total_dinas: number;
 }
+
+export interface GetRekapDinasKeuanganRes {
+  status: string;
+  list: RekapDetailData[];
+  pagination: {
+    total_data: number;
+    total_page: number;
+  };
+}
