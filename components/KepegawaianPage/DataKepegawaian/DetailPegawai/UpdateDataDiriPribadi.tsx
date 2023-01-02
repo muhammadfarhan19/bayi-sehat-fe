@@ -452,10 +452,22 @@ export default function UpdateDataDiriPribadi() {
             <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nomor Rekening</div>
             <div className="flex w-full flex-auto flex-col">
               <input
-                {...register('nomor_rekening', { required: false })}
+                {...register('nomor_rekening', {
+                  required: false,
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: 'Please enter a number',
+                  },
+                })}
                 type="text"
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               />
+              {errors.nomor_rekening && errors.nomor_rekening.type === 'pattern' && (
+                <div className="mt-1 flex items-center">
+                  <ExclamationCircleIcon className="mr-1 h-4 w-4 text-red-500" />
+                  <div className="text-sm text-red-500">Nomor Rekening tidak sesuai Format</div>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex flex-row items-center px-7">
