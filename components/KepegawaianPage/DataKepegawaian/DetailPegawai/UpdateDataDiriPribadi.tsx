@@ -67,6 +67,11 @@ export default function UpdateDataDiriPribadi() {
       setValue('uuid_bpjs', data?.uuid_bpjs?.[0]?.document_uuid);
       setValue('uuid_ktp', data?.uuid_ktp?.[0]?.document_uuid);
       setValue('uuid_npwp', data?.uuid_npwp?.[0]?.document_uuid);
+      setValue('nama_rekening', data?.nama_rekening);
+      setValue('nomor_rekening', data?.nomor_rekening?.replace(/\D/g, ''));
+      setValue('file_name_rek', data?.uuid_rekening?.[0]?.document_name);
+      setValue('file_uuid_rek', data?.uuid_rekening?.[0]?.document_uuid);
+      setValue('bank_id', data?.bank_id);
     }
   }, [data]);
 
@@ -109,9 +114,9 @@ export default function UpdateDataDiriPribadi() {
           document_uuid: formData.uuid_npwp,
         },
       ],
-      nomor_rekening: formData?.nomor_rekening,
+      nomor_rekening: String(formData?.nomor_rekening).replace(/\D/g, ''),
       nama_rekening: formData?.nama_rekening?.toUpperCase(),
-      bank_id: 1,
+      bank_id: Number(formData?.bank_id),
       uuid_rekening: [
         {
           document_name: formData?.file_name_rek,
@@ -468,7 +473,7 @@ export default function UpdateDataDiriPribadi() {
             <div className="w-full">
               <Controller
                 control={control}
-                name="agama"
+                name="bank_id"
                 rules={{ required: false }}
                 render={({ field: { onChange, value } }) => {
                   return (
@@ -477,7 +482,7 @@ export default function UpdateDataDiriPribadi() {
                         onChange={value => {
                           onChange(value.value);
                         }}
-                        defaultValue={composeListDefaultValue(listBank!, 'nama', 'nama', value)}
+                        defaultValue={composeListDefaultValue(listBank!, 'id', 'nama', value)}
                         label={''}
                         options={(listBank || []).map(each => ({
                           text: each.nama,
