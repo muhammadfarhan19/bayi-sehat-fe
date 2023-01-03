@@ -1,11 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { CalendarIcon, XIcon } from '@heroicons/react/outline';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
 import Link from 'next/link';
 import React from 'react';
 
 import { Dinas } from '../../../types/api/KepegawaianAPI';
+import { startEndDateString } from '../../../utils/DateUtil';
 import { getQueryString } from '../../../utils/URLUtils';
 
 interface Props {
@@ -68,27 +67,7 @@ export default function ModalEventInfo(props: Props) {
               <div className="space-y-2">
                 {infos.map(info => {
                   const redirectLink = kepegawaianLink + '&dinas_id=' + info?.dinas_id;
-                  const dateString = (() => {
-                    try {
-                      if (info.tgl_mulai === info.tgl_selesai) {
-                        return format(new Date(info.tgl_mulai), 'dd MMM yyyy', { locale: id });
-                      }
-
-                      const breakStart = info.tgl_mulai.split('-'),
-                        breakEnd = info.tgl_selesai.split('-');
-                      breakStart.pop();
-                      breakEnd.pop();
-
-                      const dateStartFormat = breakStart.join('') === breakEnd.join('') ? 'dd' : 'dd MMM yyyy';
-                      return [
-                        format(new Date(info.tgl_mulai), dateStartFormat, { locale: id }),
-                        format(new Date(info.tgl_selesai), 'dd MMM yyyy', { locale: id }),
-                      ].join(' - ');
-                    } catch (error) {
-                      console.error(error);
-                      return '';
-                    }
-                  })();
+                  const dateString = startEndDateString(info.tgl_mulai, info.tgl_selesai);
 
                   return (
                     <div className="space-y-1 bg-white p-4 shadow">

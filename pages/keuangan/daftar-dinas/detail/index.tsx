@@ -7,7 +7,7 @@ import LeftMenu from '../../../../components/shared/MainLayout/LeftMenu';
 import MainLayout from '../../../../components/shared/MainLayout/MainLayout';
 import { NavigationId } from '../../../../constants/NavigationList';
 
-function DinasPegawaiData() {
+function KeuanganDinasDetail() {
   return (
     <MainLayout>
       <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-8">
@@ -20,4 +20,4 @@ function DinasPegawaiData() {
   );
 }
 
-export default withReduxPage()(withAuthenticatedPage({ resourceId: NavigationId.KEPEGAWAIAN })(DinasPegawaiData));
+export default withReduxPage()(withAuthenticatedPage({ resourceId: NavigationId.KEPEGAWAIAN })(KeuanganDinasDetail));

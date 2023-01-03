@@ -1,4 +1,5 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
 import React from 'react';
 
 import { RekapDinasAPI } from '../../../constants/APIUrls';
@@ -161,8 +162,10 @@ function ListDaftarDinas() {
                       className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                     >
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
-                      <td className="cursor-pointer px-6 py-4 text-xs font-medium text-indigo-800 underline">
-                        {data?.no_sp}
+                      <td className="px-6 py-4 text-xs font-medium text-indigo-800">
+                        <Link href={`/keuangan/daftar-dinas/detail?dinas_id=${data?.dinas_id}`}>
+                          <a className="cursor-pointer font-medium underline">{data?.no_sp}</a>
+                        </Link>
                       </td>
                       <td className="px-6 text-xs font-medium text-gray-900">{data?.isi_penugasan}</td>
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja_str}</td>

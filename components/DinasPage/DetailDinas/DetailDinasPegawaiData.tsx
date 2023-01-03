@@ -1,11 +1,12 @@
-import { Disclosure } from '@headlessui/react';
-import { ChevronLeftIcon, ChevronUpIcon, UploadIcon } from '@heroicons/react/solid';
+import { ChevronLeftIcon, UploadIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import * as React from 'react';
 
-import { classNames } from '../../../utils/Components';
 import { CircleProgress } from '../../shared/CircleProgress';
 import UploadWrapper, { FileObject } from '../../shared/Input/UploadWrapper';
+import DinasSection from './DinasSection';
+import ExternalSection from './ExternalSection';
+import PegawaiSection from './PegawaiSection';
 
 function DetailDinasPegawaiData() {
   const [fileName, setFileName] = React.useState('');
@@ -61,153 +62,10 @@ function DetailDinasPegawaiData() {
         </div>
       </div>
 
-      <Disclosure defaultOpen={true} as="div" className="rounded-lg bg-white py-4 shadow">
-        {({ open }) => (
-          <>
-            <Disclosure.Button as="div" className="flex cursor-pointer flex-row items-center justify-between px-6">
-              <span className="text-lg font-medium text-gray-900">Detail Dinas</span>
-              <ChevronUpIcon
-                className={classNames(
-                  open ? 'rotate-180 text-indigo-700' : 'text-indigo-600',
-                  'h-6 w-6 transform transition-colors duration-150 ease-in-out group-hover:text-indigo-700'
-                )}
-              />
-            </Disclosure.Button>
-            <Disclosure.Panel as="div" className="flex flex-col flex-nowrap space-y-2 pt-6">
-              {[
-                { label: 'Unit Kerja', content: <>Sekretariat Diektorat Jenderal Pendidikan Tinggi</> },
-                {
-                  label: 'Nomor Surat',
-                  content: <span className="cursor-pointer text-indigo-600 underline">4070/E1/TI.02.00/2021</span>,
-                },
-                { label: 'Tanggal Surat', content: <>13 Juni 2022</> },
-                { label: 'Tanggal Dinas', content: <>13 Juni 2022 16 Juni 2022</> },
-                { label: 'Jenis Dinas', content: <>Dinas SPPD</> },
-                { label: 'Lokasi Dinas', content: <>Margo Depok</> },
-                { label: 'PIC BP', content: <>Sutikno</> },
-                { label: 'PIC PUMK', content: <>Ipong</> },
-                { label: 'PIC Kegiatan', content: <>Widodo Arjuna</> },
-                { label: 'Isi Penugasan', content: <>Flow Reminder Dinas untuk Pegawai Intradikti</> },
-                {
-                  label: 'Surat Tugas',
-                  content: (
-                    <>
-                      4070/E1/T1.02.00/2021 <span className="cursor-pointer text-indigo-600 underline">Lihat</span>
-                    </>
-                  ),
-                },
-              ].map((each, index, collections) => (
-                <React.Fragment key={`content${index}`}>
-                  <div className="flex px-6">
-                    <span className="shrink grow basis-5/12 text-gray-700 sm:basis-3/12">{each.label}</span>
-                    <div className="grow basis-7/12 sm:basis-9/12">{each.content}</div>
-                  </div>
-                  {collections.length - 1 !== index && <div className="border-t-[1px] border-solid" />}
-                </React.Fragment>
-              ))}
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
+      <DinasSection />
+      <PegawaiSection />
+      <ExternalSection />
 
-      <Disclosure defaultOpen={true} as="div" className="rounded-lg bg-white py-4 shadow">
-        {({ open }) => (
-          <>
-            <Disclosure.Button as="div" className="flex cursor-pointer flex-row items-center justify-between px-6">
-              <p className="text-lg font-medium text-gray-900">Detail Pegawai</p>
-              <ChevronUpIcon
-                className={classNames(
-                  open ? 'rotate-180 text-indigo-700' : 'text-indigo-600',
-                  'h-6 w-6 transform transition-colors duration-150 ease-in-out group-hover:text-indigo-700'
-                )}
-              />
-            </Disclosure.Button>
-            <Disclosure.Panel as="div" className="flex flex-col flex-nowrap space-y-2 pt-6">
-              <div className="flex px-6">
-                <span className="shrink grow basis-5/12 text-gray-700 sm:basis-3/12">Pegawai</span>
-                <div className="flex grow basis-7/12 flex-col gap-y-2 sm:basis-9/12">
-                  {[
-                    {
-                      name: 'Widodo Arjuna - 198607122010121007',
-                      position: 'Direktorat Kelembagaan',
-                      status: 'Available',
-                      date: '13 Juni 2022 - 16 Juni 2022',
-                    },
-                    {
-                      name: 'Muhammad Muaz Ramadhan - 198607122010121007',
-                      position: 'Direktorat Kelembagaan',
-                      status: 'Available',
-                      date: '16 Juni 2022',
-                    },
-                    {
-                      name: 'Diago Dwi Yulianda - 198607122010121007	',
-                      position: 'Direktorat Kelembagaan',
-                      status: 'Available',
-                      date: '13 Juni 2022 - 16 Juni 2022',
-                    },
-                  ].map((each, index) => (
-                    <div key={`pegawai${index}`} className="flex">
-                      <div className="shrink grow basis-1">{index + 1}.</div>
-                      <div className="flex grow basis-11/12 flex-col">
-                        <div className="text-base">{each.name}</div>
-                        <div className="text-sm text-gray-500">{each.position}</div>
-                        <div>
-                          <span className="text-green-500">{each.status}</span>, {each.date}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
-
-      <Disclosure defaultOpen={true} as="div" className="rounded-lg bg-white py-4 shadow">
-        {({ open }) => (
-          <>
-            <Disclosure.Button as="div" className="flex cursor-pointer flex-row items-center justify-between px-6">
-              <span className="text-lg font-medium text-gray-900">Detail Tim Eksternal</span>
-              <ChevronUpIcon
-                className={classNames(
-                  open ? 'rotate-180 text-indigo-700' : 'text-indigo-600',
-                  'h-6 w-6 transform transition-colors duration-150 ease-in-out group-hover:text-indigo-700'
-                )}
-              />
-            </Disclosure.Button>
-            <Disclosure.Panel as="div" className="flex flex-col flex-nowrap space-y-2 pt-6">
-              <div className="flex px-6">
-                <span className="shrink grow basis-5/12 text-gray-700 sm:basis-3/12">Tim Eksternal</span>
-                <div className="flex grow basis-7/12 flex-col gap-y-2 sm:basis-9/12">
-                  {[
-                    {
-                      name: 'Widodo Arjuna - 198607122010121007',
-                      position: 'Direktorat Kelembagaan',
-                    },
-                    {
-                      name: 'Muhammad Muaz Ramadhan - 198607122010121007',
-                      position: 'Direktorat Kelembagaan',
-                    },
-                    {
-                      name: 'Diago Dwi Yulianda - 198607122010121007	',
-                      position: 'Direktorat Kelembagaan',
-                    },
-                  ].map((each, index) => (
-                    <div key={`pegawai${index}`} className="flex">
-                      <div className="shrink grow basis-1">{index + 1}.</div>
-                      <div className="flex grow basis-11/12 flex-col">
-                        <div className="text-base">{each.name}</div>
-                        <div className="text-sm text-gray-500">{each.position}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
       <div className="flex flex-col items-end gap-y-2 rounded-lg bg-white py-4 shadow">
         <div className="flex items-center gap-x-2 px-6">
           <Link href="/kepegawaian">

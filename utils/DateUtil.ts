@@ -101,3 +101,25 @@ export const convertIndonesiaFormat = (date: string) => {
     return '-';
   }
 };
+
+export const startEndDateString = (tgl_mulai: string, tgl_selesai: string) => {
+  try {
+    if (tgl_mulai === tgl_selesai) {
+      return format(new Date(tgl_mulai), 'dd MMM yyyy', { locale: id });
+    }
+
+    const breakStart = tgl_mulai.split('-'),
+      breakEnd = tgl_selesai.split('-');
+    breakStart.pop();
+    breakEnd.pop();
+
+    const dateStartFormat = breakStart.join('') === breakEnd.join('') ? 'dd' : 'dd MMM yyyy';
+    return [
+      format(new Date(tgl_mulai), dateStartFormat, { locale: id }),
+      format(new Date(tgl_selesai), 'dd MMM yyyy', { locale: id }),
+    ].join(' - ');
+  } catch (error) {
+    console.error(error);
+    return '';
+  }
+};
