@@ -72,6 +72,8 @@ export interface RekapDetailData {
   surat_tugas: DocumentData[];
   pegawai: PegawaiData[];
   pegawai_external: PegawaiData[];
+  status_pembayaran: string;
+  status_pembayaran_id: number;
 }
 
 export interface DocumentData {

@@ -9,6 +9,7 @@ import { formatDate } from '../../../utils/DateUtil';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import { ColourGrading, StatusDinas } from './Shared/_resources';
 
 function ListDaftarDinas() {
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
@@ -193,7 +194,15 @@ function ListDaftarDinas() {
                         </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.pic_pumk}</td>
                         <td className="px-6 py-4 text-center text-[10px] font-medium text-gray-900">
-                          <div className={`rounded-md bg-[#9EDE73] px-8 py-1 text-white`}>{'-'}</div>
+                          <div
+                            className={`rounded-md ${
+                              data?.status_pembayaran_id === StatusDinas.MenungguPUMKDiproses
+                                ? ColourGrading.isMenunggu
+                                : 'bg-[#9EDE73]'
+                            }  px-8 py-1 text-white`}
+                          >
+                            {data?.status_pembayaran}
+                          </div>
                         </td>
                       </tr>
                     );
