@@ -16,15 +16,15 @@ import {
   PostUserProfileRes,
 } from '../../../../types/api/UserAPI';
 import { Status, StatusMenikah } from '../../../../types/Common';
-import { classNames, composeListDefaultValue } from '../../../../utils/Components';
+import { classNames } from '../../../../utils/Components';
 import { callAPI } from '../../../../utils/Fetchers';
 import { getQueryString } from '../../../../utils/URLUtils';
 import { CircleProgress } from '../../../shared/CircleProgress';
 import FileLoader from '../../../shared/FileLoader';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
+import AutoComplete from '../../../shared/Input/ComboBox';
 import UploadWrapper, { FileObject } from '../../../shared/Input/UploadWrapper';
 import Loader from '../../../shared/Loader/Loader';
-import DropdownInput from './RiwayatJabatan/Shared/DropdownInput';
 
 type FormType = Omit<PostUserProfileReq, 'uuid_ktp' | 'uuid_bpjs' | 'uuid_npwp'> & {
   uuid_ktp: string;
@@ -45,6 +45,13 @@ export default function UpdateDataDiriPribadi() {
   );
 
   const { data: listBank } = useCommonApi<null, GetListBankRes[]>(MasterAPI.GET_BANK_LIST, null, { method: 'GET' });
+
+  const [defaultValue, setDefaultValue] = React.useState<any>({
+    bank: {
+      text: undefined,
+      value: undefined,
+    },
+  });
 
   const {
     control,
@@ -72,6 +79,12 @@ export default function UpdateDataDiriPribadi() {
       setValue('file_name_rek', data?.uuid_rekening?.[0]?.document_name);
       setValue('file_uuid_rek', data?.uuid_rekening?.[0]?.document_uuid);
       setValue('bank_id', data?.bank_id);
+      setDefaultValue({
+        bank: {
+          text: data?.bank_str,
+          value: String(data?.bank_id),
+        },
+      });
     }
   }, [data]);
 
@@ -487,15 +500,13 @@ export default function UpdateDataDiriPribadi() {
                 control={control}
                 name="bank_id"
                 rules={{ required: false }}
-                render={({ field: { onChange, value } }) => {
+                render={({ field: { onChange } }) => {
                   return (
                     <>
-                      <DropdownInput
-                        onChange={value => {
-                          onChange(value.value);
-                        }}
-                        defaultValue={composeListDefaultValue(listBank!, 'id', 'nama', value)}
+                      <AutoComplete
+                        onChange={value => onChange(value.value)}
                         label={''}
+                        defaultValue={{ text: defaultValue.bank.text || '', value: defaultValue.bank.value || '' }}
                         options={(listBank || []).map(each => ({
                           text: each.nama,
                           value: String(each.id),
