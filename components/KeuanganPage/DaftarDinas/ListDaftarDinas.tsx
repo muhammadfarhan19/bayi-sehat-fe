@@ -2,8 +2,9 @@ import { AdjustmentsIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React from 'react';
 
-import { RekapDinasAPI } from '../../../constants/APIUrls';
+import { RekapDinasAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
 import { GetRekapDinasKeuanganRes, GetRekapReq } from '../../../types/api/RekapDinasAPI';
+import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
 import { formatDate } from '../../../utils/DateUtil';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
@@ -25,6 +26,12 @@ function ListDaftarDinas() {
     GetRekapReq,
     GetRekapDinasKeuanganRes
   >(RekapDinasAPI.GET_DINAS_LIST, filterState, { method: 'GET' }, { revalidateOnMount: true });
+
+  const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
+    UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
+    null,
+    { method: 'GET' }
+  );
 
   const changeFilterState = (inputState: Partial<GetRekapReq>) => {
     const pageAffected = Object.keys(inputState).includes('page');
@@ -69,8 +76,16 @@ function ListDaftarDinas() {
           <div className="flex w-full flex-row gap-x-[16px]">
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
-              <select className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+              <select
+                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                onChange={e => changeFilterState({ unit_kerja_id: Number(e.target.value) })}
+              >
                 <option value="">Semua</option>
+                {(unitKerjaList || []).map(item => (
+                  <option key={item?.unit_kerja_id} value={item?.unit_kerja_id}>
+                    {item?.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="w-[202px] pb-2">
@@ -93,6 +108,7 @@ function ListDaftarDinas() {
               <p className="mb-[4px] text-[14px] font-normal">PUMK</p>
               <input
                 type="text"
+                onChange={e => changeFilterState({ pic_pumk: e.target.value === '' ? undefined : e.target.value })}
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="PUMK"
               />
@@ -156,28 +172,32 @@ function ListDaftarDinas() {
                   </tr>
                 </thead>
                 <tbody>
-                  {(listKeuanganDinas?.list || []).map((data, dataIdx) => (
-                    <tr
-                      key={dataIdx}
-                      className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
-                    >
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
-                      <td className="px-6 py-4 text-xs font-medium text-indigo-800">
-                        <Link href={`/keuangan/daftar-dinas/detail?dinas_id=${data?.dinas_id}`}>
-                          <a className="cursor-pointer font-medium underline">{data?.no_sp}</a>
-                        </Link>
-                      </td>
-                      <td className="px-6 text-xs font-medium text-gray-900">{data?.isi_penugasan}</td>
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja_str}</td>
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                        {data?.tgl_mulai?.substring(0, 2)}-{formatDate(new Date(data?.tgl_selesai), 'dd MMMM yyyy')}
-                      </td>
-                      <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.pic_pumk}</td>
-                      <td className="px-6 py-4 text-center text-[10px] font-medium text-gray-900">
-                        <div className={`rounded-md bg-[#9EDE73] px-8 py-1 text-white`}>{'-'}</div>
-                      </td>
-                    </tr>
-                  ))}
+                  {(listKeuanganDinas?.list || []).map((data, dataIdx) => {
+                    const asEmptyString = '';
+                    const dataTanggalMulaiDinas = !data?.tgl_mulai ? asEmptyString : data?.tgl_mulai?.slice(-2);
+                    return (
+                      <tr
+                        key={dataIdx}
+                        className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                      >
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-indigo-800">
+                          <Link href={`/keuangan/daftar-dinas/detail?dinas_id=${data?.dinas_id}`}>
+                            <a className="cursor-pointer font-medium underline">{data?.no_sp}</a>
+                          </Link>
+                        </td>
+                        <td className="px-6 text-xs font-medium text-gray-900">{data?.isi_penugasan}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja_str}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          {dataTanggalMulaiDinas}-{formatDate(new Date(data?.tgl_selesai), 'dd MMMM yyyy')}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.pic_pumk}</td>
+                        <td className="px-6 py-4 text-center text-[10px] font-medium text-gray-900">
+                          <div className={`rounded-md bg-[#9EDE73] px-8 py-1 text-white`}>{'-'}</div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
               <Pagination

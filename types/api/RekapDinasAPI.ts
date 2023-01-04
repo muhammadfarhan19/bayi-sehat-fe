@@ -8,6 +8,7 @@ export interface GetRekapReq {
   unit_kerja_id?: number;
   tgl_mulai?: string;
   tgl_selesai?: string;
+  pic_pumk?: string;
 }
 
 export interface GetRekapPegawaiReq {
