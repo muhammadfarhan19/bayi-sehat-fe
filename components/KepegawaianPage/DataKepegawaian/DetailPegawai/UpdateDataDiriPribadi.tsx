@@ -46,13 +46,6 @@ export default function UpdateDataDiriPribadi() {
 
   const { data: listBank } = useCommonApi<null, GetListBankRes[]>(MasterAPI.GET_BANK_LIST, null, { method: 'GET' });
 
-  const [defaultValue, setDefaultValue] = React.useState<any>({
-    bank: {
-      text: undefined,
-      value: undefined,
-    },
-  });
-
   const {
     control,
     handleSubmit,
@@ -79,12 +72,6 @@ export default function UpdateDataDiriPribadi() {
       setValue('file_name_rek', data?.uuid_rekening?.[0]?.document_name);
       setValue('file_uuid_rek', data?.uuid_rekening?.[0]?.document_uuid);
       setValue('bank_id', data?.bank_id);
-      setDefaultValue({
-        bank: {
-          text: data?.bank_str,
-          value: String(data?.bank_id),
-        },
-      });
     }
   }, [data]);
 
@@ -506,7 +493,7 @@ export default function UpdateDataDiriPribadi() {
                       <AutoComplete
                         onChange={value => onChange(value.value)}
                         label={''}
-                        defaultValue={{ text: defaultValue.bank.text || '', value: defaultValue.bank.value || '' }}
+                        defaultValue={{ text: data?.bank_str || '', value: String(data?.bank_id) || '' }}
                         options={(listBank || []).map(each => ({
                           text: each.nama,
                           value: String(each.id),
