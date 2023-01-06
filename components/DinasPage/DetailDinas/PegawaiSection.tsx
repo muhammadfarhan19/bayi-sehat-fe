@@ -10,7 +10,7 @@ import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 
 function PegawaiSection() {
-  const { dinas_id } = getQueryString<{ dinas_id: string; type: string }>();
+  const { dinas_id } = getQueryString<{ dinas_id: string }>();
   const { data, isValidating } = useCommonApi<GetRekapDetailReq, RekapDetailData>(
     RekapDinasAPI.GET_DINAS_DETAIL,
     { dinas_id: Number(dinas_id) },
