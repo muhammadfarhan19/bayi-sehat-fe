@@ -20,11 +20,11 @@ import { classNames } from '../../../../utils/Components';
 import { callAPI } from '../../../../utils/Fetchers';
 import { getQueryString } from '../../../../utils/URLUtils';
 import { CircleProgress } from '../../../shared/CircleProgress';
-import FileLoader from '../../../shared/FileLoader';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import AutoComplete from '../../../shared/Input/ComboBox';
 import UploadWrapper, { FileObject } from '../../../shared/Input/UploadWrapper';
 import Loader from '../../../shared/Loader/Loader';
+import { LinkFile } from './DataDiriPribadi';
 
 type FormType = Omit<PostUserProfileReq, 'uuid_ktp' | 'uuid_bpjs' | 'uuid_npwp'> & {
   uuid_ktp: string;
@@ -153,8 +153,8 @@ export default function UpdateDataDiriPribadi() {
           <h3 className="text-xl font-semibold tracking-wider text-gray-700">Data Diri Pribadi</h3>
         </div>
         <form className="space-y-6" onSubmit={handleSubmit(submitHandler)}>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Jenis Kelamin</div>
+          <div className="px-7">
+            <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">Jenis Kelamin</div>
             <input
               value={data?.jenis_kelamin ? GenderText[data.jenis_kelamin] : ''}
               type="text"
@@ -162,8 +162,8 @@ export default function UpdateDataDiriPribadi() {
               className="shadow-s block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 disabled:bg-gray-200 sm:text-sm"
             />
           </div>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Status Menikah</div>
+          <div className="px-7">
+            <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">Status Menikah</div>
             <Controller
               control={control}
               name="status_menikah"
@@ -184,8 +184,8 @@ export default function UpdateDataDiriPribadi() {
               )}
             />
           </div>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Jumlah Anak</div>
+          <div className="px-7">
+            <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">Jumlah Anak</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('jumlah_anak', { required: false })}
@@ -202,8 +202,8 @@ export default function UpdateDataDiriPribadi() {
             </div>
           </div>
           <div>
-            <div className="flex flex-row items-center px-7">
-              <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">NIK</div>
+            <div className="px-7">
+              <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">NIK</div>
               <div className="flex w-full flex-auto flex-col">
                 <input
                   maxLength={16}
@@ -220,21 +220,38 @@ export default function UpdateDataDiriPribadi() {
                 )}
               </div>
             </div>
-            <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
+            <div className="mt-5 px-7 sm:col-span-6">
+              <label className="mb-2 block text-sm font-medium text-gray-700">Dokumen KTP</label>
+              {data && !isValidating && (
+                <div className="mb-3 pl-2">
+                  <LinkFile link={data?.uuid_ktp?.[0]?.document_uuid} value={data?.uuid_ktp?.[0].document_name} />
+                </div>
+              )}
               <Controller
                 control={control}
-                name="uuid_ktp"
+                name={'uuid_ktp'}
                 rules={{ required: false }}
                 render={({ field: { onChange, value } }) => (
-                  <div className="flex items-center">
-                    <UploadWrapper
-                      allowedTypes={['jpg', 'jpeg', 'png', 'pdf']}
-                      handleUploadChange={(files: FileObject[]) => {
-                        onChange(files[0].id);
-                      }}
-                    >
-                      {({ loading }) => (
-                        <div className="flex items-center">
+                  <UploadWrapper
+                    allowedTypes={['pdf']}
+                    handleUploadChange={(files: FileObject[]) => {
+                      setValue('uuid_ktp', files[0].id);
+                      onChange(files[0].name);
+                    }}
+                  >
+                    {({ loading }) => (
+                      <div
+                        className={classNames(
+                          'flex items-center justify-center space-x-2 rounded-md border-[1px] p-2',
+                          errors.uuid_ktp ? 'border-red-500' : ''
+                        )}
+                      >
+                        <div className="flex flex-1 flex-row items-center justify-center space-x-3 rounded-md bg-sky-100 py-2">
+                          <div>
+                            <div className="text-sm text-gray-400">
+                              {value || 'Masukan dokumen permohonan dalam bentuk PDF max 2mb'}
+                            </div>
+                          </div>
                           <button
                             disabled={loading}
                             type="button"
@@ -244,28 +261,16 @@ export default function UpdateDataDiriPribadi() {
                             <UploadIcon className="mr-1 h-4" />
                             Upload
                           </button>
-                          {!value && (
-                            <div
-                              className={classNames('ml-2 text-xs', errors.uuid_ktp ? 'text-red-400' : 'text-gray-400')}
-                            >
-                              (jpg,jpeg,png,pdf)
-                            </div>
-                          )}
                         </div>
-                      )}
-                    </UploadWrapper>
-                    {!!value && (
-                      <FileLoader uuid={value} asLink>
-                        <a className={`ml-2 whitespace-nowrap text-blue-500 underline`}>Dokumen KTP</a>
-                      </FileLoader>
+                      </div>
                     )}
-                  </div>
+                  </UploadWrapper>
                 )}
-              />
+              ></Controller>
             </div>
           </div>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Email</div>
+          <div className="px-7">
+            <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">Email</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('email', { required: false })}
@@ -281,8 +286,8 @@ export default function UpdateDataDiriPribadi() {
               )}
             </div>
           </div>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Alamat</div>
+          <div className="px-7">
+            <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">Alamat</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('alamat', { required: false })}
@@ -299,8 +304,8 @@ export default function UpdateDataDiriPribadi() {
             </div>
           </div>
           <div>
-            <div className="flex flex-row items-center px-7">
-              <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">NPWP</div>
+            <div className="px-7">
+              <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">NPWP</div>
               <div className="flex w-full flex-auto flex-col">
                 <input
                   {...register('npwp', { required: false })}
@@ -316,21 +321,38 @@ export default function UpdateDataDiriPribadi() {
                 )}
               </div>
             </div>
-            <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
+            <div className="mt-5 px-7 sm:col-span-6">
+              <label className="mb-2 block text-sm font-medium text-black">Dokumen NPWP</label>
+              {data && !isValidating && (
+                <div className="mb-3 pl-2">
+                  <LinkFile link={data?.uuid_npwp?.[0]?.document_uuid} value={data?.uuid_npwp?.[0].document_name} />
+                </div>
+              )}
               <Controller
                 control={control}
-                name="uuid_npwp"
+                name={'uuid_npwp'}
                 rules={{ required: false }}
                 render={({ field: { onChange, value } }) => (
-                  <div className="flex items-center">
-                    <UploadWrapper
-                      allowedTypes={['jpg', 'jpeg', 'png', 'pdf']}
-                      handleUploadChange={(files: FileObject[]) => {
-                        onChange(files[0].id);
-                      }}
-                    >
-                      {({ loading }) => (
-                        <div className="flex items-center">
+                  <UploadWrapper
+                    allowedTypes={['pdf', 'jpeg', 'jpg', 'png']}
+                    handleUploadChange={(files: FileObject[]) => {
+                      setValue('uuid_npwp', files[0].id);
+                      onChange(files[0].name);
+                    }}
+                  >
+                    {({ loading }) => (
+                      <div
+                        className={classNames(
+                          'flex items-center justify-center space-x-2 rounded-md border-[1px] p-2',
+                          errors.uuid_npwp ? 'border-red-500' : ''
+                        )}
+                      >
+                        <div className="flex flex-1 flex-row items-center justify-center space-x-3 rounded-md bg-sky-100 py-2">
+                          <div>
+                            <div className="text-sm text-gray-400">
+                              {value || 'Masukan dokumen permohonan dalam bentuk PDF max 2mb'}
+                            </div>
+                          </div>
                           <button
                             disabled={loading}
                             type="button"
@@ -340,32 +362,17 @@ export default function UpdateDataDiriPribadi() {
                             <UploadIcon className="mr-1 h-4" />
                             Upload
                           </button>
-                          {!value && (
-                            <div
-                              className={classNames(
-                                'ml-2 text-xs',
-                                errors.uuid_npwp ? 'text-red-400' : 'text-gray-400'
-                              )}
-                            >
-                              (jpg,jpeg,png,pdf)
-                            </div>
-                          )}
                         </div>
-                      )}
-                    </UploadWrapper>
-                    {!!value && (
-                      <FileLoader uuid={value} asLink>
-                        <a className="ml-2 whitespace-nowrap text-blue-500 underline">Dokumen NPWP</a>
-                      </FileLoader>
+                      </div>
                     )}
-                  </div>
+                  </UploadWrapper>
                 )}
-              />
+              ></Controller>
             </div>
           </div>
           <div>
-            <div className="flex flex-row items-center px-7">
-              <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">BPJS</div>
+            <div className="px-7">
+              <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">BPJS</div>
               <div className="flex w-full flex-auto flex-col">
                 <input
                   {...register('bpjs', { required: false })}
@@ -381,21 +388,38 @@ export default function UpdateDataDiriPribadi() {
                 )}
               </div>
             </div>
-            <div className="mt-2 ml-[190px] flex w-full flex-auto flex-col">
+            <div className="mt-5 px-7 sm:col-span-6">
+              <label className="mb-2 block text-sm font-medium text-black">Dokumen BPJS</label>
+              {data && !isValidating && (
+                <div className="mb-3 pl-2">
+                  <LinkFile link={data?.uuid_bpjs?.[0]?.document_uuid} value={data?.uuid_bpjs?.[0].document_name} />
+                </div>
+              )}
               <Controller
                 control={control}
-                name="uuid_bpjs"
+                name={'uuid_bpjs'}
                 rules={{ required: false }}
                 render={({ field: { onChange, value } }) => (
-                  <div className="flex items-center">
-                    <UploadWrapper
-                      allowedTypes={['jpg', 'jpeg', 'png', 'pdf']}
-                      handleUploadChange={(files: FileObject[]) => {
-                        onChange(files[0].id);
-                      }}
-                    >
-                      {({ loading }) => (
-                        <div className="flex items-center">
+                  <UploadWrapper
+                    allowedTypes={['pdf']}
+                    handleUploadChange={(files: FileObject[]) => {
+                      setValue('uuid_bpjs', files[0].id);
+                      onChange(files[0].name);
+                    }}
+                  >
+                    {({ loading }) => (
+                      <div
+                        className={classNames(
+                          'flex items-center justify-center space-x-2 rounded-md border-[1px] p-2',
+                          errors.uuid_bpjs ? 'border-red-500' : ''
+                        )}
+                      >
+                        <div className="flex flex-1 flex-row items-center justify-center space-x-3 rounded-md bg-sky-100 py-2">
+                          <div>
+                            <div className="text-sm text-gray-400">
+                              {value || 'Masukan dokumen permohonan dalam bentuk PDF max 2mb'}
+                            </div>
+                          </div>
                           <button
                             disabled={loading}
                             type="button"
@@ -405,31 +429,16 @@ export default function UpdateDataDiriPribadi() {
                             <UploadIcon className="mr-1 h-4" />
                             Upload
                           </button>
-                          {!value && (
-                            <div
-                              className={classNames(
-                                'ml-2 text-xs',
-                                errors.file_uuid_rek ? 'text-red-400' : 'text-gray-400'
-                              )}
-                            >
-                              (jpg,jpeg,png,pdf)
-                            </div>
-                          )}
                         </div>
-                      )}
-                    </UploadWrapper>
-                    {!!value && (
-                      <FileLoader uuid={value} asLink>
-                        <a className="ml-2 whitespace-nowrap text-blue-500 underline">Dokumen BPJS</a>
-                      </FileLoader>
+                      </div>
                     )}
-                  </div>
+                  </UploadWrapper>
                 )}
-              />
+              ></Controller>
             </div>
           </div>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nomor HP</div>
+          <div className="px-7">
+            <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">Nomor HP</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('hp', { required: false })}
@@ -448,8 +457,8 @@ export default function UpdateDataDiriPribadi() {
           <div className="mt-5 mb-6 px-7 py-1">
             <h3 className="text-xl font-semibold tracking-wider text-gray-700">Data Rekening</h3>
           </div>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nomor Rekening</div>
+          <div className="px-7">
+            <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">Nomor Rekening</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('nomor_rekening', {
@@ -470,8 +479,8 @@ export default function UpdateDataDiriPribadi() {
               )}
             </div>
           </div>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Atas Nama Rekening</div>
+          <div className="px-7">
+            <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">Atas Nama Rekening</div>
             <div className="flex w-full flex-auto flex-col">
               <input
                 {...register('nama_rekening', { required: false })}
@@ -480,8 +489,8 @@ export default function UpdateDataDiriPribadi() {
               />
             </div>
           </div>
-          <div className="flex flex-row items-center px-7">
-            <div className="basis-[200px] text-sm font-medium tracking-wider text-[#6B7280]">Nama Bank</div>
+          <div className="px-7">
+            <div className="mb-2 basis-[200px] text-sm font-medium tracking-wider text-black">Nama Bank</div>
             <div className="w-full">
               <Controller
                 control={control}
@@ -505,61 +514,56 @@ export default function UpdateDataDiriPribadi() {
               />
             </div>
           </div>
-          <div className="flex flex-row">
-            <div className="basis-[200px] px-7 text-sm font-medium tracking-wider text-[#6B7280]">
-              Dokumen Bank/Rekening
-            </div>
-            <div className="flex w-full flex-auto flex-col pl-5">
-              <Controller
-                control={control}
-                name="file_uuid_rek"
-                rules={{ required: false }}
-                render={({ field: { onChange, value } }) => {
-                  return (
-                    <div className="flex items-center">
-                      <UploadWrapper
-                        allowedTypes={['jpg', 'jpeg', 'png', 'pdf']}
-                        handleUploadChange={(files: FileObject[]) => {
-                          const fileIndex = files?.length - 1;
-                          setValue('file_uuid_rek', files?.[fileIndex]?.id);
-                          setValue('file_name_rek', files?.[fileIndex].name);
-                          onChange(files?.[fileIndex].id);
-                        }}
-                      >
-                        {({ loading }) => (
-                          <div className="flex items-center">
-                            <button
-                              disabled={loading}
-                              type="button"
-                              className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
-                            >
-                              {loading ? <CircleProgress /> : null}
-                              <UploadIcon className="mr-1 h-4" />
-                              Upload
-                            </button>
-                            {!value && (
-                              <div
-                                className={classNames(
-                                  'ml-2 text-xs',
-                                  errors.file_uuid_rek ? 'text-red-400' : 'text-gray-400'
-                                )}
-                              >
-                                (jpg,jpeg,png,pdf)
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </UploadWrapper>
-                      {!!value && (
-                        <FileLoader uuid={value} asLink>
-                          <a className="ml-2 whitespace-nowrap text-blue-500 underline">Dokumen Bank</a>
-                        </FileLoader>
+          <div className="mt-5 px-7 sm:col-span-6">
+            <label className="mb-2 block text-sm font-medium text-black">Dokumen Bank/Rekening</label>
+            {data && !isValidating && (
+              <div className="mb-3 pl-2">
+                <LinkFile
+                  link={data?.uuid_rekening?.[0]?.document_uuid}
+                  value={data?.uuid_rekening?.[0].document_name}
+                />
+              </div>
+            )}
+            <Controller
+              control={control}
+              name={'file_uuid_rek'}
+              rules={{ required: false }}
+              render={({ field: { onChange, value } }) => (
+                <UploadWrapper
+                  allowedTypes={['pdf']}
+                  handleUploadChange={(files: FileObject[]) => {
+                    setValue('file_uuid_rek', files[0].id);
+                    onChange(files[0].name);
+                  }}
+                >
+                  {({ loading }) => (
+                    <div
+                      className={classNames(
+                        'flex items-center justify-center space-x-2 rounded-md border-[1px] p-2',
+                        errors.file_uuid_rek ? 'border-red-500' : ''
                       )}
+                    >
+                      <div className="flex flex-1 flex-row items-center justify-center space-x-3 rounded-md bg-sky-100 py-2">
+                        <div>
+                          <div className="text-sm text-gray-400">
+                            {value || 'Masukan dokumen permohonan dalam bentuk PDF max 2mb'}
+                          </div>
+                        </div>
+                        <button
+                          disabled={loading}
+                          type="button"
+                          className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                        >
+                          {loading ? <CircleProgress /> : null}
+                          <UploadIcon className="mr-1 h-4" />
+                          Upload
+                        </button>
+                      </div>
                     </div>
-                  );
-                }}
-              />
-            </div>
+                  )}
+                </UploadWrapper>
+              )}
+            ></Controller>
           </div>
 
           <div className="flex flex-auto flex-col items-end px-7">

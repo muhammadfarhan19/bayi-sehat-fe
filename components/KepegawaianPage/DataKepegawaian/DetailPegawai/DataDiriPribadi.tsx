@@ -6,13 +6,21 @@ import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
 import Loader from '../../../shared/Loader/Loader';
 
-export const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
+export const LinkFile = ({
+  link,
+  value,
+  additionalStyle,
+}: {
+  link?: string;
+  value?: string;
+  additionalStyle?: string;
+}) => {
   if (!link) {
     return <>{value}</>;
   }
   return (
     <FileLoader uuid={link} asLink>
-      <span className="whitespace-nowrap text-blue-500 underline">{value}</span>
+      <span className={`whitespace-nowrap text-blue-500 underline ${additionalStyle}`}>{value}</span>
     </FileLoader>
   );
 };
