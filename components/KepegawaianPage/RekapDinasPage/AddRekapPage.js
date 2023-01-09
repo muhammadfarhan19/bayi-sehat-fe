@@ -899,7 +899,7 @@ function AddRekapPage(props) {
             <div className="mt-5">
               <div className="mt-1 sm:col-span-2 sm:mt-0">
                 <AutoCompletePegawai
-                  disabled={watch('tgl_mulai') === '' && watch('tgl_selesai') === ''}
+                  disabled={watch('tgl_mulai') === '' || watch('tgl_selesai') === ''}
                   label={'Pegawai'}
                   placeholderDisabled={'Silahkan masukan tanggal mulai dan tanggal selesai dinas terlebih dahulu'}
                   placeholder={'Cari dan Tambahkan Pegawai'}
@@ -921,7 +921,7 @@ function AddRekapPage(props) {
             <div className="mt-5">
               <div className="mt-1 sm:col-span-2 sm:mt-0">
                 <AutoCompleteEksternal
-                  disabled={watch('tgl_mulai') === '' && watch('tgl_selesai') === ''}
+                  disabled={watch('tgl_mulai') === '' || watch('tgl_selesai') === ''}
                   label={'Tim Eksternal'}
                   placeholderDisabled={'Silahkan masukan tanggal mulai dan tanggal selesai dinas terlebih dahulu'}
                   placeholder={'Cari dan Tambahkan Tim Eksternal'}
