@@ -89,9 +89,9 @@ export const TEMPLATE_FILE_FORMAT = {
 };
 
 export const StatusPembayaranText = [
-  'Menunggu PUMK Proses',
+  'Menunggu PUMK Memproses',
   'Diproses PUMK',
-  'Diajukan PUMK ke BPP',
-  'Dibayarkan BPP',
+  'Diajukan PUMK Kepada BPP',
+  'Dibayarkan oleh PUMK',
   'Selesai',
 ];

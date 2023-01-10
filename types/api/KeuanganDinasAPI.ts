@@ -11,6 +11,31 @@ export interface GetDetailPembayaranReq {
 
 export interface GetDetailPembayaranRes {
   status: Status;
+  data: PembayaranData[];
+}
+
+export interface PembayaranData {
+  detail_pembayaran_dinas_id: number;
+  dinas_id: number;
+  ref_id: number;
+  ref_type: string;
+  nama: string;
+  gol: string;
+  tusi: string;
+  honorarium_sumber: number;
+  waktu: number;
+  total_honorarium: number;
+  uang_harian: number;
+  transport: number;
+  pajak: number;
+  lainnya: number;
+  jumlah_bersih: number;
+  jumlah_pj: number;
+  no_rekening: string;
+  nama_bank: string;
+  atas_nama_rekening: string;
+  created_by: string;
+  created_at: string;
 }
 
 export interface PostDinasBuktibayarReq {
@@ -35,3 +60,13 @@ export interface PostDataPembayaranReq {
 }
 
 export interface PostDataPembayaranRes extends GenericRes {}
+
+export interface PostUpdateStatusPembayaranReq {
+  dinas_id: number;
+  status_pembayaran: number;
+}
+
+export interface PostUpdateStatusPembayaranRes {
+  status: Status;
+  data: string;
+}

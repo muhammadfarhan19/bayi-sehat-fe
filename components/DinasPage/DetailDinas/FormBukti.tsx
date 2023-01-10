@@ -20,6 +20,7 @@ import { getQueryString } from '../../../utils/URLUtils';
 import { CircleProgress } from '../../shared/CircleProgress';
 import DatePickerCustom from '../../shared/Input/DatePicker';
 import UploadWrapper, { FileObject } from '../../shared/Input/UploadWrapper';
+import useUpdateStatus from './useUpdateStatus';
 
 interface FormState {
   tanggal: number;
@@ -30,6 +31,8 @@ function FormBukti() {
   const dispatch = useDispatch();
 
   const { dinas_id, status: statusPembayaranId } = getQueryString<{ dinas_id: string; status: string }>();
+  const { updateStatus } = useUpdateStatus();
+
   const isFormBuktiBayar = statusPembayaranId === '2';
   const isFormBuktitanggungjawab = statusPembayaranId === '3';
 
@@ -80,13 +83,8 @@ function FormBukti() {
     }
 
     if (resSubmit! && resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
-      dispatch(
-        setSnackbar({
-          show: true,
-          message: 'Data berhasil tersimpan.',
-          type: SnackbarType.INFO,
-        })
-      );
+      await updateStatus(Number(statusPembayaranId) + 1);
+      reset();
     } else {
       dispatch(
         setSnackbar({
@@ -192,7 +190,7 @@ function FormBukti() {
             type="submit"
             className="rounded border border-transparent bg-indigo-600 p-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200"
           >
-            Ajukan Pembayaran
+            Kirim
           </button>
         </div>
       </div>

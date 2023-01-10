@@ -27,6 +27,10 @@ function DinasSection() {
     );
   }
 
+  if (!data) {
+    throw 'Error loading component';
+  }
+
   return (
     <>
       <Disclosure defaultOpen={true} as="div" className="rounded-lg bg-white py-4 shadow">

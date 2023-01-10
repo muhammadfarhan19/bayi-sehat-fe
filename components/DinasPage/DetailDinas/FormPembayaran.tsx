@@ -1,10 +1,9 @@
 import { UploadIcon } from '@heroicons/react/solid';
-import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 
-import { setSnackbar } from '../../../action/CommonAction';
+import { setModal, setSnackbar } from '../../../action/CommonAction';
 import { KeuanganDinasAPI } from '../../../constants/APIUrls';
-import { SnackbarType } from '../../../reducer/CommonReducer';
+import { ModalType, SnackbarType } from '../../../reducer/CommonReducer';
 import { GetDocumentRes } from '../../../types/api/DocumentAPI';
 import { PostDataPembayaranReq, PostDataPembayaranRes } from '../../../types/api/KeuanganDinasAPI';
 import { Status } from '../../../types/Common';
@@ -12,11 +11,12 @@ import { callAPI } from '../../../utils/Fetchers';
 import { getQueryString } from '../../../utils/URLUtils';
 import { CircleProgress } from '../../shared/CircleProgress';
 import UploadWrapper, { FileObject } from '../../shared/Input/UploadWrapper';
+import useUpdateStatus, { StatusPUMK } from './useUpdateStatus';
 
 function FormPembayaran() {
-  const { dinas_id } = getQueryString<{ dinas_id: string }>();
+  const { dinas_id, status } = getQueryString<{ dinas_id: string; status: string }>();
+  const { updateStatus } = useUpdateStatus();
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const handleDownload = () => {
     (async () => {
@@ -53,14 +53,19 @@ function FormPembayaran() {
     );
 
     if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
+      if (Number(status) !== StatusPUMK.DIPROSES_PUMK) {
+        updateStatus(StatusPUMK.DIPROSES_PUMK);
+        return;
+      }
+
       dispatch(
-        setSnackbar({
+        setModal({
+          message: 'Data berhasil tersimpan!',
+          type: ModalType.INFO,
           show: true,
-          message: 'Data berhasil tersimpan.',
-          type: SnackbarType.INFO,
+          redirect: window.location.href,
         })
       );
-      router.push(location.href);
     } else {
       dispatch(
         setSnackbar({
