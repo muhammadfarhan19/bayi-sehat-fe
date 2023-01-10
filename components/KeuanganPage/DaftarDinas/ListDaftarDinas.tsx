@@ -195,13 +195,21 @@ function ListDaftarDinas() {
                           {dataTanggalMulaiDinas}-{formatDate(new Date(data?.tgl_selesai), 'dd MMMM yyyy')}
                         </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.pic_pumk}</td>
-                        <td className="px-6 py-4 text-center text-[10px] font-medium text-gray-900">
+                        <td className="w-60 px-6 py-4 text-center text-[10px] font-medium text-gray-900">
                           <div
                             className={`rounded-md ${
                               data?.status_pembayaran_id === StatusDinas.MenungguPUMKDiproses
                                 ? ColourGrading.isMenunggu
-                                : 'bg-[#9EDE73]'
-                            }  px-8 py-1 text-white`}
+                                : data?.status_pembayaran_id === StatusDinas.DiprosesPUMK
+                                ? ColourGrading.isDiproses
+                                : data?.status_pembayaran_id === StatusDinas.DiajukanKeBPP
+                                ? ColourGrading.isDiajukan
+                                : data?.status_pembayaran_id === StatusDinas.DibayarkanBPP
+                                ? ColourGrading.isDibayarkan
+                                : data?.status_pembayaran_id === StatusDinas.Selesai
+                                ? ColourGrading.isSelesai
+                                : 'bg-white'
+                            } px-2 py-2 text-white`}
                           >
                             {data?.status_pembayaran}
                           </div>

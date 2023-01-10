@@ -162,6 +162,7 @@ export interface PostUserUpdateDataDiriPegawaiReq {
   pangkat: number;
   masa_kerja: string;
   masa_kerja_kepangkatan: string;
+  custom_unit_kerja?: string;
   karpeg: string;
   custom_jabatan_name: string;
   karpeg_file: {
