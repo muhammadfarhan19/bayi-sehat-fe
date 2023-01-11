@@ -154,7 +154,7 @@ function ListDaftarDinas() {
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      className="w-48 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
                       TANGGAL DINAS
                     </th>
@@ -166,7 +166,7 @@ function ListDaftarDinas() {
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      className="w-96 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
                       STATUS
                     </th>
@@ -174,8 +174,6 @@ function ListDaftarDinas() {
                 </thead>
                 <tbody>
                   {(listKeuanganDinas?.list || []).map((data, dataIdx) => {
-                    const asEmptyString = '';
-                    const dataTanggalMulaiDinas = !data?.tgl_mulai ? asEmptyString : data?.tgl_mulai?.slice(-2);
                     return (
                       <tr
                         key={dataIdx}
@@ -192,7 +190,8 @@ function ListDaftarDinas() {
                         <td className="px-6 text-xs font-medium text-gray-900">{data?.isi_penugasan}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja_str}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                          {dataTanggalMulaiDinas}-{formatDate(new Date(data?.tgl_selesai), 'dd MMMM yyyy')}
+                          {formatDate(new Date(data?.tgl_mulai), 'dd MMMM yyyy')} -{' '}
+                          {formatDate(new Date(data?.tgl_selesai), 'dd MMMM yyyy')}
                         </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.pic_pumk}</td>
                         <td className="w-60 px-6 py-4 text-center text-[10px] font-medium text-gray-900">
