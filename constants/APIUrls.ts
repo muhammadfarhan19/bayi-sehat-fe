@@ -239,3 +239,10 @@ export const KeuanganDinasAPI = {
   POST_BUKTI_TANGGUNGJAWAB: config.apiHost + '/dinas/buktitanggungjawab',
   POST_UPDATE_STATUS_PEMBAYARAN: config.apiHost + '/dinas/update-status-pembayaran',
 };
+
+export const CutiAPI = {
+  POST_CUTI: config.apiHost + '/cuti/insert',
+  PUT_CUTI: config.apiHost + '/cuti/update',
+  GET_CUTI_LIST: config.apiHost + '/cuti/list',
+  GET_CUTI_QUOTA: config.apiHost + '/cuti/stat-pengajuan',
+};

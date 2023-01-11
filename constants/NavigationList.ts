@@ -54,6 +54,11 @@ export const NavigationList: Navigation[] = [
             href: '/kehadiran',
           },
           {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Klaim Cuti dan Sakit',
+            href: '/cuti-sakit',
+          },
+          {
             id: PUBLIC,
             name: 'Log Harian',
             href: '/log-harian',
