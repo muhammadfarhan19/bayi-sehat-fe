@@ -384,7 +384,7 @@ function KlaimCutiSakit() {
                             {data?.status === 1 ? 'Cuti' : 'Cuti Sakit'}
                           </td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-blue-900">
+                          <td className="px-6 py-4 text-xs font-medium text-blue-900 underline">
                             {data?.files?.[0]?.document_name?.length === 0 ? (
                               '-'
                             ) : (
