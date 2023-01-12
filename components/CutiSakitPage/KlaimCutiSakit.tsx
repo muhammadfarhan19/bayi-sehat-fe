@@ -381,7 +381,7 @@ function KlaimCutiSakit() {
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{formatDatePengajuan}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                            {data?.status === 1 ? 'Cuti' : 'Cuti Sakit'}
+                            {data?.type === 1 ? 'Cuti' : 'Cuti Sakit'}
                           </td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
                           <td className="px-6 py-4 text-xs font-medium text-blue-900 underline">
