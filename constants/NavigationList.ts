@@ -135,6 +135,11 @@ export const NavigationList: Navigation[] = [
           },
           {
             id: NavigationId.KEPEGAWAIAN,
+            name: 'Klaim Cuti dan Sakit',
+            href: '/kepegawaian/cuti-sakit',
+          },
+          {
+            id: NavigationId.KEPEGAWAIAN,
             name: 'Log Harian',
             href: '/kepegawaian/log-harian',
           },

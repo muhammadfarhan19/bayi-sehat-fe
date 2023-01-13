@@ -294,7 +294,7 @@ function KlaimCutiSakit() {
             name={`: ${personalPegawaiData?.nama}`}
             tanggal={`: ${getValues('tanggal_klaim')}`}
             nip={`: ${personalPegawaiData?.nip}`}
-            jenisPengajuan={`: ${getValues('jenis_pengajuan')}`}
+            jenisPengajuan={`: ${getValues('jenis_pengajuan') == 1 ? 'Cuti' : 'Cuti Sakit'}`}
             alasan={`: ${getValues('catatan')}`}
             documentValue={getValues('file_id')}
             dokumen={`: ${getValues('file_name')}`}

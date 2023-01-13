@@ -1,15 +1,15 @@
 import React from 'react';
 
-import KlaimAdmin from './KlaimAdmin';
 import KlaimDetail from './KlaimDetail';
+import KlaimList from './KlaimList';
 
-export default function RiwayatPenghargaan() {
+export default function KlaimCutiSakitAdmin() {
   const [klaimKehadiranId, setKlaimKehadiranId] = React.useState(0);
 
   return (
     <>
       {klaimKehadiranId === 0 ? (
-        <KlaimAdmin
+        <KlaimList
           onShowDetail={(id: number) => {
             setKlaimKehadiranId(id);
           }}

@@ -31,6 +31,7 @@ export interface GetCutiListRes {
 export interface GetCutiListData {
   id: number;
   pegawai_id: number;
+  nama_pegawai: string;
   tanggal: string;
   type: number;
   note: string;
