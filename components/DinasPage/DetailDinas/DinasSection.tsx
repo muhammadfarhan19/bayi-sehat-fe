@@ -89,13 +89,17 @@ function DinasSection() {
                     </>
                   ),
                 },
-              ].map((each, index, collections) => (
+              ].map((each, index) => (
                 <React.Fragment key={`content${index}`}>
-                  <div className="flex px-6">
-                    <span className="shrink grow basis-5/12 text-gray-700 sm:basis-3/12">{each.label}</span>
-                    <div className="grow basis-7/12 sm:basis-9/12">{each.content}</div>
+                  <div className="border-t-[1px] border-solid" />
+                  <div className="flex px-6 py-[10px]">
+                    <span className="font-inter shrink grow basis-5/12 text-[14px] text-[#6B7280] sm:basis-3/12">
+                      {each.label}
+                    </span>
+                    <div className="font-inter grow basis-7/12 text-[14px] text-[#111827] sm:basis-9/12">
+                      {each.content}
+                    </div>
                   </div>
-                  {collections.length - 1 !== index && <div className="border-t-[1px] border-solid" />}
                 </React.Fragment>
               ))}
             </Disclosure.Panel>

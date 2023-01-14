@@ -174,7 +174,7 @@ export const NavigationList: Navigation[] = [
     childMenu: [
       {
         id: NavigationId.KEUANGAN,
-        name: 'Dinas',
+        name: 'Pembayaran',
         href: '/keuangan/daftar-dinas',
       },
     ],

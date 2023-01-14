@@ -234,7 +234,9 @@ export const PresensiShiftPegawaiAPI = {
 export const KeuanganDinasAPI = {
   GET_DETAIL_PEMBAYARAN: config.apiHost + '/dinas/list-detail-data-pembayaran',
   GET_TEMPLATE_PEMBAYARAN: config.apiHost + '/dinas/download/template-pembayaran',
-  POST_DATA_PEMBAYARAN: config.apiHost + '/dinas/upload-data-pembayaran',
+  // POST_DATA_PEMBAYARAN: config.apiHost + '/dinas/upload-data-pembayaran',
+  GET_TANGGAL_PEMBAYARAN: config.apiHost + '/dinas/tanggal-pembayaran',
+  POST_DATA_PEMBAYARAN: config.apiHost + '/dinas/insert-data-pembayaran',
   POST_BUKTI_BAYAR: config.apiHost + '/dinas/buktibayar',
   POST_BUKTI_TANGGUNGJAWAB: config.apiHost + '/dinas/buktitanggungjawab',
   POST_UPDATE_STATUS_PEMBAYARAN: config.apiHost + '/dinas/update-status-pembayaran',

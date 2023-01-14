@@ -41,7 +41,6 @@ export interface PembayaranData {
 export interface PostDinasBuktibayarReq {
   dinas_id: number;
   tgl_di_bayar: string;
-  file_bukti_bayar: File[];
 }
 
 export interface PostDinasBuktibayarRes extends GenericRes {}
@@ -49,14 +48,12 @@ export interface PostDinasBuktibayarRes extends GenericRes {}
 export interface PostDinasBuktitanggungjawabReq {
   dinas_id: number;
   tgl_pertanggung_jawaban: string;
-  file_pertanggung_jawaban: File[];
 }
 
 export interface PostDinasBuktitanggungjawabRes extends GenericRes {}
 
 export interface PostDataPembayaranReq {
   dinas_id: number;
-  files: File[];
 }
 
 export interface PostDataPembayaranRes extends GenericRes {}
@@ -69,4 +66,14 @@ export interface PostUpdateStatusPembayaranReq {
 export interface PostUpdateStatusPembayaranRes {
   status: Status;
   data: string;
+}
+
+export interface GetTanggalPembayaranReq {
+  dinas_id: number;
+}
+
+export interface TanggalPembayaranData {
+  tanggal_request: string;
+  tanggal_dibayarkan: string;
+  tanggal_pertanggungjawaban: string;
 }

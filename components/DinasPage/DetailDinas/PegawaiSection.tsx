@@ -45,21 +45,23 @@ function PegawaiSection() {
                 <div className="flex grow basis-7/12 flex-col gap-y-2 sm:basis-9/12">
                   {(data?.pegawai || []).map((each, index) => (
                     <div key={`pegawai${index}`} className="flex">
-                      <div className="shrink grow basis-1">{index + 1}.</div>
+                      <div className="font-inter shrink grow basis-1 text-[16px] text-[#374151] ">{index + 1}.</div>
                       <div className="flex grow basis-11/12 flex-col">
-                        <div className="text-base">{each.nama_pegawai}</div>
-                        <div className="text-sm text-gray-500">{each.unit_kerja_str}</div>
+                        <div className="font-inter text-[16px] text-[#374151] ">{each.nama_pegawai}</div>
+                        <div className="font-inter text-[14px] text-[#6B7280]">{each.unit_kerja_str}</div>
                         <div>
                           {(() => {
                             if (each.flag === 2) {
-                              return <span className="text-[#10B981]">Available</span>;
+                              return <span className="font-inter text-[14px] text-[#10B981]">Available</span>;
                             } else if (each.flag === 1) {
-                              return <span className="text-yellow-400">Partialy Available</span>;
+                              return <span className="font-inter text-[14px] text-yellow-400">Partialy Available</span>;
                             } else if (each.flag === 0) {
-                              return <span className="text-[#DC2626]">Not Available</span>;
+                              return <span className="font-inter text-[14px] text-[#DC2626]">Not Available</span>;
                             }
                           })()}
-                          , {startEndDateString(each?.tgl_mulai || '', each?.tgl_selesai || '')}
+                          <span className="font-inter text-[14px] text-[#374151]">
+                            , {startEndDateString(each?.tgl_mulai || '', each?.tgl_selesai || '')}
+                          </span>
                         </div>
                       </div>
                     </div>
