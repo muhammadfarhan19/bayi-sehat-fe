@@ -288,6 +288,8 @@ function KlaimCutiSakit() {
         {formModalState.open ? (
           <ModalKehadiran
             open={formModalState.open}
+            withCustomTitle
+            modalTitle="Klaim Cuti dan Sakit"
             setOpen={(open: boolean) => handleShowForm(open)}
             handleSubmission={handleSubmit(submitHandler)}
             selectedId={formModalState?.selectedId}
