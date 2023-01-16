@@ -21,7 +21,6 @@ function FormBukti() {
     control,
     formState: { errors },
     handleSubmit,
-    reset,
   } = useForm<FormState>({
     defaultValues: {
       tanggal: Date.now(),
@@ -79,7 +78,7 @@ function FormBukti() {
         <div className="flex items-center gap-x-2">
           <button
             className="rounded border border-transparent bg-red-600 p-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-500 disabled:text-gray-200"
-            onClick={() => reset()}
+            onClick={() => (window.location.href = '/keuangan/daftar-dinas')}
           >
             Batal
           </button>
