@@ -3,3 +3,9 @@ export const StatusPengajuan = {
   Diajukan: 1,
   Diterima: 2,
 };
+
+export const StatusText = {
+  Ditolak: 'Ditolak',
+  Diajukan: 'Diproses',
+  Diterima: 'Diterima',
+};

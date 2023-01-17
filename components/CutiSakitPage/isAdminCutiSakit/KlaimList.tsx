@@ -10,7 +10,7 @@ import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
-import { StatusPengajuan } from '../Shared/_resource';
+import { StatusPengajuan, StatusText } from '../Shared/_resource';
 import KlaimModal from './KlaimModal';
 
 type ListKlaimProps = {
@@ -116,7 +116,7 @@ function KlaimList(props: ListKlaimProps) {
             label={'Status Pengajuan'}
             onChange={e => changeFilterState({ status: Number(e.value) })}
             defaultValue={{ text: 'Semua', value: '*' }}
-            options={[0, 1, 2, 3].map(each => ({
+            options={[0, 1, 2, -1].map(each => ({
               text: each === 0 ? 'Semua' : each === 1 ? 'Diproses' : each === 2 ? 'Diterima' : 'Ditolak',
               value: String(each),
             }))}
@@ -194,10 +194,10 @@ function KlaimList(props: ListKlaimProps) {
                       data?.status === StatusPengajuan.Ditolak || data?.status === StatusPengajuan.Diterima;
                     const currentStatus =
                       data?.status === StatusPengajuan.Diterima
-                        ? 'Diterima'
+                        ? StatusText.Diterima
                         : data?.status === StatusPengajuan.Ditolak
-                        ? 'Ditolak'
-                        : 'Diajukan';
+                        ? StatusText.Ditolak
+                        : StatusText.Diajukan;
                     return (
                       <tr
                         key={data?.id}

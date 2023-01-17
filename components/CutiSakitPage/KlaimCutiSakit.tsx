@@ -420,7 +420,7 @@ function KlaimCutiSakit() {
                               Ditolak
                             </td>
                           ) : (
-                            <td className="px-6 py-4 text-xs font-medium text-gray-900">Diajukan</td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">Diproses</td>
                           )}
                         </tr>
                       );
