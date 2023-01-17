@@ -6,20 +6,27 @@ import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
 import Loader from '../../../shared/Loader/Loader';
 
-export const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
+export const LinkFile = ({
+  link,
+  value,
+  additionalStyle,
+}: {
+  link?: string;
+  value?: string;
+  additionalStyle?: string;
+}) => {
   if (!link) {
     return <>{value}</>;
   }
   return (
     <FileLoader uuid={link} asLink>
-      <span className="whitespace-nowrap text-blue-500 underline">{value}</span>
+      <span className={`whitespace-nowrap text-blue-500 underline ${additionalStyle}`}>{value}</span>
     </FileLoader>
   );
 };
 
 function DataDiriPribadi() {
   const dataApiRes = usePersonalData();
-
   if (!dataApiRes) {
     return (
       <div className="relative h-[150px] w-full divide-y divide-gray-200">
@@ -55,6 +62,18 @@ function DataDiriPribadi() {
               value: <LinkFile link={dataApiRes.uuid_bpjs?.[0]?.document_uuid} value={dataApiRes.bpjs} />,
             },
             { label: 'Nomor HP', value: dataApiRes.hp },
+            { label: 'Nama Rekening Bank', value: dataApiRes?.nama_rekening?.toUpperCase() },
+            { label: 'Nomor Rekening Bank', value: dataApiRes?.nomor_rekening },
+            { label: 'Nama Bank Terdaftar', value: !dataApiRes?.bank_str ? '-' : dataApiRes?.bank_str },
+            {
+              label: 'Dokumen Bank',
+              value: (
+                <LinkFile
+                  link={dataApiRes?.uuid_rekening?.[0]?.document_uuid}
+                  value={dataApiRes?.uuid_rekening?.[0]?.document_name}
+                />
+              ),
+            },
           ].map((each, index) => (
             <tr key={index}>
               <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>

@@ -87,3 +87,11 @@ export const TEMPLATE_FILE_NAME = {
 export const TEMPLATE_FILE_FORMAT = {
   xlsx: 'xlsx',
 };
+
+export const StatusPembayaranText = [
+  'Menunggu PUMK Memproses',
+  'Diproses PUMK',
+  'Diajukan PUMK Kepada BPP',
+  'Dibayarkan oleh PUMK',
+  'Selesai',
+];

@@ -115,7 +115,7 @@ export default function DetailDinas() {
         <Card
           title="Jadwal Dinas"
           sub_title={`Dinas dibulan ${convertIndonesiaFormat(dateNowStr).split(' ')[1]}`}
-          link={`/jadwal-dinas`}
+          link={`/jadwal-dinas` + (pegawai_id ? '?pegawai_id=' + pegawai_id : '')}
           data={typeof dinas !== 'undefined' && dinas !== null ? String(dinas?.total_dinas) : '-'}
           load={loadDinas}
         />
@@ -123,7 +123,7 @@ export default function DetailDinas() {
         <Card
           title="Log Harian"
           sub_title="Belum di isi"
-          link="/log-harian"
+          link={'/log-harian' + (pegawai_id ? '?pegawai_id=' + pegawai_id : '')}
           data={
             typeof logHarian !== 'undefined' && logHarian !== null ? String(logHarian?.number_of_day_unfilled) : '-'
           }

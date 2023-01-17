@@ -3,6 +3,7 @@ import { XIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { ContentLabelledItems } from '../KepegawaianPage/DataKepegawaian/DetailPegawai/ProfileSummaryPegawai/Shared/PageComponents';
+import FileLoader from '../shared/FileLoader';
 
 interface ModalProps {
   open: boolean;
@@ -17,10 +18,27 @@ interface ModalProps {
   alasan?: string;
   dokumen?: string;
   pegawaiID?: number;
+  withCustomTitle?: boolean;
+  modalTitle?: string;
+  documentValue?: string;
 }
 
 function ModalKehadiran(props: ModalProps) {
-  const { open, setOpen, handleSubmission, name, nip, tanggal, jenisPengajuan, alasan, dokumen } = props;
+  const {
+    open,
+    setOpen,
+    handleSubmission,
+    name,
+    nip,
+    tanggal,
+    jenisPengajuan,
+    alasan,
+    dokumen,
+    withCustomTitle = false,
+    modalTitle,
+    documentValue,
+  } = props;
+
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -55,7 +73,9 @@ function ModalKehadiran(props: ModalProps) {
           >
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
               <Dialog.Title as="div" className="flex justify-between">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">Klaim Kehadiran</h3>
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  {withCustomTitle ? modalTitle : 'Klaim Kehadiran'}
+                </h3>
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
               <form onSubmit={handleSubmission}>
@@ -74,8 +94,10 @@ function ModalKehadiran(props: ModalProps) {
                 <div className="mt-5 sm:col-span-6">
                   <ContentLabelledItems subtitle="Alasan" value={alasan} />
                 </div>
-                <div className="mt-5 sm:col-span-6">
-                  <ContentLabelledItems subtitle="Dokumen" value={dokumen} />
+                <div className="mt-5 text-indigo-600 sm:col-span-6">
+                  <FileLoader uuid={documentValue} asLink>
+                    <ContentLabelledItems subtitle="Dokumen" value={dokumen} />
+                  </FileLoader>
                 </div>
 
                 <div className="mt-5 sm:col-span-6"></div>

@@ -8,6 +8,7 @@ export interface GetRekapReq {
   unit_kerja_id?: number;
   tgl_mulai?: string;
   tgl_selesai?: string;
+  pic_pumk?: string;
 }
 
 export interface GetRekapPegawaiReq {
@@ -65,9 +66,14 @@ export interface RekapDetailData {
   lokasi: string;
   pic: string;
   pic_id: number;
+  pic_pumk: string;
+  pic_pumk_id: number;
   isi_penugasan: string;
   surat_tugas: DocumentData[];
   pegawai: PegawaiData[];
+  pegawai_external: PegawaiData[];
+  status_pembayaran: string;
+  status_pembayaran_id: number;
 }
 
 export interface DocumentData {
@@ -128,4 +134,13 @@ export interface GetRekapDinasPegawaiReq {
 
 export interface GetRekapDinasPegawaiRes {
   total_dinas: number;
+}
+
+export interface GetRekapDinasKeuanganRes {
+  status: string;
+  list: RekapDetailData[];
+  pagination: {
+    total_data: number;
+    total_page: number;
+  };
 }

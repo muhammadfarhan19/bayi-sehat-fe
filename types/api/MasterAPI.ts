@@ -48,3 +48,26 @@ export interface GetMasterJenisKpRes {
   status: Status;
   data: MasterJenisKpData[];
 }
+export interface GetMasterHotel {
+  status: Status;
+  data: MasterHotel;
+}
+export interface MasterHotel {
+  list: {
+    hotel_id: number;
+    nama_hotel: string;
+    nama_cp: string;
+    nomor_hp_cp: string;
+    nomor_rekening: string;
+    bank_id: number;
+    bank_nama: string;
+    atas_nama_rekening: string;
+    npwp: string;
+    files: [];
+    alamat: string;
+  }[];
+  pagination: {
+    total_page: number;
+    total_data: number;
+  };
+}

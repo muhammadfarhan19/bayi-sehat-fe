@@ -54,7 +54,7 @@ function TwoGraph(props: Props) {
   React.useEffect(() => {
     if (
       !isValidating &&
-      barChartsData.multiple_bar_charts &&
+      barChartsData?.multiple_bar_charts &&
       !dataStatisticSecondValidating &&
       barSecondChartsData.multiple_bar_charts
     ) {

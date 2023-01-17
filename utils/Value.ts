@@ -9,6 +9,8 @@ export const encrypt = (text: string) => {
     .catch(() => '');
 };
 
+export const formatAmount = (text: string) => text.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
 export const getAcceptedType = (argType: AcceptedType) => {
   const type = argType.toLowerCase();
   if (['jpeg', 'jpg'].includes(type)) {

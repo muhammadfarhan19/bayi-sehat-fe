@@ -30,6 +30,14 @@ export interface GetUserProfileData {
     document_name: string;
   }[];
   hp: string;
+  uuid_rekening: {
+    document_uuid: string;
+    document_name: string;
+  }[];
+  nama_rekening: string;
+  nomor_rekening: string;
+  bank_id: number;
+  bank_str: string;
 }
 
 export interface GetUserPersonalPegawaiData {
@@ -124,6 +132,15 @@ export interface PostUserProfileReq {
   agama?: number;
   golongan_darah?: string;
   no_bpjs_kt?: string;
+  nomor_rekening?: string;
+  nama_rekening?: string;
+  bank_id?: number;
+  uuid_rekening?: [
+    {
+      document_uuid?: string;
+      document_name?: string;
+    }
+  ];
 }
 
 export interface PostUserProfileRes {
@@ -145,6 +162,7 @@ export interface PostUserUpdateDataDiriPegawaiReq {
   pangkat: number;
   masa_kerja: string;
   masa_kerja_kepangkatan: string;
+  custom_unit_kerja?: string;
   karpeg: string;
   custom_jabatan_name: string;
   karpeg_file: {

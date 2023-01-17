@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 interface Card {
   data: string;
   link: string;
@@ -46,9 +48,9 @@ export default function Card(props: Card) {
         </div>
       </div>
       <div className="bg-[#F9FAFB] px-[21px] py-[14px]">
-        <a className="text-[14px] text-[#4F46E5]" href={link}>
-          Lihat Selengkapnya
-        </a>
+        <Link href={link}>
+          <a className="text-[14px] text-[#4F46E5]">Lihat Selengkapnya</a>
+        </Link>
       </div>
     </div>
   );

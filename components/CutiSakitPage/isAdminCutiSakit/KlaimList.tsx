@@ -1,20 +1,23 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
-import { KlaimKehadiranList } from '../../../constants/APIUrls';
-import { GetKehadiranDataList, GetKehadiranList } from '../../../types/api/KlaimKehadiranAPI';
+import { CutiAPI } from '../../../constants/APIUrls';
+import { GetCutiListParams, GetCutiListRes } from '../../../types/api/CutiAPI';
+import { GetKehadiranList } from '../../../types/api/KlaimKehadiranAPI';
+import { formatDate } from '../../../utils/DateUtil';
 import FileLoader from '../../shared/FileLoader';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import { StatusPengajuan, StatusText } from '../Shared/_resource';
 import KlaimModal from './KlaimModal';
 
 type ListKlaimProps = {
   onShowDetail: (id: number) => void;
 };
 
-function KlaimAdmin(props: ListKlaimProps) {
+function KlaimList(props: ListKlaimProps) {
   const { onShowDetail } = props;
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [filterState, setFilterState] = React.useState<GetKehadiranList>({
@@ -26,8 +29,8 @@ function KlaimAdmin(props: ListKlaimProps) {
     data: getKlaimKehadiran,
     isValidating,
     mutate,
-  } = useCommonApi<GetKehadiranList, GetKehadiranDataList>(
-    KlaimKehadiranList.GET_KLAIM_KEHADIRAN_LIST,
+  } = useCommonApi<GetCutiListParams, GetCutiListRes>(
+    CutiAPI.GET_CUTI_LIST,
     filterState,
     { method: 'GET' },
     { revalidateOnMount: true }
@@ -42,30 +45,15 @@ function KlaimAdmin(props: ListKlaimProps) {
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean;
     selectedId?: number;
-    tanggal_klaim: string;
-    jenis_pengajuan: string;
-    user_id?: number;
   }>({
     open: false,
     selectedId: undefined,
-    tanggal_klaim: '',
-    jenis_pengajuan: '',
-    user_id: undefined,
   });
 
-  const handleShowForm = (
-    open: boolean,
-    tanggal_klaim: string,
-    jenis_pengajuan: string,
-    user_id?: number,
-    selectedId?: number
-  ) => {
+  const handleShowForm = (open: boolean, selectedId?: number) => {
     setFormModalState({
       open,
       selectedId,
-      tanggal_klaim,
-      jenis_pengajuan,
-      user_id,
     });
   };
 
@@ -88,7 +76,7 @@ function KlaimAdmin(props: ListKlaimProps) {
   return (
     <div className="overflow-auto rounded-lg bg-white px-6 py-6 shadow">
       <div className="mb-5 flex flex-row items-center">
-        <h3 className="text-xl font-medium leading-6 text-gray-900">Data Klaim Kehadiran</h3>
+        <h3 className="text-xl font-medium leading-6 text-gray-900">Data Klaim Cuti dan Sakit</h3>
         <div className="ml-auto flex">
           <input
             type="text"
@@ -128,7 +116,7 @@ function KlaimAdmin(props: ListKlaimProps) {
             label={'Status Pengajuan'}
             onChange={e => changeFilterState({ status: Number(e.value) })}
             defaultValue={{ text: 'Semua', value: '*' }}
-            options={[0, 1, 2, 3].map(each => ({
+            options={[0, 1, 2, -1].map(each => ({
               text: each === 0 ? 'Semua' : each === 1 ? 'Diproses' : each === 2 ? 'Diterima' : 'Ditolak',
               value: String(each),
             }))}
@@ -190,7 +178,7 @@ function KlaimAdmin(props: ListKlaimProps) {
                     </th>
                     <th
                       scope="col"
-                      className="py-3 pl-5 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      className="w-full px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
                       Aksi
                     </th>
@@ -198,7 +186,18 @@ function KlaimAdmin(props: ListKlaimProps) {
                 </thead>
                 <tbody>
                   {(getKlaimKehadiran?.list || []).map((data, dataIdx) => {
-                    const isStatusProcessed = data?.status_klaim === 2 || data?.status_klaim === 3;
+                    const formattedDate: string = data?.tanggal
+                      ? formatDate(new Date(data?.tanggal), 'dd MMM yyyy')
+                      : '';
+                    const statusType: string = data?.type === 1 ? 'Cuti' : 'Cuti Sakit';
+                    const isDitolakNorIsDiterima =
+                      data?.status === StatusPengajuan.Ditolak || data?.status === StatusPengajuan.Diterima;
+                    const currentStatus =
+                      data?.status === StatusPengajuan.Diterima
+                        ? StatusText.Diterima
+                        : data?.status === StatusPengajuan.Ditolak
+                        ? StatusText.Ditolak
+                        : StatusText.Diajukan;
                     return (
                       <tr
                         key={data?.id}
@@ -211,34 +210,26 @@ function KlaimAdmin(props: ListKlaimProps) {
                           onClick={() => onShowDetail(data?.id)}
                           className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-500"
                         >
-                          {data?.nama}
+                          {data?.nama_pegawai}
                         </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.tanggal_klaim}</td>
-                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
-                          {data?.jenis_pengajuan}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.alasan_klaim}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedDate}</td>
+                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">{statusType}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">
                           <FileLoader uuid={data?.files?.[0]?.document_uuid} asLink>
                             {data?.files?.[0]?.document_name?.length === 0 ? '-' : data?.files?.[0]?.document_name}
                           </FileLoader>
                         </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.status_klaim_str}</td>
-                        <td className="py-4 pl-5">
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{currentStatus}</td>
+                        <td className="py-4 pr-2">
                           <button
                             onClick={() => {
-                              handleShowForm(
-                                !formModalState?.open,
-                                data?.tanggal_klaim,
-                                data?.jenis_pengajuan,
-                                data?.user_id,
-                                data?.id
-                              );
+                              handleShowForm(!formModalState?.open, data?.id);
                             }}
-                            disabled={data?.status_klaim === 2 || data?.status_klaim === 3}
+                            disabled={isDitolakNorIsDiterima}
                             type="button"
                             className={`inline-flex w-36 items-center justify-center rounded border border-transparent ${
-                              isStatusProcessed
+                              isDitolakNorIsDiterima
                                 ? 'bg-gray-300 hover:bg-gray-700 disabled:bg-gray-500'
                                 : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-200'
                             } px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
@@ -254,15 +245,11 @@ function KlaimAdmin(props: ListKlaimProps) {
               {formModalState?.open && (
                 <KlaimModal
                   open={formModalState?.open}
-                  setOpen={(open: boolean) => handleShowForm(open, '', '')}
+                  setOpen={(open: boolean) => handleShowForm(open, 0)}
                   selectedId={formModalState?.selectedId}
-                  tanggalKlaimSelected={formModalState?.tanggal_klaim}
-                  pegawaiIdSelected={formModalState?.user_id}
-                  jenisPengajuanSelected={formModalState?.jenis_pengajuan}
                   onSuccess={() => mutate()}
                 />
               )}
-
               <Pagination
                 onChange={value => {
                   changeFilterState({ page: value });
@@ -279,4 +266,4 @@ function KlaimAdmin(props: ListKlaimProps) {
   );
 }
 
-export default KlaimAdmin;
+export default KlaimList;

@@ -1,5 +1,4 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { UploadIcon, XIcon } from '@heroicons/react/outline';
+import { ChevronLeftIcon, UploadIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -24,6 +23,7 @@ import useAllowAdmin from '../../../../shared/hooks/useAllowAdmin';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
+import { LinkFile } from '../DataDiriPribadi';
 import AutoCompleteCustom from '../RiwayatKGB/Shared/CustomComboBox';
 
 interface UploadFormProps {
@@ -250,525 +250,544 @@ export default function DataPribadiForm(props: UploadFormProps) {
   }, [open]);
 
   return (
-    <Transition appear show={open} as={React.Fragment}>
-      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={toggleModal}>
-        <div className="min-h-screen px-4 text-center">
-          <Transition.Child
-            as={React.Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Dialog.Overlay className="fixed inset-0 backdrop-brightness-50" />
-          </Transition.Child>
-
-          {/* This element is to trick the browser into centering the modal contents. */}
-          <span className="inline-block h-screen align-middle" aria-hidden="true">
-            &#8203;
-          </span>
-          <Transition.Child
-            as={React.Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-              <Dialog.Title as="div" className="flex justify-between">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">Ubah Data Pribadi</h3>
-                <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
-              </Dialog.Title>
-              <form onSubmit={handleSubmit(submitHandler)}>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="nip" className="block text-sm font-medium text-gray-700">
-                    NIP
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                      disabled={true}
-                      name="nip"
-                      type="text"
-                      value={pegawai?.nip}
-                    />
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="nama" className="block text-sm font-medium text-gray-700">
-                    Nama
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                      disabled={true}
-                      name="nama"
-                      type="text"
-                      value={pegawai?.nama}
-                    />
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Unit Kerja</label>
-                  <div className="pt-1 sm:col-span-2 sm:mt-0">
-                    <select
-                      className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-                      {...register('unit_kerja_id', { required: 'Silahkan masukan unit kerja.' })}
-                      disabled={!isAllowAdmin}
-                    >
-                      <option value="">Silahkan Pilih</option>
-                      {(unitKerjaList || []).map((item, index) => (
-                        <option key={`options-${index}`} value={item?.unit_kerja_id}>
-                          {item?.name}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.unit_kerja_id && (
-                      <p className="mt-1 text-xs text-red-500">{errors.unit_kerja_id.message}</p>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Tempat Lahir</label>
-                  <div className="mt-1">
-                    <input
-                      {...register('tempat_lahir', { required: 'Silahkan masukan tempat lahir.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                      name="tempat_lahir"
-                      type="text"
-                      disabled={!isAllowAdmin}
-                    />
-                    {errors.tempat_lahir && <p className="mt-1 text-xs text-red-500">{errors.tempat_lahir.message}</p>}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
-                  <div className="mt-1">
-                    <input
-                      {...register('tanggal_lahir', { required: 'Silahkan masukan nama tanggal lahir.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                      name="tanggal_lahir"
-                      type="date"
-                      disabled={!isAllowAdmin}
-                    />
-                    {errors.tanggal_lahir && (
-                      <p className="mt-1 text-xs text-red-500">{errors.tanggal_lahir.message}</p>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <div className="mt-1">
-                    <Controller
-                      control={control}
-                      name="jabatan"
-                      rules={{ required: 'Mohon isi data jabatan' }}
-                      render={({ field: { onChange } }) => (
-                        <AutoCompleteCustom
-                          disabled={true}
-                          onChange={value => onChange(value.value)}
-                          label={'Nama Jabatan'}
-                          defaultValue={{ text: formJabatanState.text || '', value: formJabatanState.value || '' }}
-                          onQueryChange={queryText => {
-                            if (debounce.current) {
-                              clearTimeout(debounce.current);
-                            }
-                            debounce.current = window.setTimeout(() => {
-                              setQueryJabatan(queryText);
-                            }, 500);
-                          }}
-                          options={(daftarJabatan?.list || []).map(each => ({
-                            text: each.name,
-                            value: String(each.jabatan_id),
-                          }))}
-                        />
-                      )}
-                    />
-                    {errors.jabatan && <p className="mt-1 text-xs text-red-500">{errors.jabatan.message}</p>}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
-                  <div className="mt-1">
-                    <select
-                      className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-                      {...register('jenis_kelamin', { required: 'Silahkan masukan jenis kelamin.' })}
-                      disabled={!isAllowAdmin}
-                    >
-                      {Object.keys(GenderText)?.map((each, index) => {
-                        return (
-                          <option
-                            key={`options-${index}`}
-                            value={each}
-                            selected={each === String(pegawai?.jenis_kelamin) ? true : false}
-                          >
-                            {GenderText[each as unknown as Gender]}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    {errors.jenis_kelamin && (
-                      <p className="mt-1 text-xs text-red-500">{errors.jenis_kelamin.message}</p>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="agama" className="block text-sm font-medium text-gray-700">
-                    Agama
-                  </label>
-                  <div className="mt-1">
-                    <select
-                      className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-                      {...register('agama', { required: 'Silahkan masukan agama.' })}
-                    >
-                      {Object.keys(AgamaText)?.map((each, index) => {
-                        return (
-                          <option
-                            key={`options-${index}`}
-                            value={each}
-                            selected={each === String(pegawai?.agama) ? true : false}
-                          >
-                            {AgamaText[each as unknown as Agama]}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    {errors.agama && <p className="mt-1 text-xs text-red-500">{errors.agama.message}</p>}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="golongan_darah" className="block text-sm font-medium text-gray-700">
-                    Golongan Darah
-                  </label>
-                  <div className="mt-1">
-                    <select
-                      className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-                      {...register('golongan_darah', { required: 'Silahkan masukan golongan darah.' })}
-                    >
-                      <option value={''}>Silahkan Pilih</option>
-                      <option value={'A'}>A</option>
-                      <option value={'B'}>B</option>
-                      <option value={'O'}>O</option>
-                      <option value={'AB'}>AB</option>
-                    </select>
-                    {errors.golongan_darah && (
-                      <p className="mt-1 text-xs text-red-500">{errors.golongan_darah.message}</p>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="hp" className="block text-sm font-medium text-gray-700">
-                    Nomor Ponsel
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register('hp', { required: 'Silahkan masukan nomor ponsel.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="hp"
-                      type="text"
-                    />
-                    {errors.hp && <p className="mt-1 text-xs text-red-500">{errors.hp.message}</p>}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                    Email
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register('email', { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, required: true })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="email"
-                      type="text"
-                    />
-                    {errors.email && (
-                      <p className="mt-1 text-xs text-red-500">Silahkan masukan email anda dengan format yang sesuai</p>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="alamat" className="block text-sm font-medium text-gray-700">
-                    Alamat
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register('alamat', { required: 'Silahkan masukan alamat.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="alamat"
-                      type="text"
-                    />
-                    {errors.alamat && <p className="mt-1 text-xs text-red-500">{errors.alamat.message}</p>}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="npwp" className="block text-sm font-medium text-gray-700">
-                    NPWP
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register('npwp', { required: 'Silahkan masukan npwp.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="npwp"
-                      type="text"
-                    />
-                    {errors.npwp && <p className="mt-1 text-xs text-red-500">{errors.npwp.message}</p>}
-                  </div>
-                  <div className="mt-2">
-                    <Controller
-                      control={control}
-                      name={'file_name_npwp'}
-                      rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
-                      render={({ field: { onChange, value } }) => (
-                        <UploadWrapper
-                          allowedTypes={['pdf']}
-                          handleUploadChange={(files: FileObject[]) => {
-                            setValue('file_id_npwp', files[0].id);
-                            onChange(files[0].name);
-                          }}
-                        >
-                          {({ loading }) => (
-                            <div
-                              className={classNames(
-                                'flex items-center justify-between border-[1px] p-3',
-                                errors.file_name_npwp ? 'border-red-500' : ''
-                              )}
-                            >
-                              <div>
-                                <div className="text-sm text-gray-600">{value || 'Kartu NPWP'}</div>
-                                <div className="text-xs text-gray-400">(pdf)</div>
-                              </div>
-                              <button
-                                disabled={loading}
-                                type="button"
-                                className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
-                              >
-                                {loading ? <CircleProgress /> : null}
-                                <UploadIcon className="mr-1 h-4" />
-                                Upload
-                              </button>
-                            </div>
-                          )}
-                        </UploadWrapper>
-                      )}
-                    ></Controller>
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="bpjs" className="block text-sm font-medium text-gray-700">
-                    BPJS Kesehatan
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register('bpjs', { required: 'Silahkan masukan bpjs.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="bpjs"
-                      type="text"
-                    />
-                    {errors.bpjs && <p className="mt-1 text-xs text-red-500">{errors.bpjs.message}</p>}
-                  </div>
-                  <div className="mt-2">
-                    <Controller
-                      control={control}
-                      name={'file_name_bpjs_kesehatan'}
-                      rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
-                      render={({ field: { onChange, value } }) => (
-                        <UploadWrapper
-                          allowedTypes={['pdf']}
-                          handleUploadChange={(files: FileObject[]) => {
-                            setValue('file_id_bpjs_kesehatan', files[0].id);
-                            onChange(files[0].name);
-                          }}
-                        >
-                          {({ loading }) => (
-                            <div
-                              className={classNames(
-                                'flex items-center justify-between border-[1px] p-3',
-                                errors.file_name_bpjs_kesehatan ? 'border-red-500' : ''
-                              )}
-                            >
-                              <div>
-                                <div className="text-sm text-gray-600">{value || 'Kartu BPJS Kesehatan'}</div>
-                                <div className="text-xs text-gray-400">(pdf)</div>
-                              </div>
-                              <button
-                                disabled={loading}
-                                type="button"
-                                className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
-                              >
-                                {loading ? <CircleProgress /> : null}
-                                <UploadIcon className="mr-1 h-4" />
-                                Upload
-                              </button>
-                            </div>
-                          )}
-                        </UploadWrapper>
-                      )}
-                    ></Controller>
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="no_bpjs_kt" className="block text-sm font-medium text-gray-700">
-                    BPJS Ketenagakerjaan
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register('no_bpjs_kt', { required: 'Silahkan masukan bpjs ketenagakerjaan.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="no_bpjs_kt"
-                      type="text"
-                    />
-                    {errors.no_bpjs_kt && <p className="mt-1 text-xs text-red-500">{errors.no_bpjs_kt.message}</p>}
-                  </div>
-                  <div className="mt-2">
-                    <Controller
-                      control={control}
-                      name={'file_name_bpjs_kt'}
-                      rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
-                      render={({ field: { onChange, value } }) => (
-                        <UploadWrapper
-                          allowedTypes={['pdf']}
-                          handleUploadChange={(files: FileObject[]) => {
-                            setValue('file_id_bpjs_kt', files[0].id);
-                            onChange(files[0].name);
-                          }}
-                        >
-                          {({ loading }) => (
-                            <div
-                              className={classNames(
-                                'flex items-center justify-between border-[1px] p-3',
-                                errors.file_name_bpjs_kt ? 'border-red-500' : ''
-                              )}
-                            >
-                              <div>
-                                <div className="text-sm text-gray-600">{value || 'Kartu BPJS Ketenagakerjaan'}</div>
-                                <div className="text-xs text-gray-400">(pdf)</div>
-                              </div>
-                              <button
-                                disabled={loading}
-                                type="button"
-                                className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
-                              >
-                                {loading ? <CircleProgress /> : null}
-                                <UploadIcon className="mr-1 h-4" />
-                                Upload
-                              </button>
-                            </div>
-                          )}
-                        </UploadWrapper>
-                      )}
-                    ></Controller>
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="keterangan" className="block text-sm font-medium text-gray-700">
-                    Status Pernikahan
-                  </label>
-                  <div className="mt-1">
-                    <select
-                      className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-                      {...register('status_menikah', { required: 'Silahkan masukan status pernikahan.' })}
-                    >
-                      {Object.keys(StatusMenikahText)?.map((each, index) => {
-                        return (
-                          <option
-                            key={`options-${index}`}
-                            value={each}
-                            selected={each === String(pegawai?.status_menikah) ? true : false}
-                          >
-                            {StatusMenikahText[each as unknown as StatusMenikah]}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    {errors.status_menikah && (
-                      <p className="mt-1 text-xs text-red-500">{errors.status_menikah.message}</p>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="jumlah_anak" className="block text-sm font-medium text-gray-700">
-                    Jumlah Anak
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register('jumlah_anak', { required: 'Silahkan masukan jumlah anak.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="jumlah_anak"
-                      type="number"
-                    />
-                    {errors.jumlah_anak && <p className="mt-1 text-xs text-red-500">{errors.jumlah_anak.message}</p>}
-                  </div>
-                </div>
-                <div className="mt-5 sm:col-span-6">
-                  <label htmlFor="nik" className="block text-sm font-medium text-gray-700">
-                    NIK
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register('nik', { required: 'Silahkan masukan nik.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="nik"
-                      type="text"
-                    />
-                    {errors.nik && <p className="mt-1 text-xs text-red-500">{errors.nik.message}</p>}
-                  </div>
-                  <div className="mt-2">
-                    <Controller
-                      control={control}
-                      name={'file_name_ktp'}
-                      rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
-                      render={({ field: { onChange, value } }) => (
-                        <UploadWrapper
-                          allowedTypes={['pdf']}
-                          handleUploadChange={(files: FileObject[]) => {
-                            setValue('file_id_ktp', files[0].id);
-                            onChange(files[0].name);
-                          }}
-                        >
-                          {({ loading }) => (
-                            <div
-                              className={classNames(
-                                'flex items-center justify-between border-[1px] p-3',
-                                errors.file_name_ktp ? 'border-red-500' : ''
-                              )}
-                            >
-                              <div>
-                                <div className="text-sm text-gray-600">{value || 'KTP'}</div>
-                                <div className="text-xs text-gray-400">(pdf)</div>
-                              </div>
-                              <button
-                                disabled={loading}
-                                type="button"
-                                className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
-                              >
-                                {loading ? <CircleProgress /> : null}
-                                <UploadIcon className="mr-1 h-4" />
-                                Upload
-                              </button>
-                            </div>
-                          )}
-                        </UploadWrapper>
-                      )}
-                    ></Controller>
-                  </div>
-                </div>
-
-                <div className="mt-5">
-                  <button
-                    type="submit"
-                    className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    Simpan
-                  </button>
-                </div>
-              </form>
+    <>
+      <div className="">
+        <div className="mt-8">
+          <div className="flex flex-row items-center">
+            <ChevronLeftIcon className="h-5 cursor-pointer" onClick={toggleModal} />
+            <h3 onClick={toggleModal} className="cursor-pointer pl-2 text-lg font-medium leading-6 text-gray-900">
+              Kembali
+            </h3>
+          </div>
+          <form onSubmit={handleSubmit(submitHandler)}>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="nip" className="block text-sm font-medium text-gray-700">
+                NIP
+              </label>
+              <div className="mt-1">
+                <input
+                  className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                  disabled={true}
+                  name="nip"
+                  type="text"
+                  value={pegawai?.nip}
+                />
+              </div>
             </div>
-          </Transition.Child>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="nama" className="block text-sm font-medium text-gray-700">
+                Nama
+              </label>
+              <div className="mt-1">
+                <input
+                  className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                  disabled={true}
+                  name="nama"
+                  type="text"
+                  value={pegawai?.nama}
+                />
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label className="block text-sm font-medium text-gray-700">Unit Kerja</label>
+              <div className="pt-1 sm:col-span-2 sm:mt-0">
+                <select
+                  className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                  {...register('unit_kerja_id', { required: 'Silahkan masukan unit kerja.' })}
+                  disabled={!isAllowAdmin}
+                >
+                  <option value="">Silahkan Pilih</option>
+                  {(unitKerjaList || []).map((item, index) => (
+                    <option key={`options-${index}`} value={item?.unit_kerja_id}>
+                      {item?.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.unit_kerja_id && <p className="mt-1 text-xs text-red-500">{errors.unit_kerja_id.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label className="block text-sm font-medium text-gray-700">Tempat Lahir</label>
+              <div className="mt-1">
+                <input
+                  {...register('tempat_lahir', { required: 'Silahkan masukan tempat lahir.' })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                  name="tempat_lahir"
+                  type="text"
+                  disabled={!isAllowAdmin}
+                />
+                {errors.tempat_lahir && <p className="mt-1 text-xs text-red-500">{errors.tempat_lahir.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label className="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
+              <div className="mt-1">
+                <input
+                  {...register('tanggal_lahir', { required: 'Silahkan masukan nama tanggal lahir.' })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                  name="tanggal_lahir"
+                  type="date"
+                  disabled={!isAllowAdmin}
+                />
+                {errors.tanggal_lahir && <p className="mt-1 text-xs text-red-500">{errors.tanggal_lahir.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <div className="mt-1">
+                <Controller
+                  control={control}
+                  name="jabatan"
+                  rules={{ required: 'Mohon isi data jabatan' }}
+                  render={({ field: { onChange } }) => (
+                    <AutoCompleteCustom
+                      disabled={true}
+                      onChange={value => onChange(value.value)}
+                      label={'Nama Jabatan'}
+                      defaultValue={{ text: formJabatanState.text || '', value: formJabatanState.value || '' }}
+                      onQueryChange={queryText => {
+                        if (debounce.current) {
+                          clearTimeout(debounce.current);
+                        }
+                        debounce.current = window.setTimeout(() => {
+                          setQueryJabatan(queryText);
+                        }, 500);
+                      }}
+                      options={(daftarJabatan?.list || []).map(each => ({
+                        text: each.name,
+                        value: String(each.jabatan_id),
+                      }))}
+                    />
+                  )}
+                />
+                {errors.jabatan && <p className="mt-1 text-xs text-red-500">{errors.jabatan.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label className="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+              <div className="mt-1">
+                <select
+                  className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                  {...register('jenis_kelamin', { required: 'Silahkan masukan jenis kelamin.' })}
+                  disabled={!isAllowAdmin}
+                >
+                  {Object.keys(GenderText)?.map((each, index) => {
+                    return (
+                      <option
+                        key={`options-${index}`}
+                        value={each}
+                        selected={each === String(pegawai?.jenis_kelamin) ? true : false}
+                      >
+                        {GenderText[each as unknown as Gender]}
+                      </option>
+                    );
+                  })}
+                </select>
+                {errors.jenis_kelamin && <p className="mt-1 text-xs text-red-500">{errors.jenis_kelamin.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="agama" className="block text-sm font-medium text-gray-700">
+                Agama
+              </label>
+              <div className="mt-1">
+                <select
+                  className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                  {...register('agama', { required: 'Silahkan masukan agama.' })}
+                >
+                  {Object.keys(AgamaText)?.map((each, index) => {
+                    return (
+                      <option
+                        key={`options-${index}`}
+                        value={each}
+                        selected={each === String(pegawai?.agama) ? true : false}
+                      >
+                        {AgamaText[each as unknown as Agama]}
+                      </option>
+                    );
+                  })}
+                </select>
+                {errors.agama && <p className="mt-1 text-xs text-red-500">{errors.agama.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="golongan_darah" className="block text-sm font-medium text-gray-700">
+                Golongan Darah
+              </label>
+              <div className="mt-1">
+                <select
+                  className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                  {...register('golongan_darah', { required: 'Silahkan masukan golongan darah.' })}
+                >
+                  <option value={''}>Silahkan Pilih</option>
+                  <option value={'A'}>A</option>
+                  <option value={'B'}>B</option>
+                  <option value={'O'}>O</option>
+                  <option value={'AB'}>AB</option>
+                </select>
+                {errors.golongan_darah && <p className="mt-1 text-xs text-red-500">{errors.golongan_darah.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="hp" className="block text-sm font-medium text-gray-700">
+                Nomor Ponsel
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('hp', { required: 'Silahkan masukan nomor ponsel.' })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                  name="hp"
+                  type="text"
+                />
+                {errors.hp && <p className="mt-1 text-xs text-red-500">{errors.hp.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('email', { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, required: true })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                  name="email"
+                  type="text"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-xs text-red-500">Silahkan masukan email anda dengan format yang sesuai</p>
+                )}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="alamat" className="block text-sm font-medium text-gray-700">
+                Alamat
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('alamat', { required: 'Silahkan masukan alamat.' })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                  name="alamat"
+                  type="text"
+                />
+                {errors.alamat && <p className="mt-1 text-xs text-red-500">{errors.alamat.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="npwp" className="block text-sm font-medium text-gray-700">
+                NPWP
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('npwp', { required: 'Silahkan masukan npwp.' })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                  name="npwp"
+                  type="text"
+                />
+                {errors.npwp && <p className="mt-1 text-xs text-red-500">{errors.npwp.message}</p>}
+              </div>
+              <div className="mt-5 sm:col-span-6">
+                <label className="mb-2 block text-sm font-medium text-gray-700">Dokumen NPWP</label>
+                {open && (
+                  <div className="mb-3 pl-2">
+                    <LinkFile
+                      link={pegawai?.uuid_npwp?.[0]?.document_uuid}
+                      value={pegawai?.uuid_npwp?.[0].document_name}
+                    />
+                  </div>
+                )}
+                <Controller
+                  control={control}
+                  name={'file_name_npwp'}
+                  rules={{ required: false }}
+                  render={({ field: { onChange, value } }) => (
+                    <UploadWrapper
+                      allowedTypes={['pdf']}
+                      handleUploadChange={(files: FileObject[]) => {
+                        setValue('file_id_npwp', files[0].id);
+                        onChange(files[0].name);
+                      }}
+                    >
+                      {({ loading }) => (
+                        <div
+                          className={classNames(
+                            'flex items-center justify-center space-x-2 rounded-md border-[1px] p-2',
+                            errors.file_name_npwp ? 'border-red-500' : ''
+                          )}
+                        >
+                          <div className="flex flex-1 flex-row items-center justify-center space-x-3 rounded-md bg-sky-100 py-2">
+                            <div>
+                              <div className="text-sm text-gray-400">
+                                {value || 'Masukan dokumen permohonan dalam bentuk PDF max 2mb'}
+                              </div>
+                            </div>
+                            <button
+                              disabled={loading}
+                              type="button"
+                              className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                            >
+                              {loading ? <CircleProgress /> : null}
+                              <UploadIcon className="mr-1 h-4" />
+                              Upload
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </UploadWrapper>
+                  )}
+                ></Controller>
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="bpjs" className="block text-sm font-medium text-gray-700">
+                BPJS Kesehatan
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('bpjs', { required: 'Silahkan masukan bpjs.' })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                  name="bpjs"
+                  type="text"
+                />
+                {errors.bpjs && <p className="mt-1 text-xs text-red-500">{errors.bpjs.message}</p>}
+              </div>
+              <div className="mt-5 sm:col-span-6">
+                <label className="mb-2 block text-sm font-medium text-gray-700">Dokumen BPJS Kesehatan</label>
+                {open && (
+                  <div className="mb-3 pl-2">
+                    <LinkFile
+                      link={pegawai?.uuid_bpjs?.[0]?.document_uuid}
+                      value={pegawai?.uuid_bpjs?.[0].document_name}
+                    />
+                  </div>
+                )}
+                <Controller
+                  control={control}
+                  name={'file_name_bpjs_kesehatan'}
+                  rules={{ required: false }}
+                  render={({ field: { onChange, value } }) => (
+                    <UploadWrapper
+                      allowedTypes={['pdf']}
+                      handleUploadChange={(files: FileObject[]) => {
+                        setValue('file_id_bpjs_kesehatan', files[0].id);
+                        onChange(files[0].name);
+                      }}
+                    >
+                      {({ loading }) => (
+                        <div
+                          className={classNames(
+                            'flex items-center justify-center space-x-2 rounded-md border-[1px] p-2',
+                            errors.file_name_bpjs_kesehatan ? 'border-red-500' : ''
+                          )}
+                        >
+                          <div className="flex flex-1 flex-row items-center justify-center space-x-3 rounded-md bg-sky-100 py-2">
+                            <div>
+                              <div className="text-sm text-gray-400">
+                                {value || 'Masukan dokumen permohonan dalam bentuk PDF max 2mb'}
+                              </div>
+                            </div>
+                            <button
+                              disabled={loading}
+                              type="button"
+                              className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                            >
+                              {loading ? <CircleProgress /> : null}
+                              <UploadIcon className="mr-1 h-4" />
+                              Upload
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </UploadWrapper>
+                  )}
+                ></Controller>
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="no_bpjs_kt" className="block text-sm font-medium text-gray-700">
+                BPJS Ketenagakerjaan
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('no_bpjs_kt', { required: 'Silahkan masukan bpjs ketenagakerjaan.' })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                  name="no_bpjs_kt"
+                  type="text"
+                />
+                {errors.no_bpjs_kt && <p className="mt-1 text-xs text-red-500">{errors.no_bpjs_kt.message}</p>}
+              </div>
+              <div className="mt-5 sm:col-span-6">
+                <label className="mb-2 block text-sm font-medium text-gray-700">Dokumen BPJS Ketenagakerjaan</label>
+                {open && (
+                  <div className="mb-3 pl-2">
+                    <LinkFile
+                      link={pegawai?.uuid_bpjs_kt?.[0]?.document_uuid}
+                      value={pegawai?.uuid_bpjs_kt?.[0].document_name}
+                    />
+                  </div>
+                )}
+                <Controller
+                  control={control}
+                  name={'file_name_bpjs_kt'}
+                  rules={{ required: false }}
+                  render={({ field: { onChange, value } }) => (
+                    <UploadWrapper
+                      allowedTypes={['pdf']}
+                      handleUploadChange={(files: FileObject[]) => {
+                        setValue('file_id_bpjs_kt', files[0].id);
+                        onChange(files[0].name);
+                      }}
+                    >
+                      {({ loading }) => (
+                        <div
+                          className={classNames(
+                            'flex items-center justify-center space-x-2 rounded-md border-[1px] p-2',
+                            errors.file_name_bpjs_kt ? 'border-red-500' : ''
+                          )}
+                        >
+                          <div className="flex flex-1 flex-row items-center justify-center space-x-3 rounded-md bg-sky-100 py-2">
+                            <div>
+                              <div className="text-sm text-gray-400">
+                                {value || 'Masukan dokumen permohonan dalam bentuk PDF max 2mb'}
+                              </div>
+                            </div>
+                            <button
+                              disabled={loading}
+                              type="button"
+                              className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                            >
+                              {loading ? <CircleProgress /> : null}
+                              <UploadIcon className="mr-1 h-4" />
+                              Upload
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </UploadWrapper>
+                  )}
+                ></Controller>
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="keterangan" className="block text-sm font-medium text-gray-700">
+                Status Pernikahan
+              </label>
+              <div className="mt-1">
+                <select
+                  className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                  {...register('status_menikah', { required: 'Silahkan masukan status pernikahan.' })}
+                >
+                  {Object.keys(StatusMenikahText)?.map((each, index) => {
+                    return (
+                      <option
+                        key={`options-${index}`}
+                        value={each}
+                        selected={each === String(pegawai?.status_menikah) ? true : false}
+                      >
+                        {StatusMenikahText[each as unknown as StatusMenikah]}
+                      </option>
+                    );
+                  })}
+                </select>
+                {errors.status_menikah && <p className="mt-1 text-xs text-red-500">{errors.status_menikah.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="jumlah_anak" className="block text-sm font-medium text-gray-700">
+                Jumlah Anak
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('jumlah_anak', { required: 'Silahkan masukan jumlah anak.' })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                  name="jumlah_anak"
+                  type="number"
+                />
+                {errors.jumlah_anak && <p className="mt-1 text-xs text-red-500">{errors.jumlah_anak.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="nik" className="block text-sm font-medium text-gray-700">
+                NIK
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('nik', { required: 'Silahkan masukan nik.' })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                  name="nik"
+                  type="text"
+                />
+                {errors.nik && <p className="mt-1 text-xs text-red-500">{errors.nik.message}</p>}
+              </div>
+              <div className="mt-5 sm:col-span-6">
+                <label className="mb-2 block text-sm font-medium text-gray-700">Dokumen KTP</label>
+                {open && (
+                  <div className="mb-3 pl-2">
+                    <LinkFile
+                      link={pegawai?.uuid_ktp?.[0]?.document_uuid}
+                      value={pegawai?.uuid_ktp?.[0].document_name}
+                    />
+                  </div>
+                )}
+                <Controller
+                  control={control}
+                  name={'file_name_ktp'}
+                  rules={{ required: false }}
+                  render={({ field: { onChange, value } }) => (
+                    <UploadWrapper
+                      allowedTypes={['pdf']}
+                      handleUploadChange={(files: FileObject[]) => {
+                        setValue('file_id_ktp', files[0].id);
+                        onChange(files[0].name);
+                      }}
+                    >
+                      {({ loading }) => (
+                        <div
+                          className={classNames(
+                            'flex items-center justify-center space-x-2 rounded-md border-[1px] p-2',
+                            errors.file_name_ktp ? 'border-red-500' : ''
+                          )}
+                        >
+                          <div className="flex flex-1 flex-row items-center justify-center space-x-3 rounded-md bg-sky-100 py-2">
+                            <div>
+                              <div className="text-sm text-gray-400">
+                                {value || 'Masukan dokumen permohonan dalam bentuk PDF max 2mb'}
+                              </div>
+                            </div>
+                            <button
+                              disabled={loading}
+                              type="button"
+                              className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
+                            >
+                              {loading ? <CircleProgress /> : null}
+                              <UploadIcon className="mr-1 h-4" />
+                              Upload
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </UploadWrapper>
+                  )}
+                ></Controller>
+              </div>
+            </div>
+            <div className="flex flex-auto flex-col items-end px-7">
+              <div className="mt-5 flex">
+                <div
+                  onClick={toggleModal}
+                  className="mr-3 inline-flex items-center rounded border border-transparent bg-gray-400 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-gray-500 disabled:bg-gray-200 disabled:text-gray-200"
+                >
+                  Batal
+                </div>
+                <button
+                  type="submit"
+                  className="flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200"
+                >
+                  Simpan
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-      </Dialog>
-    </Transition>
+      </div>
+    </>
   );
 }

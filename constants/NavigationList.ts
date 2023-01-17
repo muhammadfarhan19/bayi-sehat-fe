@@ -54,6 +54,11 @@ export const NavigationList: Navigation[] = [
             href: '/kehadiran',
           },
           {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Klaim Cuti dan Sakit',
+            href: '/cuti-sakit',
+          },
+          {
             id: PUBLIC,
             name: 'Log Harian',
             href: '/log-harian',
@@ -130,6 +135,11 @@ export const NavigationList: Navigation[] = [
           },
           {
             id: NavigationId.KEPEGAWAIAN,
+            name: 'Klaim Cuti dan Sakit',
+            href: '/kepegawaian/cuti-sakit',
+          },
+          {
+            id: NavigationId.KEPEGAWAIAN,
             name: 'Log Harian',
             href: '/kepegawaian/log-harian',
           },
@@ -155,6 +165,17 @@ export const NavigationList: Navigation[] = [
             href: '/master/role-user',
           },
         ],
+      },
+    ],
+  },
+  {
+    id: NavigationId.KEUANGAN,
+    name: 'Keuangan',
+    childMenu: [
+      {
+        id: NavigationId.KEUANGAN,
+        name: 'Pembayaran',
+        href: '/keuangan/daftar-dinas',
       },
     ],
   },
