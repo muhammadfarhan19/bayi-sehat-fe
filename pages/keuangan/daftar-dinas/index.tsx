@@ -6,6 +6,7 @@ import { withAuthenticatedPage } from '../../../components/shared/hocs/Authentic
 import { withReduxPage } from '../../../components/shared/hocs/ReduxPage';
 import LeftMenu from '../../../components/shared/MainLayout/LeftMenu';
 import MainLayout from '../../../components/shared/MainLayout/MainLayout';
+import { NavigationId } from '../../../constants/NavigationList';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function DaftarDinas() {
@@ -24,4 +25,4 @@ function DaftarDinas() {
   );
 }
 
-export default withReduxPage()(withAuthenticatedPage()(DaftarDinas));
+export default withReduxPage()(withAuthenticatedPage({ resourceId: NavigationId.KEUANGAN })(DaftarDinas));
