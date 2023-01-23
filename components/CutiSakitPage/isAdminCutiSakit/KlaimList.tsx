@@ -150,7 +150,13 @@ function KlaimList(props: ListKlaimProps) {
                       scope="col"
                       className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      Tanggal
+                      Tanggal Mulai
+                    </th>
+                    <th
+                      scope="col"
+                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Tanggal Selesai
                     </th>
                     <th
                       scope="col"
@@ -189,6 +195,9 @@ function KlaimList(props: ListKlaimProps) {
                     const formattedDate: string = data?.tanggal
                       ? formatDate(new Date(data?.tanggal), 'dd MMM yyyy')
                       : '';
+                    const formattedDateSelesai: string = data?.tanggal_selesai
+                      ? formatDate(new Date(data?.tanggal_selesai), 'dd MMM yyyy')
+                      : '';
                     const statusType: string = data?.type === 1 ? 'Cuti' : 'Cuti Sakit';
                     const isDitolakNorIsDiterima =
                       data?.status === StatusPengajuan.Ditolak || data?.status === StatusPengajuan.Diterima;
@@ -213,6 +222,7 @@ function KlaimList(props: ListKlaimProps) {
                           {data?.nama_pegawai}
                         </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedDate}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedDateSelesai}</td>
                         <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">{statusType}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">

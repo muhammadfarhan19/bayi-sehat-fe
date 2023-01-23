@@ -31,7 +31,7 @@ import usePersonalData from '../shared/hooks/usePersonalData';
 import UploadWrapper, { FileObject } from '../shared/Input/UploadWrapper';
 import Loader from '../shared/Loader/Loader';
 import Pagination from '../shared/Pagination';
-import { StatusPengajuan } from './Shared/_resource';
+import { PengajuanType, StatusPengajuan } from './Shared/_resource';
 
 interface FormState {
   pegawai_id: number;
@@ -40,6 +40,7 @@ interface FormState {
   catatan?: string;
   file_id: string;
   file_name: string;
+  tanggal_selesai: string;
 }
 
 function KlaimCutiSakit() {
@@ -120,6 +121,7 @@ function KlaimCutiSakit() {
       {
         pegawai_id: Number(personalPegawaiData?.pegawai_id),
         tanggal_klaim: formData?.tanggal_klaim,
+        tanggal_selesai: formData?.tanggal_selesai,
         jenis_pengajuan: Number(formData?.jenis_pengajuan),
         catatan: formData?.catatan ?? '',
         files: [
@@ -194,17 +196,22 @@ function KlaimCutiSakit() {
             type="text"
             label="Nama"
           />
-
           <InputLabelled
             isError={errors.tanggal_klaim}
-            onChange={e => alert(e)}
             errorMessage={errors.tanggal_klaim?.message}
             validation={{ ...register('tanggal_klaim', { required: 'Silahkan Pilih Tanggal Klaim' }) }}
             name="tanggal_klaim"
             type="date"
-            label="Tanggal Klaim"
+            label="Tanggal Mulai"
           />
-
+          <InputLabelled
+            isError={errors.tanggal_selesai}
+            errorMessage={errors.tanggal_selesai?.message}
+            validation={{ ...register('tanggal_selesai', { required: 'Silahkan Pilih Tanggal Selesai' }) }}
+            name="tanggal_selesai"
+            type="date"
+            label="Tanggal Selesai"
+          />
           <DropdownPicker
             isError={errors.jenis_pengajuan}
             errorMessage={errors.jenis_pengajuan?.message}
@@ -216,6 +223,15 @@ function KlaimCutiSakit() {
             secondValue={2}
             secondOption="Cuti Sakit"
             formVerification="jenis_pengajuan"
+            moreOptions={(PengajuanType || []).map(item => {
+              return (
+                <>
+                  <option key={item.value} value={item.value}>
+                    {item.text}
+                  </option>
+                </>
+              );
+            })}
           />
           <InputLabelled
             isError={errors.catatan}
@@ -227,7 +243,7 @@ function KlaimCutiSakit() {
           />
           <div className="mt-5 sm:col-span-6">
             <label className="mb-2 block text-sm font-medium text-gray-700">
-              Unggah Surat Dokter atau Persetujuan dari Pimpinan
+              Unggah Surat Dokter atau dokumen pendukung lainnya
             </label>
             <Controller
               control={control}
@@ -294,7 +310,7 @@ function KlaimCutiSakit() {
             handleSubmission={handleSubmit(submitHandler)}
             selectedId={formModalState?.selectedId}
             name={`: ${personalPegawaiData?.nama}`}
-            tanggal={`: ${getValues('tanggal_klaim')}`}
+            tanggal={`: ${getValues('tanggal_klaim')} s.d ${getValues('tanggal_selesai')}`}
             nip={`: ${personalPegawaiData?.nip}`}
             jenisPengajuan={`: ${getValues('jenis_pengajuan') == 1 ? 'Cuti' : 'Cuti Sakit'}`}
             alasan={`: ${getValues('catatan')}`}
@@ -345,7 +361,13 @@ function KlaimCutiSakit() {
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
-                        Tanggal
+                        Tanggal Mulai
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Tanggal Selesai
                       </th>
                       <th
                         scope="col"
@@ -378,13 +400,17 @@ function KlaimCutiSakit() {
                       const formatDatePengajuan: string = data?.tanggal
                         ? formatDate(new Date(data?.tanggal), 'dd MMMM yyyy')
                         : '-';
+                      const formatDatePengajuanSelesai: string = data?.tanggal_selesai
+                        ? formatDate(new Date(data?.tanggal_selesai), 'dd MMMM yyyy')
+                        : '-';
+
+                      const statType = PengajuanType.find(item => item?.value === data?.type);
                       return (
                         <tr key={data?.id} className={'bg-white hover:bg-gray-100'}>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{formatDatePengajuan}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                            {data?.type === 1 ? 'Cuti' : 'Cuti Sakit'}
-                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{formatDatePengajuanSelesai}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{statType?.text}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
                           <td className="px-6 py-4 text-xs font-medium text-blue-900 underline">
                             {data?.files?.[0]?.document_name?.length === 0 ? (
