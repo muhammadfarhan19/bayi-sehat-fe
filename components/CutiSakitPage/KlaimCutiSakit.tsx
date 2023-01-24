@@ -31,7 +31,7 @@ import usePersonalData from '../shared/hooks/usePersonalData';
 import UploadWrapper, { FileObject } from '../shared/Input/UploadWrapper';
 import Loader from '../shared/Loader/Loader';
 import Pagination from '../shared/Pagination';
-import { PengajuanType, StatusPengajuan } from './Shared/_resource';
+import { PengajuanType, PengajuanTypeCuti, StatusPengajuan } from './Shared/_resource';
 
 interface FormState {
   pegawai_id: number;
@@ -160,6 +160,8 @@ function KlaimCutiSakit() {
       setTimeout(() => window.location.reload(), 3000);
     }
   };
+
+  const valueCutiType = PengajuanTypeCuti.find(item => item?.value == Number(getValues('jenis_pengajuan')));
 
   if (!personalPegawaiData?.pegawai_id) {
     return (
@@ -312,7 +314,7 @@ function KlaimCutiSakit() {
             name={`: ${personalPegawaiData?.nama}`}
             tanggal={`: ${getValues('tanggal_klaim')} s.d ${getValues('tanggal_selesai')}`}
             nip={`: ${personalPegawaiData?.nip}`}
-            jenisPengajuan={`: ${getValues('jenis_pengajuan') == 1 ? 'Cuti' : 'Cuti Sakit'}`}
+            jenisPengajuan={`: ${valueCutiType?.text}`}
             alasan={`: ${getValues('catatan')}`}
             documentValue={getValues('file_id')}
             dokumen={`: ${getValues('file_name')}`}

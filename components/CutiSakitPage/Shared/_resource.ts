@@ -37,3 +37,30 @@ export const PengajuanType = [
     text: 'Cuti Melahirkan',
   },
 ];
+
+export const PengajuanTypeCuti = [
+  {
+    value: 1,
+    text: 'Cuti Tahunan',
+  },
+  {
+    value: 2,
+    text: 'Cuti Sakit',
+  },
+  {
+    value: 3,
+    text: 'Cuti Besar',
+  },
+  {
+    value: 4,
+    text: 'Cuti Karena Alasan Penting',
+  },
+  {
+    value: 5,
+    text: 'Cuti Diluar Tanggungan Negara',
+  },
+  {
+    value: 6,
+    text: 'Cuti Melahirkan',
+  },
+];
