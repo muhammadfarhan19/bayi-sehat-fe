@@ -177,9 +177,13 @@ export const RiwayatKGBAPI = {
 
 export const RiwayatSKPAPI = {
   GET_RIWAYAT_SKP_LIST: config.apiHost + '/riwayat-skp/list',
+  GET_RIWAYAT_SKP_LIST_V2: config.apiHost + '/riwayat-skp-new/list',
   POST_RIWAYAT_SKP_INSERT: config.apiHost + '/riwayat-skp/insert',
+  POST_RIWAYAT_SKP_V2: config.apiHost + '/riwayat-skp-new/insert',
+  PUT_RIWAYAT_SKP_V2: config.apiHost + '/riwayat-skp-new/update',
   POST_RIWAYAT_SKP_UPDATE: config.apiHost + '/riwayat-skp/update',
   POST_RIWAYAT_SKP_DELETE: config.apiHost + '/riwayat-skp/delete',
+  POST_RIWAYAT_SKP_DELETE_V2: config.apiHost + '/riwayat-skp-new/delete',
 };
 
 export const RiwayatPengangkatanPekerjaan = {

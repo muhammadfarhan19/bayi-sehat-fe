@@ -1,10 +1,10 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
-import { RiwayatSkpListData } from '../../../../../types/api/RiwayatSkpAPI';
+import { RiwayatSkpData } from '../../../../../types/api/RiwayatSkpAPI';
 import ImgFile from '../../../../shared/FileLoader';
 
 type ListSkpProps = {
-  detail?: RiwayatSkpListData;
+  detail?: RiwayatSkpData;
   onBack: () => void;
 };
 
@@ -24,9 +24,9 @@ export default function DetailSkp(props: ListSkpProps) {
           <tbody className="divide-y divide-gray-200 bg-white">
             {[
               { label: 'Tahun', value: detail?.tahun },
-              { label: 'Nilai PPK', value: detail?.nilai_ppk },
-              { label: 'Nilai SKP', value: detail?.nilai_skp },
-              { label: 'Nilai Perilaku', value: detail?.nilai_perilaku },
+              { label: 'Rating Hasil Kerja', value: detail?.rating_hasil_kerja },
+              { label: 'Rating Perilaku Kerja', value: detail?.rating_perilaku_kerja },
+              { label: 'Predikat Kinerja Pegawai', value: detail?.predikat_kinerja_pegawai },
               { label: 'Berkas', value: detail?.files?.[0]?.document_name },
             ].map((each, index) => (
               <tr key={index}>

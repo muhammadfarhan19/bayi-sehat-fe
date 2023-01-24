@@ -7,9 +7,9 @@ import { RiwayatSKPAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
   GetRiwayatSkpListReq,
-  PostRiwayatSkpDeleteReq,
+  PostDelRiwayatSkpReq,
   PostRiwayatSkpDeleteRes,
-  RiwayatSkpListData,
+  RiwayatSkpData,
 } from '../../../../../types/api/RiwayatSkpAPI';
 import { Status } from '../../../../../types/Common';
 import { callAPI } from '../../../../../utils/Fetchers';
@@ -22,7 +22,7 @@ import { PDFIcon } from '../../../../shared/icons/PDFIcon';
 import SkpForm from './SkpForm';
 
 type ListSkpProps = {
-  onShowDetail: (detail: RiwayatSkpListData) => void;
+  onShowDetail: (detail: RiwayatSkpData) => void;
 };
 
 export default function ListSkp(props: ListSkpProps) {
@@ -32,20 +32,19 @@ export default function ListSkp(props: ListSkpProps) {
   const personalPegawaiData = usePersonalData();
   const isAllowAdmin = useAllowAdmin();
 
-  const [formModalState, setFormModalState] = React.useState<{ open: boolean; selected?: RiwayatSkpListData }>({
+  const [formModalState, setFormModalState] = React.useState<{ open: boolean; selected?: RiwayatSkpData }>({
     open: false,
     selected: undefined,
   });
 
-  const handleShowForm = (open: boolean, selected?: RiwayatSkpListData) => {
+  const handleShowForm = (open: boolean, selected?: RiwayatSkpData) => {
     setFormModalState({ open, selected });
   };
 
   const handleConfirm = async () => {
-    const resDelete = await callAPI<PostRiwayatSkpDeleteReq, PostRiwayatSkpDeleteRes>(
-      RiwayatSKPAPI.POST_RIWAYAT_SKP_DELETE,
+    const resDelete = await callAPI<PostDelRiwayatSkpReq, PostRiwayatSkpDeleteRes>(
+      RiwayatSKPAPI.POST_RIWAYAT_SKP_DELETE_V2,
       {
-        pegawai_id: Number(personalPegawaiData?.pegawai_id),
         riwayat_id: Number(confirmId),
       },
       { method: 'post' }
@@ -70,8 +69,8 @@ export default function ListSkp(props: ListSkpProps) {
     mutate();
   };
 
-  const { data: riwayatSkp, mutate } = useCommonApi<GetRiwayatSkpListReq, RiwayatSkpListData[]>(
-    RiwayatSKPAPI.GET_RIWAYAT_SKP_LIST,
+  const { data: riwayatSkp, mutate } = useCommonApi<GetRiwayatSkpListReq, RiwayatSkpData[]>(
+    RiwayatSKPAPI.GET_RIWAYAT_SKP_LIST_V2,
     { pegawai_id: personalPegawaiData?.pegawai_id },
     { method: 'GET' }
   );
@@ -111,19 +110,19 @@ export default function ListSkp(props: ListSkpProps) {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Nilai PPK
+                Rating Hasil Kerja
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Nilai SKP
+                Rating Perilaku Kerja
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Nilai Perilaku
+                Predikat Kinerja Pegawai
               </th>
               <th
                 scope="col"
@@ -145,10 +144,10 @@ export default function ListSkp(props: ListSkpProps) {
             {(riwayatSkp || []).map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.tahun}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nilai_ppk}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nilai_skp}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nilai_perilaku}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.tahun}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.rating_hasil_kerja}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.rating_perilaku_kerja}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.predikat_kinerja_pegawai}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   <FileLoader uuid={each?.files?.[0]?.document_uuid}>
                     <div className="flex items-center">

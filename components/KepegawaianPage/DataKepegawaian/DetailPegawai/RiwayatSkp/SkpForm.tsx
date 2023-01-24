@@ -6,13 +6,14 @@ import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
 import { RiwayatSKPAPI } from '../../../../../constants/APIUrls';
+import { PredikatKinerjaPegawai, RatingPerilakuDanHasilKerja } from '../../../../../constants/Resource';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
-  PostRiwayatSkpInsertReq,
   PostRiwayatSkpInsertRes,
-  PostRiwayatSkpUpdateReq,
+  PostRiwayatSkpReq,
   PostRiwayatSkpUpdateRes,
-  RiwayatSkpListData,
+  PutRiwayatSkpReq,
+  RiwayatSkpData,
 } from '../../../../../types/api/RiwayatSkpAPI';
 import { Status } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
@@ -26,19 +27,19 @@ interface UploadFormProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   onSuccess: () => void;
-  detail?: RiwayatSkpListData;
+  detail?: RiwayatSkpData;
 }
 
 interface FormState {
   pegawai_id: number;
   tahun: number;
-  nilai_ppk: number;
-  nilai_skp: number;
-  nilai_perilaku: number;
   file_id: string;
   file_name: string;
   document_uuid: string;
   document_name: string;
+  rating_hasil_kerja: string;
+  rating_perilaku_kerja: string;
+  predikat_kinerja_pegawai: string;
 }
 
 export default function SkpForm(props: UploadFormProps) {
@@ -55,11 +56,7 @@ export default function SkpForm(props: UploadFormProps) {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<FormState>({
-    defaultValues: {
-      tahun: Date.now(),
-    },
-  });
+  } = useForm<FormState>();
 
   const yearOptions: Array<number> = [];
   const year = new Date().getFullYear();
@@ -71,24 +68,25 @@ export default function SkpForm(props: UploadFormProps) {
     if (detail && detail?.files[0]?.document_uuid) {
       setValue('file_id', detail.files[0].document_uuid);
       setValue('file_name', detail.files[0].document_uuid);
-      setValue('nilai_ppk', detail.nilai_ppk);
-      setValue('nilai_skp', detail.nilai_skp);
-      setValue('nilai_perilaku', detail.nilai_perilaku);
+      setValue('rating_hasil_kerja', detail.rating_hasil_kerja);
+      setValue('rating_perilaku_kerja', detail.rating_perilaku_kerja);
+      setValue('predikat_kinerja_pegawai', detail.predikat_kinerja_pegawai);
+      setValue('tahun', detail?.tahun);
     }
   }, [detail]);
 
   const submitHandler = async (formData: FormState) => {
     let resSubmit;
     if (detail) {
-      resSubmit = await callAPI<PostRiwayatSkpUpdateReq, PostRiwayatSkpUpdateRes>(
-        RiwayatSKPAPI.POST_RIWAYAT_SKP_UPDATE,
+      resSubmit = await callAPI<PutRiwayatSkpReq, PostRiwayatSkpUpdateRes>(
+        RiwayatSKPAPI.PUT_RIWAYAT_SKP_V2,
         {
-          riwayat_id: Number(detail.riwayat_id),
+          riwayat_id: Number(detail?.riwayat_id),
           pegawai_id: Number(personalData?.pegawai_id),
           tahun: Number(formData.tahun),
-          nilai_ppk: Number(formData.nilai_ppk),
-          nilai_skp: Number(formData.nilai_skp),
-          nilai_perilaku: Number(formData.nilai_perilaku),
+          rating_hasil_kerja: formData?.rating_hasil_kerja,
+          rating_perilaku_kerja: formData?.rating_perilaku_kerja,
+          predikat_kinerja_pegawai: formData?.predikat_kinerja_pegawai,
           files: [
             {
               document_uuid: formData.file_id,
@@ -99,14 +97,14 @@ export default function SkpForm(props: UploadFormProps) {
         { method: 'post' }
       );
     } else {
-      resSubmit = await callAPI<PostRiwayatSkpInsertReq, PostRiwayatSkpInsertRes>(
-        RiwayatSKPAPI.POST_RIWAYAT_SKP_INSERT,
+      resSubmit = await callAPI<PostRiwayatSkpReq, PostRiwayatSkpInsertRes>(
+        RiwayatSKPAPI.POST_RIWAYAT_SKP_V2,
         {
           pegawai_id: Number(personalData?.pegawai_id),
-          tahun: Number(formData.tahun),
-          nilai_ppk: Number(formData.nilai_ppk),
-          nilai_skp: Number(formData.nilai_skp),
-          nilai_perilaku: Number(formData.nilai_perilaku),
+          tahun: Number(formData?.tahun),
+          rating_hasil_kerja: formData?.rating_hasil_kerja,
+          rating_perilaku_kerja: formData?.rating_perilaku_kerja,
+          predikat_kinerja_pegawai: formData?.predikat_kinerja_pegawai,
           files: [
             {
               document_uuid: formData.file_id,
@@ -236,49 +234,61 @@ export default function SkpForm(props: UploadFormProps) {
                   />
                 </div>
                 <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Nilai PPK</label>
+                  <label className="block text-sm font-medium text-gray-700">Rating Hasil Kerja</label>
                   <div className="mt-1">
-                    <input
-                      {...register('nilai_ppk', { required: 'Silahkan masukan nama nilai ppk.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="nilai_ppk"
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      max="120"
-                    />
-                    {errors.nilai_ppk && <p className="mt-1 text-xs text-red-500">{errors.nilai_ppk.message}</p>}
+                    <select
+                      {...register('rating_hasil_kerja', { required: 'Silahkan pilih Rating Hasil Kerja.' })}
+                      className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                    >
+                      <option value="">Semua</option>
+                      {RatingPerilakuDanHasilKerja.map(item => (
+                        <option key={item.id} value={item.textAsValue}>
+                          {item.textAsValue}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.rating_hasil_kerja && (
+                      <p className="mt-1 text-xs text-red-500">{errors.rating_hasil_kerja.message}</p>
+                    )}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Nilai SKP</label>
+                  <label className="block text-sm font-medium text-gray-700">Rating Perilaku Kerja</label>
                   <div className="mt-1">
-                    <input
-                      {...register('nilai_skp', { required: 'Silahkan masukan nama nilai skp.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="nilai_skp"
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      max="120"
-                    />
-                    {errors.nilai_skp && <p className="mt-1 text-xs text-red-500">{errors.nilai_skp.message}</p>}
+                    <select
+                      {...register('rating_perilaku_kerja', { required: 'Silahkan pilih Rating Perilaku Kerja.' })}
+                      className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                    >
+                      <option value="">Semua</option>
+                      {RatingPerilakuDanHasilKerja.map(item => (
+                        <option key={item.id} value={item.textAsValue}>
+                          {item.textAsValue}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.rating_perilaku_kerja && (
+                      <p className="mt-1 text-xs text-red-500">{errors.rating_perilaku_kerja.message}</p>
+                    )}
                   </div>
                 </div>
                 <div className="mt-5 sm:col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Nilai Perilaku</label>
+                  <label className="block text-sm font-medium text-gray-700">Predikat Kinerja Pegawai</label>
                   <div className="mt-1">
-                    <input
-                      {...register('nilai_perilaku', { required: 'Silahkan masukan nilai perilaku.' })}
-                      className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
-                      name="nilai_perilaku"
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      max="120"
-                    />
-                    {errors.nilai_perilaku && (
-                      <p className="mt-1 text-xs text-red-500">{errors.nilai_perilaku.message}</p>
+                    <select
+                      {...register('predikat_kinerja_pegawai', {
+                        required: 'Silahkan pilih Predikat Kinerja Pegawai.',
+                      })}
+                      className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                    >
+                      <option value="">Semua</option>
+                      {PredikatKinerjaPegawai.map(item => (
+                        <option key={item.id} value={item.textAsValue}>
+                          {item.textAsValue}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.predikat_kinerja_pegawai && (
+                      <p className="mt-1 text-xs text-red-500">{errors.predikat_kinerja_pegawai.message}</p>
                     )}
                   </div>
                 </div>

@@ -65,3 +65,52 @@ export interface PostRiwayatSkpDeleteRes {
   status: Status;
   data: string;
 }
+
+//Migration to V2 RiwayatSKP : POST | PUT | GET
+// 25 Jan 2023 | BE Reza
+export interface PostRiwayatSkpReq {
+  pegawai_id: number;
+  tahun: number;
+  rating_hasil_kerja: string;
+  rating_perilaku_kerja: string;
+  predikat_kinerja_pegawai: string;
+  files: [
+    {
+      document_uuid: string;
+      document_name: string;
+    }
+  ];
+}
+export interface PutRiwayatSkpReq {
+  riwayat_id: number;
+  pegawai_id: number;
+  tahun: number;
+  rating_hasil_kerja: string;
+  rating_perilaku_kerja: string;
+  predikat_kinerja_pegawai: string;
+  files: [
+    {
+      document_uuid: string;
+      document_name: string;
+    }
+  ];
+}
+
+export interface RiwayatSkpData {
+  riwayat_id: number;
+  pegawai_id: number;
+  tahun: number;
+  rating_hasil_kerja: string;
+  rating_perilaku_kerja: string;
+  predikat_kinerja_pegawai: string;
+  files: [
+    {
+      document_uuid: string;
+      document_name: string;
+    }
+  ];
+}
+
+export interface PostDelRiwayatSkpReq {
+  riwayat_id: number;
+}
