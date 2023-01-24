@@ -144,3 +144,19 @@ export interface GetRekapDinasKeuanganRes {
     total_page: number;
   };
 }
+export interface GetCalendarReq {
+  dinas_id?: number;
+  unit_kerja_id?: number;
+  tgl_mulai?: string;
+  tgl_selesai?: string;
+}
+export interface CalendarData {
+  date: string;
+  dinas_id: number;
+  unit_kerja_id: number;
+  total_dinas: number;
+}
+export interface GetCalendarRes {
+  status: string;
+  data: CalendarData[];
+}

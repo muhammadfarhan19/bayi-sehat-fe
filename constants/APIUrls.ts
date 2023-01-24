@@ -58,6 +58,7 @@ export const KepegawaianAPI = {
   GET_PEGAWAI_STATISTIC_LIST: config.apiHost + '/pegawai/statistic/list',
   GET_PEGAWAI_PRESENSI_SUMMARY: config.apiHost + '/presensi-pegawai/summary',
   GET_PEGAWAI_PEGAWAI_EKSTERNAL: config.apiHost + '/user/external/list',
+  GET_CALENDAR_PEGAWAI: config.apiHost + '/dinas/kalender/summary',
 };
 
 export const PetaAPI = {

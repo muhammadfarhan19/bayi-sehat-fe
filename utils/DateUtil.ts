@@ -20,6 +20,7 @@ export interface EventDate {
   time?: string;
   dateKey: string;
   datetime: string;
+  totalDinas?: number;
   infoType: 'presensi' | 'dinas';
 }
 
