@@ -10,7 +10,7 @@ import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
-import { StatusPengajuan, StatusText } from '../Shared/_resource';
+import { PengajuanType, StatusPengajuan, StatusText } from '../Shared/_resource';
 import KlaimModal from './KlaimModal';
 
 type ListKlaimProps = {
@@ -198,7 +198,7 @@ function KlaimList(props: ListKlaimProps) {
                     const formattedDateSelesai: string = data?.tanggal_selesai
                       ? formatDate(new Date(data?.tanggal_selesai), 'dd MMM yyyy')
                       : '';
-                    const statusType: string = data?.type === 1 ? 'Cuti' : 'Cuti Sakit';
+                    const statType = PengajuanType.find(item => item?.value === data?.type);
                     const isDitolakNorIsDiterima =
                       data?.status === StatusPengajuan.Ditolak || data?.status === StatusPengajuan.Diterima;
                     const currentStatus =
@@ -223,7 +223,7 @@ function KlaimList(props: ListKlaimProps) {
                         </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedDate}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedDateSelesai}</td>
-                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">{statusType}</td>
+                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">{statType?.text}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">
                           <FileLoader uuid={data?.files?.[0]?.document_uuid} asLink>

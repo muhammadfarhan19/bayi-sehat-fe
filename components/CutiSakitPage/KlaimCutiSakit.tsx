@@ -219,7 +219,7 @@ function KlaimCutiSakit() {
             label="Jenis Pengajuan"
             defaultOption="Silahkan Pilih"
             firstValue={1}
-            firstOption="Cuti"
+            firstOption="Cuti Tahunan"
             secondValue={2}
             secondOption="Cuti Sakit"
             formVerification="jenis_pengajuan"

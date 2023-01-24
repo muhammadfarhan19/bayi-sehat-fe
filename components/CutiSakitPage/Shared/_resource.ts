@@ -10,25 +10,30 @@ export const StatusText = {
   Diterima: 'Diterima',
 };
 
+/**
+ * Back-End Contract
+ * 1 - Cuti Tahunan
+ * 2 - Cuti Sakit
+ * 3 - Cuti Besar
+ * 4 - Cuti Karena Alasan Penting
+ * 5 - Cuti Diluar Tanggungan Negara
+ * 6 - Cuti Melahirkan
+ */
 export const PengajuanType = [
   {
     value: 3,
-    text: 'Cuti Tahunan',
-  },
-  {
-    value: 4,
     text: 'Cuti Besar',
   },
   {
-    value: 5,
+    value: 4,
     text: 'Cuti Karena Alasan Penting',
   },
   {
-    value: 6,
+    value: 5,
     text: 'Cuti Diluar Tanggungan Negara',
   },
   {
-    value: 7,
+    value: 6,
     text: 'Cuti Melahirkan',
   },
 ];
