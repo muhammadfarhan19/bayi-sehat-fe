@@ -55,8 +55,8 @@ export const NavigationList: Navigation[] = [
           },
           {
             id: PUBLIC,
-            name: 'Klaim Cuti dan Sakit',
-            href: '/cuti-sakit',
+            name: 'Klaim Cuti',
+            href: '/cuti',
           },
           {
             id: PUBLIC,
@@ -135,8 +135,8 @@ export const NavigationList: Navigation[] = [
           },
           {
             id: NavigationId.KEPEGAWAIAN,
-            name: 'Klaim Cuti dan Sakit',
-            href: '/kepegawaian/cuti-sakit',
+            name: 'Klaim Cuti',
+            href: '/kepegawaian/cuti',
           },
           {
             id: NavigationId.KEPEGAWAIAN,
