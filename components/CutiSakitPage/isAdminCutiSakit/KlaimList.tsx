@@ -76,7 +76,7 @@ function KlaimList(props: ListKlaimProps) {
   return (
     <div className="overflow-auto rounded-lg bg-white px-6 py-6 shadow">
       <div className="mb-5 flex flex-row items-center">
-        <h3 className="text-xl font-medium leading-6 text-gray-900">Data Klaim Cuti dan Sakit</h3>
+        <h3 className="text-xl font-medium leading-6 text-gray-900">Data Klaim Cuti</h3>
         <div className="ml-auto flex">
           <input
             type="text"

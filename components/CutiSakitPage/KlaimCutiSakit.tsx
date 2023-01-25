@@ -187,7 +187,7 @@ function KlaimCutiSakit() {
 
       <section aria-labelledby="section-1-title">
         <div className="overflow-hidden rounded-lg bg-white px-6 py-6 shadow">
-          <h3 className="text-xl font-medium leading-6 text-gray-900">Pengajuan Klaim Cuti dan Sakit</h3>
+          <h3 className="text-xl font-medium leading-6 text-gray-900">Pengajuan Klaim Cuti</h3>
           <InputLabelled
             isError={null}
             isUneditable={true}
@@ -307,7 +307,7 @@ function KlaimCutiSakit() {
           <ModalKehadiran
             open={formModalState.open}
             withCustomTitle
-            modalTitle="Klaim Cuti dan Sakit"
+            modalTitle="Klaim Cuti"
             setOpen={(open: boolean) => handleShowForm(open)}
             handleSubmission={handleSubmit(submitHandler)}
             selectedId={formModalState?.selectedId}
@@ -326,7 +326,7 @@ function KlaimCutiSakit() {
       <section aria-labelledby="section-1-title">
         <div className="overflow-hidden rounded-lg bg-white px-6 py-6 shadow">
           <div className="mb-5 flex flex-row items-center">
-            <h3 className="text-xl font-medium leading-6 text-gray-900">Data Klaim Cuti dan Sakit</h3>
+            <h3 className="text-xl font-medium leading-6 text-gray-900">Data Klaim Cuti</h3>
           </div>
 
           <div className="flex w-full flex-row gap-x-[16px]">
