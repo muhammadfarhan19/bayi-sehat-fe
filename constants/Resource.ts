@@ -92,7 +92,7 @@ export const StatusPembayaranText = [
   'Menunggu PUMK Memproses',
   'Diproses PUMK',
   'Diajukan PUMK Kepada BPP',
-  'Dibayarkan oleh PUMK',
+  'Dibayarkan BPP',
   'Selesai',
 ];
 

@@ -245,6 +245,7 @@ export const KeuanganDinasAPI = {
   POST_BUKTI_BAYAR: config.apiHost + '/dinas/buktibayar',
   POST_BUKTI_TANGGUNGJAWAB: config.apiHost + '/dinas/buktitanggungjawab',
   POST_UPDATE_STATUS_PEMBAYARAN: config.apiHost + '/dinas/update-status-pembayaran',
+  GET_PEFORMA_PEGAWAI: config.apiHost + '/dinas/performa/summary',
 };
 
 export const CutiAPI = {
