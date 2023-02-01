@@ -57,8 +57,8 @@ export interface PostRiwayatSkpUpdateRes {
 }
 
 export interface PostRiwayatSkpDeleteReq {
-  pegawai_id: number;
-  riwayat_id: number;
+  pegawai_id?: number;
+  riwayat_id?: number;
 }
 
 export interface PostRiwayatSkpDeleteRes {
@@ -103,6 +103,9 @@ export interface RiwayatSkpData {
   rating_hasil_kerja: string;
   rating_perilaku_kerja: string;
   predikat_kinerja_pegawai: string;
+  nilai_ppk: number;
+  nilai_skp: number;
+  nilai_perilaku: number;
   files: [
     {
       document_uuid: string;
