@@ -31,7 +31,7 @@ import usePersonalData from '../shared/hooks/usePersonalData';
 import UploadWrapper, { FileObject } from '../shared/Input/UploadWrapper';
 import Loader from '../shared/Loader/Loader';
 import Pagination from '../shared/Pagination';
-import { StatusPengajuan } from './Shared/_resource';
+import { PengajuanType, PengajuanTypeCuti, StatusPengajuan } from './Shared/_resource';
 
 interface FormState {
   pegawai_id: number;
@@ -40,6 +40,7 @@ interface FormState {
   catatan?: string;
   file_id: string;
   file_name: string;
+  tanggal_selesai: string;
 }
 
 function KlaimCutiSakit() {
@@ -120,6 +121,7 @@ function KlaimCutiSakit() {
       {
         pegawai_id: Number(personalPegawaiData?.pegawai_id),
         tanggal_klaim: formData?.tanggal_klaim,
+        tanggal_selesai: formData?.tanggal_selesai,
         jenis_pengajuan: Number(formData?.jenis_pengajuan),
         catatan: formData?.catatan ?? '',
         files: [
@@ -159,6 +161,8 @@ function KlaimCutiSakit() {
     }
   };
 
+  const valueCutiType = PengajuanTypeCuti.find(item => item?.value == Number(getValues('jenis_pengajuan')));
+
   if (!personalPegawaiData?.pegawai_id) {
     return (
       <div className="relative h-[150px] w-full divide-y divide-gray-200">
@@ -183,7 +187,7 @@ function KlaimCutiSakit() {
 
       <section aria-labelledby="section-1-title">
         <div className="overflow-hidden rounded-lg bg-white px-6 py-6 shadow">
-          <h3 className="text-xl font-medium leading-6 text-gray-900">Pengajuan Klaim Cuti dan Sakit</h3>
+          <h3 className="text-xl font-medium leading-6 text-gray-900">Pengajuan Klaim Cuti</h3>
           <InputLabelled
             isError={null}
             isUneditable={true}
@@ -194,17 +198,22 @@ function KlaimCutiSakit() {
             type="text"
             label="Nama"
           />
-
           <InputLabelled
             isError={errors.tanggal_klaim}
-            onChange={e => alert(e)}
             errorMessage={errors.tanggal_klaim?.message}
             validation={{ ...register('tanggal_klaim', { required: 'Silahkan Pilih Tanggal Klaim' }) }}
             name="tanggal_klaim"
             type="date"
-            label="Tanggal Klaim"
+            label="Tanggal Mulai"
           />
-
+          <InputLabelled
+            isError={errors.tanggal_selesai}
+            errorMessage={errors.tanggal_selesai?.message}
+            validation={{ ...register('tanggal_selesai', { required: 'Silahkan Pilih Tanggal Selesai' }) }}
+            name="tanggal_selesai"
+            type="date"
+            label="Tanggal Selesai"
+          />
           <DropdownPicker
             isError={errors.jenis_pengajuan}
             errorMessage={errors.jenis_pengajuan?.message}
@@ -212,10 +221,19 @@ function KlaimCutiSakit() {
             label="Jenis Pengajuan"
             defaultOption="Silahkan Pilih"
             firstValue={1}
-            firstOption="Cuti"
+            firstOption="Cuti Tahunan"
             secondValue={2}
             secondOption="Cuti Sakit"
             formVerification="jenis_pengajuan"
+            moreOptions={(PengajuanType || []).map(item => {
+              return (
+                <>
+                  <option key={item.value} value={item.value}>
+                    {item.text}
+                  </option>
+                </>
+              );
+            })}
           />
           <InputLabelled
             isError={errors.catatan}
@@ -227,7 +245,7 @@ function KlaimCutiSakit() {
           />
           <div className="mt-5 sm:col-span-6">
             <label className="mb-2 block text-sm font-medium text-gray-700">
-              Unggah Surat Dokter atau Persetujuan dari Pimpinan
+              Unggah Surat Dokter atau dokumen pendukung lainnya
             </label>
             <Controller
               control={control}
@@ -289,14 +307,14 @@ function KlaimCutiSakit() {
           <ModalKehadiran
             open={formModalState.open}
             withCustomTitle
-            modalTitle="Klaim Cuti dan Sakit"
+            modalTitle="Klaim Cuti"
             setOpen={(open: boolean) => handleShowForm(open)}
             handleSubmission={handleSubmit(submitHandler)}
             selectedId={formModalState?.selectedId}
             name={`: ${personalPegawaiData?.nama}`}
-            tanggal={`: ${getValues('tanggal_klaim')}`}
+            tanggal={`: ${getValues('tanggal_klaim')} s.d ${getValues('tanggal_selesai')}`}
             nip={`: ${personalPegawaiData?.nip}`}
-            jenisPengajuan={`: ${getValues('jenis_pengajuan') == 1 ? 'Cuti' : 'Cuti Sakit'}`}
+            jenisPengajuan={`: ${valueCutiType?.text}`}
             alasan={`: ${getValues('catatan')}`}
             documentValue={getValues('file_id')}
             dokumen={`: ${getValues('file_name')}`}
@@ -308,7 +326,7 @@ function KlaimCutiSakit() {
       <section aria-labelledby="section-1-title">
         <div className="overflow-hidden rounded-lg bg-white px-6 py-6 shadow">
           <div className="mb-5 flex flex-row items-center">
-            <h3 className="text-xl font-medium leading-6 text-gray-900">Data Klaim Cuti dan Sakit</h3>
+            <h3 className="text-xl font-medium leading-6 text-gray-900">Data Klaim Cuti</h3>
           </div>
 
           <div className="flex w-full flex-row gap-x-[16px]">
@@ -345,7 +363,13 @@ function KlaimCutiSakit() {
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
-                        Tanggal
+                        Tanggal Mulai
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Tanggal Selesai
                       </th>
                       <th
                         scope="col"
@@ -378,13 +402,17 @@ function KlaimCutiSakit() {
                       const formatDatePengajuan: string = data?.tanggal
                         ? formatDate(new Date(data?.tanggal), 'dd MMMM yyyy')
                         : '-';
+                      const formatDatePengajuanSelesai: string = data?.tanggal_selesai
+                        ? formatDate(new Date(data?.tanggal_selesai), 'dd MMMM yyyy')
+                        : '-';
+
+                      const statType = PengajuanType.find(item => item?.value === data?.type);
                       return (
                         <tr key={data?.id} className={'bg-white hover:bg-gray-100'}>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{formatDatePengajuan}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                            {data?.type === 1 ? 'Cuti' : 'Cuti Sakit'}
-                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{formatDatePengajuanSelesai}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{statType?.text}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
                           <td className="px-6 py-4 text-xs font-medium text-blue-900 underline">
                             {data?.files?.[0]?.document_name?.length === 0 ? (

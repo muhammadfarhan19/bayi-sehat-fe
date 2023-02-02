@@ -2,6 +2,7 @@ export interface PostCutiReq {
   pegawai_id: number;
   tanggal_klaim: string;
   jenis_pengajuan: number;
+  tanggal_selesai: string;
   catatan: string;
   files: [
     {
@@ -33,6 +34,7 @@ export interface GetCutiListData {
   pegawai_id: number;
   nama_pegawai: string;
   tanggal: string;
+  tanggal_selesai: string;
   type: number;
   note: string;
   admin_note: string;

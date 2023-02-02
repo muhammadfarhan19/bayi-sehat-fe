@@ -22,6 +22,7 @@ const months = [
 
 interface Props {
   onChange: (date: Date) => void;
+  type?: string;
 }
 
 function DatePicker(props: Props) {
@@ -112,22 +113,25 @@ function DatePicker(props: Props) {
           </Transition>
         </Menu>
       </h1>
-      <div className="flex items-center">
-        <div className="flex items-center rounded-md shadow-sm md:items-stretch">
-          <button
-            onClick={() => handleNextPrevMonth(-1)}
-            className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
-          >
-            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
-          <button
-            onClick={() => handleNextPrevMonth(1)}
-            className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
-          >
-            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
+
+      {typeof props.type === 'undefined' && (
+        <div className="flex items-center">
+          <div className="flex items-center rounded-md shadow-sm md:items-stretch">
+            <button
+              onClick={() => handleNextPrevMonth(-1)}
+              className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+            >
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <button
+              onClick={() => handleNextPrevMonth(1)}
+              className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+            >
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

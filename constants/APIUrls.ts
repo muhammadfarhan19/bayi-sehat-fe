@@ -58,6 +58,7 @@ export const KepegawaianAPI = {
   GET_PEGAWAI_STATISTIC_LIST: config.apiHost + '/pegawai/statistic/list',
   GET_PEGAWAI_PRESENSI_SUMMARY: config.apiHost + '/presensi-pegawai/summary',
   GET_PEGAWAI_PEGAWAI_EKSTERNAL: config.apiHost + '/user/external/list',
+  GET_CALENDAR_PEGAWAI: config.apiHost + '/dinas/kalender/summary',
 };
 
 export const PetaAPI = {
@@ -176,9 +177,13 @@ export const RiwayatKGBAPI = {
 
 export const RiwayatSKPAPI = {
   GET_RIWAYAT_SKP_LIST: config.apiHost + '/riwayat-skp/list',
+  GET_RIWAYAT_SKP_LIST_V2: config.apiHost + '/riwayat-skp-new/list',
   POST_RIWAYAT_SKP_INSERT: config.apiHost + '/riwayat-skp/insert',
+  POST_RIWAYAT_SKP_V2: config.apiHost + '/riwayat-skp-new/insert',
+  PUT_RIWAYAT_SKP_V2: config.apiHost + '/riwayat-skp-new/update',
   POST_RIWAYAT_SKP_UPDATE: config.apiHost + '/riwayat-skp/update',
   POST_RIWAYAT_SKP_DELETE: config.apiHost + '/riwayat-skp/delete',
+  POST_RIWAYAT_SKP_DELETE_V2: config.apiHost + '/riwayat-skp-new/delete',
 };
 
 export const RiwayatPengangkatanPekerjaan = {
@@ -240,6 +245,7 @@ export const KeuanganDinasAPI = {
   POST_BUKTI_BAYAR: config.apiHost + '/dinas/buktibayar',
   POST_BUKTI_TANGGUNGJAWAB: config.apiHost + '/dinas/buktitanggungjawab',
   POST_UPDATE_STATUS_PEMBAYARAN: config.apiHost + '/dinas/update-status-pembayaran',
+  GET_PEFORMA_PEGAWAI: config.apiHost + '/dinas/performa/summary',
 };
 
 export const CutiAPI = {

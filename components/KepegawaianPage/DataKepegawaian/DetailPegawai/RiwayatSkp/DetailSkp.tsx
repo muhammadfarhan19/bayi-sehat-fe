@@ -1,10 +1,10 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
-import { RiwayatSkpListData } from '../../../../../types/api/RiwayatSkpAPI';
+import { RiwayatSkpData } from '../../../../../types/api/RiwayatSkpAPI';
 import ImgFile from '../../../../shared/FileLoader';
 
 type ListSkpProps = {
-  detail?: RiwayatSkpListData;
+  detail?: RiwayatSkpData;
   onBack: () => void;
 };
 
@@ -18,22 +18,41 @@ export default function DetailSkp(props: ListSkpProps) {
         <span className="tracking-wide text-gray-600">Kembali</span>
       </div>
       <div>
-        <span className="mb-2 text-[24px] font-[600]">Riwayat SKP</span>
+        <span className="mb-2 text-[24px] font-[600]">Riwayat SKP {detail?.nilai_perilaku ? 'Lama' : 'Baru'}</span>
         <table className="min-w-full divide-y divide-gray-200">
           <thead></thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {[
-              { label: 'Tahun', value: detail?.tahun },
-              { label: 'Nilai PPK', value: detail?.nilai_ppk },
-              { label: 'Nilai SKP', value: detail?.nilai_skp },
-              { label: 'Nilai Perilaku', value: detail?.nilai_perilaku },
-              { label: 'Berkas', value: detail?.files?.[0]?.document_name },
-            ].map((each, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
-                <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
-              </tr>
-            ))}
+            {detail?.nilai_perilaku ? (
+              <>
+                {[
+                  { label: 'Tahun', value: detail?.tahun },
+                  { label: 'Nilai PPK', value: detail?.nilai_ppk },
+                  { label: 'Nilai SKP', value: detail?.nilai_skp },
+                  { label: 'Nilai Perilaku', value: detail?.nilai_perilaku },
+                  { label: 'Berkas', value: detail?.files?.[0]?.document_name },
+                ].map((each, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
+                  </tr>
+                ))}
+              </>
+            ) : (
+              <>
+                {[
+                  { label: 'Tahun', value: detail?.tahun },
+                  { label: 'Rating Hasil Kerja', value: detail?.rating_hasil_kerja },
+                  { label: 'Rating Perilaku Kerja', value: detail?.rating_perilaku_kerja },
+                  { label: 'Predikat Kinerja Pegawai', value: detail?.predikat_kinerja_pegawai },
+                  { label: 'Berkas', value: detail?.files?.[0]?.document_name },
+                ].map((each, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
+                  </tr>
+                ))}
+              </>
+            )}
           </tbody>
         </table>
       </div>

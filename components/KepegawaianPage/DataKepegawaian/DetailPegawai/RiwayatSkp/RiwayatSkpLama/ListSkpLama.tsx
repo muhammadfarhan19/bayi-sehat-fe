@@ -2,35 +2,40 @@ import { PlusIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setSnackbar } from '../../../../../action/CommonAction';
-import { RiwayatSKPAPI } from '../../../../../constants/APIUrls';
-import { SnackbarType } from '../../../../../reducer/CommonReducer';
+import { setSnackbar } from '../../../../../../action/CommonAction';
+import { RiwayatSKPAPI } from '../../../../../../constants/APIUrls';
+import { SnackbarType } from '../../../../../../reducer/CommonReducer';
 import {
   GetRiwayatSkpListReq,
-  PostDelRiwayatSkpReq,
+  PostRiwayatSkpDeleteReq,
   PostRiwayatSkpDeleteRes,
   RiwayatSkpData,
-} from '../../../../../types/api/RiwayatSkpAPI';
-import { Status } from '../../../../../types/Common';
-import { callAPI } from '../../../../../utils/Fetchers';
-import ConfirmDialog from '../../../../shared/ConfirmDialog';
-import FileLoader from '../../../../shared/FileLoader';
-import useAllowAdmin from '../../../../shared/hooks/useAllowAdmin';
-import useCommonApi from '../../../../shared/hooks/useCommonApi';
-import usePersonalData from '../../../../shared/hooks/usePersonalData';
-import { PDFIcon } from '../../../../shared/icons/PDFIcon';
-import SkpForm from './SkpForm';
+} from '../../../../../../types/api/RiwayatSkpAPI';
+import { Status } from '../../../../../../types/Common';
+import { callAPI } from '../../../../../../utils/Fetchers';
+import ConfirmDialog from '../../../../../shared/ConfirmDialog';
+import FileLoader from '../../../../../shared/FileLoader';
+import useAllowAdmin from '../../../../../shared/hooks/useAllowAdmin';
+import useCommonApi from '../../../../../shared/hooks/useCommonApi';
+import usePersonalData from '../../../../../shared/hooks/usePersonalData';
+import { PDFIcon } from '../../../../../shared/icons/PDFIcon';
+import SkpFormLama from './SkpFormLama';
 
 type ListSkpProps = {
   onShowDetail: (detail: RiwayatSkpData) => void;
 };
 
-export default function ListSkp(props: ListSkpProps) {
-  const [confirmId, setConfirmId] = React.useState(0);
+function ListSkpLama(props: ListSkpProps) {
   const { onShowDetail } = props;
-  const dispatch = useDispatch();
-  const personalPegawaiData = usePersonalData();
+  const [confirmId, setConfirmId] = React.useState(0);
   const isAllowAdmin = useAllowAdmin();
+  const personalPegawaiData = usePersonalData();
+  const dispatch = useDispatch();
+  const { data: riwayatSkp, mutate } = useCommonApi<GetRiwayatSkpListReq, RiwayatSkpData[]>(
+    RiwayatSKPAPI.GET_RIWAYAT_SKP_LIST,
+    { pegawai_id: personalPegawaiData?.pegawai_id },
+    { method: 'GET' }
+  );
 
   const [formModalState, setFormModalState] = React.useState<{ open: boolean; selected?: RiwayatSkpData }>({
     open: false,
@@ -42,14 +47,14 @@ export default function ListSkp(props: ListSkpProps) {
   };
 
   const handleConfirm = async () => {
-    const resDelete = await callAPI<PostDelRiwayatSkpReq, PostRiwayatSkpDeleteRes>(
-      RiwayatSKPAPI.POST_RIWAYAT_SKP_DELETE_V2,
+    const resDelete = await callAPI<PostRiwayatSkpDeleteReq, PostRiwayatSkpDeleteRes>(
+      RiwayatSKPAPI.POST_RIWAYAT_SKP_DELETE,
       {
+        pegawai_id: Number(personalPegawaiData?.pegawai_id),
         riwayat_id: Number(confirmId),
       },
       { method: 'post' }
     );
-
     let snackbarProps;
     if (resDelete.status === 200 && resDelete.data?.status === Status.OK) {
       snackbarProps = {
@@ -69,16 +74,10 @@ export default function ListSkp(props: ListSkpProps) {
     mutate();
   };
 
-  const { data: riwayatSkp, mutate } = useCommonApi<GetRiwayatSkpListReq, RiwayatSkpData[]>(
-    RiwayatSKPAPI.GET_RIWAYAT_SKP_LIST_V2,
-    { pegawai_id: personalPegawaiData?.pegawai_id },
-    { method: 'GET' }
-  );
-
   return (
-    <div className="mt-5 border-t-2">
-      <div className="my-3 mt-5 flex items-center">
-        <div className="flex flex-1 pr-2 text-sm text-[18px] font-semibold">Riwayat SKP Baru</div>
+    <div className="mt-5">
+      <div className="my-3 flex items-center">
+        <div className="flex flex-1 pr-2 text-sm text-[18px] font-semibold">Riwayat SKP Lama</div>
         {isAllowAdmin && (
           <button
             type="button"
@@ -86,7 +85,7 @@ export default function ListSkp(props: ListSkpProps) {
             onClick={() => handleShowForm(!formModalState.open)}
           >
             <PlusIcon className="mr-1 h-4" />
-            Tambah Riwayat SKP Baru
+            Tambah Riwayat SKP Lama
           </button>
         )}
       </div>
@@ -110,19 +109,19 @@ export default function ListSkp(props: ListSkpProps) {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Rating Hasil Kerja
+                Nilai PPK
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Rating Perilaku Kerja
+                Nilai SKP
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Predikat Kinerja Pegawai
+                Nilai Perilaku
               </th>
               <th
                 scope="col"
@@ -144,10 +143,10 @@ export default function ListSkp(props: ListSkpProps) {
             {(riwayatSkp || []).map((each, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.tahun}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.rating_hasil_kerja}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.rating_perilaku_kerja}</td>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each?.predikat_kinerja_pegawai}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.tahun}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nilai_ppk}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nilai_skp}</td>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.nilai_perilaku}</td>
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   <FileLoader uuid={each?.files?.[0]?.document_uuid}>
                     <div className="flex items-center">
@@ -190,7 +189,7 @@ export default function ListSkp(props: ListSkpProps) {
         </table>
       </div>
       {formModalState.open ? (
-        <SkpForm
+        <SkpFormLama
           onSuccess={() => mutate()}
           open={formModalState.open}
           setOpen={(open: boolean) => handleShowForm(open)}
@@ -206,3 +205,5 @@ export default function ListSkp(props: ListSkpProps) {
     </div>
   );
 }
+
+export default ListSkpLama;

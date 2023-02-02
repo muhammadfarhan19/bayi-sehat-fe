@@ -92,6 +92,53 @@ export const StatusPembayaranText = [
   'Menunggu PUMK Memproses',
   'Diproses PUMK',
   'Diajukan PUMK Kepada BPP',
-  'Dibayarkan oleh PUMK',
+  'Dibayarkan BPP',
   'Selesai',
+];
+
+export const HelpCenterUri = {
+  isAdmin:
+    'https://www.canva.com/design/DAFNUqOADak/NqcYNvPUiuRoJSdA3DWbSg/edit?utm_content=DAFNUqOADak&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton#1',
+  isPegawai:
+    'https://www.canva.com/design/DAFMwCC9V5w/fRu_CF25QcbWthz6sA09Gw/view?utm_content=DAFMwCC9V5w&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton',
+  loginGuidance:
+    'https://www.canva.com/design/DAFZbpRAZIY/tYZTgwhbEFtq8DpwmQc3WA/view?utm_content=DAFZbpRAZIY&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink',
+};
+
+export const RatingPerilakuDanHasilKerja = [
+  {
+    id: 1,
+    textAsValue: 'Di Atas Ekspektasi',
+  },
+  {
+    id: 2,
+    textAsValue: 'Sesuai Ekspektasi',
+  },
+  {
+    id: 3,
+    textAsValue: 'Di Bawah Ekspektasi',
+  },
+];
+
+export const PredikatKinerjaPegawai = [
+  {
+    id: 1,
+    textAsValue: 'Sangat Baik/Istimewa',
+  },
+  {
+    id: 2,
+    textAsValue: 'Baik',
+  },
+  {
+    id: 3,
+    textAsValue: 'Butuh Perbaikan',
+  },
+  {
+    id: 4,
+    textAsValue: 'Kurang/Missconduct',
+  },
+  {
+    id: 5,
+    textAsValue: 'Sangat Kurang',
+  },
 ];

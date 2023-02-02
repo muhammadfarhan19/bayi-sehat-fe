@@ -77,3 +77,11 @@ export interface TanggalPembayaranData {
   tanggal_dibayarkan: string;
   tanggal_pertanggungjawaban: string;
 }
+export interface GetPeformaPegawaiData {
+  total_dinas_proses: number;
+  total_dinas: number;
+  total_dinas_selesai: number;
+  min_day_proses: number;
+  max_day_proses: number;
+  avg_day_proses: number;
+}

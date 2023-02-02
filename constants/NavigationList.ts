@@ -10,7 +10,7 @@ export const NavigationId = {
 };
 
 export const UserNavigationList: Navigation[] = [
-  { name: 'Biodata', href: '/', id: PUBLIC },
+  { name: 'Biodata', href: '/pegawai/biodata', id: PUBLIC },
   { name: 'Ubah Foto Profil', href: '#', id: PUBLIC },
   { name: 'Ubah Kata Sandi', href: '/changepassword', id: PUBLIC },
   { name: 'Keluar', href: '/logout', id: PUBLIC },
@@ -54,9 +54,9 @@ export const NavigationList: Navigation[] = [
             href: '/kehadiran',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
-            name: 'Klaim Cuti dan Sakit',
-            href: '/cuti-sakit',
+            id: PUBLIC,
+            name: 'Klaim Cuti',
+            href: '/cuti',
           },
           {
             id: PUBLIC,
@@ -135,8 +135,8 @@ export const NavigationList: Navigation[] = [
           },
           {
             id: NavigationId.KEPEGAWAIAN,
-            name: 'Klaim Cuti dan Sakit',
-            href: '/kepegawaian/cuti-sakit',
+            name: 'Klaim Cuti',
+            href: '/kepegawaian/cuti',
           },
           {
             id: NavigationId.KEPEGAWAIAN,

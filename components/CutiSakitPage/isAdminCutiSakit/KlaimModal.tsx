@@ -101,7 +101,7 @@ function KlaimModal(props: ModalProps) {
           >
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-sm transition-all">
               <Dialog.Title as="div" className="flex justify-between">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">Klaim Pengajuan Cuti dan Sakit</h3>
+                <h3 className="text-lg font-medium leading-6 text-gray-900">Klaim Pengajuan Cuti</h3>
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
               <form onSubmit={handleSubmit(submitHandler)}>

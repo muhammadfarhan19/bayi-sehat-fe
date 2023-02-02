@@ -1,22 +1,26 @@
+import { ChevronLeftIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
+import Link from 'next/link';
 import React from 'react';
 
-import { RekapDinasAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
+import { RekapDinasAPI } from '../../../constants/APIUrls';
 import { GetRekapReq, RekapData } from '../../../types/api/RekapDinasAPI';
-import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
-import SummaryDinasCalendar from '../../DinasPage/DataPegawai/SummaryDinasCalendar';
-import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
-import AdminDinasAccess from './AdminDinasAccess';
 
-function RekapDinasPage() {
+interface CalendarProps {
+  date: string;
+}
+
+function DetailCalendarPage(props: CalendarProps) {
+  const { date } = props;
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [loaded, setLoaded] = React.useState(false);
-
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
     page: 1,
     per_page: 20,
+    tgl_mulai: date,
   });
 
   const {
@@ -24,12 +28,6 @@ function RekapDinasPage() {
     isValidating,
     mutate,
   } = useCommonApi<GetRekapReq, RekapData>(RekapDinasAPI.GET_DINAS_LIST, filterState, { method: 'GET' });
-
-  const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
-    UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
-    null,
-    { method: 'GET' }
-  );
 
   React.useEffect(() => {
     if (loaded) {
@@ -58,74 +56,17 @@ function RekapDinasPage() {
   return (
     <>
       <div className="rounded-lg bg-white shadow">
+        <Link href={'/kepegawaian/rekap-dinas'}>
+          <span className="flex w-fit cursor-pointer flex-row items-center gap-x-2 py-6 px-6">
+            <ChevronLeftIcon className="h-5 w-5" />
+            <div>Kembali</div>
+          </span>
+        </Link>
         <div className="px-6">
           <div className="flex flex-row py-6">
-            <p className="text-lg font-medium text-gray-900">Rekap Dinas</p>
-
-            <div className="ml-auto flex">
-              <input
-                autoComplete="off"
-                type="text"
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Cari Penugasan"
-                onChange={e => {
-                  changeFilterState({ isi_penugasan: e.target.value === '' ? undefined : e.target.value });
-                }}
-              />
-              <AdminDinasAccess />
-            </div>
-          </div>
-
-          <div className="flex w-full flex-row gap-x-[16px]">
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
-              <select
-                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                onChange={e => {
-                  changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
-                }}
-              >
-                <option value="">Semua</option>
-                {(unitKerjaList || []).map((item, index) => (
-                  <option key={`options-${index}`} value={item?.unit_kerja_id}>
-                    {item?.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Jenis Dinas</p>
-              <select
-                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                onChange={e => {
-                  changeFilterState({ jenis_dinas_id: e.target.value === '' ? undefined : Number(e.target.value) });
-                }}
-              >
-                <option value="">Semua</option>
-                <option value="1">Dinas SPPD</option>
-                <option value="2">Dinas Non SPPD</option>
-              </select>
-            </div>
-            <div className="w-[202px] pb-2">
-              <p className="text-sm font-medium text-gray-700"> Dari Tanggal</p>
-              <input
-                type="date"
-                className="mt-1 w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                onChange={e => {
-                  changeFilterState({ tgl_mulai: e.target.value === '' ? undefined : e.target.value });
-                }}
-              />
-            </div>
-            <div className="w-[202px] pb-2">
-              <p className="text-sm font-medium text-gray-700"> Sampai Tanggal</p>
-              <input
-                type="date"
-                className="mt-1 w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                onChange={e => {
-                  changeFilterState({ tgl_selesai: e.target.value === '' ? undefined : e.target.value });
-                }}
-              />
-            </div>
+            <p className="text-lg font-medium text-gray-900">
+              Daftar dinas tanggal {format(new Date(date), 'dd MMMM yyyy')}
+            </p>
           </div>
         </div>
         {isValidating ? (
@@ -224,15 +165,8 @@ function RekapDinasPage() {
           </div>
         )}
       </div>
-
-      <div className="mt-6 overflow-hidden rounded-lg bg-white shadow">
-        <div className="flex flex-row flex-wrap items-center justify-between px-6 py-4">
-          <p className="text-lg font-medium text-gray-900">Kalender Dinas</p>
-        </div>
-        <SummaryDinasCalendar />
-      </div>
     </>
   );
 }
 
-export default withErrorBoundary(RekapDinasPage);
+export default DetailCalendarPage;
