@@ -29,6 +29,7 @@ type ListGolonganProps = {
 export default function ListGolongan(props: ListGolonganProps) {
   const dispatch = useDispatch();
   const isAllowAdmin = useAllowAdmin();
+  console.log(isAllowAdmin);
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const [confirmId, setConfirmId] = React.useState(0);
   const { onShowDetail } = props;
@@ -76,15 +77,19 @@ export default function ListGolongan(props: ListGolonganProps) {
   return (
     <>
       <div className="my-3 flex items-center">
-        <div className="flex flex-1 pr-2 text-sm text-gray-500">{/* TODO: Wait for wording */}</div>
-        <button
-          type="button"
-          className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
-          onClick={() => handleShowForm(!formModalState.open)}
-        >
-          <PlusIcon className="mr-1 h-4" />
-          Tambah Riwayat Golongan
-        </button>
+        {isAllowAdmin && (
+          <>
+            <div className="flex flex-1 pr-2 text-sm text-gray-500">{/* TODO: Wait for wording */}</div>
+            <button
+              type="button"
+              className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
+              onClick={() => handleShowForm(!formModalState.open)}
+            >
+              <PlusIcon className="mr-1 h-4" />
+              Tambah Riwayat Golongan
+            </button>
+          </>
+        )}
       </div>
       <div className="overflow-auto">
         <table className="min-w-full divide-y divide-gray-200">
