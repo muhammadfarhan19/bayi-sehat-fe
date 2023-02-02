@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { AuthAPI } from '../constants/APIUrls';
+import { HelpCenterUri } from '../constants/Resource';
 import { PostAuthLoginReq, PostAuthLoginRes } from '../types/api/AuthAPI';
 import { Status } from '../types/Common';
 import { getCookie, setCookie } from '../utils/CookieHandler';
@@ -139,8 +140,12 @@ export default function LoginPage() {
                 </div>
 
                 <div className="text-sm">
-                  <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                    Lupa kata sandi?
+                  <a
+                    href={HelpCenterUri.loginGuidance}
+                    target="_blank"
+                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                  >
+                    Panduan Login
                   </a>
                 </div>
               </div>

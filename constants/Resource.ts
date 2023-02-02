@@ -101,6 +101,8 @@ export const HelpCenterUri = {
     'https://www.canva.com/design/DAFNUqOADak/NqcYNvPUiuRoJSdA3DWbSg/edit?utm_content=DAFNUqOADak&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton#1',
   isPegawai:
     'https://www.canva.com/design/DAFMwCC9V5w/fRu_CF25QcbWthz6sA09Gw/view?utm_content=DAFMwCC9V5w&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton',
+  loginGuidance:
+    'https://www.canva.com/design/DAFZbpRAZIY/tYZTgwhbEFtq8DpwmQc3WA/view?utm_content=DAFZbpRAZIY&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink',
 };
 
 export const RatingPerilakuDanHasilKerja = [
