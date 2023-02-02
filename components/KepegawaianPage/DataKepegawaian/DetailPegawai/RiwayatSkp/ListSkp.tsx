@@ -78,7 +78,7 @@ export default function ListSkp(props: ListSkpProps) {
   return (
     <div className="mt-5 border-t-2">
       <div className="my-3 mt-5 flex items-center">
-        <div className="flex flex-1 pr-2 text-sm text-[18px] font-semibold">Riwayat Skp Baru</div>
+        <div className="flex flex-1 pr-2 text-sm text-[18px] font-semibold">Riwayat SKP Baru</div>
         {isAllowAdmin && (
           <button
             type="button"

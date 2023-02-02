@@ -77,7 +77,7 @@ function ListSkpLama(props: ListSkpProps) {
   return (
     <div className="mt-5">
       <div className="my-3 flex items-center">
-        <div className="flex flex-1 pr-2 text-sm text-[18px] font-semibold">Riwayat Skp Lama</div>
+        <div className="flex flex-1 pr-2 text-sm text-[18px] font-semibold">Riwayat SKP Lama</div>
         {isAllowAdmin && (
           <button
             type="button"
