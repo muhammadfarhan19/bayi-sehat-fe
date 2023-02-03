@@ -9,7 +9,9 @@ import { KlaimKehadiranList } from '../../../constants/APIUrls';
 import { SnackbarType } from '../../../reducer/CommonReducer';
 import { PostKehadiranReqData, PostUpdatePengajuanReq } from '../../../types/api/KlaimKehadiranAPI';
 import { Status } from '../../../types/Common';
+import { formatStringDate } from '../../../utils/DateUtil';
 import { callAPI } from '../../../utils/Fetchers';
+import FileLoader from '../../shared/FileLoader';
 
 interface ModalProps {
   open: boolean;
@@ -19,6 +21,11 @@ interface ModalProps {
   tanggalKlaimSelected: string;
   jenisPengajuanSelected: string;
   onSuccess: () => void;
+  namaPegawai?: string;
+  unitKerja?: string;
+  alasan?: string;
+  uploadedDocument?: string;
+  uploadedDocumentName?: string;
 }
 
 interface FormState {
@@ -31,8 +38,20 @@ interface FormState {
 }
 
 function KlaimModal(props: ModalProps) {
-  const { open, setOpen, selectedId, pegawaiIdSelected, jenisPengajuanSelected, tanggalKlaimSelected, onSuccess } =
-    props;
+  const {
+    open,
+    setOpen,
+    selectedId,
+    pegawaiIdSelected,
+    jenisPengajuanSelected,
+    tanggalKlaimSelected,
+    onSuccess,
+    namaPegawai,
+    unitKerja,
+    alasan,
+    uploadedDocument,
+    uploadedDocumentName,
+  } = props;
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -115,6 +134,45 @@ function KlaimModal(props: ModalProps) {
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
               <form onSubmit={handleSubmit(submitHandler)}>
+                <div className="my-5">
+                  <div className="mt-4 mb-2 block text-sm text-base font-medium">Detail Pegawai</div>
+                  <>
+                    <div className="ml-2">
+                      <div className="flex flex-row items-center">
+                        <label className="block flex flex-[0.2] text-sm font-normal text-gray-700">Nama</label>
+                        <label className="block flex flex-1 text-sm font-normal text-gray-700">{`: ${namaPegawai}`}</label>
+                      </div>
+                      <div className="my-3 flex flex-row">
+                        <label className="block flex flex-[0.2] text-sm font-normal text-gray-700">Unit Kerja</label>
+                        <label className="block flex flex-1 text-sm font-normal text-gray-700">{`: ${unitKerja}`}</label>
+                      </div>
+                    </div>
+                  </>
+                  <div className="mt-4 mb-2 block text-sm text-base font-medium">Detail Pengajuan</div>
+                  <>
+                    <div className="ml-2">
+                      <div className="flex flex-row items-center">
+                        <label className="block flex flex-[0.2] text-sm font-normal text-gray-700">Tanggal</label>
+                        <label className="block flex flex-1 text-sm font-normal text-gray-700">{`: ${formatStringDate(
+                          tanggalKlaimSelected,
+                          'dd MMMM yyyy'
+                        )}`}</label>
+                      </div>
+                      <div className="my-3 flex flex-row">
+                        <label className="block flex flex-[0.2] text-sm font-normal text-gray-700">Alasan</label>
+                        <label className="block flex flex-1 text-sm font-normal text-gray-700">{`: ${alasan}`}</label>
+                      </div>
+                      <div className="flex flex-row">
+                        <label className="block flex flex-[0.2] text-sm font-normal text-gray-700">Dokumen</label>
+                        <div className="block flex flex-1 text-sm font-normal text-gray-700">
+                          <FileLoader uuid={uploadedDocument}>
+                            <label className="text-indigo-600">{`: ${uploadedDocumentName}`}</label>
+                          </FileLoader>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                </div>
                 <div className="mt-5 sm:col-span-6">
                   <label className="block text-sm font-medium text-gray-700">Status</label>
                   <div className="mt-1 sm:col-span-2 sm:mt-0">

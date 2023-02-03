@@ -45,12 +45,22 @@ function KlaimAdmin(props: ListKlaimProps) {
     tanggal_klaim: string;
     jenis_pengajuan: string;
     user_id?: number;
+    nama?: string;
+    unitKerja?: string;
+    alasan?: string;
+    uuid?: string;
+    docName?: string;
   }>({
     open: false,
     selectedId: undefined,
     tanggal_klaim: '',
     jenis_pengajuan: '',
     user_id: undefined,
+    nama: undefined,
+    unitKerja: undefined,
+    alasan: undefined,
+    uuid: undefined,
+    docName: undefined,
   });
 
   const handleShowForm = (
@@ -58,7 +68,12 @@ function KlaimAdmin(props: ListKlaimProps) {
     tanggal_klaim: string,
     jenis_pengajuan: string,
     user_id?: number,
-    selectedId?: number
+    selectedId?: number,
+    nama?: string,
+    unitKerja?: string,
+    alasan?: string,
+    uuid?: string,
+    docName?: string
   ) => {
     setFormModalState({
       open,
@@ -66,6 +81,11 @@ function KlaimAdmin(props: ListKlaimProps) {
       tanggal_klaim,
       jenis_pengajuan,
       user_id,
+      nama,
+      unitKerja,
+      alasan,
+      uuid,
+      docName,
     });
   };
 
@@ -232,7 +252,12 @@ function KlaimAdmin(props: ListKlaimProps) {
                                 data?.tanggal_klaim,
                                 data?.jenis_pengajuan,
                                 data?.user_id,
-                                data?.id
+                                data?.id,
+                                data?.nama,
+                                data?.unit_kerja_str,
+                                data?.alasan_klaim,
+                                data?.files?.[0]?.document_uuid,
+                                data?.files?.[0]?.document_name
                               );
                             }}
                             disabled={data?.status_klaim === 2 || data?.status_klaim === 3}
@@ -260,6 +285,11 @@ function KlaimAdmin(props: ListKlaimProps) {
                   pegawaiIdSelected={formModalState?.user_id}
                   jenisPengajuanSelected={formModalState?.jenis_pengajuan}
                   onSuccess={() => mutate()}
+                  namaPegawai={formModalState?.nama}
+                  unitKerja={formModalState?.unitKerja}
+                  alasan={formModalState?.alasan}
+                  uploadedDocument={formModalState?.uuid}
+                  uploadedDocumentName={formModalState?.docName}
                 />
               )}
 

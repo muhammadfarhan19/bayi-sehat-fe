@@ -50,7 +50,6 @@ export default function ShiftPnsForm(props: UploadFormProps) {
     control,
     register,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors },
   } = useForm<FormState>();
@@ -133,8 +132,6 @@ export default function ShiftPnsForm(props: UploadFormProps) {
   if (load) {
     return <></>;
   }
-
-  console.log(watch());
 
   return (
     <Transition appear show={open} as={React.Fragment}>

@@ -3,8 +3,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
-import { JabatanAPI, RbacAPI, UserAPI } from '../../../../../constants/APIUrls';
-import { Permissions } from '../../../../../constants/Permission';
+import { JabatanAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
   GetRiwayatJabatanReq,
@@ -12,8 +11,6 @@ import {
   PostRiwayatJabatanDeleteRes,
   RiwayatJabatanData,
 } from '../../../../../types/api/JabatanAPI';
-import { AuthorizeData, PostRbacBulkAuthorizeReq } from '../../../../../types/api/RbacAPI';
-import { GetUserProfileData, GetUserProfileReq } from '../../../../../types/api/UserAPI';
 import { Status } from '../../../../../types/Common';
 import { formatDate } from '../../../../../utils/DateUtil';
 import { callAPI } from '../../../../../utils/Fetchers';
@@ -52,23 +49,6 @@ export default function ListJabatan(props: ListJabatanProps) {
     });
   };
 
-  const { data: userProfile, isValidating: userProfileLoading } = useCommonApi<GetUserProfileReq, GetUserProfileData>(
-    UserAPI.GET_USER_PROFILE,
-    {},
-    { method: 'GET' }
-  );
-
-  const { data: rbac } = useCommonApi<PostRbacBulkAuthorizeReq, AuthorizeData[]>(
-    RbacAPI.POST_RBAC_BULK_AUTHORIZE,
-    {
-      bulk_request: [{ action: 'read', resource_id: Permissions.KepegawaianAdmin, user_id: userProfile?.user_id || 0 }],
-    },
-    { method: 'POST' },
-    { revalidateOnMount: true, skipCall: userProfileLoading }
-  );
-
-  const allowKepegawaianAdmin = !!rbac?.[0]?.is_authorized;
-
   const handleConfirm = async () => {
     const resDelete = await callAPI<PostRiwayatJabatanDeleteReq, PostRiwayatJabatanDeleteRes>(
       JabatanAPI.POST_RIWAYAT_JABATAN_DELETE,
@@ -97,19 +77,17 @@ export default function ListJabatan(props: ListJabatanProps) {
 
   return (
     <>
-      {allowKepegawaianAdmin && (
-        <div className="my-3 flex items-center">
-          <div className="flex flex-1 pr-2 text-sm text-gray-500">{/* TODO: Wait for wording */}</div>
-          <button
-            type="button"
-            className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
-            onClick={() => handleShowForm(!formModalState.open)}
-          >
-            <PlusIcon className="mr-1 h-4" />
-            Tambah Riwayat Jabatan
-          </button>
-        </div>
-      )}
+      <div className="my-3 flex items-center">
+        <div className="flex flex-1 pr-2 text-sm text-gray-500">{/* TODO: Wait for wording */}</div>
+        <button
+          type="button"
+          className="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
+          onClick={() => handleShowForm(!formModalState.open)}
+        >
+          <PlusIcon className="mr-1 h-4" />
+          Tambah Riwayat Jabatan
+        </button>
+      </div>
       <div className="overflow-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -133,12 +111,6 @@ export default function ListJabatan(props: ListJabatanProps) {
               >
                 Jabatan
               </th>
-              {/* <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-              >
-                Kumulatif
-              </th> */}
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -177,9 +149,6 @@ export default function ListJabatan(props: ListJabatanProps) {
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   <div className="w-[150px]"> {each.nama_jabatan}</div>
                 </td>
-                {/* <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  <div className="whitespace-nowrap">{each.kumulatif}</div>
-                </td> */}
                 <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">
                   <div className="whitespace-nowrap">{formatDate(new Date(each.tmt), 'yyyy-MM-dd')}</div>
                 </td>
@@ -203,24 +172,22 @@ export default function ListJabatan(props: ListJabatanProps) {
                     >
                       Lihat
                     </button>
-                    {allowKepegawaianAdmin && (
-                      <>
-                        <button
-                          type="button"
-                          className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                          onClick={() => handleShowForm(!formModalState.open, String(each.jabatan_pegawai_id))}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          className="mr-2 inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
-                          onClick={() => setConfirmId(each.jabatan_pegawai_id)}
-                        >
-                          Hapus
-                        </button>
-                      </>
-                    )}
+                    <>
+                      <button
+                        type="button"
+                        className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
+                        onClick={() => handleShowForm(!formModalState.open, String(each.jabatan_pegawai_id))}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="mr-2 inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                        onClick={() => setConfirmId(each.jabatan_pegawai_id)}
+                      >
+                        Hapus
+                      </button>
+                    </>
                   </div>
                 </td>
               </tr>
@@ -228,14 +195,12 @@ export default function ListJabatan(props: ListJabatanProps) {
           </tbody>
         </table>
       </div>
-      {allowKepegawaianAdmin && (
-        <JabatanForm
-          onSuccess={() => mutate()}
-          open={formModalState.open}
-          setOpen={(open: boolean) => handleShowForm(open)}
-          selectedId={formModalState?.selectedId}
-        />
-      )}
+      <JabatanForm
+        onSuccess={() => mutate()}
+        open={formModalState.open}
+        setOpen={(open: boolean) => handleShowForm(open)}
+        selectedId={formModalState?.selectedId}
+      />
       <ConfirmDialog
         open={!!confirmId}
         message="Anda yakin ingin menghapus data ini?"

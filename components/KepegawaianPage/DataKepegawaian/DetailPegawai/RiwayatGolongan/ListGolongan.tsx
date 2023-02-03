@@ -29,7 +29,6 @@ type ListGolonganProps = {
 export default function ListGolongan(props: ListGolonganProps) {
   const dispatch = useDispatch();
   const isAllowAdmin = useAllowAdmin();
-  console.log(isAllowAdmin);
   const { pegawai_id } = getQueryString<{ pegawai_id?: string }>();
   const [confirmId, setConfirmId] = React.useState(0);
   const { onShowDetail } = props;
