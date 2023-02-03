@@ -218,7 +218,6 @@ function KlaimAdmin(props: ListKlaimProps) {
                 </thead>
                 <tbody>
                   {(getKlaimKehadiran?.list || []).map((data, dataIdx) => {
-                    console.log(data);
                     const isStatusProcessed = data?.status_klaim === 2 || data?.status_klaim === 3;
                     return (
                       <tr
