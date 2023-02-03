@@ -16,12 +16,20 @@ function useAllowAdminDinas() {
     {
       bulk_request: [
         { action: 'read', resource_id: Permissions.TOMBOL_TAMBAH_DINAS, user_id: userProfile?.user_id || 0 },
+        { action: 'read', resource_id: Permissions.TOMBOL_EDIT_DINAS, user_id: userProfile?.user_id || 0 },
       ],
     },
     { method: 'POST' },
     { revalidateOnMount: true, skipCall: userProfileLoading }
   );
-  return !!rbac?.[0]?.is_authorized;
+
+  const isAllowDinasAdd = !!rbac?.[0]?.is_authorized;
+  const isAllowDinasEdit = !!rbac?.[1]?.is_authorized;
+
+  return {
+    isAllowDinasAdd,
+    isAllowDinasEdit,
+  };
 }
 
 export default useAllowAdminDinas;

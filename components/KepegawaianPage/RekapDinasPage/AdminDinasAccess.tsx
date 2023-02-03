@@ -3,8 +3,8 @@ import React from 'react';
 import useAllowAdminDinas from '../../shared/hooks/useAllowAdminDinas';
 
 const AdminDinasAccess = () => {
-  const isAdminDinas = useAllowAdminDinas();
-  if (isAdminDinas) {
+  const { isAllowDinasAdd } = useAllowAdminDinas();
+  if (isAllowDinasAdd) {
     return (
       <div className="flex w-full">
         <button

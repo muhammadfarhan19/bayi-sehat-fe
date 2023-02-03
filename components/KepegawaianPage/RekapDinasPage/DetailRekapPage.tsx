@@ -18,6 +18,7 @@ import { callAPI } from '../../../utils/Fetchers';
 import { getQueryString } from '../../../utils/URLUtils';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import FileLoader from '../../shared/FileLoader';
+import useAllowAdminDinas from '../../shared/hooks/useAllowAdminDinas';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import { PDFIcon } from '../../shared/icons/PDFIcon';
 
@@ -29,6 +30,7 @@ interface DetailProps {
 function DetailRekapPage(props: DetailProps) {
   const dispatch = useDispatch();
   const { dinas_id, viewOnly } = props;
+  const { isAllowDinasEdit } = useAllowAdminDinas();
 
   const qs = getQueryString<{ pegawai_id?: string }>();
   const redirectBackLink = qs.pegawai_id
@@ -177,7 +179,7 @@ function DetailRekapPage(props: DetailProps) {
               </table>
             </div>
           </div>
-          {!viewOnly && (
+          {!viewOnly && isAllowDinasEdit && (
             <div className="mt-[3rem] flex w-full">
               <div className="ml-auto flex flex-row gap-x-[12px]">
                 <button

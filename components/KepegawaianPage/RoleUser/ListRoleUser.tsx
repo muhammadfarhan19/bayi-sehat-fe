@@ -166,11 +166,11 @@ function ListRoleUser() {
                           {(data?.roles || [])?.map(item => {
                             return (
                               <React.Fragment key={item.role_id}>
-                                <div className="mb-5 flex space-x-10 text-xs font-medium text-gray-900">
-                                  <p className='text-gray-900" text-xs font-medium'>{item.role}</p>
+                                <div className="mb-5 flex flex flex-row items-center space-x-10 text-xs font-medium text-gray-900">
+                                  <p className='text-gray-900" flex w-36 text-xs font-medium'>{item.role}</p>
                                   <button
                                     type="button"
-                                    className="mr-2 rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                                    className="mr-2 w-36 rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
                                     onClick={() =>
                                       setConfirmDelData({
                                         id: data?.pegawai_id,
