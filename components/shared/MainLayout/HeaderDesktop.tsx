@@ -112,6 +112,14 @@ export default function HeaderDesktop(props: NavigationProps) {
                     <span className="sr-only">Open main menu</span>
                     <MenuIcon className="block h-6 w-6" aria-hidden="true" onClick={() => setExpand(!open)} />
                   </Popover.Button>
+                  <button
+                    type="button"
+                    onClick={handleOpenHelpCentre}
+                    className="mr-2 flex-shrink-0 rounded-full p-1 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                  >
+                    <span className="sr-only">User Help Center</span>
+                    <QuestionMarkCircleIcon className="h-7 w-7" aria-hidden="true" />
+                  </button>
 
                   <MenuDropdown navigation={userNavigation}>
                     <span className="sr-only">Open user menu</span>
