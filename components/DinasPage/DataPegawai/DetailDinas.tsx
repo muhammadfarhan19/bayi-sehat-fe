@@ -83,7 +83,7 @@ export default function DetailDinas() {
               alt=""
             />
           ) : (
-            <UserCircleIcon className="h-[88px] w-[88px] fill-indigo-500" />
+            <UserCircleIcon className="h-[88px] w-[88px] self-center fill-indigo-500" />
           )}
           <div className="my-auto ml-2 flex flex-col">
             {isOwnProfile && (
