@@ -35,6 +35,9 @@ interface UploadFormProps {
   setOpen: (open: boolean) => void;
   selectedId?: number;
   onSuccess: () => void;
+  golongan?: string;
+  penandatangan?: string;
+  golonganId?: number;
 }
 
 interface FormState {
@@ -50,7 +53,7 @@ interface FormState {
 }
 
 export default function RiwayatKGBForm(props: UploadFormProps) {
-  const { open, setOpen, selectedId, onSuccess } = props;
+  const { open, setOpen, selectedId, onSuccess, golongan: golonganSelected, penandatangan, golonganId } = props;
   const dispatch = useDispatch();
   const personalData = usePersonalData();
   const [queryPegawai, setQueryPegawai] = React.useState('');
@@ -234,7 +237,10 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
                     rules={{ required: 'Mohon input data golongan.' }}
                     render={({ field: { onChange } }) => (
                       <AutoComplete
-                        defaultValue={{ text: data?.golongan_id_str || '', value: String(data?.golongan_id) || '' }}
+                        defaultValue={{
+                          text: data?.golongan_id_str || String(golonganSelected),
+                          value: String(data?.golongan_id) || String(golonganId),
+                        }}
                         onChange={value => onChange(value.value)}
                         label={'Golongan'}
                         placeholder={'Pilih golongan'}
@@ -276,7 +282,10 @@ export default function RiwayatKGBForm(props: UploadFormProps) {
                           onChange(input?.value);
                         }}
                         label={'Pejabat Penandatangan'}
-                        defaultValue={{ text: data?.penandatangan || '', value: String(data?.penandatangan) || '' }}
+                        defaultValue={{
+                          text: data?.penandatangan || String(penandatangan),
+                          value: String(data?.penandatangan) || String(penandatangan),
+                        }}
                         onQueryChange={queryText => {
                           if (debounce.current) {
                             clearTimeout(debounce.current);

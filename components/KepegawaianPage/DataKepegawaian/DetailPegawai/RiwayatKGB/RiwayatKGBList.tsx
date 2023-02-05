@@ -31,9 +31,18 @@ export default function RiwayatKGBList(props: ListKGBProps) {
   const dispatch = useDispatch();
   const personalData = usePersonalData();
 
-  const [formModalState, setFormModalState] = React.useState<{ open: boolean; selectedId?: number }>({
+  const [formModalState, setFormModalState] = React.useState<{
+    open: boolean;
+    selectedId?: number;
+    golongan?: string;
+    penandatangan?: string;
+    golonganId?: number;
+  }>({
     open: false,
     selectedId: undefined,
+    golongan: undefined,
+    penandatangan: undefined,
+    golonganId: undefined,
   });
 
   const { data: riwayatKGBList, mutate } = useCommonApi<GetKGBListReq, GetKGBList[]>(
@@ -42,10 +51,19 @@ export default function RiwayatKGBList(props: ListKGBProps) {
     { method: 'GET' }
   );
 
-  const handleShowForm = (open: boolean, selectedId?: number) => {
+  const handleShowForm = (
+    open: boolean,
+    selectedId?: number,
+    golongan?: string,
+    penandatangan?: string,
+    golonganId?: number
+  ) => {
     setFormModalState({
       open,
       selectedId,
+      golongan,
+      penandatangan,
+      golonganId,
     });
   };
 
@@ -161,7 +179,15 @@ export default function RiwayatKGBList(props: ListKGBProps) {
                     <button
                       type="button"
                       className="mr-2 inline-flex items-center rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:border-indigo-200 disabled:text-indigo-200"
-                      onClick={() => handleShowForm(!formModalState.open, each?.riwayat_id)}
+                      onClick={() =>
+                        handleShowForm(
+                          !formModalState.open,
+                          each?.riwayat_id,
+                          each?.golongan_id_str,
+                          each?.penandatangan,
+                          each?.golongan_id
+                        )
+                      }
                     >
                       Edit
                     </button>
@@ -185,6 +211,9 @@ export default function RiwayatKGBList(props: ListKGBProps) {
           setOpen={(open: boolean) => handleShowForm(open)}
           selectedId={formModalState?.selectedId}
           onSuccess={() => mutate()}
+          golongan={formModalState?.golongan}
+          penandatangan={formModalState?.penandatangan}
+          golonganId={formModalState?.golonganId}
         />
       ) : null}
       <ConfirmDialog
