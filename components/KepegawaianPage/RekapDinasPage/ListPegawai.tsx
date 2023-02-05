@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 
 import { classNames } from '../../../utils/Components';
+import { formatStringDate } from '../../../utils/DateUtil';
 
 interface Pegawai {
   flag: number;
@@ -53,10 +54,10 @@ export default function ListPegawai(props: ListData) {
                           ? `${format(new Date(date), 'dd MMM yyyy')}`
                           : `${format(new Date(date), 'dd MMM yyyy')}, `
                       )}
-                    {each.flag === 2 &&
-                      format(new Date(each.tgl_available[0]), 'dd MMM yyyy') +
+                    {each?.flag === 2 &&
+                      formatStringDate(each?.tgl_available[0], 'dd MMM yyyy') +
                         ' - ' +
-                        format(new Date(each.tgl_available?.[each.tgl_available.length - 1]), 'dd MMM yyyy')}
+                        formatStringDate(each?.tgl_available?.[each.tgl_available.length - 1], 'dd MMM yyyy')}
                   </p>
                 </div>
               </div>
