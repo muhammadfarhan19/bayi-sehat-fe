@@ -1,10 +1,10 @@
 import { ChevronLeftIcon } from '@heroicons/react/outline';
-import { format } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
 
 import { RekapDinasAPI } from '../../../constants/APIUrls';
 import { GetRekapReq, RekapData } from '../../../types/api/RekapDinasAPI';
+import { formatStringDate } from '../../../utils/DateUtil';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
@@ -65,7 +65,7 @@ function DetailCalendarPage(props: CalendarProps) {
         <div className="px-6">
           <div className="flex flex-row py-6">
             <p className="text-lg font-medium text-gray-900">
-              Daftar dinas tanggal {format(new Date(date), 'dd MMMM yyyy')}
+              Daftar dinas tanggal {formatStringDate(date, 'dd MMMM yyyy')}
             </p>
           </div>
         </div>
