@@ -569,7 +569,7 @@ export default function UpdateDataDiriPribadi() {
           <div className="flex flex-auto flex-col items-end px-7">
             <div className="flex">
               <a
-                href="/"
+                href="/pegawai/biodata"
                 className="mr-3 inline-flex items-center rounded border border-transparent bg-gray-400 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-gray-500 disabled:bg-gray-200 disabled:text-gray-200"
               >
                 Batal
