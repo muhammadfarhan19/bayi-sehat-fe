@@ -8,6 +8,7 @@ import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import { ModalProps } from '../shared/type';
 import KlaimModal from './KlaimModal';
 
 type ListKlaimProps = {
@@ -39,18 +40,7 @@ function KlaimAdmin(props: ListKlaimProps) {
     setFilterState(newState);
   };
 
-  const [formModalState, setFormModalState] = React.useState<{
-    open: boolean;
-    selectedId?: number;
-    tanggal_klaim: string;
-    jenis_pengajuan: string;
-    user_id?: number;
-    nama?: string;
-    unitKerja?: string;
-    alasan?: string;
-    uuid?: string;
-    docName?: string;
-  }>({
+  const [formModalState, setFormModalState] = React.useState<ModalProps>({
     open: false,
     selectedId: undefined,
     tanggal_klaim: '',
