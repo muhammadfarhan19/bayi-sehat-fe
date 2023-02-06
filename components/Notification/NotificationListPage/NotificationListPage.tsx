@@ -98,7 +98,7 @@ export default function NotificationListPage() {
             ))
           ) : (
             <tr className="flex flex-col px-[24px] py-[16px]">
-              <p className="text-[14px] text-[#4F46E5]">Kamu belum ada kegiatan!</p>
+              <td className="text-[14px] text-[#4F46E5]">Kamu belum ada kegiatan!</td>
             </tr>
           )}
         </tbody>

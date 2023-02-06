@@ -209,6 +209,9 @@ function KlaimAdmin(props: ListKlaimProps) {
                 <tbody>
                   {(getKlaimKehadiran?.list || []).map((data, dataIdx) => {
                     const isStatusProcessed = data?.status_klaim === 2 || data?.status_klaim === 3;
+                    const disabledButton = isStatusProcessed
+                      ? 'bg-gray-300 hover:bg-gray-700 disabled:bg-gray-500'
+                      : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-200';
                     return (
                       <tr
                         key={data?.id}
@@ -250,13 +253,9 @@ function KlaimAdmin(props: ListKlaimProps) {
                                 data?.files?.[0]?.document_name
                               );
                             }}
-                            disabled={data?.status_klaim === 2 || data?.status_klaim === 3}
+                            disabled={isStatusProcessed}
                             type="button"
-                            className={`inline-flex w-36 items-center justify-center rounded border border-transparent ${
-                              isStatusProcessed
-                                ? 'bg-gray-300 hover:bg-gray-700 disabled:bg-gray-500'
-                                : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-200'
-                            } px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
+                            className={`inline-flex w-36 items-center justify-center rounded border border-transparent ${disabledButton} px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
                           >
                             Proses Klaim
                           </button>

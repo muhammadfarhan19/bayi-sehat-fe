@@ -20,8 +20,12 @@ function LogHarianPegawai() {
 
   const personalPegawaiData = usePersonalData();
   const isPpnpn = Number(personalPegawaiData?.status_cpns || 0) === 2;
-
-  const { data: logHarianData, isValidating } = useCommonApi<GetLogHarianReqYear, GetLogHarianData[]>(
+  const isPNS = personalPegawaiData?.status_cpns === 1;
+  const {
+    data: logHarianData,
+    isValidating,
+    mutate,
+  } = useCommonApi<GetLogHarianReqYear, GetLogHarianData[]>(
     LogHarianAPI.GET_LOG_HARIAN_MONTH,
     { pegawai_id: Number(personalPegawaiData?.pegawai_id), year: Number(selectedDate?.getFullYear()) },
     { method: 'GET' },
@@ -65,7 +69,7 @@ function LogHarianPegawai() {
           selectedMonth={detailData?.month}
           onBack={() => {
             setIsShownEachDetailPage(false);
-            setTimeout(() => window.location.reload(), 500);
+            mutate();
           }}
         />
       ) : (
@@ -74,7 +78,7 @@ function LogHarianPegawai() {
             <div className="mb-5 flex flex-row items-center">
               <h3 className="text-xl font-medium leading-6 text-gray-900">Log Harian</h3>
             </div>
-            {personalPegawaiData?.status_cpns === 1 ? (
+            {isPNS ? (
               <div className="mb-5 mt-2 inline-flex flex-wrap items-center space-x-2">
                 <ExclamationCircleIcon width={20} height={20} color="#FBBF24" />
                 <p className="text-[16px] font-normal">Mohon isi log harian di web</p>
