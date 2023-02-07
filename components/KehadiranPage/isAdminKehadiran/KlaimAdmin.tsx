@@ -164,7 +164,7 @@ function KlaimAdmin(props: ListKlaimProps) {
                     </th>
                     <th
                       scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
                       Nama
                     </th>
@@ -217,7 +217,7 @@ function KlaimAdmin(props: ListKlaimProps) {
                         key={data?.id}
                         className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                       >
-                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
                           {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
                         </td>
                         <td
@@ -227,9 +227,7 @@ function KlaimAdmin(props: ListKlaimProps) {
                           {data?.nama}
                         </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.tanggal_klaim}</td>
-                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
-                          {data?.jenis_pengajuan}
-                        </td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jenis_pengajuan}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.alasan_klaim}</td>
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">
                           <FileLoader uuid={data?.files?.[0]?.document_uuid} asLink>
