@@ -1,7 +1,7 @@
 export interface ModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSuccess?: () => void;
+  onSuccess: () => void;
 }
 
 export interface FormState {

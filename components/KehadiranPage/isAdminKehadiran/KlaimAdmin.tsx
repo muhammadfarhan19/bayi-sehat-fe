@@ -8,6 +8,7 @@ import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import { ModalProps } from '../shared/type';
 import KlaimModal from './KlaimModal';
 
 type ListKlaimProps = {
@@ -39,18 +40,7 @@ function KlaimAdmin(props: ListKlaimProps) {
     setFilterState(newState);
   };
 
-  const [formModalState, setFormModalState] = React.useState<{
-    open: boolean;
-    selectedId?: number;
-    tanggal_klaim: string;
-    jenis_pengajuan: string;
-    user_id?: number;
-    nama?: string;
-    unitKerja?: string;
-    alasan?: string;
-    uuid?: string;
-    docName?: string;
-  }>({
+  const [formModalState, setFormModalState] = React.useState<ModalProps>({
     open: false,
     selectedId: undefined,
     tanggal_klaim: '',
@@ -174,7 +164,7 @@ function KlaimAdmin(props: ListKlaimProps) {
                     </th>
                     <th
                       scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
                       Nama
                     </th>
@@ -219,12 +209,15 @@ function KlaimAdmin(props: ListKlaimProps) {
                 <tbody>
                   {(getKlaimKehadiran?.list || []).map((data, dataIdx) => {
                     const isStatusProcessed = data?.status_klaim === 2 || data?.status_klaim === 3;
+                    const disabledButton = isStatusProcessed
+                      ? 'bg-gray-300 hover:bg-gray-700 disabled:bg-gray-500'
+                      : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-200';
                     return (
                       <tr
                         key={data?.id}
                         className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                       >
-                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
                           {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
                         </td>
                         <td
@@ -234,9 +227,7 @@ function KlaimAdmin(props: ListKlaimProps) {
                           {data?.nama}
                         </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.tanggal_klaim}</td>
-                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
-                          {data?.jenis_pengajuan}
-                        </td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jenis_pengajuan}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.alasan_klaim}</td>
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">
                           <FileLoader uuid={data?.files?.[0]?.document_uuid} asLink>
@@ -260,13 +251,9 @@ function KlaimAdmin(props: ListKlaimProps) {
                                 data?.files?.[0]?.document_name
                               );
                             }}
-                            disabled={data?.status_klaim === 2 || data?.status_klaim === 3}
+                            disabled={isStatusProcessed}
                             type="button"
-                            className={`inline-flex w-36 items-center justify-center rounded border border-transparent ${
-                              isStatusProcessed
-                                ? 'bg-gray-300 hover:bg-gray-700 disabled:bg-gray-500'
-                                : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-200'
-                            } px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
+                            className={`inline-flex w-36 items-center justify-center rounded border border-transparent ${disabledButton} px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
                           >
                             Proses Klaim
                           </button>

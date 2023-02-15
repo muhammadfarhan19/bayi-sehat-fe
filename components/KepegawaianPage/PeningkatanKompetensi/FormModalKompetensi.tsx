@@ -204,7 +204,7 @@ function FormLogHarianPPNPN(props: ModalProps) {
                     onClick={() => {
                       fileDownloader(envTypeUUID, TEMPLATE_FILE_NAME.PeningkatanKompetensi, TEMPLATE_FILE_FORMAT.xlsx);
                     }}
-                    className="cursor-pointer font-sans text-[13px] font-bold text-indigo-600"
+                    className="cursor-pointer font-sans text-[13px] font-bold text-indigo-600 hover:animate-bounce"
                   >
                     Unduh disini
                   </a>

@@ -4,16 +4,25 @@ import { PeningkatanKompAPI } from '../../constants/APIUrls';
 import { GetPeningkatanReq, GetPeningkatanRes } from '../../types/api/PeningkatanKompetensiAPI';
 import useCommonApi from '../shared/hooks/useCommonApi';
 import usePersonalData from '../shared/hooks/usePersonalData';
+import Loader from '../shared/Loader/Loader';
 
 function DetailPeningkatan() {
   const personalPegawai = usePersonalData();
 
-  const { data: listKompetensi } = useCommonApi<GetPeningkatanReq, GetPeningkatanRes[]>(
+  const { data: listKompetensi, isValidating } = useCommonApi<GetPeningkatanReq, GetPeningkatanRes[]>(
     PeningkatanKompAPI.GET_PENINGKATAN_KOMP_LIST,
     { pegawai_id: Number(personalPegawai?.pegawai_id) },
     { method: 'GET' },
     { revalidateOnMount: true, skipCall: !personalPegawai?.pegawai_id }
   );
+
+  if (isValidating) {
+    return (
+      <div className="relative h-[150px] w-full divide-y divide-gray-200">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <>
