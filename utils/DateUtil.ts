@@ -18,10 +18,13 @@ export interface EventDate {
   color: string;
   name: string;
   time?: string;
+  timeIn?: string;
+  timeOut?: string;
   dateKey: string;
   datetime: string;
   totalDinas?: number;
   infoType: 'presensi' | 'dinas';
+  listDinas?: string;
 }
 
 export const generateDays = (
@@ -73,9 +76,9 @@ export const generateDays = (
 };
 
 export function yearMonthDuration(start: string, end: string) {
-  var dateStart = new Date(start);
-  var dateEnd = new Date(end);
-  var diff = new Date(dateEnd.getTime() - dateStart.getTime());
+  const dateStart = new Date(start);
+  const dateEnd = new Date(end);
+  const diff = new Date(dateEnd.getTime() - dateStart.getTime());
   return [diff.getUTCFullYear() - 1970, diff.getUTCMonth()];
 }
 
@@ -98,9 +101,8 @@ export const convertIndonesiaFormat = (date: string) => {
     const arr = date.split('-');
 
     return arr[2].substring(0, 2) + ' ' + bulan[parseInt(arr[1]) - 1] + ' ' + arr[0];
-  } else {
-    return '-';
   }
+  return '-';
 };
 
 export const startEndDateString = (tgl_mulai: string, tgl_selesai: string) => {
@@ -124,3 +126,15 @@ export const startEndDateString = (tgl_mulai: string, tgl_selesai: string) => {
     return '';
   }
 };
+
+export function getFirstAndLastDaysOfYear(year: number): { start: Date; end: Date }[] {
+  // Loop through each month of the year
+  return Array.from({ length: 12 }, (_, month) => {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    return {
+      start: firstDay,
+      end: lastDay,
+    };
+  });
+}

@@ -8,6 +8,7 @@ import { Presensi } from '../../../types/api/KepegawaianAPI';
 interface Props {
   open: boolean;
   toggleOpen: (open: boolean) => void;
+  onClaimPresence: React.MouseEventHandler<HTMLButtonElement>;
   info?: Presensi;
 }
 
@@ -26,7 +27,8 @@ export const MapPresensiColorText = {
 };
 
 export default function ModalPresensiInfo(props: Props) {
-  const { info } = props;
+  const { info, onClaimPresence } = props;
+
   if (!info) {
     return null;
   }
@@ -36,6 +38,8 @@ export default function ModalPresensiInfo(props: Props) {
   const statusColor = `text-${
     MapPresensiColorText[Number(info.status) as keyof typeof MapPresensiColorText]?.[0] || 'gray'
   }-500`;
+
+  const isKlaimKehadiran = info.status_str === MapPresensiColorText?.[5]?.[1];
 
   return (
     <Transition appear show={props.open} as={React.Fragment}>
@@ -99,11 +103,19 @@ export default function ModalPresensiInfo(props: Props) {
                   </div>
                 </div>
               )}
-
               <div className="mt-5 ml-12">
                 <span className="text-sm text-gray-500">Status: </span>
                 <span className={`text-sm ${statusColor}`}>{statusText}</span>
               </div>
+              {isKlaimKehadiran ? (
+                <button
+                  onClick={onClaimPresence}
+                  type="button"
+                  className="mt-5 flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200"
+                >
+                  Klaim Kehadiran
+                </button>
+              ) : null}
             </div>
           </Transition.Child>
 
