@@ -9,6 +9,7 @@ import { classNames } from '../../../../utils/Components';
 import { callAPI } from '../../../../utils/Fetchers';
 import { getQueryString } from '../../../../utils/URLUtils';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
+import useAllowAdmin from '../../../shared/hooks/useAllowAdmin';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
 import Loader from '../../../shared/Loader/Loader';
@@ -27,11 +28,13 @@ import RiwayatPendidikan from './RiwayatPendidikan';
 import RiwayatPengangkatan from './RiwayatPengangkatan';
 import RiwayatPenghargaan from './RiwayatPenghargaan';
 import RiwayatSkp from './RiwayatSkp';
+import StatusKepegawaian from './StatusKepegawaian';
 
 export type PegawaiType = 'pns' | 'ppnpn';
 
 function DetailPegawai() {
   const { type } = getQueryString() as { type: PegawaiType };
+  const isAllowAdmin = useAllowAdmin();
 
   const pns = [
     { name: 'Data Diri Pegawai', href: '#' },
@@ -366,6 +369,12 @@ function DetailPegawai() {
             </div>
           </Dialog>
         </Transition>
+      )}
+
+      {isAllowAdmin && (
+        <div className="flex flex-col rounded-[8px] bg-white py-6 px-[24px] shadow">
+          <StatusKepegawaian />
+        </div>
       )}
     </>
   );

@@ -62,6 +62,7 @@ export interface GetUserPersonalPegawaiData {
   unit_kerja: string;
   user_id: number;
   golongan_id: number;
+  status_kepegawaian: number;
 }
 
 export type GetUserProfileReq = {

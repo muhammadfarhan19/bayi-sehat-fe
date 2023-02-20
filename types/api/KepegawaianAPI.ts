@@ -159,3 +159,13 @@ export interface GetPresensiPegawaiSummaryRes {
     tidak_hadir: number;
   };
 }
+
+export interface PostStatusKepegawaianReq {
+  pegawai_id: number;
+  status_kepegawaian: number;
+}
+
+export interface PostStatusKepegawaianRes {
+  status: Status;
+  data: string;
+}
