@@ -142,3 +142,14 @@ export const PredikatKinerjaPegawai = [
     textAsValue: 'Sangat Kurang',
   },
 ];
+
+export const StatusPegawai = [
+  { value: 1, text: 'Aktif' },
+  { value: 2, text: 'Batas Usia Pensiun' },
+  { value: 3, text: 'Pensiun Dini' },
+  { value: 4, text: 'Mengundurkan Diri' },
+  { value: 5, text: 'Pemberhentian Hormat' },
+  { value: 6, text: 'Pemberhentian Tidak Dengan Hormat' },
+  { value: 7, text: 'Meninggal Dunia' },
+  { value: 8, text: 'Mutasi' },
+];
