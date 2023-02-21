@@ -60,6 +60,7 @@ export interface GetUserPersonalPegawaiData {
   tmt_cpns: string;
   tmt_golongan: string;
   unit_kerja: string;
+  unit_kerja_id: number;
   user_id: number;
   golongan_id: number;
   status_kepegawaian: number;
