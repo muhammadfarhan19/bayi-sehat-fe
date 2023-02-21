@@ -4,13 +4,19 @@ import DetailRekapPage from '../../../components/KepegawaianPage/RekapDinasPage/
 import RekapDinasPage from '../../../components/KepegawaianPage/RekapDinasPage/RekapDinasPage';
 import { withAuthenticatedPage } from '../../../components/shared/hocs/AuthenticatedPage';
 import { withReduxPage } from '../../../components/shared/hocs/ReduxPage';
+import usePersonalData from '../../../components/shared/hooks/usePersonalData';
 import LeftMenu from '../../../components/shared/MainLayout/LeftMenu';
 import MainLayout from '../../../components/shared/MainLayout/MainLayout';
 import { NavigationId } from '../../../constants/NavigationList';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function RekapDinas() {
+  const personalPegawai = usePersonalData();
   const { dinas_id, type, date } = getQueryString<{ dinas_id: string; type: string; date: string }>();
+
+  if (!personalPegawai?.unit_kerja_id) {
+    return <></>;
+  }
 
   return (
     <MainLayout>
@@ -26,7 +32,7 @@ function RekapDinas() {
             ) : typeof date !== 'undefined' ? (
               <DetailCalendarPage date={date} />
             ) : (
-              <RekapDinasPage />
+              <RekapDinasPage unit_kerja_id={personalPegawai?.unit_kerja_id} />
             )}
           </section>
         </div>

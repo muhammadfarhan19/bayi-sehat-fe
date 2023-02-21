@@ -9,18 +9,30 @@ import {
   Presensi,
 } from '../../../types/api/KepegawaianAPI';
 import { classNames } from '../../../utils/Components';
-import { EventDate, generateDays } from '../../../utils/DateUtil';
+import { EventDate, generateDays, handleCheckTime } from '../../../utils/DateUtil';
+import ModalKlaimPresensi from '../../KehadiranPage/RekapKehadiran/ModalKlaimPresensi';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import MonthPicker from './DatePicker';
 import ModalEventInfo, { MapEventColor } from './ModalEventInfo';
 import ModalPresensiInfo, { MapPresensiColorText } from './ModalPresensiInfo';
 
+interface FormKlaimPresensi {
+  open: boolean;
+  selectedId?: number;
+  dateSelected?: string;
+}
+
 export default function DinasCalendar() {
   const personalPegawai = usePersonalData();
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [selectedPresensi, setSelectedPresensi] = React.useState<Presensi>();
   const [selectedDinas, setSelectedDinas] = React.useState<Dinas[]>();
+  const [formKlaimPresensi, setFormKlaimPresensi] = React.useState<FormKlaimPresensi>({
+    open: false,
+    selectedId: undefined,
+    dateSelected: undefined,
+  });
 
   let endDateStr = '';
   if (selectedDate) {
@@ -37,7 +49,7 @@ export default function DinasCalendar() {
       tgl_selesai: endDateStr,
     },
     { method: 'get' },
-    { skipCall: !selectedDate || !personalPegawai?.pegawai_id }
+    { skipCall: !selectedDate || !personalPegawai?.pegawai_id, revalidateOnMount: true }
   );
 
   const eventList = {} as Record<number, EventDate[]>;
@@ -61,6 +73,7 @@ export default function DinasCalendar() {
             datetime: dateTime.join('-'),
             name: item.jenis_dinas,
             infoType: 'dinas',
+            listDinas: item?.isi_penugasan,
           });
         });
         return;
@@ -73,6 +86,8 @@ export default function DinasCalendar() {
         datetime: each.date,
         name: 'Presensi',
         infoType: 'presensi',
+        timeIn: each?.check_in,
+        timeOut: each?.check_out,
       });
     });
 
@@ -84,6 +99,14 @@ export default function DinasCalendar() {
         (kalendarData?.list_presensi || []).filter(each => each.date === event.dateKey)?.[0]?.list_dinas || []
       );
     }
+  };
+
+  const handleShowFormKlaimPresensi = (open: boolean, selectedId?: number, dateSelected?: string) => {
+    setFormKlaimPresensi({
+      open,
+      selectedId,
+      dateSelected,
+    });
   };
 
   return (
@@ -118,53 +141,92 @@ export default function DinasCalendar() {
         <div className="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
           <div className=" grid w-full grid-cols-7 grid-rows-6 gap-px">
             {generateDays(selectedDate?.getFullYear() || 2000, selectedDate?.getMonth() || 0, eventList).map(
-              (day, index) => (
-                <div
-                  key={`day.date${index}`}
-                  className={classNames(
-                    day.isCurrentMonth ? 'bg-white' : 'bg-gray-50 text-gray-500',
-                    'relative h-[80px] py-2 px-3'
-                  )}
-                >
-                  <time
-                    dateTime={day.date}
-                    className={
-                      day.isToday
-                        ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
-                        : index % 7 === 0 && day.isCurrentMonth
-                        ? 'text-red-500'
-                        : ''
-                    }
+              (day, index) => {
+                return (
+                  <div
+                    key={`day.date${index}`}
+                    className={classNames(
+                      day.isCurrentMonth ? 'bg-white' : 'bg-gray-50 text-gray-500',
+                      'relative h-[100px] py-2 px-3'
+                    )}
                   >
-                    {(day.date.split('-').pop() || '').replace(/^0/, '')}
-                  </time>
-                  {day.events.length > 0 && (
-                    <ol className="mt-2">
-                      {day.events.slice(0, 1).map((event, index) => (
-                        <li key={`event.id${index}`}>
-                          <span
-                            onClick={handleClick(event)}
-                            className={`group flex rounded-lg px-2 bg-${event.color}-50 hover:bg-${event.color}-100 cursor-pointer`}
-                          >
-                            <p className={`flex-auto truncate text-xs text-${event.color}-700`}>{event.name}</p>
-                            <time
-                              dateTime={event.datetime}
-                              className={`ml-3 hidden flex-none xl:block text-${event.color}-500 group-hover:text-${event.color}-700`}
-                            >
-                              {event.time}
-                            </time>
-                          </span>
-                        </li>
-                      ))}
-                    </ol>
-                  )}
-                </div>
-              )
+                    <time
+                      dateTime={day.date}
+                      className={
+                        day.isToday
+                          ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
+                          : index % 7 === 0 && day.isCurrentMonth
+                          ? 'text-red-500'
+                          : ''
+                      }
+                    >
+                      {(day.date.split('-').pop() || '').replace(/^0/, '')}
+                    </time>
+                    {day.events.length > 0 && (
+                      <ol className="mt-2">
+                        {day.events.slice(0, 1).map((event, index) => {
+                          const handleDateEvent = () => {
+                            if (event?.timeIn && !event?.timeOut) {
+                              return (
+                                <p className={`flex-auto text-xs text-${event?.color}-700`}>
+                                  {handleCheckTime(event?.timeIn)} : {'~'}
+                                </p>
+                              );
+                            } else if (event?.timeIn && event?.timeOut) {
+                              return (
+                                <p className={`flex-auto text-xs text-${event?.color}-700`}>
+                                  {handleCheckTime(event?.timeIn)} : {handleCheckTime(event?.timeOut)}
+                                </p>
+                              );
+                            } else if (!event?.timeIn && event?.timeOut) {
+                              return (
+                                <p className={`flex-auto text-xs text-${event?.color}-700`}>
+                                  {'~'} : {handleCheckTime(event?.timeOut)}
+                                </p>
+                              );
+                            }
+                            return null;
+                          };
+                          return (
+                            <li key={`event.id${index}`}>
+                              <span
+                                onClick={handleClick(event)}
+                                className={`group flex flex-col rounded-lg px-2 py-1 bg-${event.color}-50 hover:bg-${event.color}-100 cursor-pointer`}
+                              >
+                                <p className={`flex-auto text-xs text-${event.color}-700`}>{event.name}</p>
+                                {handleDateEvent()}
+                                {event?.listDinas && (
+                                  <p className={`flex-auto truncate text-xs text-${event?.color}-700`}>
+                                    {event?.listDinas}
+                                  </p>
+                                )}
+                                <time
+                                  dateTime={event.datetime}
+                                  className={`ml-3 hidden flex-none xl:block text-${event.color}-500 group-hover:text-${event.color}-700`}
+                                >
+                                  {event.time}
+                                </time>
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ol>
+                    )}
+                  </div>
+                );
+              }
             )}
 
             <ModalPresensiInfo
               open={!!selectedPresensi}
               toggleOpen={(open: boolean) => setSelectedPresensi(!open ? undefined : selectedPresensi)}
+              onClaimPresence={() =>
+                handleShowFormKlaimPresensi(
+                  !formKlaimPresensi.open,
+                  selectedPresensi?.presensi_id,
+                  selectedPresensi?.date
+                )
+              }
               info={selectedPresensi}
             />
 
@@ -172,6 +234,18 @@ export default function DinasCalendar() {
               open={!!selectedDinas}
               toggleOpen={(open: boolean) => setSelectedDinas(!open ? undefined : selectedDinas)}
               infos={selectedDinas}
+            />
+
+            <ModalKlaimPresensi
+              open={formKlaimPresensi?.open}
+              onSuccess={() => window.location.reload()}
+              pegId={personalPegawai?.pegawai_id}
+              selectedDate={formKlaimPresensi?.dateSelected}
+              pegawaiName={personalPegawai?.nama}
+              selectedId={formKlaimPresensi?.selectedId}
+              setOpen={() => {
+                handleShowFormKlaimPresensi(!formKlaimPresensi?.open);
+              }}
             />
 
             {/* precall tailwind class */}

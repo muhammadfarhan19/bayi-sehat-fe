@@ -4,19 +4,24 @@ import { RekapDinasAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
 import { GetRekapReq, RekapData } from '../../../types/api/RekapDinasAPI';
 import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
 import SummaryDinasCalendar from '../../DinasPage/DataPegawai/SummaryDinasCalendar';
-import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
 import AdminDinasAccess from './AdminDinasAccess';
 
-function RekapDinasPage() {
+interface UnitKerja {
+  unit_kerja_id: number;
+}
+
+function RekapDinasPage(props: UnitKerja) {
+  const { unit_kerja_id } = props;
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [loaded, setLoaded] = React.useState(false);
 
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
     page: 1,
     per_page: 20,
+    unit_kerja_id: unit_kerja_id,
   });
 
   const {
@@ -80,14 +85,19 @@ function RekapDinasPage() {
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
               <select
-                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                 onChange={e => {
                   changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
                 }}
+                disabled={!!unit_kerja_id}
               >
                 <option value="">Semua</option>
                 {(unitKerjaList || []).map((item, index) => (
-                  <option key={`options-${index}`} value={item?.unit_kerja_id}>
+                  <option
+                    key={`options-${index}`}
+                    value={item?.unit_kerja_id}
+                    selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                  >
                     {item?.name}
                   </option>
                 ))}
@@ -229,10 +239,10 @@ function RekapDinasPage() {
         <div className="flex flex-row flex-wrap items-center justify-between px-6 py-4">
           <p className="text-lg font-medium text-gray-900">Kalender Dinas</p>
         </div>
-        <SummaryDinasCalendar />
+        <SummaryDinasCalendar unit_kerja_id={unit_kerja_id} />
       </div>
     </>
   );
 }
 
-export default withErrorBoundary(RekapDinasPage);
+export default RekapDinasPage;

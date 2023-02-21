@@ -50,6 +50,11 @@ export const NavigationList: Navigation[] = [
         childMenu: [
           {
             id: PUBLIC,
+            name: 'Rekap Kehadiran',
+            href: '/rekap-kehadiran',
+          },
+          {
+            id: PUBLIC,
             name: 'Klaim Kehadiran',
             href: '/kehadiran',
           },
@@ -128,6 +133,11 @@ export const NavigationList: Navigation[] = [
         id: NavigationId.KEPEGAWAIAN,
         name: 'Kehadiran',
         childMenu: [
+          {
+            id: NavigationId.KEPEGAWAIAN,
+            name: 'Rekap Kehadiran',
+            href: '/kepegawaian/rekap-kehadiran',
+          },
           {
             id: NavigationId.KEPEGAWAIAN,
             name: 'Klaim Kehadiran',

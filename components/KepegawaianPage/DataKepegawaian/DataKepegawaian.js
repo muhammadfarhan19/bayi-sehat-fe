@@ -1,16 +1,22 @@
 import React from 'react';
 
 import { classNames } from '../../../utils/Components';
+import usePersonalData from '../../shared/hooks/usePersonalData';
 import MasterPns from './MasterPNS/MasterPns';
 import MasterPpnpn from './MasterPPNPN/MasterPpnpn';
 
 export default function DataKepegawaian() {
+  const personalPegawai = usePersonalData();
   const tabs = [
     { name: 'Master PNS', href: '#' },
     { name: 'Master PPNPN', href: '#' },
   ];
 
   const [selected, setSelected] = React.useState('Master PNS');
+
+  if (!personalPegawai?.unit_kerja_id) {
+    return <></>;
+  }
 
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -53,7 +59,13 @@ export default function DataKepegawaian() {
           </div>
         </div>
       </div>
-      <div>{selected === 'Master PNS' ? <MasterPns /> : <MasterPpnpn />}</div>
+      <div>
+        {selected === 'Master PNS' ? (
+          <MasterPns unit_kerja_id={personalPegawai?.unit_kerja_id} />
+        ) : (
+          <MasterPpnpn unit_kerja_id={personalPegawai?.unit_kerja_id} />
+        )}
+      </div>
     </div>
   );
 }

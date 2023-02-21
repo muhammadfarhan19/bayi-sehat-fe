@@ -8,6 +8,7 @@ import { Presensi } from '../../../types/api/KepegawaianAPI';
 interface Props {
   open: boolean;
   toggleOpen: (open: boolean) => void;
+  onClaimPresence: React.MouseEventHandler<HTMLButtonElement>;
   info?: Presensi;
 }
 
@@ -24,9 +25,29 @@ export const MapPresensiColorText = {
   9: ['gray', 'Libur', false],
   10: ['green', 'Cuti Sakit', false],
 };
-
+// 1 - Masuk
+// 2 - Terlambat
+// 3 - Pulang Awal
+// 4 - Terlambat & Pulang Awal
+// 5 - Tidak Hadir
+// 6 - Dinas
+// 7 - Weekend
+// 8 - Cuti
+// 9 - Libur
+// 10 - Sakit
+//tidak hadir, pulang sebelum waktunya sama terlambat, terlambat dan pulang sebelum waktunya.
 export default function ModalPresensiInfo(props: Props) {
-  const { info } = props;
+  const { info, onClaimPresence } = props;
+  const isKlaimKehadiranTidakHadir = info?.status === 5;
+  const isKlaimKehadiranTerlambat = info?.status === 2;
+  const isKlaimKehadiranPulangSebelumWaktu = info?.status === 4;
+  const isKlaimKehadiranPulangAwal = info?.status === 3;
+  const isKlaimKehadiranAvailButton =
+    isKlaimKehadiranTidakHadir ||
+    isKlaimKehadiranPulangSebelumWaktu ||
+    isKlaimKehadiranTerlambat ||
+    isKlaimKehadiranPulangAwal;
+
   if (!info) {
     return null;
   }
@@ -99,11 +120,19 @@ export default function ModalPresensiInfo(props: Props) {
                   </div>
                 </div>
               )}
-
               <div className="mt-5 ml-12">
                 <span className="text-sm text-gray-500">Status: </span>
                 <span className={`text-sm ${statusColor}`}>{statusText}</span>
               </div>
+              {isKlaimKehadiranAvailButton ? (
+                <button
+                  onClick={onClaimPresence}
+                  type="button"
+                  className="mt-5 flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200"
+                >
+                  Klaim Kehadiran
+                </button>
+              ) : null}
             </div>
           </Transition.Child>
 

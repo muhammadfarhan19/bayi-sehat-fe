@@ -4,7 +4,7 @@ export interface GetKehadiranList {
   Alasan?: string;
   tgl_mulai?: string;
   tgl_selesai?: string;
-  Unit_kerja_id?: number;
+  unit_kerja_id?: number;
   page: number;
   per_page: number;
   status?: number;

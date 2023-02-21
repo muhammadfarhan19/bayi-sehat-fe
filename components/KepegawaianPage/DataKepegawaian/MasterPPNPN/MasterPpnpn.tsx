@@ -9,7 +9,12 @@ import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
 
-export default function MasterPpnpn() {
+interface UnitKerja {
+  unit_kerja_id: number;
+}
+
+export default function MasterPpnpn(props: UnitKerja) {
+  const { unit_kerja_id } = props;
   const router = useRouter();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
   const toggleAdvancedFilter = () => {
@@ -20,6 +25,7 @@ export default function MasterPpnpn() {
     page: 1,
     per_page: 20,
     status_cpns: [2],
+    unit_kerja_id: String(unit_kerja_id),
   });
 
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
@@ -66,12 +72,17 @@ export default function MasterPpnpn() {
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
               <select
-                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                 onChange={e => search('unit_kerja_id', e.target.value)}
+                disabled={!!unit_kerja_id}
               >
                 <option value="">Semua</option>
                 {(unitKerjaList || []).map((item, index) => (
-                  <option key={`options-${index}`} value={item?.unit_kerja_id}>
+                  <option
+                    key={`options-${index}`}
+                    value={item?.unit_kerja_id}
+                    selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                  >
                     {item?.name}
                   </option>
                 ))}

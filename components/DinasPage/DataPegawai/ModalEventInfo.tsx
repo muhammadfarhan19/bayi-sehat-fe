@@ -87,6 +87,9 @@ export default function ModalEventInfo(props: Props) {
                             {info.jenis_dinas}
                           </a>
                         </Link>
+                        {info?.isi_penugasan ? (
+                          <p className="py-1 text-[14px] font-medium">{info?.isi_penugasan}</p>
+                        ) : null}
                       </div>
                       <div className="flex justify-between">
                         <div className="relative">

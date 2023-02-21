@@ -13,14 +13,16 @@ import KlaimModal from './KlaimModal';
 
 type ListKlaimProps = {
   onShowDetail: (id: number) => void;
+  unit_kerja_id: number;
 };
 
 function KlaimAdmin(props: ListKlaimProps) {
-  const { onShowDetail } = props;
+  const { onShowDetail, unit_kerja_id } = props;
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [filterState, setFilterState] = React.useState<GetKehadiranList>({
     page: 1,
     per_page: 20,
+    unit_kerja_id: unit_kerja_id,
   });
 
   const {
