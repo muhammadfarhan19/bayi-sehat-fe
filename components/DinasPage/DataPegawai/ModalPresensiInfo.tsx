@@ -39,14 +39,10 @@ export const MapPresensiColorText = {
 export default function ModalPresensiInfo(props: Props) {
   const { info, onClaimPresence } = props;
   const isKlaimKehadiranTidakHadir = info?.status === 5;
-  const isKlaimKehadiranTerlambat = info?.status === 2;
   const isKlaimKehadiranPulangSebelumWaktu = info?.status === 4;
   const isKlaimKehadiranPulangAwal = info?.status === 3;
   const isKlaimKehadiranAvailButton =
-    isKlaimKehadiranTidakHadir ||
-    isKlaimKehadiranPulangSebelumWaktu ||
-    isKlaimKehadiranTerlambat ||
-    isKlaimKehadiranPulangAwal;
+    isKlaimKehadiranTidakHadir || isKlaimKehadiranPulangSebelumWaktu || isKlaimKehadiranPulangAwal;
 
   if (!info) {
     return null;
