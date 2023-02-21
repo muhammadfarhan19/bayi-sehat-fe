@@ -1,16 +1,11 @@
 import React from 'react';
 
 import { classNames } from '../../../utils/Components';
-import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
-import { DataDinasPNS } from './DataDinasPNS/DataDinasPNS';
-import { DataDinasPPNPN } from './DataDinasPPNPN/DataDinasPPNPN';
+import { tabs } from '../../DinasPage/DataPegawai/DataDinasPegawai';
+import ListPegawaiPNS from './ListPegawaiPNS';
+import ListPegawaiPPNPN from './ListPegawaiPPNPN';
 
-export const tabs = [
-  { name: 'Master PNS', href: '#' },
-  { name: 'Master PPNPN', href: '#' },
-];
-
-export function DataDinasPegawai() {
+function RekapKehadiranAdminPage() {
   const [selected, setSelected] = React.useState('Master PNS');
 
   return (
@@ -53,9 +48,9 @@ export function DataDinasPegawai() {
           </div>
         </div>
       </div>
-      <div>{selected === 'Master PNS' ? <DataDinasPNS /> : <DataDinasPPNPN />}</div>
+      <div>{selected === 'Master PNS' ? <ListPegawaiPNS /> : <ListPegawaiPPNPN />}</div>
     </div>
   );
 }
 
-export default withErrorBoundary(DataDinasPegawai);
+export default RekapKehadiranAdminPage;

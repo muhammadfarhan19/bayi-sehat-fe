@@ -138,3 +138,16 @@ export function getFirstAndLastDaysOfYear(year: number): { start: Date; end: Dat
     };
   });
 }
+
+export const handleCheckTime = (event?: string) => {
+  if (event) {
+    const emptyString = ' ';
+    const dividerTime = ':';
+    const dateString = event ? event : emptyString;
+    const dateParts = dateString?.split(emptyString);
+    const timeString = dateParts[1] ?? [];
+    const timeParts = timeString.split(dividerTime);
+    return timeParts[0] + ':' + timeParts[1];
+  }
+  return;
+};

@@ -9,7 +9,7 @@ import {
   Presensi,
 } from '../../../types/api/KepegawaianAPI';
 import { classNames } from '../../../utils/Components';
-import { EventDate, generateDays } from '../../../utils/DateUtil';
+import { EventDate, generateDays, handleCheckTime } from '../../../utils/DateUtil';
 import ModalKlaimPresensi from '../../KehadiranPage/RekapKehadiran/ModalKlaimPresensi';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
@@ -99,19 +99,6 @@ export default function DinasCalendar() {
         (kalendarData?.list_presensi || []).filter(each => each.date === event.dateKey)?.[0]?.list_dinas || []
       );
     }
-  };
-
-  const handleCheckTime = (event?: string) => {
-    if (event) {
-      const emptyString = ' ';
-      const dividerTime = ':';
-      const dateString = event ? event : emptyString;
-      const dateParts = dateString?.split(emptyString);
-      const timeString = dateParts[1] ?? [];
-      const timeParts = timeString.split(dividerTime);
-      return timeParts[0] + ':' + timeParts[1];
-    }
-    return;
   };
 
   const handleShowFormKlaimPresensi = (open: boolean, selectedId?: number, dateSelected?: string) => {

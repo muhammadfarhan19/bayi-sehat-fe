@@ -8,7 +8,7 @@ function RekapKehadiran() {
   const [detailRekap, setDetailRekap] = React.useState<DinasPegawaiKalenderData>();
   return (
     <>
-      {typeof detailRekap === 'undefined' || detailRekap?.list_presensi === null ? (
+      {typeof detailRekap === 'undefined' ? (
         <RekapCalendar onShowDetail={(detail: DinasPegawaiKalenderData) => setDetailRekap(detail)} />
       ) : (
         <RekapDetail

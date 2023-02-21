@@ -25,9 +25,28 @@ export const MapPresensiColorText = {
   9: ['gray', 'Libur', false],
   10: ['green', 'Cuti Sakit', false],
 };
-
+// 1 - Masuk
+// 2 - Terlambat
+// 3 - Pulang Awal
+// 4 - Terlambat & Pulang Awal
+// 5 - Tidak Hadir
+// 6 - Dinas
+// 7 - Weekend
+// 8 - Cuti
+// 9 - Libur
+// 10 - Sakit
+//tidak hadir, pulang sebelum waktunya sama terlambat, terlambat dan pulang sebelum waktunya.
 export default function ModalPresensiInfo(props: Props) {
   const { info, onClaimPresence } = props;
+  const isKlaimKehadiranTidakHadir = info?.status === 5;
+  const isKlaimKehadiranTerlambat = info?.status === 2;
+  const isKlaimKehadiranPulangSebelumWaktu = info?.status === 4;
+  const isKlaimKehadiranPulangAwal = info?.status === 3;
+  const isKlaimKehadiranAvailButton =
+    isKlaimKehadiranTidakHadir ||
+    isKlaimKehadiranPulangSebelumWaktu ||
+    isKlaimKehadiranTerlambat ||
+    isKlaimKehadiranPulangAwal;
 
   if (!info) {
     return null;
@@ -38,8 +57,6 @@ export default function ModalPresensiInfo(props: Props) {
   const statusColor = `text-${
     MapPresensiColorText[Number(info.status) as keyof typeof MapPresensiColorText]?.[0] || 'gray'
   }-500`;
-
-  const isKlaimKehadiran = info.status_str === MapPresensiColorText?.[5]?.[1];
 
   return (
     <Transition appear show={props.open} as={React.Fragment}>
@@ -107,7 +124,7 @@ export default function ModalPresensiInfo(props: Props) {
                 <span className="text-sm text-gray-500">Status: </span>
                 <span className={`text-sm ${statusColor}`}>{statusText}</span>
               </div>
-              {isKlaimKehadiran ? (
+              {isKlaimKehadiranAvailButton ? (
                 <button
                   onClick={onClaimPresence}
                   type="button"

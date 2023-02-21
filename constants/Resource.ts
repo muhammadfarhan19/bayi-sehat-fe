@@ -153,3 +153,46 @@ export const StatusPegawai = [
   { value: 7, text: 'Meninggal Dunia' },
   { value: 8, text: 'Mutasi' },
 ];
+
+export const StatusPresensiBE = [
+  {
+    statusId: 1,
+    title: 'Masuk',
+  },
+  {
+    statusId: 2,
+    title: 'Terlambat',
+  },
+  {
+    statusId: 3,
+    title: 'Pulang Awal',
+  },
+  {
+    statusId: 4,
+    title: 'Terlambat & Pulang Awal',
+  },
+  {
+    statusId: 5,
+    title: 'Tidak Hadir',
+  },
+  {
+    statusId: 6,
+    title: 'Dinas',
+  },
+  {
+    statusId: 7,
+    title: 'Weekend',
+  },
+  {
+    statusId: 8,
+    title: 'Cuti',
+  },
+  {
+    statusId: 9,
+    title: 'Libur',
+  },
+  {
+    statusId: 10,
+    title: 'Sakit',
+  },
+];
