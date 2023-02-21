@@ -26,6 +26,8 @@ interface ModalProps {
   pegId?: number;
   selectedDate?: string;
   pegawaiName?: string;
+  timeIn?: string;
+  timeOut?: string;
 }
 
 interface FormState {
@@ -39,13 +41,8 @@ interface FormState {
 }
 
 function ModalKlaimPresensi(props: ModalProps) {
-  const { open, setOpen, onSuccess, pegId, selectedDate, pegawaiName } = props;
-
+  const { open, setOpen, onSuccess, pegId, selectedDate, pegawaiName, timeIn, timeOut } = props;
   const dispatch = useDispatch();
-
-  const toggleModal = () => {
-    setOpen(!open);
-  };
 
   const {
     register,
@@ -57,7 +54,10 @@ function ModalKlaimPresensi(props: ModalProps) {
 
   React.useEffect(() => {
     setValue('tanggal_klaim', String(selectedDate));
-  }, [open]);
+    if (timeIn && !timeOut) {
+      setValue('jenis_pengajuan', 'Jam Kerja Pulang');
+    }
+  }, [open, timeIn, timeOut]);
 
   const submitHandler = async (formData: FormState) => {
     const resSubmit = await callAPI<PostKehadiranData, PostKehadiranReqData>(
@@ -114,6 +114,10 @@ function ModalKlaimPresensi(props: ModalProps) {
       );
       setTimeout(() => window.location.reload(), 3000);
     }
+  };
+
+  const toggleModal = () => {
+    setOpen(!open);
   };
 
   return (

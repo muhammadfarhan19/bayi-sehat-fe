@@ -21,6 +21,8 @@ interface FormKlaimPresensi {
   open: boolean;
   selectedId?: number;
   dateSelected?: string;
+  timeIn?: string;
+  timeOut?: string;
 }
 
 export default function DinasCalendar() {
@@ -32,6 +34,8 @@ export default function DinasCalendar() {
     open: false,
     selectedId: undefined,
     dateSelected: undefined,
+    timeIn: undefined,
+    timeOut: undefined,
   });
 
   let endDateStr = '';
@@ -101,11 +105,19 @@ export default function DinasCalendar() {
     }
   };
 
-  const handleShowFormKlaimPresensi = (open: boolean, selectedId?: number, dateSelected?: string) => {
+  const handleShowFormKlaimPresensi = (
+    open: boolean,
+    selectedId?: number,
+    dateSelected?: string,
+    timeIn?: string,
+    timeOut?: string
+  ) => {
     setFormKlaimPresensi({
       open,
       selectedId,
       dateSelected,
+      timeIn,
+      timeOut,
     });
   };
 
@@ -227,7 +239,9 @@ export default function DinasCalendar() {
                 handleShowFormKlaimPresensi(
                   !formKlaimPresensi.open,
                   selectedPresensi?.presensi_id,
-                  selectedPresensi?.date
+                  selectedPresensi?.date,
+                  selectedPresensi?.check_in,
+                  selectedPresensi?.check_out
                 )
               }
               info={selectedPresensi}
@@ -246,6 +260,8 @@ export default function DinasCalendar() {
               selectedDate={formKlaimPresensi?.dateSelected}
               pegawaiName={personalPegawai?.nama}
               selectedId={formKlaimPresensi?.selectedId}
+              timeIn={formKlaimPresensi?.timeIn}
+              timeOut={formKlaimPresensi?.timeOut}
               setOpen={() => {
                 handleShowFormKlaimPresensi(!formKlaimPresensi?.open);
               }}
