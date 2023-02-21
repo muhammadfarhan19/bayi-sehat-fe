@@ -139,6 +139,21 @@ export function getFirstAndLastDaysOfYear(year: number): { start: Date; end: Dat
   });
 }
 
+export function getFirstAndLastDaysOfCurrentYear(): { start: Date; end: Date }[] {
+  const today = new Date();
+  const year = today.getFullYear();
+  const currentMonth = today.getMonth();
+
+  return Array.from({ length: currentMonth + 1 }, (_, month) => {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    return {
+      start: firstDay,
+      end: lastDay,
+    };
+  });
+}
+
 export const handleCheckTime = (event?: string) => {
   if (event) {
     const emptyString = ' ';
@@ -151,3 +166,6 @@ export const handleCheckTime = (event?: string) => {
   }
   return;
 };
+
+export const weekendText = 'Weekend';
+export const weekendTextLocaleId = 'Akhir Pekan';

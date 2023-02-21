@@ -5,7 +5,7 @@ import React from 'react';
 
 import { KepegawaianAPI } from '../../../constants/APIUrls';
 import { DinasPegawaiKalenderData, GetDinasPegawaiKalenderReq } from '../../../types/api/KepegawaianAPI';
-import { getFirstAndLastDaysOfYear } from '../../../utils/DateUtil';
+import { getFirstAndLastDaysOfCurrentYear } from '../../../utils/DateUtil';
 import DinasCalendar from '../../DinasPage/DataPegawai/DinasCalendar';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
@@ -19,8 +19,7 @@ function RekapCalendar(props: RekapCalendarProps) {
   const { onShowDetail } = props;
   const personalPegawai = usePersonalData();
   const [selectedDate, setSelectedDate] = React.useState<Date>();
-  const year = 2023;
-  const dates = React.useMemo(() => getFirstAndLastDaysOfYear(year), [year]);
+  const dates = React.useMemo(getFirstAndLastDaysOfCurrentYear, []);
 
   const endDateStr = React.useMemo(() => {
     if (selectedDate) {
