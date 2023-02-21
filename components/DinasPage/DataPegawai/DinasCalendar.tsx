@@ -9,7 +9,7 @@ import {
   Presensi,
 } from '../../../types/api/KepegawaianAPI';
 import { classNames } from '../../../utils/Components';
-import { EventDate, generateDays, handleCheckTime } from '../../../utils/DateUtil';
+import { EventDate, generateDays, handleCheckTime, weekendText, weekendTextLocaleId } from '../../../utils/DateUtil';
 import ModalKlaimPresensi from '../../KehadiranPage/RekapKehadiran/ModalKlaimPresensi';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
@@ -84,7 +84,7 @@ export default function DinasCalendar() {
         color: String(MapPresensiColorText[each.status as keyof typeof MapPresensiColorText]?.[0]) || 'gray',
         dateKey: each.date,
         datetime: each.date,
-        name: 'Presensi',
+        name: each?.status_str,
         infoType: 'presensi',
         timeIn: each?.check_in,
         timeOut: each?.check_out,
@@ -165,6 +165,7 @@ export default function DinasCalendar() {
                     {day.events.length > 0 && (
                       <ol className="mt-2">
                         {day.events.slice(0, 1).map((event, index) => {
+                          const isWeekend = event?.name === weekendText;
                           const handleDateEvent = () => {
                             if (event?.timeIn && !event?.timeOut) {
                               return (
@@ -191,9 +192,11 @@ export default function DinasCalendar() {
                             <li key={`event.id${index}`}>
                               <span
                                 onClick={handleClick(event)}
-                                className={`group flex flex-col rounded-lg px-2 py-1 bg-${event.color}-50 hover:bg-${event.color}-100 cursor-pointer`}
+                                className={`group flex flex-col rounded-lg px-2 py-1 bg-${event?.color}-50 hover:bg-${event.color}-100 cursor-pointer`}
                               >
-                                <p className={`flex-auto text-xs text-${event.color}-700`}>{event.name}</p>
+                                <p className={`flex-auto text-xs text-${event.color}-700`}>
+                                  {isWeekend ? weekendTextLocaleId : event?.name}
+                                </p>
                                 {handleDateEvent()}
                                 {event?.listDinas && (
                                   <p className={`flex-auto truncate text-xs text-${event?.color}-700`}>

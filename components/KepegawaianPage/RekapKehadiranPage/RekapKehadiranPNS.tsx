@@ -5,7 +5,7 @@ import React from 'react';
 
 import { KepegawaianAPI } from '../../../constants/APIUrls';
 import { DinasPegawaiKalenderData, GetDinasPegawaiKalenderReq } from '../../../types/api/KepegawaianAPI';
-import { getFirstAndLastDaysOfYear } from '../../../utils/DateUtil';
+import { getFirstAndLastDaysOfCurrentYear } from '../../../utils/DateUtil';
 import RekapDetail from '../../KehadiranPage/RekapKehadiran/RekapDetail';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 
@@ -17,8 +17,8 @@ interface RekapKehadiranPNSProps {
 function RekapKehadiranPNS(props: RekapKehadiranPNSProps) {
   const { pegawai_id, onBack } = props;
   const [detailRekap, setDetailRekap] = React.useState<DinasPegawaiKalenderData>();
-  const year = 2023;
-  const dates = React.useMemo(() => getFirstAndLastDaysOfYear(year), [year]);
+  const dates = React.useMemo(getFirstAndLastDaysOfCurrentYear, []);
+
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const endDateStr = React.useMemo(() => {
     if (selectedDate) {
@@ -37,7 +37,7 @@ function RekapKehadiranPNS(props: RekapKehadiranPNSProps) {
       tgl_selesai: endDateStr,
     },
     { method: 'get' },
-    { skipCall: !selectedDate || !pegawai_id }
+    { skipCall: !selectedDate || !pegawai_id, revalidateOnMount: true }
   );
 
   React.useEffect(() => {

@@ -2,7 +2,7 @@ import { ChevronLeftIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { DinasPegawaiKalenderData } from '../../../types/api/KepegawaianAPI';
-import { formatStringDate, handleCheckTime } from '../../../utils/DateUtil';
+import { formatStringDate, handleCheckTime, weekendText, weekendTextLocaleId } from '../../../utils/DateUtil';
 
 interface DateProps {
   start: Date;
@@ -95,7 +95,7 @@ function RekapDetail(props: DetailRekapProps) {
                                     isUnpresence && 'text-yellow-400'
                                   } ${isDinas && 'text-green-600'}`}
                                 >
-                                  {status_str}
+                                  {status_str === weekendText ? weekendTextLocaleId : status_str}
                                 </td>
                               </tr>
                             );
