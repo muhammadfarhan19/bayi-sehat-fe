@@ -2,12 +2,13 @@ import React from 'react';
 
 import { classNames } from '../../../utils/Components';
 import { tabs } from '../../DinasPage/DataPegawai/DataDinasPegawai';
+import usePersonalData from '../../shared/hooks/usePersonalData';
 import ListPegawaiPNS from './ListPegawaiPNS';
 import ListPegawaiPPNPN from './ListPegawaiPPNPN';
 
 function RekapKehadiranAdminPage() {
   const [selected, setSelected] = React.useState('Master PNS');
-
+  const personalPegawai = usePersonalData();
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">
       <div className="px-6">
@@ -48,7 +49,13 @@ function RekapKehadiranAdminPage() {
           </div>
         </div>
       </div>
-      <div>{selected === 'Master PNS' ? <ListPegawaiPNS /> : <ListPegawaiPPNPN />}</div>
+      <div>
+        {selected === 'Master PNS' ? (
+          <ListPegawaiPNS unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
+        ) : (
+          <ListPegawaiPPNPN unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
+        )}
+      </div>
     </div>
   );
 }

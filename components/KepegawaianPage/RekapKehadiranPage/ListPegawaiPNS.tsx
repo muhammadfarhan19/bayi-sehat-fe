@@ -1,18 +1,25 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
-import { KepegawaianAPI } from '../../../constants/APIUrls';
+import { KepegawaianAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../types/api/KepegawaianAPI';
+import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
 import RekapKehadiranPNS from './RekapKehadiranPNS';
 
-function ListPegawaiPNS() {
+interface UnitKerjaProps {
+  unit_kerja_id: number;
+}
+function ListPegawaiPNS(props: UnitKerjaProps) {
+  const { unit_kerja_id } = props;
+  const inputTimeout = React.useRef<NodeJS.Timeout>();
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
     per_page: 20,
     status_cpns: [1, 3],
+    unit_kerja_id: unit_kerja_id,
   });
 
   const [pegawaiId, setPegawaiId] = React.useState<number>(0);
@@ -24,11 +31,29 @@ function ListPegawaiPNS() {
     { revalidateOnMount: true }
   );
 
-  const search = async <T extends keyof typeof filter>(type: T, value: typeof filter[T]) => {
-    const newState = { ...filter };
-    newState[type] = value;
-    setFilter(newState);
+  const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
+    UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
+    null,
+    { method: 'GET' }
+  );
+
+  const changeFilterState = (inputState: Partial<GetPegawaiListReq>) => {
+    const pageAffected = Object.keys(inputState).includes('page');
+    const newState = {
+      ...filter,
+      ...inputState,
+    };
+
+    if (!pageAffected) {
+      newState.page = 1;
+    }
+
+    if (inputTimeout.current) {
+      clearTimeout(inputTimeout.current);
+    }
+    inputTimeout.current = setTimeout(() => setFilter(newState), pageAffected ? 0 : 500);
   };
+
   return (
     <>
       {pegawaiId ? (
@@ -42,7 +67,9 @@ function ListPegawaiPNS() {
                 type="text"
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="Cari..."
-                onChange={e => search('nama', e.target.value)}
+                onChange={e => {
+                  changeFilterState({ nama: e.target.value === '' ? undefined : e.target.value });
+                }}
               />
               <button
                 type="button"
@@ -52,6 +79,27 @@ function ListPegawaiPNS() {
                 <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
               </button>
             </div>
+          </div>
+          <div className="w-[202px] pl-5">
+            <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
+            <select
+              className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+              onChange={e => {
+                changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
+              }}
+              disabled={!!unit_kerja_id}
+            >
+              <option value="">Semua</option>
+              {(unitKerjaList || []).map((item, index) => (
+                <option
+                  selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                  key={`options-${index}`}
+                  value={item?.unit_kerja_id}
+                >
+                  {item?.name}
+                </option>
+              ))}
+            </select>
           </div>
           {isValidating ? (
             <div className="relative h-[150px] w-full divide-y divide-gray-200">
@@ -122,7 +170,7 @@ function ListPegawaiPNS() {
                   </table>
                   <Pagination
                     onChange={value => {
-                      search('page', value);
+                      changeFilterState({ page: value });
                     }}
                     totalData={pegawaiList ? pegawaiList?.pagination?.total_data : 0}
                     perPage={filter?.per_page}

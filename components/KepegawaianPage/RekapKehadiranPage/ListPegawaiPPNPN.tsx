@@ -1,19 +1,27 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
-import { KepegawaianAPI } from '../../../constants/APIUrls';
+import { KepegawaianAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../types/api/KepegawaianAPI';
+import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
 import RekapKehadiranPNS from './RekapKehadiranPNS';
 
-function ListPegawaiPPNPN() {
+interface UnitKerjaProps {
+  unit_kerja_id: number;
+}
+function ListPegawaiPPNPN(props: UnitKerjaProps) {
+  const { unit_kerja_id } = props;
+
   const [pegawaiId, setPegawaiId] = React.useState<number>(0);
+  const inputTimeout = React.useRef<NodeJS.Timeout>();
   const [filterPPNPN, setFilterPPNPN] = React.useState<GetPegawaiListReq>({
     page: 1,
     per_page: 20,
     status_cpns: [2],
+    unit_kerja_id: unit_kerja_id,
   });
 
   const { data: ppnpnList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
@@ -22,10 +30,27 @@ function ListPegawaiPPNPN() {
     { method: 'GET' }
   );
 
-  const searches = async <T extends keyof typeof filterPPNPN>(type: T, value: typeof filterPPNPN[T]) => {
-    const newState = { ...filterPPNPN };
-    newState[type] = value;
-    setFilterPPNPN(newState);
+  const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
+    UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
+    null,
+    { method: 'GET' }
+  );
+
+  const changeFilterState = (inputState: Partial<GetPegawaiListReq>) => {
+    const pageAffected = Object.keys(inputState).includes('page');
+    const newState = {
+      ...filterPPNPN,
+      ...inputState,
+    };
+
+    if (!pageAffected) {
+      newState.page = 1;
+    }
+
+    if (inputTimeout.current) {
+      clearTimeout(inputTimeout.current);
+    }
+    inputTimeout.current = setTimeout(() => setFilterPPNPN(newState), pageAffected ? 0 : 500);
   };
   return (
     <>
@@ -42,7 +67,9 @@ function ListPegawaiPPNPN() {
                 type="text"
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="Cari..."
-                onChange={e => searches('nama', e.target.value)}
+                onChange={e => {
+                  changeFilterState({ nama: e.target.value === '' ? undefined : e.target.value });
+                }}
               />
               <button
                 type="button"
@@ -52,6 +79,27 @@ function ListPegawaiPPNPN() {
                 <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
               </button>
             </div>
+          </div>
+          <div className="w-[202px] pl-5">
+            <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
+            <select
+              className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+              onChange={e => {
+                changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
+              }}
+              disabled={!!unit_kerja_id}
+            >
+              <option value="">Semua</option>
+              {(unitKerjaList || []).map((item, index) => (
+                <option
+                  selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                  key={`options-${index}`}
+                  value={item?.unit_kerja_id}
+                >
+                  {item?.name}
+                </option>
+              ))}
+            </select>
           </div>
           {isValidating ? (
             <div className="relative h-[150px] w-full divide-y divide-gray-200">
@@ -129,7 +177,7 @@ function ListPegawaiPPNPN() {
                     </table>
                     <Pagination
                       onChange={value => {
-                        searches('page', value);
+                        changeFilterState({ page: value });
                       }}
                       totalData={ppnpnList ? ppnpnList?.pagination.total_data : 0}
                       perPage={filterPPNPN.per_page}
