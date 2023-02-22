@@ -9,6 +9,7 @@ export type Navigation = {
   name: string;
   selectedHref?: string[];
   current?: boolean;
+  accessId?: number;
 } & (
   | {
       href: string;

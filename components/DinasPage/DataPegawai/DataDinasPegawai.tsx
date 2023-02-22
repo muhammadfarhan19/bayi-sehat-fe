@@ -2,6 +2,7 @@ import React from 'react';
 
 import { classNames } from '../../../utils/Components';
 import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
+import usePersonalData from '../../shared/hooks/usePersonalData';
 import { DataDinasPNS } from './DataDinasPNS/DataDinasPNS';
 import { DataDinasPPNPN } from './DataDinasPPNPN/DataDinasPPNPN';
 
@@ -12,6 +13,7 @@ export const tabs = [
 
 export function DataDinasPegawai() {
   const [selected, setSelected] = React.useState('Master PNS');
+  const personalPegawai = usePersonalData();
 
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -53,7 +55,13 @@ export function DataDinasPegawai() {
           </div>
         </div>
       </div>
-      <div>{selected === 'Master PNS' ? <DataDinasPNS /> : <DataDinasPPNPN />}</div>
+      <div>
+        {selected === 'Master PNS' ? (
+          <DataDinasPNS unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
+        ) : (
+          <DataDinasPPNPN unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
+        )}
+      </div>
     </div>
   );
 }

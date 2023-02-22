@@ -17,6 +17,11 @@ function useAllowAdminDinas() {
       bulk_request: [
         { action: 'read', resource_id: Permissions.TOMBOL_TAMBAH_DINAS, user_id: userProfile?.user_id || 0 },
         { action: 'read', resource_id: Permissions.TOMBOL_EDIT_DINAS, user_id: userProfile?.user_id || 0 },
+        {
+          action: 'read',
+          resource_id: Permissions.RESOURCE_GROUP_AKSES_PENUH_DINAS,
+          user_id: userProfile?.user_id || 0,
+        },
       ],
     },
     { method: 'POST' },
@@ -25,10 +30,12 @@ function useAllowAdminDinas() {
 
   const isAllowDinasAdd = !!rbac?.[0]?.is_authorized;
   const isAllowDinasEdit = !!rbac?.[1]?.is_authorized;
+  const isAllowDinasFullAccessMenu = !!rbac?.[2]?.is_authorized;
 
   return {
     isAllowDinasAdd,
     isAllowDinasEdit,
+    isAllowDinasFullAccessMenu,
   };
 }
 
