@@ -6,19 +6,24 @@ import { KepegawaianAPI, MasterAPI, UnitKerjaAPI } from '../../../../constants/A
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../../types/api/KepegawaianAPI';
 import { JenisJabatanListData } from '../../../../types/api/MasterAPI';
 import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
-import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
 
-export function DataDinasPPNPN() {
+interface UnitKerjaProps {
+  unit_kerja_id: number;
+}
+
+export function DataDinasPPNPN(props: UnitKerjaProps) {
+  const { unit_kerja_id } = props;
   const router = useRouter();
-  const inputTimeout = React.useRef(0);
+  const inputTimeout = React.useRef<NodeJS.Timeout>();
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
     per_page: 20,
     status_cpns: [2],
+    unit_kerja_id: unit_kerja_id,
   });
 
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
@@ -43,14 +48,21 @@ export function DataDinasPPNPN() {
     setshowAdvancedFilter(!showAdvancedFilter);
   };
 
-  const search = async <T extends keyof typeof filter>(type: T, value: typeof filter[T]) => {
+  const changeFilterState = (inputState: Partial<GetPegawaiListReq>) => {
+    const pageAffected = Object.keys(inputState).includes('page');
+    const newState = {
+      ...filter,
+      ...inputState,
+    };
+
+    if (!pageAffected) {
+      newState.page = 1;
+    }
+
     if (inputTimeout.current) {
       clearTimeout(inputTimeout.current);
     }
-
-    inputTimeout.current = window.setTimeout(() => {
-      setFilter({ ...filter, [type]: value });
-    }, 500);
+    inputTimeout.current = setTimeout(() => setFilter(newState), pageAffected ? 0 : 500);
   };
 
   return (
@@ -63,7 +75,9 @@ export function DataDinasPPNPN() {
               type="text"
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               placeholder="Cari..."
-              onChange={e => search('nama', e.target.value)}
+              onChange={e => {
+                changeFilterState({ nama: e.target.value === '' ? undefined : e.target.value });
+              }}
             />
             <button
               className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
@@ -78,12 +92,19 @@ export function DataDinasPPNPN() {
             <div className="w-[202px] pb-2">
               <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
               <select
-                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                onChange={e => search('unit_kerja_id', e.target.value)}
+                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                onChange={e => {
+                  changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
+                }}
+                disabled={!!unit_kerja_id}
               >
                 <option value="">Semua</option>
                 {(unitKerjaList || []).map((item, index) => (
-                  <option key={`options-${index}`} value={item?.unit_kerja_id}>
+                  <option
+                    selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                    key={`options-${index}`}
+                    value={item?.unit_kerja_id}
+                  >
                     {item?.name}
                   </option>
                 ))}
@@ -93,7 +114,9 @@ export function DataDinasPPNPN() {
               <p className="mb-[4px] text-[14px] font-normal">Tipe Jabatan</p>
               <select
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                onChange={e => search('tipe_jabatan', e.target.value)}
+                onChange={e => {
+                  changeFilterState({ tipe_jabatan: e.target.value === '' ? undefined : e.target.value });
+                }}
               >
                 <option value="">Semua</option>
                 {(jenisJabatanList || []).map((item, index) => (
@@ -109,7 +132,9 @@ export function DataDinasPPNPN() {
                 type="text"
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="Nama Jabatan"
-                onChange={e => search('jabatan', e.target.value)}
+                onChange={e => {
+                  changeFilterState({ jabatan: e.target.value === '' ? undefined : e.target.value });
+                }}
               />
             </div>
           </div>
@@ -189,7 +214,7 @@ export function DataDinasPPNPN() {
               </table>
               <Pagination
                 onChange={value => {
-                  search('page', value);
+                  changeFilterState({ page: value });
                 }}
                 totalData={pegawaiList ? pegawaiList?.pagination.total_data : 0}
                 perPage={filter.per_page}
@@ -203,4 +228,4 @@ export function DataDinasPPNPN() {
   );
 }
 
-export default withErrorBoundary(DataDinasPPNPN);
+export default DataDinasPPNPN;

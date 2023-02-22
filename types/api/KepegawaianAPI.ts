@@ -8,7 +8,7 @@ export interface GetPegawaiListReq {
   range_umur?: string;
   status_cpns: number[];
   tipe_jabatan?: string;
-  unit_kerja_id?: string | null;
+  unit_kerja_id?: string | null | number;
   page: number;
   per_page: number;
 }

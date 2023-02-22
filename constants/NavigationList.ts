@@ -7,6 +7,19 @@ export const NavigationId = {
   KEPEGAWAIAN: 6,
   KEUANGAN: 14,
   KEPANGKATAN: 17,
+  DINAS: 152,
+  DATA_PEGAWAI: 114,
+  MENU_PEGAWAI: 126,
+  PENINGKATAN_KOMPETENSI: 115,
+  DAFTAR_JABATAN: 116,
+  PETA_JABATAN: 117,
+  REKAP_DINAS: 118,
+  DATA_DINAS: 119,
+  KEHADIRAN: 120,
+  LOG_HARIAN: 121,
+  SHIFT: 122,
+  LIBUR_RAMADHAN: 123,
+  ROLE_USER: 124,
 };
 
 export const UserNavigationList: Navigation[] = [
@@ -43,7 +56,6 @@ export const NavigationList: Navigation[] = [
           },
         ],
       },
-
       {
         id: PUBLIC,
         name: 'Kehadiran',
@@ -82,26 +94,26 @@ export const NavigationList: Navigation[] = [
         href: '/kepegawaian',
       },
       {
-        id: NavigationId.KEPEGAWAIAN,
+        id: NavigationId.MENU_PEGAWAI,
         name: 'Pegawai',
         childMenu: [
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.DATA_PEGAWAI,
             name: 'Data Pegawai',
             href: '/kepegawaian/data-pegawai',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.PENINGKATAN_KOMPETENSI,
             name: 'Peningkatan Kompetensi',
             href: '/kepegawaian/peningkatan-kompetensi',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.DAFTAR_JABATAN,
             name: 'Daftar Jabatan',
             href: '/kepegawaian/daftar-jabatan',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.PETA_JABATAN,
             name: 'Peta Jabatan',
             href: '/kepegawaian/peta-jabatan',
           },
@@ -113,16 +125,16 @@ export const NavigationList: Navigation[] = [
       //   href: '/kepegawaian/kepangkatan',
       // },
       {
-        id: NavigationId.KEPEGAWAIAN,
+        id: NavigationId.REKAP_DINAS,
         name: 'Dinas',
         childMenu: [
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.REKAP_DINAS,
             name: 'Rekap Dinas',
             href: '/kepegawaian/rekap-dinas',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.DATA_DINAS,
             name: 'Data Dinas Pegawai',
             href: '/dinas/pegawai',
             selectedHref: ['/dinas/pegawai/detail'],
@@ -130,47 +142,47 @@ export const NavigationList: Navigation[] = [
         ],
       },
       {
-        id: NavigationId.KEPEGAWAIAN,
+        id: NavigationId.KEHADIRAN,
         name: 'Kehadiran',
         childMenu: [
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.KEHADIRAN,
             name: 'Rekap Kehadiran',
             href: '/kepegawaian/rekap-kehadiran',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.KEHADIRAN,
             name: 'Klaim Kehadiran',
             href: '/kepegawaian/kehadiran',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.KEHADIRAN,
             name: 'Klaim Cuti',
             href: '/kepegawaian/cuti',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.LOG_HARIAN,
             name: 'Log Harian',
             href: '/kepegawaian/log-harian',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.SHIFT,
             name: 'Shift',
             href: '/kepegawaian/shift',
           },
         ],
       },
       {
-        id: NavigationId.KEPEGAWAIAN,
+        id: NavigationId.LIBUR_RAMADHAN,
         name: 'Data Master',
         childMenu: [
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.LIBUR_RAMADHAN,
             name: 'Hari Libur dan Ramadhan',
             href: '/master/libur',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.ROLE_USER,
             name: 'Role User',
             href: '/master/role-user',
           },
