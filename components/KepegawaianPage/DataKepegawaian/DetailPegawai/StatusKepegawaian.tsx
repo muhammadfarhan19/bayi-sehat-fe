@@ -10,6 +10,7 @@ import { PostStatusKepegawaianReq, PostStatusKepegawaianRes } from '../../../../
 import { Status } from '../../../../types/Common';
 import { callAPI } from '../../../../utils/Fetchers';
 import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
+import useAllowAdmin from '../../../shared/hooks/useAllowAdmin';
 import usePersonalData from '../../../shared/hooks/usePersonalData';
 
 interface FormState {
@@ -18,6 +19,7 @@ interface FormState {
 
 function StatusKepegawaian() {
   const dataPersonal = usePersonalData();
+  const isAllowAdmin = useAllowAdmin();
   const dispatch = useDispatch();
 
   const { handleSubmit, register } = useForm<FormState>();
@@ -65,30 +67,32 @@ function StatusKepegawaian() {
           {typeof dataPersonal?.status_kepegawaian !== 'undefined' &&
             StatusPegawai.filter(each => each.value === dataPersonal?.status_kepegawaian)[0].text}
         </p>
-        <select
-          {...register('status_kepegawaian')}
-          className="my-auto block h-fit w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-        >
-          {StatusPegawai.map(item => {
-            if (item.value !== dataPersonal?.status_kepegawaian) {
+        {isAllowAdmin && (
+          <select
+            {...register('status_kepegawaian')}
+            className="my-auto block h-fit w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+          >
+            {StatusPegawai.map(item => {
               return (
-                <option key={item.value} value={item.value}>
+                <option key={item.value} value={item.value} selected={dataPersonal?.status_kepegawaian === item.value}>
                   {item.text}
                 </option>
               );
-            }
-          })}
-        </select>
+            })}
+          </select>
+        )}
       </div>
       <div className="mt-[20px] h-[1px] w-full bg-gray-200"></div>
-      <div className="mt-[29px] flex">
-        <button
-          disabled={load}
-          className="ml-auto rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
-        >
-          {load ? 'Processing' : 'Submit'}
-        </button>
-      </div>
+      {isAllowAdmin && (
+        <div className="mt-[29px] flex">
+          <button
+            disabled={load}
+            className="ml-auto rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
+          >
+            {load ? 'Processing' : 'Submit'}
+          </button>
+        </div>
+      )}
     </form>
   );
 }
