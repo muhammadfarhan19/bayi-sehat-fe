@@ -927,12 +927,11 @@ function AddRekapPage(props) {
                   placeholder={'Cari dan Tambahkan Tim Eksternal'}
                   onChange={value => {
                     pegawaiEksternal(value);
-                    clearErrors('tim_eksternal');
                   }}
                 />
-                {errors.tim_eksternal && (
+                {/* {errors.tim_eksternal && (
                   <p className="mt-1 text-xs text-red-500">Silahkan masukan minimal 1 tim eksternal</p>
-                )}
+                )} */}
               </div>
             </div>
 
@@ -963,7 +962,6 @@ function AddRekapPage(props) {
                   className="inline-flex rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-[14px] text-gray-50"
                   onClick={() => {
                     listPegawai.length === 0 && setError('pegawai', { type: 'required' });
-                    listPegawaiEksternal.length === 0 && setError('tim_eksternal', { type: 'required' });
                   }}
                 >
                   {load ? <CircleProgress /> : null}
