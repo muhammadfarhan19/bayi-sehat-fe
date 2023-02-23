@@ -803,7 +803,7 @@ function AddRekapPage(props) {
                   <Controller
                     control={control}
                     name="pic_pumk"
-                    rules={{ required: 'Mohon isi PIC PUMK' }}
+                    rules={{ required: false }}
                     render={({ field: { onChange } }) => (
                       <AutoComplete
                         onChange={input => {
