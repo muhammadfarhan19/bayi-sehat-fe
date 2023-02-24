@@ -9,6 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Intra DIKTI</title>
+        <link rel="icon" type="image/x-icon" href="/favicon.png" />
       </Head>
       {/* @ts-ignore */}
       <Component {...pageProps} />
