@@ -1,5 +1,5 @@
 module.exports = {
-  apiHost: 'http://43.241.149.99/api',
+  apiHost: 'https://devintra.dikti.go.id/api',
   environment: 'staging',
   cookieSecure: false,
   apiTimeoutMs: 65000, // 65 seconds
