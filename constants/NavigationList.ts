@@ -16,10 +16,16 @@ export const NavigationId = {
   REKAP_DINAS: 118,
   DATA_DINAS: 119,
   KEHADIRAN: 120,
+  REKAP_KEHADIRAN: 157,
+  KLAIM_CUTI: 159,
   LOG_HARIAN: 121,
   SHIFT: 122,
   LIBUR_RAMADHAN: 123,
   ROLE_USER: 124,
+  PARENT_SIDE_MENU_DINAS: 153,
+  PARENT_SIDE_MENU_PEGAWAI: 154,
+  PARENT_SIDE_MENU_KEHADIRAN: 155,
+  PARENT_SIDE_MENU_MASTER: 156,
 };
 
 export const UserNavigationList: Navigation[] = [
@@ -28,6 +34,16 @@ export const UserNavigationList: Navigation[] = [
   { name: 'Ubah Kata Sandi', href: '/changepassword', id: PUBLIC },
   { name: 'Keluar', href: '/logout', id: PUBLIC },
 ];
+
+// 153	Parent Side Menu Dinas
+// 154	Parent Side Menu Pegawai
+// 155	Parent Side Menu Kehadiran
+// 156	Parent Side Menu Master
+
+// 157	Side Menu Rekap Kehadiran
+// 158	Resource Group - Side Menu Rekap Kehadiran
+// 159	Side Menu Klaim Cuti
+// 160	Resource Group - Side Menu Klaim Cuti
 
 export const NavigationList: Navigation[] = [
   {
@@ -125,7 +141,7 @@ export const NavigationList: Navigation[] = [
       //   href: '/kepegawaian/kepangkatan',
       // },
       {
-        id: NavigationId.REKAP_DINAS,
+        id: NavigationId.PARENT_SIDE_MENU_DINAS,
         name: 'Dinas',
         childMenu: [
           {
@@ -142,11 +158,11 @@ export const NavigationList: Navigation[] = [
         ],
       },
       {
-        id: NavigationId.KEHADIRAN,
+        id: NavigationId.PARENT_SIDE_MENU_KEHADIRAN,
         name: 'Kehadiran',
         childMenu: [
           {
-            id: NavigationId.KEHADIRAN,
+            id: NavigationId.REKAP_KEHADIRAN,
             name: 'Rekap Kehadiran',
             href: '/kepegawaian/rekap-kehadiran',
           },
@@ -156,7 +172,7 @@ export const NavigationList: Navigation[] = [
             href: '/kepegawaian/kehadiran',
           },
           {
-            id: NavigationId.KEHADIRAN,
+            id: NavigationId.KLAIM_CUTI,
             name: 'Klaim Cuti',
             href: '/kepegawaian/cuti',
           },
@@ -173,7 +189,7 @@ export const NavigationList: Navigation[] = [
         ],
       },
       {
-        id: NavigationId.LIBUR_RAMADHAN,
+        id: NavigationId.PARENT_SIDE_MENU_MASTER,
         name: 'Data Master',
         childMenu: [
           {

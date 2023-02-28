@@ -2,18 +2,20 @@ import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { PetaAPI } from '../../constants/APIUrls';
-import { GetPetaReq, GetPetaRes, PetaData, PostKebutuhanPetaReq, PostKebutuhanPetaRes } from '../../types/api/PetaApi';
+import { PetaAPI, UnitKerjaAPI } from '../../constants/APIUrls';
+import { GetPetaReq, PetaData, PostKebutuhanPetaReq, PostKebutuhanPetaRes } from '../../types/api/PetaApi';
+import { GetUnitKerjaData } from '../../types/api/UnitKerjaAPI';
 import { Status } from '../../types/Common';
 import { callAPI } from '../../utils/Fetchers';
+import useCommonApi from '../shared/hooks/useCommonApi';
+import usePersonalData from '../shared/hooks/usePersonalData';
 import Loader from '../shared/Loader/Loader';
 import Pagination from '../shared/Pagination';
 
 export default function DaftarPetaJabatan() {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
-  const [throwError, setThrowError] = React.useState<string>();
-  const [loaded, setLoaded] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const userData = usePersonalData();
   const [update, setUpdate] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [selected, setSelected] = React.useState({ keterisian: 0, selisih: 0, id: 0 });
@@ -24,37 +26,27 @@ export default function DaftarPetaJabatan() {
     formState: { errors },
   } = useForm<PostKebutuhanPetaReq>();
 
-  const [dataTable, setDataTable] = React.useState<PetaData>();
-
-  const [filterState, setFilterState] = React.useState<GetPetaReq>({
-    page: 1,
-    per_page: 20,
-    is_dikti: 1,
-  });
-
   React.useEffect(() => {
-    refreshDataTable(filterState);
     reset({
       jumlah: undefined,
     });
   }, [update]);
 
-  const refreshDataTable = (apiReq: GetPetaReq) => {
-    setLoaded(false);
-    callAPI<GetPetaReq | null, GetPetaRes>(PetaAPI.GET_PETA, apiReq, {
-      method: 'GET',
-    }).then(res => {
-      if (res.status === 200 && res.data && res.data.status === Status.OK) {
-        const apiRes = res.data.data;
-        if (Object.keys(apiRes).length) {
-          setDataTable(apiRes);
-          setLoaded(true);
-        } else {
-          setThrowError('Data not found');
-        }
-      }
-    });
-  };
+  const [filterState, setFilterState] = React.useState<GetPetaReq>({
+    page: 1,
+    per_page: 20,
+    is_dikti: 1,
+    unit_kerja_id: userData?.unit_kerja_id,
+  });
+
+  const { data: dataTable, isValidating } = useCommonApi<GetPetaReq, PetaData>(PetaAPI.GET_PETA, filterState, {
+    method: 'GET',
+  });
+  const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
+    UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
+    null,
+    { method: 'GET' }
+  );
 
   const changeFilterState = (inputState: Partial<GetPetaReq>) => {
     const pageAffected = Object.keys(inputState).includes('page');
@@ -67,16 +59,11 @@ export default function DaftarPetaJabatan() {
       newState.page = 1;
     }
 
-    setFilterState(newState);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    timeoutRef.current = setTimeout(() => refreshDataTable(newState), pageAffected ? 0 : 800);
+    timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
-
-  if (throwError) {
-    throw throwError;
-  }
 
   const Modal = () => {
     return (
@@ -200,7 +187,7 @@ export default function DaftarPetaJabatan() {
   const submitHandler = async (formData: PostKebutuhanPetaReq) => {
     setLoading(true);
     const updateKebutuhan = {
-      // unit_kerja_id: 0,
+      unit_kerja_id: 0,
       jabatan_id: +formData.jabatan_id,
       jumlah: +formData.jumlah,
     };
@@ -241,9 +228,30 @@ export default function DaftarPetaJabatan() {
             />
           </div>
         </div>
+        <div className="w-[202px] pl-5">
+          <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
+          <select
+            className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+            onChange={e => {
+              changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
+            }}
+            disabled={!!userData?.unit_kerja_id}
+          >
+            <option value="">Semua</option>
+            {(unitKerjaList || []).map((item, index) => (
+              <option
+                selected={userData?.unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                key={`options-${index}`}
+                value={item?.unit_kerja_id}
+              >
+                {item?.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      {!loaded ? (
+      {isValidating ? (
         <div className="relative h-[150px] w-full divide-y divide-gray-200">
           <Loader />
         </div>
@@ -310,7 +318,7 @@ export default function DaftarPetaJabatan() {
                   <td
                     className="cursor-pointer px-6 text-xs font-medium text-indigo-800"
                     onClick={() =>
-                      (window.location.href = `/kepegawaian/daftar-jabatan?id=${data.id}&name=${data.jabatan}`)
+                      (window.location.href = `/kepegawaian/daftar-jabatan?id=${data.id}&name=${data.jabatan}&unit=${userData?.unit_kerja_id}`)
                     }
                   >
                     {data.jabatan}

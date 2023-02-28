@@ -25,6 +25,7 @@ export interface GetPegawaiListData {
     nip: string;
     name: string;
     unit_kerja: string;
+    unit_kerja_id: number;
     golongan: string;
     tipe_jabatan: string;
     jabatan: string;

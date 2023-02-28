@@ -5035,6 +5035,11 @@ tar@^6.1.11:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
+tawkto-react@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/tawkto-react/-/tawkto-react-3.0.1.tgz#e9436d5d9adc09190c1bc52d2d42cfd20d899671"
+  integrity sha512-iuv3LgT8nNVPuqONgzQnuJkjwGNjMvkXx1Tkb3I6+3LEIyX7rahAXHSkpVc80BvPG6FAK0FW/77dDVfc2idilQ==
+
 text-hex@1.0.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/text-hex/-/text-hex-1.0.0.tgz#69dc9c1b17446ee79a92bf5b884bb4b9127506f5"

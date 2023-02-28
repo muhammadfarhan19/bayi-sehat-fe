@@ -1,4 +1,5 @@
 import { ExclamationCircleIcon, EyeIcon, EyeOffIcon, InformationCircleIcon } from '@heroicons/react/outline';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -9,6 +10,7 @@ import { Status } from '../types/Common';
 import { getCookie, setCookie } from '../utils/CookieHandler';
 import { callAPI } from '../utils/Fetchers';
 import { CircleProgress } from './shared/CircleProgress';
+import useTawkChat from './shared/hooks/useTawkChat';
 
 export default function LoginPage() {
   const [passwordShown, setPasswordShown] = React.useState(false);
@@ -44,6 +46,12 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  const { handleShownChat } = useTawkChat();
+  const { pathname } = useRouter();
+  React.useEffect(() => {
+    if (pathname === '/login') handleShownChat();
+  }, [pathname]);
 
   return (
     <>

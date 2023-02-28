@@ -21,7 +21,7 @@ function DetailJabatan() {
 
   return (
     <>
-      <a href="/kepegawaian/daftar-jabatan" className="flex flex-row items-center gap-x-2 py-6 px-6">
+      <a href="/kepegawaian/peta-jabatan" className="flex flex-row items-center gap-x-2 py-6 px-6">
         <ChevronLeftIcon className="h-8 w-8" />
         <div>Kembali</div>
       </a>

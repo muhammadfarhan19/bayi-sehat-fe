@@ -25,11 +25,13 @@ export interface GetPetaReq {
   per_page: number;
   nama_jabatan?: string;
   is_dikti?: number;
+  unit_kerja_id?: number;
 }
 
 export interface PostKebutuhanPetaReq {
   jabatan_id: number;
   jumlah: number;
+  unit_kerja_id: number;
 }
 
 export type PostKebutuhanPetaRes =
