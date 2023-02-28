@@ -1,7 +1,14 @@
 import Cookies from 'js-cookie';
 import config from './Config';
 
-type CookieName = 'token' | 'refreshtoken' | 'lastrefresh' | 'rememberme';
+type CookieName =
+  | 'token'
+  | 'refreshtoken'
+  | 'lastrefresh'
+  | 'rememberme'
+  | 'twk_idm_key'
+  | 'TawkConnectionTime'
+  | 'twk_uuid_63ec8bf8474251287913675b';
 type CookieOption = Partial<{
   expires: number;
   path: string;

@@ -1,12 +1,14 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
-import { CutiAPI } from '../../../constants/APIUrls';
+import { CutiAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
 import { GetCutiListParams, GetCutiListRes } from '../../../types/api/CutiAPI';
 import { GetKehadiranList } from '../../../types/api/KlaimKehadiranAPI';
+import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
 import { formatDate } from '../../../utils/DateUtil';
 import FileLoader from '../../shared/FileLoader';
 import useCommonApi from '../../shared/hooks/useCommonApi';
+import usePersonalData from '../../shared/hooks/usePersonalData';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
@@ -19,21 +21,25 @@ type ListKlaimProps = {
 
 function KlaimList(props: ListKlaimProps) {
   const { onShowDetail } = props;
+  const personalData = usePersonalData();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
+
   const [filterState, setFilterState] = React.useState<GetKehadiranList>({
     page: 1,
     per_page: 20,
+    unit_kerja_id: personalData?.unit_kerja_id,
   });
 
   const {
     data: getKlaimKehadiran,
     isValidating,
     mutate,
-  } = useCommonApi<GetCutiListParams, GetCutiListRes>(
-    CutiAPI.GET_CUTI_LIST,
-    filterState,
-    { method: 'GET' },
-    { revalidateOnMount: true }
+  } = useCommonApi<GetCutiListParams, GetCutiListRes>(CutiAPI.GET_CUTI_LIST, filterState, { method: 'GET' });
+
+  const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
+    UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
+    null,
+    { method: 'GET' }
   );
 
   const search = async <T extends keyof typeof filterState>(type: T, value: typeof filterState[T]) => {
@@ -94,6 +100,27 @@ function KlaimList(props: ListKlaimProps) {
       </div>
 
       <div className="flex w-full flex-row gap-x-[16px]">
+        <div className="w-[202px]">
+          <p className="pb-1 pl-1 text-sm font-medium text-gray-700">Unit Kerja</p>
+          <select
+            className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+            onChange={e => {
+              changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
+            }}
+            disabled={!!personalData?.unit_kerja_id}
+          >
+            <option value="">Semua</option>
+            {(unitKerjaList || []).map((item, index) => (
+              <option
+                selected={personalData?.unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                key={`options-${index}`}
+                value={item?.unit_kerja_id}
+              >
+                {item?.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="w-[202px] pb-2">
           <p className="text-sm font-medium text-gray-700">Dari Tanggal</p>
           <input

@@ -1,5 +1,5 @@
 module.exports = {
-  apiHost: 'https://intradikti.kemdikbud.go.id/api',
+  apiHost: 'https://devintra.dikti.go.id/api',
   environment: 'development',
   cookieSecure: false,
   apiTimeoutMs: 15000, // 15 seconds

@@ -1,7 +1,9 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
 
 import { UserNavigationList } from '../../../constants/NavigationList';
 import { useAuthorizedMenuContext } from '../context/AuthorizedMenuContext';
+import useTawkChat from '../hooks/useTawkChat';
 import HeaderDesktop from './HeaderDesktop';
 import MobileNavigation from './MobileNavigation';
 import { Navigation } from './NavigationProps';
@@ -15,6 +17,8 @@ const user = {
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false);
   const navigationContext = useAuthorizedMenuContext();
+  const { pathname } = useRouter();
+  const { handleShownChat } = useTawkChat();
   const navigation = navigationContext.map<Navigation>(each => {
     return {
       current: each.current,
@@ -23,6 +27,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       name: each.name,
     };
   });
+
+  React.useLayoutEffect(() => {
+    handleShownChat();
+  }, [pathname]);
 
   return (
     <>
