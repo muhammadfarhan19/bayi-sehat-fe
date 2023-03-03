@@ -159,7 +159,7 @@ export default function DaftarPetaJabatan() {
                             render={({ field: { onChange, value } }) => (
                               <AutoComplete
                                 onChange={value => onChange(value.value)}
-                                label={'Jenjang'}
+                                label={'Unit Kerja'}
                                 defaultValue={
                                   value
                                     ? composeListDefaultValue(unitKerjaList!, 'unit_kerja_id', 'name', value)
