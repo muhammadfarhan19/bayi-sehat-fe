@@ -1,14 +1,16 @@
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import { PetaAPI, UnitKerjaAPI } from '../../constants/APIUrls';
 import { GetPetaReq, PetaData, PostKebutuhanPetaReq, PostKebutuhanPetaRes } from '../../types/api/PetaApi';
 import { GetUnitKerjaData } from '../../types/api/UnitKerjaAPI';
 import { Status } from '../../types/Common';
+import { composeListDefaultValue } from '../../utils/Components';
 import { callAPI } from '../../utils/Fetchers';
 import useCommonApi from '../shared/hooks/useCommonApi';
 import usePersonalData from '../shared/hooks/usePersonalData';
+import AutoComplete from '../shared/Input/ComboBox';
 import Loader from '../shared/Loader/Loader';
 import Pagination from '../shared/Pagination';
 
@@ -23,6 +25,7 @@ export default function DaftarPetaJabatan() {
     handleSubmit,
     register,
     reset,
+    control,
     formState: { errors },
   } = useForm<PostKebutuhanPetaReq>();
 
@@ -39,7 +42,11 @@ export default function DaftarPetaJabatan() {
     unit_kerja_id: userData?.unit_kerja_id,
   });
 
-  const { data: dataTable, isValidating } = useCommonApi<GetPetaReq, PetaData>(PetaAPI.GET_PETA, filterState, {
+  const {
+    data: dataTable,
+    isValidating,
+    mutate,
+  } = useCommonApi<GetPetaReq, PetaData>(PetaAPI.GET_PETA, filterState, {
     method: 'GET',
   });
   const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
@@ -143,6 +150,33 @@ export default function DaftarPetaJabatan() {
                           </div>
                         </div>
                       </div>
+                      <div className="mt-5 sm:col-span-6">
+                        <div className="mt-1 sm:col-span-2 sm:mt-0">
+                          <Controller
+                            control={control}
+                            rules={{ required: 'Mohon pilih jenjang yang ingin disimpan.' }}
+                            name="unit_kerja_id"
+                            render={({ field: { onChange, value } }) => (
+                              <AutoComplete
+                                onChange={value => onChange(value.value)}
+                                label={'Jenjang'}
+                                defaultValue={
+                                  value
+                                    ? composeListDefaultValue(unitKerjaList!, 'unit_kerja_id', 'name', value)
+                                    : undefined
+                                }
+                                options={(unitKerjaList || [])?.map(each => ({
+                                  text: each.name,
+                                  value: String(each.unit_kerja_id),
+                                }))}
+                              />
+                            )}
+                          />
+                          {errors.unit_kerja_id && (
+                            <p className="mt-1 text-xs text-red-500">{errors.unit_kerja_id.message}</p>
+                          )}
+                        </div>
+                      </div>
                       <div className="mt-2">
                         <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4">
                           <div className="sm:col-span-3">
@@ -187,7 +221,7 @@ export default function DaftarPetaJabatan() {
   const submitHandler = async (formData: PostKebutuhanPetaReq) => {
     setLoading(true);
     const updateKebutuhan = {
-      unit_kerja_id: 0,
+      unit_kerja_id: Number(formData?.unit_kerja_id),
       jabatan_id: +formData.jabatan_id,
       jumlah: +formData.jumlah,
     };
@@ -203,6 +237,7 @@ export default function DaftarPetaJabatan() {
     );
 
     if (kebutuhan.status === 200 && kebutuhan.data?.status === Status.OK) {
+      mutate();
       setLoading(false);
       setOpen(false);
       setUpdate(!update);
