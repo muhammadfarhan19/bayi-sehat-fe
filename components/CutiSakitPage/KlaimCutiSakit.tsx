@@ -122,6 +122,7 @@ function KlaimCutiSakit() {
         pegawai_id: Number(personalPegawaiData?.pegawai_id),
         tanggal_klaim: formData?.tanggal_klaim,
         tanggal_selesai: formData?.tanggal_selesai,
+        unit_kerja_id: Number(personalPegawaiData?.unit_kerja_id),
         jenis_pengajuan: Number(formData?.jenis_pengajuan),
         catatan: formData?.catatan ?? '',
         files: [

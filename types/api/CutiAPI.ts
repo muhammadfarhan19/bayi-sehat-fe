@@ -4,6 +4,7 @@ export interface PostCutiReq {
   jenis_pengajuan: number;
   tanggal_selesai: string;
   catatan: string;
+  unit_kerja_id: number;
   files: [
     {
       document_uuid: string;
