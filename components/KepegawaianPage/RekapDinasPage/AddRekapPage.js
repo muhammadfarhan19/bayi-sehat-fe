@@ -17,6 +17,7 @@ import AutoCompletePegawai from '../../shared/Input/AutoCompletePegawai';
 import AutoComplete from '../../shared/Input/ComboBox';
 import UploadWrapper from '../../shared/Input/UploadWrapper';
 import Loader from '../../shared/Loader/Loader';
+import AutoCompleteCustom from '../DataKepegawaian/DetailPegawai/RiwayatKGB/Shared/CustomComboBox';
 import ListDeleted from './ListDeleted';
 import ListPegawai from './ListPegawai';
 import ListPegawaiEksternal from './ListPegawaiEksternal';
@@ -741,7 +742,7 @@ function AddRekapPage(props) {
                     name="lokasi"
                     rules={{ required: 'Silahkan masukan lokasi dinas.' }}
                     render={({ field: { onChange } }) => (
-                      <AutoComplete
+                      <AutoCompleteCustom
                         onChange={input => {
                           onChange(input?.value);
                         }}
