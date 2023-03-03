@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { classNames } from '../../../utils/Components';
+import config from '../../../utils/Config';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import MasterPns from './MasterPNS/MasterPns';
 import MasterPpnpn from './MasterPPNPN/MasterPpnpn';
@@ -14,7 +15,7 @@ export default function DataKepegawaian() {
 
   const [selected, setSelected] = React.useState('Master PNS');
 
-  if (!personalPegawai?.unit_kerja_id) {
+  if (config.environment === 'production' && !personalPegawai?.unit_kerja_id) {
     return <></>;
   }
 
