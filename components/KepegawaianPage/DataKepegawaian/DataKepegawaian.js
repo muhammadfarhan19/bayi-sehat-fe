@@ -62,9 +62,9 @@ export default function DataKepegawaian() {
       </div>
       <div>
         {selected === 'Master PNS' ? (
-          <MasterPns unit_kerja_id={personalPegawai?.unit_kerja_id} />
+          <MasterPns unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
         ) : (
-          <MasterPpnpn unit_kerja_id={personalPegawai?.unit_kerja_id} />
+          <MasterPpnpn unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
         )}
       </div>
     </div>

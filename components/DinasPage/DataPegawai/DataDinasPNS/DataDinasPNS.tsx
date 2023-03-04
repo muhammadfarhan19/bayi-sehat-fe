@@ -6,6 +6,7 @@ import { KepegawaianAPI, MasterAPI, UnitKerjaAPI } from '../../../../constants/A
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../../types/api/KepegawaianAPI';
 import { JenisJabatanListData } from '../../../../types/api/MasterAPI';
 import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
+import useAllowSuperAdmin from '../../../shared/hooks/useAllowSuperAdmin';
 // import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
@@ -26,7 +27,7 @@ export function DataDinasPNS(props: UnitKerja) {
     status_cpns: [1, 3],
     unit_kerja_id: unit_kerja_id,
   });
-
+  const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
     KepegawaianAPI.GET_PEGAWAI_LIST,
     filter,
@@ -97,7 +98,7 @@ export function DataDinasPNS(props: UnitKerja) {
                 onChange={e => {
                   changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
                 }}
-                disabled={!!unit_kerja_id}
+                disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
               >
                 <option value="">Semua</option>
                 {(unitKerjaList || []).map((item, index) => (

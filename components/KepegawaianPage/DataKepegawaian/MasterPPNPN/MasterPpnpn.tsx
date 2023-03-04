@@ -5,6 +5,7 @@ import React from 'react';
 import { KepegawaianAPI, UnitKerjaAPI } from '../../../../constants/APIUrls';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../../types/api/KepegawaianAPI';
 import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
+import useAllowSuperAdmin from '../../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
@@ -20,7 +21,7 @@ export default function MasterPpnpn(props: UnitKerja) {
   const toggleAdvancedFilter = () => {
     setshowAdvancedFilter(!showAdvancedFilter);
   };
-
+  const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
     per_page: 20,
@@ -74,7 +75,7 @@ export default function MasterPpnpn(props: UnitKerja) {
               <select
                 className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                 onChange={e => search('unit_kerja_id', e.target.value)}
-                disabled={!!unit_kerja_id}
+                disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
               >
                 <option value="">Semua</option>
                 {(unitKerjaList || []).map((item, index) => (
