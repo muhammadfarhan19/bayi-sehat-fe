@@ -65,7 +65,7 @@ function KlaimCutiSakit() {
   });
 
   const personalPegawaiData = usePersonalData();
-
+  console.log(personalPegawaiData?.unit_kerja_id);
   const { data: kuotaPengajuanCuti, mutate: mutationQuota } = useCommonApi<GetCutiReq, GetQuotaPengajuanRes>(
     CutiAPI.GET_CUTI_QUOTA,
     { pegawai_id: Number(personalPegawaiData?.pegawai_id) },
@@ -407,7 +407,7 @@ function KlaimCutiSakit() {
                         ? formatDate(new Date(data?.tanggal_selesai), 'dd MMMM yyyy')
                         : '-';
 
-                      const statType = PengajuanType.find(item => item?.value === data?.type);
+                      const statType = PengajuanTypeCuti.find(item => item?.value === data?.type);
                       return (
                         <tr key={data?.id} className={'bg-white hover:bg-gray-100'}>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
