@@ -4,6 +4,7 @@ import React from 'react';
 import { KepegawaianAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../types/api/KepegawaianAPI';
 import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
+import useAllowSuperAdmin from '../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
@@ -21,6 +22,7 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
     status_cpns: [1, 3],
     unit_kerja_id: unit_kerja_id,
   });
+  const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
 
   const [pegawaiId, setPegawaiId] = React.useState<number>(0);
 
@@ -87,7 +89,7 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
               onChange={e => {
                 changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
               }}
-              disabled={!!unit_kerja_id}
+              disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
             >
               <option value="">Semua</option>
               {(unitKerjaList || []).map((item, index) => (

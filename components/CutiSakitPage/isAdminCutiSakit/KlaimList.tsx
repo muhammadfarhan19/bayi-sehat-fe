@@ -7,6 +7,7 @@ import { GetKehadiranList } from '../../../types/api/KlaimKehadiranAPI';
 import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
 import { formatDate } from '../../../utils/DateUtil';
 import FileLoader from '../../shared/FileLoader';
+import useAllowSuperAdmin from '../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import AutoComplete from '../../shared/Input/ComboBox';
@@ -29,6 +30,7 @@ function KlaimList(props: ListKlaimProps) {
     per_page: 20,
     unit_kerja_id: personalData?.unit_kerja_id,
   });
+  const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
 
   const {
     data: getKlaimKehadiran,
@@ -107,7 +109,7 @@ function KlaimList(props: ListKlaimProps) {
             onChange={e => {
               changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
             }}
-            disabled={!!personalData?.unit_kerja_id}
+            disabled={!!personalData?.unit_kerja_id && !isAllowSuperAdminAccessFilter}
           >
             <option value="">Semua</option>
             {(unitKerjaList || []).map((item, index) => (

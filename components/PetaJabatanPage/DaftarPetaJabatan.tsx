@@ -8,6 +8,7 @@ import { GetUnitKerjaData } from '../../types/api/UnitKerjaAPI';
 import { Status } from '../../types/Common';
 import { composeListDefaultValue } from '../../utils/Components';
 import { callAPI } from '../../utils/Fetchers';
+import useAllowSuperAdmin from '../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../shared/hooks/useCommonApi';
 import usePersonalData from '../shared/hooks/usePersonalData';
 import AutoComplete from '../shared/Input/ComboBox';
@@ -28,6 +29,8 @@ export default function DaftarPetaJabatan() {
     control,
     formState: { errors },
   } = useForm<PostKebutuhanPetaReq>();
+
+  const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
 
   React.useEffect(() => {
     reset({
@@ -263,14 +266,14 @@ export default function DaftarPetaJabatan() {
             />
           </div>
         </div>
-        <div className="w-[202px] pl-5">
+        <div className="w-[202px]">
           <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
           <select
             className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
             onChange={e => {
               changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
             }}
-            disabled={!!userData?.unit_kerja_id}
+            disabled={!!userData?.unit_kerja_id && !isAllowSuperAdminAccessFilter}
           >
             <option value="">Semua</option>
             {(unitKerjaList || []).map((item, index) => (

@@ -4,6 +4,7 @@ import { RekapDinasAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
 import { GetRekapReq, RekapData } from '../../../types/api/RekapDinasAPI';
 import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
 import SummaryDinasCalendar from '../../DinasPage/DataPegawai/SummaryDinasCalendar';
+import useAllowSuperAdmin from '../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
@@ -23,7 +24,7 @@ function RekapDinasPage(props: UnitKerja) {
     per_page: 20,
     unit_kerja_id: unit_kerja_id,
   });
-
+  const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
   const {
     data: dataTable,
     isValidating,
@@ -89,7 +90,7 @@ function RekapDinasPage(props: UnitKerja) {
                 onChange={e => {
                   changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
                 }}
-                disabled={!!unit_kerja_id}
+                disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
               >
                 <option value="">Semua</option>
                 {(unitKerjaList || []).map((item, index) => (
