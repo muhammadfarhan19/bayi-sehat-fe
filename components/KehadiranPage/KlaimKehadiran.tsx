@@ -10,8 +10,8 @@ import { SnackbarType } from '../../reducer/CommonReducer';
 import {
   GetKehadiranDataList,
   GetKehadiranList,
-  GetMaxPengajuanDataList,
   GetMaxPengajuanDataReq,
+  GetPengajuanInfo,
   PostKehadiranData,
   PostKehadiranReqData,
 } from '../../types/api/KlaimKehadiranAPI';
@@ -76,19 +76,33 @@ function KlaimKehadiran() {
     per_page: 20,
   });
 
-  const { data: dataList } = useCommonApi<GetMaxPengajuanDataReq, GetMaxPengajuanDataList>(
-    KlaimKehadiranList.GET_KUOTA_KEHADIRAN_SUBMIT,
-    { pegawai_id: Number(personalPegawaiData?.pegawai_id) },
-    { method: 'GET' },
-    { revalidateOnMount: true, skipCall: !personalPegawaiData?.pegawai_id }
-  );
-
   const { data: getKlaimKehadiran } = useCommonApi<GetKehadiranList, GetKehadiranDataList>(
     KlaimKehadiranList.GET_KLAIM_KEHADIRAN_LIST,
     { ...filterState, user_id: personalPegawaiData?.user_id },
     { method: 'GET' },
     { revalidateOnMount: true, skipCall: !personalPegawaiData?.user_id }
   );
+
+  const { data: klaimInfo } = useCommonApi<GetMaxPengajuanDataReq, GetPengajuanInfo>(
+    KlaimKehadiranList.GET_KLAIM_KEHADIRAN_INFO,
+    { pegawai_id: Number(personalPegawaiData?.pegawai_id) },
+    { method: 'GET' }
+  );
+
+  const TelatMasuk = {
+    TELAT_MASUK_OPTIONS: klaimInfo ? klaimInfo?.jenis_klaim?.[0]?.label : 'Telat Masuk',
+    TELAT_MASUK_VALUE: klaimInfo ? klaimInfo?.jenis_klaim?.[0]?.name : 'TELAT_MASUK',
+  };
+
+  const PulangCepat = {
+    PULANG_CEPAT_OPTIONS: klaimInfo ? klaimInfo?.jenis_klaim?.[1]?.label : 'Pulang Cepat',
+    PULANG_CEPAT_VALUE: klaimInfo ? klaimInfo?.jenis_klaim?.[1]?.name : 'PULANG_CEPAT',
+  };
+
+  const TidakAbsen = {
+    TIDAK_ABSEN_OPTIONS: klaimInfo ? klaimInfo?.jenis_klaim?.[2]?.label : 'Tidak Absen',
+    TIDAK_ABSEN_VALUE: klaimInfo ? klaimInfo?.jenis_klaim?.[2]?.name : 'TIDAK_ABSEN',
+  };
 
   const submitHandler = async (formData: FormState) => {
     const resSubmit = await callAPI<PostKehadiranData, PostKehadiranReqData>(
@@ -184,16 +198,18 @@ function KlaimKehadiran() {
         <div className="overflow-hidden rounded-lg bg-white shadow">
           <div className="p-6">
             <h3 className="text-xl font-medium leading-6 text-gray-900">Kuota Klaim</h3>
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="overflow-hidden rounded-lg bg-gray-100 px-4 py-5 shadow sm:p-6">
-                <dt className="truncate text-sm text-gray-500">Kuota klaim per bulan</dt>
-                <dd className="mt-1 text-3xl font-semibold text-indigo-700">{dataList?.max_pengajuan} Hari</dd>
-              </div>
-
-              <div className="overflow-hidden rounded-lg bg-gray-100 px-4 py-5 shadow sm:p-6">
-                <dt className="truncate text-sm text-gray-500">Sisa kuota klaim bulan ini</dt>
-                <dd className="mt-1 text-3xl font-semibold text-indigo-700">{dataList?.sisa_pengajuan} Hari</dd>
-              </div>
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+              {(klaimInfo?.jenis_klaim || []).map((data, index) => {
+                const quotaData = !isNaN(data?.kuota) ? Number(data?.kuota) : 0;
+                const usedQuotaData = !isNaN(data?.used_kuota) ? Number(data?.used_kuota) : 0;
+                const substractData = quotaData - usedQuotaData;
+                return (
+                  <div key={index} className="overflow-hidden rounded-lg bg-gray-100 px-4 py-5 shadow sm:p-6">
+                    <dt className="truncate text-sm text-gray-500">Sisa Kuota Klaim {data?.label}</dt>
+                    <dd className="mt-1 text-3xl font-semibold text-indigo-700">{substractData} Hari</dd>
+                  </div>
+                );
+              })}
             </dl>
           </div>
         </div>
@@ -229,10 +245,11 @@ function KlaimKehadiran() {
             validation={{ ...register('jenis_pengajuan', { required: 'Silahkan Pilih Jenis Pengajuan' }) }}
             label="Jenis Pengajuan"
             defaultOption="Silahkan Pilih"
-            firstValue={'Jam Kerja Masuk'}
-            secondValue={'Jam Kerja Pulang'}
-            firstOption="Jam Kerja Masuk"
-            secondOption="Jam Kerja Pulang"
+            firstValue={TelatMasuk.TELAT_MASUK_VALUE}
+            secondValue={PulangCepat.PULANG_CEPAT_VALUE}
+            firstOption={TelatMasuk.TELAT_MASUK_OPTIONS}
+            secondOption={PulangCepat.PULANG_CEPAT_OPTIONS}
+            moreOptions={<option value={TidakAbsen.TIDAK_ABSEN_VALUE}>{TidakAbsen.TIDAK_ABSEN_OPTIONS}</option>}
             formVerification="jenis_pengajuan"
           />
           <InputLabelled

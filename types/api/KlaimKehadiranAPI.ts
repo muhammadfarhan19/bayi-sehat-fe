@@ -75,3 +75,16 @@ export interface PostUpdatePengajuanReq {
   jenis_pengajuan: string;
   tanggal_klaim: string;
 }
+
+export interface GetPengajuanInfo {
+  pegawai_id: number;
+  unit_kerja_id: number;
+  jenis_klaim: JenisPengajuanData[];
+}
+
+export interface JenisPengajuanData {
+  name: string;
+  label: string;
+  kuota: number;
+  used_kuota: number;
+}
