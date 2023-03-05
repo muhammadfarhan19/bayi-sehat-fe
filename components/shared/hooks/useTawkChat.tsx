@@ -9,7 +9,7 @@ function useTawkChat() {
   const handleShownChat = () => {
     setTimeout(() => {
       if (personalData) {
-        return tawk.onLoad(
+        return tawk?.onLoad(
           tawk?.setAttributes(
             {
               name: `${personalData?.nama}`,
@@ -21,7 +21,7 @@ function useTawkChat() {
           )
         );
       }
-      tawk.onLoad(
+      tawk?.onLoad(
         tawk?.setAttributes(
           {
             name: 'Guest',
