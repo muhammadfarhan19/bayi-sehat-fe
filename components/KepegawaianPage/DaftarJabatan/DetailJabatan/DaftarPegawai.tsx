@@ -12,7 +12,7 @@ import Pagination from '../../../shared/Pagination';
 const PER_PAGE = 20;
 
 function DaftarPegawai() {
-  const { name, unit } = getQueryString<{ id: string; name: string; unit: string }>();
+  const { name, unit, id } = getQueryString<{ id: number; name: string; unit: string }>();
 
   const [throwError, setThrowError] = React.useState<string>();
   const [loaded, setLoaded] = React.useState(false);
@@ -40,6 +40,7 @@ function DaftarPegawai() {
         page: pageNumber,
         status_cpns: [1, 3],
         unit_kerja_id: unit,
+        jabatan_id: id,
       },
       {
         method: 'GET',

@@ -4,6 +4,7 @@ export interface GetPegawaiListReq {
   gender?: number;
   jabatan?: string;
   jenjang_id?: number;
+  jabatan_id?: number;
   nama?: string;
   range_umur?: string;
   status_cpns: number[];
