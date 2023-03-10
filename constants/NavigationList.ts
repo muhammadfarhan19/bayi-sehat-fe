@@ -22,10 +22,12 @@ export const NavigationId = {
   SHIFT: 122,
   LIBUR_RAMADHAN: 123,
   ROLE_USER: 124,
+  PETA_ORGANISASI: 170,
   PARENT_SIDE_MENU_DINAS: 153,
   PARENT_SIDE_MENU_PEGAWAI: 154,
   PARENT_SIDE_MENU_KEHADIRAN: 155,
   PARENT_SIDE_MENU_MASTER: 156,
+  PARENT_SIDE_STRUKTUR_ORGANISASI: 168,
 };
 
 export const UserNavigationList: Navigation[] = [
@@ -185,6 +187,17 @@ export const NavigationList: Navigation[] = [
             id: NavigationId.SHIFT,
             name: 'Shift',
             href: '/kepegawaian/shift',
+          },
+        ],
+      },
+      {
+        id: NavigationId.PARENT_SIDE_STRUKTUR_ORGANISASI,
+        name: 'Struktur Organisasi',
+        childMenu: [
+          {
+            id: NavigationId.PETA_ORGANISASI,
+            name: 'Peta Organisasi',
+            href: '/struktur-organisasi/peta-organisasi',
           },
         ],
       },
