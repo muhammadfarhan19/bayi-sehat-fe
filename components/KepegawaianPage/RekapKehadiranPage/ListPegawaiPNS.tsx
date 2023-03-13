@@ -74,7 +74,7 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
           </div>
 
           <div className="mb-5 flex flex-row items-center px-4 pt-3">
-            <h3 className="text-xl font-medium leading-6 text-gray-900">Rekap Kehadiran Pegawai</h3>
+            <h3 className="text-xl font-medium leading-6 text-gray-900">Detail Daftar Transaksi</h3>
             <div className="ml-auto flex">
               <input
                 type="text"
@@ -171,7 +171,7 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
                                   setPegawaiId(data?.pegawai_id);
                                 }}
                                 type="button"
-                                className="inline-flex w-full items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
+                                className="inline-flex w-20 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
                               >
                                 Rekap
                               </button>

@@ -72,7 +72,7 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
             </span>
           </div>
           <div className="mb-5 flex flex-row items-center px-4 pt-5">
-            <h3 className="text-xl font-medium leading-6 text-gray-900">Rekap Kehadiran Pegawai</h3>
+            <h3 className="text-xl font-medium leading-6 text-gray-900">Detail Daftar Transaksi</h3>
             <div className="ml-auto flex">
               <input
                 type="text"
@@ -134,13 +134,13 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                           >
-                            Nama
+                            NIK
                           </th>
                           <th
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                           >
-                            NIK
+                            Nama
                           </th>
                           <th
                             scope="col"
@@ -152,7 +152,7 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                           >
-                            Jabatan
+                            Aksi
                           </th>
                         </tr>
                       </thead>
@@ -167,17 +167,16 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
                             <td className="px-6 py-4 text-xs font-medium text-gray-900">
                               {filterPPNPN.per_page * (filterPPNPN.page - 1) + (dataIdx + 1)}
                             </td>
-                            <td className="px-6 py-4 text-xs font-medium text-indigo-800">{data?.name}</td>
                             <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
+                            <td className="px-6 py-4 text-xs font-medium text-indigo-800">{data?.name}</td>
                             <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
-                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
                             <td className="text-\xs px-6 py-4 font-medium">
                               <button
                                 onClick={() => {
                                   setPegawaiId(data?.pegawai_id);
                                 }}
                                 type="button"
-                                className="inline-flex w-full items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
+                                className="inline-flex w-20 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
                               >
                                 Rekap
                               </button>
