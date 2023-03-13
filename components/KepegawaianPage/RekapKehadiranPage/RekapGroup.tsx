@@ -111,7 +111,7 @@ function RekapGroup(props: RekapGroupProps) {
                               }}
                               disabled={false}
                               type="button"
-                              className={`inline-flex w-16 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-1 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200`}
+                              className={`inline-flex w-16 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-1 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-green-200`}
                             >
                               Detail
                             </button>
@@ -121,9 +121,10 @@ function RekapGroup(props: RekapGroupProps) {
                               onClick={() => {
                                 setSelectedDate(dates[index]?.start);
                               }}
-                              disabled={false}
+                              //TODO - WIRING API SYNC
+                              disabled={true}
                               type="button"
-                              className={`inline-flex w-16 items-center justify-center rounded border border-transparent bg-green-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200 disabled:text-gray-200`}
+                              className={`inline-flex w-16 items-center justify-center rounded border border-transparent bg-green-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200 disabled:text-white`}
                             >
                               Sync
                             </button>
