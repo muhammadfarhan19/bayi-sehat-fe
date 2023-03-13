@@ -29,7 +29,7 @@ function RekapGroup(props: RekapGroupProps) {
       const formatMonthCode = format(data.start, 'MMM', { locale: id });
       const formatDateStart = format(data.start, 'yyyy-MM-dd');
       const formatDateEnd = format(data.end, 'yyyy-MM-dd');
-      const uniqueCode = 23 + formatMonthCode;
+      const uniqueCode = 'ID' + formatMonthCode + 'Dikti';
       return { formatMonth, formatDateStart, formatDateEnd, uniqueCode };
     });
   }, [dates]);
@@ -94,10 +94,14 @@ function RekapGroup(props: RekapGroupProps) {
                   </thead>
                   <tbody>
                     {(formattedDates || []).map((data, index) => {
+                      const uniqueNumbers = index + 28;
                       return (
                         <tr key={index} className={'bg-white hover:bg-gray-100'}>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-400">{data.uniqueCode}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-400">
+                            {data.uniqueCode}
+                            {uniqueNumbers}
+                          </td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.formatMonth}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.formatDateStart}</td>
                           <td className="px-6 py-4 text-xs font-medium text-blue-900">{data.formatDateEnd}</td>
