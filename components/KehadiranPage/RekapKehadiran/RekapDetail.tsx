@@ -4,7 +4,7 @@ import React from 'react';
 import { DinasPegawaiKalenderData } from '../../../types/api/KepegawaianAPI';
 import { formatStringDate, handleCheckTime, weekendText, weekendTextLocaleId } from '../../../utils/DateUtil';
 
-interface DateProps {
+export interface DateProps {
   start: Date;
   end: Date;
 }

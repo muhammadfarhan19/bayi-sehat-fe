@@ -1,4 +1,4 @@
-import { AdjustmentsIcon } from '@heroicons/react/outline';
+import { AdjustmentsIcon, ChevronLeftIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { KepegawaianAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
@@ -8,13 +8,16 @@ import useAllowSuperAdmin from '../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import { SelectedData } from './RekapGroup';
 import RekapKehadiranPNS from './RekapKehadiranPNS';
 
 interface UnitKerjaProps {
   unit_kerja_id: number;
+  onBack: () => void;
+  dateSelected: SelectedData;
 }
 function ListPegawaiPPNPN(props: UnitKerjaProps) {
-  const { unit_kerja_id } = props;
+  const { unit_kerja_id, dateSelected, onBack } = props;
 
   const [pegawaiId, setPegawaiId] = React.useState<number>(0);
   const inputTimeout = React.useRef<NodeJS.Timeout>();
@@ -58,10 +61,16 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
     <>
       {pegawaiId ? (
         <>
-          <RekapKehadiranPNS pegawai_id={pegawaiId} onBack={() => setPegawaiId(0)} />
+          <RekapKehadiranPNS dateSelected={dateSelected} pegawai_id={pegawaiId} onBack={() => setPegawaiId(0)} />
         </>
       ) : (
         <>
+          <div className="pl-5 pt-5">
+            <span onClick={onBack} className="flex cursor-pointer flex-row items-center gap-x-2">
+              <ChevronLeftIcon className="h-5 w-5" />
+              <div>Kembali</div>
+            </span>
+          </div>
           <div className="mb-5 flex flex-row items-center px-4 pt-5">
             <h3 className="text-xl font-medium leading-6 text-gray-900">Rekap Kehadiran Pegawai</h3>
             <div className="ml-auto flex">
