@@ -269,7 +269,7 @@ export default function DaftarPetaJabatan() {
         <div className="w-[202px]">
           <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
           <select
-            className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+            className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
             onChange={e => {
               changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
             }}
