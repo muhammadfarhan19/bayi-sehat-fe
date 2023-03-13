@@ -105,7 +105,7 @@ export default function DaftarPetaJabatan() {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <form onSubmit={handleSubmit(submitHandler)}>
-                <div className="relative inline-block transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle">
+                <div className="relative inline-block transform overflow-auto rounded-lg bg-white px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle">
                   <div>
                     <input
                       {...register('jabatan_id')}
@@ -157,7 +157,7 @@ export default function DaftarPetaJabatan() {
                         <div className="mt-1 sm:col-span-2 sm:mt-0">
                           <Controller
                             control={control}
-                            rules={{ required: 'Mohon pilih jenjang yang ingin disimpan.' }}
+                            rules={{ required: 'Mohon pilih Unit Kerja yang ingin disimpan.' }}
                             name="unit_kerja_id"
                             render={({ field: { onChange, value } }) => (
                               <AutoComplete
