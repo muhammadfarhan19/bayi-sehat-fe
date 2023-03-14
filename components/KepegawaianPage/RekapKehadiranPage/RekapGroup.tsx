@@ -4,6 +4,8 @@ import React from 'react';
 
 import { getFirstAndLastDaysOfYear } from '../../../utils/DateUtil';
 import DatePicker from '../../LogHarianPage/isPegawaiLog/Shared/DatePicker';
+import { CircleProgress } from '../../shared/CircleProgress';
+import useSyncKehadiran from '../../shared/hooks/useSyncKehadiran';
 
 export interface SelectedData {
   dateStarted: string;
@@ -16,6 +18,7 @@ interface RekapGroupProps {
 
 function RekapGroup(props: RekapGroupProps) {
   const { onSelectedDateDetail } = props;
+  const { isSyncLoading, handleSyncByDate } = useSyncKehadiran();
   const year = new Date().getFullYear();
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const dates = getFirstAndLastDaysOfYear(selectedDate?.getFullYear() ?? year);
@@ -95,6 +98,7 @@ function RekapGroup(props: RekapGroupProps) {
                   <tbody>
                     {(formattedDates || []).map((data, index) => {
                       const uniqueNumbers = index + 28;
+                      const isLoaderShown = isSyncLoading.onLoad && isSyncLoading.onSelected === index;
                       return (
                         <tr key={index} className={'bg-white hover:bg-gray-100'}>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
@@ -123,14 +127,15 @@ function RekapGroup(props: RekapGroupProps) {
                           <td className="cursor-pointer px-6 py-4 text-xs font-medium text-green-700">
                             <button
                               onClick={() => {
-                                setSelectedDate(dates[index]?.start);
+                                handleSyncByDate(data?.formatDateStart, data?.formatDateEnd, index);
                               }}
-                              //TODO - WIRING API SYNC
-                              disabled={true}
+                              disabled={isLoaderShown}
                               type="button"
-                              className={`inline-flex w-16 items-center justify-center rounded border border-transparent bg-green-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200 disabled:text-white`}
+                              className={`inline-flex w-16 items-center justify-center rounded border border-transparent bg-green-500 ${
+                                isLoaderShown && 'pl-6'
+                              } px-2.5 py-1 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200 disabled:text-white`}
                             >
-                              Sync
+                              {isLoaderShown ? <CircleProgress /> : 'Sync'}
                             </button>
                           </td>
                         </tr>
