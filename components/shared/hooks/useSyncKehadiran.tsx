@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../../../action/CommonAction';
 import { SyncKehadiranAPI } from '../../../constants/APIUrls';
 import { SnackbarType } from '../../../reducer/CommonReducer';
-import { SyncKehadiranRes } from '../../../types/api/SyncKehadiranAPI';
+import { SyncKehadiranReq, SyncKehadiranRes } from '../../../types/api/SyncKehadiranAPI';
 import { Status } from '../../../types/Common';
 import { callAPI } from '../../../utils/Fetchers';
 
@@ -26,10 +26,12 @@ function useSyncKehadiran() {
     }
 
     handleSetLoader(true, selectedIndex);
-    const queryParams = `?start_date=${startDate}&end_date=${endDate}`;
 
     try {
-      const syncRes = await callAPI<null, SyncKehadiranRes>(SyncKehadiranAPI.POST_SYNC + queryParams, null);
+      const syncRes = await callAPI<SyncKehadiranReq, SyncKehadiranRes>(SyncKehadiranAPI.POST_SYNC, {
+        start_date: startDate,
+        end_date: endDate,
+      });
       if (syncRes.status === 200 && syncRes.data?.status === Status.OK) {
         dispatch(
           setSnackbar({
@@ -60,16 +62,13 @@ function useSyncKehadiran() {
   }
 
   async function handleSyncPegawai(startDate: string, endDate: string, nip: string, selectedIndex: number) {
-    const apiURL = new URL(SyncKehadiranAPI.POST_SYNC, window.location.origin);
-    const params = new URLSearchParams(apiURL.search);
-    params.append('start_date', startDate);
-    params.append('end_date', endDate);
-    params.append('nip', nip);
-
     handleSetLoader(true, selectedIndex);
-    apiURL.search = params.toString();
 
-    const syncRes = await callAPI<null, SyncKehadiranRes>(apiURL.href, null);
+    const syncRes = await callAPI<SyncKehadiranReq, SyncKehadiranRes>(SyncKehadiranAPI.POST_SYNC, {
+      start_date: startDate,
+      end_date: endDate,
+      nip: nip,
+    });
 
     if (syncRes.status === 200 && syncRes.data?.status === Status.OK) {
       dispatch(
