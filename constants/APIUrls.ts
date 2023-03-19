@@ -60,6 +60,7 @@ export const KepegawaianAPI = {
   GET_PEGAWAI_PEGAWAI_EKSTERNAL: config.apiHost + '/user/external/list',
   GET_CALENDAR_PEGAWAI: config.apiHost + '/dinas/kalender/summary',
   POST_STATUS_KEPEGAWAIAN: config.apiHost + '/pegawai/update-status-kepegawaian',
+  UPDATE_PEGAWAI_INFO: config.apiHost + '/pegawai/update-info',
 };
 
 export const PetaAPI = {

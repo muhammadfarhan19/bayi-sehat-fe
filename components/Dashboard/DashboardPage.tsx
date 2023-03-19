@@ -9,6 +9,7 @@ import { callAPI } from '../../utils/Fetchers';
 import { withErrorBoundary } from '../shared/hocs/ErrorBoundary';
 import Loader from '../shared/Loader/Loader';
 import Graph from './Graph';
+import StackGraph from './StackGraph';
 import TwoGraph from './TwoGraph';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -163,15 +164,19 @@ function DashboardPage() {
       </section>
 
       {isPNS && (
-        <Graph
-          typePegawai={typePegawai}
-          bgColor="#4F46E5"
-          dateNowStr={dateNowStr}
-          id={STATISTIC_ID_GOLONGAN}
-          label="Golongan"
-          title="Statistik Golongan Pegawai"
-          typeChart="golongan"
-        />
+        <>
+          {/* <Graph
+            typePegawai={typePegawai}
+            bgColor='#4F46E5'
+            dateNowStr={dateNowStr}
+            id={STATISTIC_ID_GOLONGAN}
+            label='Golongan'
+            title='Statistik Golongan Pegawai'
+            typeChart='golongan'
+          /> */}
+
+          <StackGraph id={STATISTIC_ID_GOLONGAN} title="Statistik Golongan Pegawai" dateNowStr={dateNowStr} />
+        </>
       )}
 
       <Graph
