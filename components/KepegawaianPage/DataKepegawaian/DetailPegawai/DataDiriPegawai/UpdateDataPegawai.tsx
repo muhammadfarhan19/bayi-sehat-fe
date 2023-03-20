@@ -101,7 +101,7 @@ function UpdateDataPegawai() {
         ],
         masa_kerja_kepangkatan: String(pegawaiData?.masa_kerja_kepangkatan),
         status_cpns: Number(formData?.status_cpns),
-        status_kepegawaian: Number(formData?.status_cpns),
+        status_kepegawaian: Number(pegawaiData?.status_kepegawaian),
         unit_kerja_id: Number(formData?.unit_kerja_id),
         nip: formData?.nip,
         tanggal_lahir: formData?.tanggal_lahir,
