@@ -20,7 +20,8 @@ function BackdoorForm() {
           type="date"
           errorMessage={null}
         />
-        <InputLabelled isError={null} name="jam" label="Jam" validation={null} type="time" errorMessage={null} />
+        <InputLabelled isError={null} name="jam" label="Jam Masuk" validation={null} type="time" errorMessage={null} />
+        <InputLabelled isError={null} name="jam" label="Jam Pulang" validation={null} type="time" errorMessage={null} />
         <div className="mt-5 flex flex-row justify-end">
           <button
             disabled={true}
