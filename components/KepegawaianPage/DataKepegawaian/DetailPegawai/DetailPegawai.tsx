@@ -369,7 +369,7 @@ function DetailPegawai() {
         </Transition>
       )}
 
-      <div className="flex flex-col rounded-[8px] bg-white py-6 px-[24px] shadow">
+      <div className="mt-3 flex flex-col rounded-[8px] bg-white py-6 px-[24px] shadow">
         <StatusKepegawaian />
       </div>
     </>

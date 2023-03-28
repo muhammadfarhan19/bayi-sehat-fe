@@ -1,12 +1,14 @@
 import React from 'react';
 
 import { StatusPNSText } from '../../../../../constants/Resource';
+import { getQueryString } from '../../../../../utils/URLUtils';
 import { withErrorBoundary } from '../../../../shared/hocs/ErrorBoundary';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import Loader from '../../../../shared/Loader/Loader';
 import KarpegModal from './KarpegModal';
 
 function DataDiriPegawai() {
+  const { pegawai_id, type } = getQueryString();
   const dataPersonal = usePersonalData();
 
   if (!dataPersonal) {
@@ -47,6 +49,20 @@ function DataDiriPegawai() {
               <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
             </tr>
           ))}
+
+          <tr key="update-profile">
+            <td className="px-6 py-4 text-sm font-medium text-[#6B7280]"></td>
+            <td className="flex px-6 py-4 text-sm font-medium text-[#6B7280]">
+              <button
+                onClick={() =>
+                  (window.location.href = `/kepegawaian/data-pegawai/update-data?pegawai_id=${pegawai_id}&type=${type}`)
+                }
+                className="ml-auto rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
+              >
+                Perbaharui Data
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </>

@@ -7,8 +7,10 @@ import { KepegawaianAPI } from '../../../constants/APIUrls';
 import { DinasPegawaiKalenderData, GetDinasPegawaiKalenderReq } from '../../../types/api/KepegawaianAPI';
 import { getFirstAndLastDaysOfCurrentYear } from '../../../utils/DateUtil';
 import DinasCalendar from '../../DinasPage/DataPegawai/DinasCalendar';
+import { CircleProgress } from '../../shared/CircleProgress';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
+import useSyncKehadiran from '../../shared/hooks/useSyncKehadiran';
 import Loader from '../../shared/Loader/Loader';
 
 interface RekapCalendarProps {
@@ -17,6 +19,7 @@ interface RekapCalendarProps {
 
 function RekapCalendar(props: RekapCalendarProps) {
   const { onShowDetail } = props;
+  const { isSyncLoading, handleSyncPegawai } = useSyncKehadiran();
   const personalPegawai = usePersonalData();
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const dates = React.useMemo(getFirstAndLastDaysOfCurrentYear, []);
@@ -107,7 +110,7 @@ function RekapCalendar(props: RekapCalendarProps) {
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        className="px-6 py-3 text-left text-center text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
                         AKSI
                       </th>
@@ -120,6 +123,7 @@ function RekapCalendar(props: RekapCalendarProps) {
                       const formatDateStart = format(data?.start || new Date(), 'yyyy-MM-dd');
                       const formatDateEnd = format(data?.end || new Date(), 'yyyy-MM-dd');
                       const uniqueCode = 23 + formatMonthCode + personalPegawai?.user_id;
+                      const isLoaderShown = isSyncLoading.onLoad && isSyncLoading.onSelected === dataIdx;
                       return (
                         <tr key={dataIdx} className={'bg-white hover:bg-gray-100'}>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
@@ -127,16 +131,30 @@ function RekapCalendar(props: RekapCalendarProps) {
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{formatMonth}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{formatDateStart}</td>
                           <td className="px-6 py-4 text-xs font-medium text-blue-900">{formatDateEnd}</td>
-                          <td className="cursor-pointer px-6 py-4 text-xs font-medium text-green-700">
+                          <td className="flex cursor-pointer flex-row space-x-2 px-6 py-4 text-xs font-medium text-green-700">
                             <button
                               onClick={() => {
                                 setSelectedDate(data?.start);
                               }}
                               disabled={false}
                               type="button"
-                              className={`inline-flex w-36 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200`}
+                              className={`inline-flex w-16 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-1 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200`}
                             >
                               Rekap
+                            </button>
+                            <button
+                              onClick={() => {
+                                if (personalPegawai?.nip) {
+                                  handleSyncPegawai(formatDateStart, formatDateEnd, personalPegawai?.nip, dataIdx);
+                                }
+                              }}
+                              disabled={isLoaderShown}
+                              type="button"
+                              className={`inline-flex w-16 items-center justify-center rounded border border-transparent bg-green-500 ${
+                                isLoaderShown && 'pl-6'
+                              } px-2.5 py-1 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-200 disabled:text-white`}
+                            >
+                              {isLoaderShown ? <CircleProgress /> : 'Sync'}
                             </button>
                           </td>
                         </tr>

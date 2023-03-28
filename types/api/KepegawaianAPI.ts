@@ -4,6 +4,7 @@ export interface GetPegawaiListReq {
   gender?: number;
   jabatan?: string;
   jenjang_id?: number;
+  jabatan_id?: number;
   nama?: string;
   range_umur?: string;
   status_cpns: number[];
@@ -167,6 +168,34 @@ export interface PostStatusKepegawaianReq {
 }
 
 export interface PostStatusKepegawaianRes {
+  status: Status;
+  data: string;
+}
+
+export interface UpdatePegawaiInfoReq {
+  pegawai_id: number;
+  user_id: number;
+  golongan_id: number;
+  jabatan_id: number;
+  karpeg: string;
+  karpeg_file: [
+    {
+      document_uuid: string;
+      document_name: string;
+    }
+  ];
+  masa_kerja_kepangkatan: string;
+  status_cpns: number;
+  status_kepegawaian: number;
+  unit_kerja_id: number;
+  nip: string;
+  tanggal_lahir: string;
+  tempat_lahir: string;
+  tmt_cpns: string;
+  tmt_golongan: string;
+}
+
+export interface UpdatePegawaiInfoRes {
   status: Status;
   data: string;
 }

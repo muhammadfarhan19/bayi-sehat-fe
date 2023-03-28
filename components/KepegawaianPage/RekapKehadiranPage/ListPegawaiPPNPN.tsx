@@ -1,4 +1,4 @@
-import { AdjustmentsIcon } from '@heroicons/react/outline';
+import { AdjustmentsIcon, ChevronLeftIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { KepegawaianAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
@@ -8,13 +8,16 @@ import useAllowSuperAdmin from '../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import { SelectedData } from './RekapGroup';
 import RekapKehadiranPNS from './RekapKehadiranPNS';
 
 interface UnitKerjaProps {
   unit_kerja_id: number;
+  onBack: () => void;
+  dateSelected: SelectedData;
 }
 function ListPegawaiPPNPN(props: UnitKerjaProps) {
-  const { unit_kerja_id } = props;
+  const { unit_kerja_id, dateSelected, onBack } = props;
 
   const [pegawaiId, setPegawaiId] = React.useState<number>(0);
   const inputTimeout = React.useRef<NodeJS.Timeout>();
@@ -58,12 +61,18 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
     <>
       {pegawaiId ? (
         <>
-          <RekapKehadiranPNS pegawai_id={pegawaiId} onBack={() => setPegawaiId(0)} />
+          <RekapKehadiranPNS dateSelected={dateSelected} pegawai_id={pegawaiId} onBack={() => setPegawaiId(0)} />
         </>
       ) : (
         <>
+          <div className="pl-5 pt-5">
+            <span onClick={onBack} className="flex cursor-pointer flex-row items-center gap-x-2">
+              <ChevronLeftIcon className="h-5 w-5" />
+              <div>Kembali</div>
+            </span>
+          </div>
           <div className="mb-5 flex flex-row items-center px-4 pt-5">
-            <h3 className="text-xl font-medium leading-6 text-gray-900">Rekap Kehadiran Pegawai</h3>
+            <h3 className="text-xl font-medium leading-6 text-gray-900">Detail Daftar Transaksi</h3>
             <div className="ml-auto flex">
               <input
                 type="text"
@@ -85,7 +94,7 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
           <div className="w-[202px] pl-5">
             <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
             <select
-              className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+              className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
               onChange={e => {
                 changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
               }}
@@ -125,13 +134,13 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                           >
-                            Nama
+                            NIK
                           </th>
                           <th
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                           >
-                            NIK
+                            Nama
                           </th>
                           <th
                             scope="col"
@@ -143,7 +152,7 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                           >
-                            Jabatan
+                            Aksi
                           </th>
                         </tr>
                       </thead>
@@ -158,17 +167,16 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
                             <td className="px-6 py-4 text-xs font-medium text-gray-900">
                               {filterPPNPN.per_page * (filterPPNPN.page - 1) + (dataIdx + 1)}
                             </td>
-                            <td className="px-6 py-4 text-xs font-medium text-indigo-800">{data?.name}</td>
                             <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
+                            <td className="px-6 py-4 text-xs font-medium text-indigo-800">{data?.name}</td>
                             <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
-                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
                             <td className="text-\xs px-6 py-4 font-medium">
                               <button
                                 onClick={() => {
                                   setPegawaiId(data?.pegawai_id);
                                 }}
                                 type="button"
-                                className="inline-flex w-full items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
+                                className="inline-flex w-20 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
                               >
                                 Rekap
                               </button>

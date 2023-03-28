@@ -5,10 +5,15 @@ import { tabs } from '../../DinasPage/DataPegawai/DataDinasPegawai';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import ListPegawaiPNS from './ListPegawaiPNS';
 import ListPegawaiPPNPN from './ListPegawaiPPNPN';
+import RekapGroup, { SelectedData } from './RekapGroup';
 
 function RekapKehadiranAdminPage() {
   const [selected, setSelected] = React.useState('Master PNS');
+  const [isShownDetail, setIsShownDetail] = React.useState<SelectedData>();
   const personalPegawai = usePersonalData();
+
+  const handleBack = () => setIsShownDetail(undefined);
+
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">
       <div className="px-6">
@@ -50,10 +55,20 @@ function RekapKehadiranAdminPage() {
         </div>
       </div>
       <div>
-        {selected === 'Master PNS' ? (
-          <ListPegawaiPNS unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
+        {isShownDetail !== undefined && selected === 'Master PPNPN' ? (
+          <ListPegawaiPPNPN
+            unit_kerja_id={Number(personalPegawai?.unit_kerja_id)}
+            onBack={handleBack}
+            dateSelected={isShownDetail}
+          />
+        ) : isShownDetail !== undefined && selected === 'Master PNS' ? (
+          <ListPegawaiPNS
+            unit_kerja_id={Number(personalPegawai?.unit_kerja_id)}
+            onBack={handleBack}
+            dateSelected={isShownDetail}
+          />
         ) : (
-          <ListPegawaiPPNPN unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
+          <RekapGroup onSelectedDateDetail={(detail: SelectedData) => setIsShownDetail(detail)} />
         )}
       </div>
     </div>

@@ -105,7 +105,7 @@ function KlaimList(props: ListKlaimProps) {
         <div className="w-[202px]">
           <p className="pb-1 pl-1 text-sm font-medium text-gray-700">Unit Kerja</p>
           <select
-            className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+            className="block w-full appearance-none truncate rounded-md border border-gray-300 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
             onChange={e => {
               changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
             }}
