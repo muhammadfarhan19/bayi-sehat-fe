@@ -174,6 +174,11 @@ export const NavigationList: Navigation[] = [
             href: '/kepegawaian/kehadiran',
           },
           {
+            id: NavigationId.KEHADIRAN,
+            name: 'Backdoor',
+            href: '/kepegawaian/backdoor',
+          },
+          {
             id: NavigationId.KLAIM_CUTI,
             name: 'Klaim Cuti',
             href: '/kepegawaian/cuti',
