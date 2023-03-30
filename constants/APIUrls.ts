@@ -269,3 +269,7 @@ export const StrukturOrganisasiAPI = {
 export const SyncKehadiranAPI = {
   POST_SYNC: config.apiHost + '/cron/sync-kehadiran-sdm',
 };
+
+export const AbsenBackdoorAPI = {
+  POST_PRESENSI: config.apiHost + '/presensi-pegawai/backdoor',
+};
