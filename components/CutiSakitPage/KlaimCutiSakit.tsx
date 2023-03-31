@@ -65,7 +65,6 @@ function KlaimCutiSakit() {
   });
 
   const personalPegawaiData = usePersonalData();
-  console.log(personalPegawaiData?.unit_kerja_id);
   const { data: kuotaPengajuanCuti, mutate: mutationQuota } = useCommonApi<GetCutiReq, GetQuotaPengajuanRes>(
     CutiAPI.GET_CUTI_QUOTA,
     { pegawai_id: Number(personalPegawaiData?.pegawai_id) },

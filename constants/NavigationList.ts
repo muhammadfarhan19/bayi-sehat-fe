@@ -22,6 +22,8 @@ export const NavigationId = {
   SHIFT: 122,
   LIBUR_RAMADHAN: 123,
   ROLE_USER: 124,
+  JADWAL_CUTI: 172,
+  BACKDOOR_PRESENSI: 174,
   PETA_ORGANISASI: 170,
   PARENT_SIDE_MENU_DINAS: 153,
   PARENT_SIDE_MENU_PEGAWAI: 154,
@@ -169,9 +171,19 @@ export const NavigationList: Navigation[] = [
             href: '/kepegawaian/rekap-kehadiran',
           },
           {
+            id: NavigationId.JADWAL_CUTI,
+            name: 'Jadwal Cuti',
+            href: '/kepegawaian/jadwal-cuti',
+          },
+          {
             id: NavigationId.KEHADIRAN,
             name: 'Klaim Kehadiran',
             href: '/kepegawaian/kehadiran',
+          },
+          {
+            id: NavigationId.BACKDOOR_PRESENSI,
+            name: 'Backdoor',
+            href: '/kepegawaian/backdoor',
           },
           {
             id: NavigationId.KLAIM_CUTI,

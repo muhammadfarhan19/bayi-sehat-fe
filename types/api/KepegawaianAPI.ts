@@ -35,6 +35,7 @@ export interface GetPegawaiListData {
     gender: string;
     tgl_lahir: string;
     usia: string;
+    sisa_cuti: number;
   }[];
   pagination: Pagination;
 }
@@ -198,4 +199,22 @@ export interface UpdatePegawaiInfoReq {
 export interface UpdatePegawaiInfoRes {
   status: Status;
   data: string;
+}
+
+export interface PegawaiData {
+  user_id: number;
+  pegawai_id: number;
+  nip: string;
+  name: string;
+  unit_kerja: string;
+  unit_kerja_id: number;
+  golongan: string;
+  tipe_jabatan: string;
+  jabatan: string;
+  status_cpns: number;
+  gender_id: number;
+  gender: string;
+  tgl_lahir: string;
+  usia: string;
+  sisa_cuti: number;
 }
