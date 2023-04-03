@@ -196,3 +196,8 @@ export const StatusPresensiBE = [
     title: 'Sakit',
   },
 ];
+
+export enum JamKerja {
+  Masuk = 'Jam Kerja Masuk',
+  Pulang = 'Jam Kerja Pulang',
+}

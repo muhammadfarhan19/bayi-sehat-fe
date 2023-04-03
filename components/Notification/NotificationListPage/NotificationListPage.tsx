@@ -52,8 +52,8 @@ export default function NotificationListPage() {
         <thead></thead>
         <tbody className="divide-y divide-gray-200 bg-white">
           {notification ? (
-            Object.keys(notification).map((each: string) => (
-              <tr className="flex flex-col px-[24px] py-[16px]">
+            Object.keys(notification).map((each: string, index: number) => (
+              <tr key={index} className="flex flex-col px-[24px] py-[16px]">
                 <p className="text-[14px] text-[#4F46E5]">
                   Jangan lupa ya kamu ada{' '}
                   <span className="font-bold">{notification[each as keyof typeof notification].length} Kegiatan!</span>
