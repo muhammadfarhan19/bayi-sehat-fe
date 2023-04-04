@@ -661,13 +661,8 @@ function AddRekapPage(props) {
                         required: value => {
                           if (value === '') {
                             return 'Silahkan masukan tanggal surat.';
-                          } else if (watch('tgl_mulai') !== '') {
-                            if (value > watch('tgl_mulai')) {
-                              return 'Tanggal surat tidak boleh lebih besar dari tanggal mulai dinas';
-                            }
-                          } else {
-                            return true;
                           }
+                          return true;
                         },
                       },
                     })}

@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../action/CommonAction';
 import { AbsenBackdoorAPI, KepegawaianAPI } from '../../../constants/APIUrls';
+import { JamKerja } from '../../../constants/Resource';
 import { SnackbarType } from '../../../reducer/CommonReducer';
 import { PostBackdoorReq, PostBackdoorRes } from '../../../types/api/BackdoorAPI';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../types/api/KepegawaianAPI';
@@ -12,13 +13,16 @@ import { formatDate } from '../../../utils/DateUtil';
 import { callAPI } from '../../../utils/Fetchers';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import AutoComplete from '../../shared/Input/ComboBox';
-import { InputLabelled } from '../DataKepegawaian/DetailPegawai/RiwayatKeluarga/Shared/KeluargaComponents';
+import {
+  DropdownPicker,
+  InputLabelled,
+} from '../DataKepegawaian/DetailPegawai/RiwayatKeluarga/Shared/KeluargaComponents';
 
 interface FormState {
   pegawaiId: number;
   dateSubmitted: Date;
   timeIn: string;
-  timeOut: string;
+  jenisPengajuan: string;
 }
 
 function BackdoorForm() {
@@ -36,16 +40,24 @@ function BackdoorForm() {
     handleSubmit,
     register,
     formState: { errors },
+    watch,
   } = useForm<FormState>();
 
   const submitHandler = async (formState: FormState) => {
+    const watchValuesSelected = watch('jenisPengajuan');
+    const returnValueAsJenisPengajuanSelectedJamMasuk =
+      watchValuesSelected === JamKerja.Masuk ? formState.timeIn + ':00' : '';
+    const returnValueAsJenisPengajuanSelectedJamPulang =
+      watchValuesSelected === JamKerja.Pulang ? formState.timeIn + ':00' : '';
+    const formatDatePreCalculated = formatDate(new Date(formState.dateSubmitted), 'yyyy-MM-dd');
+
     const resSubmit = await callAPI<PostBackdoorReq, PostBackdoorRes>(
       AbsenBackdoorAPI.POST_PRESENSI,
       {
         pegawai_id: Number(formState.pegawaiId),
-        date: formatDate(new Date(formState.dateSubmitted), 'yyyy-MM-dd'),
-        check_in: formState.timeIn + ':00',
-        check_out: formState.timeOut + ':00',
+        date: formatDatePreCalculated,
+        check_in: returnValueAsJenisPengajuanSelectedJamMasuk,
+        check_out: returnValueAsJenisPengajuanSelectedJamPulang,
       },
       { method: 'POST' }
     );
@@ -113,21 +125,25 @@ function BackdoorForm() {
             type="date"
             errorMessage={errors.dateSubmitted?.message}
           />
+          <DropdownPicker
+            isError={errors.jenisPengajuan}
+            errorMessage={errors.jenisPengajuan?.message}
+            validation={{ ...register('jenisPengajuan', { required: 'Silahkan Pilih Jenis Pengajuan' }) }}
+            label="Jenis Absen"
+            defaultOption="Silahkan Pilih"
+            firstValue={'Jam Kerja Masuk'}
+            secondValue={'Jam Kerja Pulang'}
+            firstOption="Jam Kerja Masuk"
+            secondOption="Jam Kerja Pulang"
+            formVerification="jenisPengajuan"
+          />
           <InputLabelled
             isError={errors.timeIn}
             name="timeIn"
-            label="Jam Masuk"
-            validation={{ ...register('timeIn', { required: 'Silahkan pilih Jam Masuk' }) }}
+            label="Jam"
+            validation={{ ...register('timeIn', { required: 'Silahkan pilih Jam' }) }}
             type="time"
             errorMessage={errors.timeIn?.message}
-          />
-          <InputLabelled
-            isError={errors.timeOut}
-            name="timeOut"
-            label="Jam Pulang"
-            validation={{ ...register('timeOut', { required: 'Silahkan pilih Jam Pulang' }) }}
-            type="time"
-            errorMessage={errors.timeOut?.message}
           />
           <div className="mt-5 flex flex-row justify-end">
             <button

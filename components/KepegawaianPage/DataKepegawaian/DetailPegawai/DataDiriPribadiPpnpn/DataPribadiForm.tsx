@@ -20,6 +20,7 @@ import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import useAllowAdmin from '../../../../shared/hooks/useAllowAdmin';
+import useAllowSuperAdmin from '../../../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
@@ -66,6 +67,7 @@ interface FormState {
 export default function DataPribadiForm(props: UploadFormProps) {
   const { open, setOpen, onSuccess } = props;
   const isAllowAdmin = useAllowAdmin();
+  const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
   const pegawai = usePersonalData();
   const dispatch = useDispatch();
   const debounce = React.useRef<number>(0);
@@ -267,7 +269,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
               <div className="mt-1">
                 <input
                   className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                  disabled={true}
+                  disabled={!isAllowSuperAdminAccessFilter}
                   name="nip"
                   type="text"
                   value={pegawai?.nip}
@@ -281,7 +283,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
               <div className="mt-1">
                 <input
                   className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                  disabled={true}
+                  disabled={!isAllowSuperAdminAccessFilter}
                   name="nama"
                   type="text"
                   value={pegawai?.nama}
@@ -340,7 +342,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
                   rules={{ required: 'Mohon isi data jabatan' }}
                   render={({ field: { onChange } }) => (
                     <AutoCompleteCustom
-                      disabled={true}
+                      disabled={!isAllowSuperAdminAccessFilter}
                       onChange={value => onChange(value.value)}
                       label={'Nama Jabatan'}
                       defaultValue={{ text: formJabatanState.text || '', value: formJabatanState.value || '' }}
