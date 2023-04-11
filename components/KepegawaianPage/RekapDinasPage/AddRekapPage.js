@@ -392,7 +392,6 @@ function AddRekapPage(props) {
       newState.push(dataPegawai);
       setListPegawaiEksternal(newState);
     } catch (e) {
-      console.log(e);
       setThrowError('Data not found');
     }
   };

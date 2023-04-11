@@ -170,7 +170,10 @@ function UpdateDataPegawai() {
 
   return (
     <div className="rounded-lg bg-white shadow">
-      <a href="/kepegawaian/data-pegawai" className="flex flex-row items-center gap-x-2 py-6 px-6">
+      <a
+        href={`/kepegawaian/data-pegawai?pegawai_id=${pegawai_id}&type=${type}`}
+        className="flex flex-row items-center gap-x-2 py-6 px-6"
+      >
         <ChevronLeftIcon className="h-5 w-5" />
         <div>Kembali</div>
       </a>

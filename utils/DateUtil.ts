@@ -23,7 +23,7 @@ export interface EventDate {
   dateKey: string;
   datetime: string;
   totalDinas?: number;
-  infoType: 'presensi' | 'dinas';
+  infoType: 'presensi' | 'dinas' | 'liburan';
   listDinas?: string;
 }
 
