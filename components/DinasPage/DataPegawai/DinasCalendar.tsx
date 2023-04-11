@@ -58,6 +58,24 @@ export default function DinasCalendar() {
 
   const eventList = {} as Record<number, EventDate[]>;
 
+  (kalendarData?.liburan_day || [])
+    .filter(each => !!each?.date)
+    .forEach((each, index) => {
+      const key = Number(each.date.split('-')[2]);
+      if (!eventList[key]) {
+        eventList[key] = [];
+      }
+
+      eventList[key].push({
+        id: key + index,
+        color: 'gray',
+        dateKey: each.date,
+        datetime: each.date,
+        name: each.libur_name,
+        infoType: 'liburan',
+      });
+    });
+
   (kalendarData?.list_presensi || [])
     .filter(each => !!each?.date)
     .forEach(each => {
