@@ -97,6 +97,7 @@ export interface GetDinasPegawaiKalenderRes {
 export interface DinasPegawaiKalenderData {
   list_presensi: Presensi[];
   list_dinas: Dinas[];
+  liburan_day: LiburanDayData[];
 }
 
 export interface Presensi {
@@ -217,4 +218,9 @@ export interface PegawaiData {
   tgl_lahir: string;
   usia: string;
   sisa_cuti: number;
+}
+
+export interface LiburanDayData {
+  date: string;
+  libur_name: string;
 }
