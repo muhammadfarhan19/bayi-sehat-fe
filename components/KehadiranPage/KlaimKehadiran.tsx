@@ -89,19 +89,36 @@ function KlaimKehadiran() {
     { method: 'GET' }
   );
 
+  /**
+   * @description `Jenis Pengajuan` Options Goes here, future changes by Map.
+   */
   const TelatMasuk = {
-    TELAT_MASUK_OPTIONS: klaimInfo ? klaimInfo?.jenis_klaim?.[0]?.label : 'Telat Masuk',
+    TELAT_MASUK_OPTIONS: klaimInfo ? klaimInfo?.jenis_klaim?.[0]?.label : 'Izin Telat Masuk',
     TELAT_MASUK_VALUE: klaimInfo ? klaimInfo?.jenis_klaim?.[0]?.name : 'TELAT_MASUK',
   };
 
   const PulangCepat = {
-    PULANG_CEPAT_OPTIONS: klaimInfo ? klaimInfo?.jenis_klaim?.[1]?.label : 'Pulang Cepat',
+    PULANG_CEPAT_OPTIONS: klaimInfo ? klaimInfo?.jenis_klaim?.[1]?.label : 'Izin Pulang Cepat',
     PULANG_CEPAT_VALUE: klaimInfo ? klaimInfo?.jenis_klaim?.[1]?.name : 'PULANG_CEPAT',
   };
 
-  const TidakAbsen = {
-    TIDAK_ABSEN_OPTIONS: klaimInfo ? klaimInfo?.jenis_klaim?.[2]?.label : 'Tidak Absen',
-    TIDAK_ABSEN_VALUE: klaimInfo ? klaimInfo?.jenis_klaim?.[2]?.name : 'TIDAK_ABSEN',
+  const TidakAbsenDatang = {
+    TIDAK_ABSEN_DATANG_OPTIONS: klaimInfo
+      ? klaimInfo?.jenis_klaim?.[2]?.label
+      : 'Keterangan lupa rekam kehadiran datang',
+    TIDAK_ABSEN_DATANG_VALUE: klaimInfo ? klaimInfo?.jenis_klaim?.[2]?.name : 'TIDAK_ABSEN_DATANG',
+  };
+
+  const TidakAbsenPulang = {
+    TIDAK_ABSEN_PULANG_OPTIONS: klaimInfo
+      ? klaimInfo?.jenis_klaim?.[3]?.label
+      : 'Keterangan lupa rekam kehadiran pulang',
+    TIDAK_ABSEN_PULANG_VALUE: klaimInfo ? klaimInfo?.jenis_klaim?.[3]?.name : 'TIDAK_ABSEN_PULANG',
+  };
+
+  const KeluarKantor = {
+    KELUAR_KANTOR_OPTIONS: klaimInfo ? klaimInfo?.jenis_klaim?.[4]?.label : 'Izin keluar kantor pada jam kerja"',
+    KELUAR_KANTOR_VALUE: klaimInfo ? klaimInfo?.jenis_klaim?.[4]?.name : 'KELUAR_KANTOR',
   };
 
   const submitHandler = async (formData: FormState) => {
@@ -249,7 +266,17 @@ function KlaimKehadiran() {
             secondValue={PulangCepat.PULANG_CEPAT_VALUE}
             firstOption={TelatMasuk.TELAT_MASUK_OPTIONS}
             secondOption={PulangCepat.PULANG_CEPAT_OPTIONS}
-            moreOptions={<option value={TidakAbsen.TIDAK_ABSEN_VALUE}>{TidakAbsen.TIDAK_ABSEN_OPTIONS}</option>}
+            moreOptions={
+              <>
+                <option value={TidakAbsenDatang.TIDAK_ABSEN_DATANG_VALUE}>
+                  {TidakAbsenDatang.TIDAK_ABSEN_DATANG_OPTIONS}
+                </option>
+                <option value={TidakAbsenPulang.TIDAK_ABSEN_PULANG_VALUE}>
+                  {TidakAbsenPulang.TIDAK_ABSEN_PULANG_OPTIONS}
+                </option>
+                <option value={KeluarKantor.KELUAR_KANTOR_VALUE}>{KeluarKantor.KELUAR_KANTOR_OPTIONS}</option>
+              </>
+            }
             formVerification="jenis_pengajuan"
           />
           <InputLabelled
