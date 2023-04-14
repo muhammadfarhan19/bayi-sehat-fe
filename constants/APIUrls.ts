@@ -259,6 +259,7 @@ export const CutiAPI = {
   PUT_CUTI: config.apiHost + '/cuti/update',
   GET_CUTI_LIST: config.apiHost + '/cuti/list',
   GET_CUTI_QUOTA: config.apiHost + '/cuti/stat-pengajuan',
+  EXPORT_DATA_CUTI: config.apiHost + '/cuti/export',
 };
 
 export const StrukturOrganisasiAPI = {
