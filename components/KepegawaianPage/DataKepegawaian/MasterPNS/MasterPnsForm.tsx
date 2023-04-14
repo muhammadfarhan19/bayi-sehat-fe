@@ -57,6 +57,8 @@ interface FormState {
   unit_kerja_id: number;
   jumlah_anak: number;
   agama: string;
+  badgeNumber: string;
+  tugasBelajar: string;
 }
 
 function MasterPnsForm() {
@@ -406,6 +408,32 @@ function MasterPnsForm() {
                   type="text"
                 />
                 {errors.karpeg && <p className="mt-1 text-xs text-red-500">{errors.karpeg.message}</p>}
+              </div>
+            </div>
+
+            <div className="mt-5 sm:col-span-6">
+              <label className="block text-sm font-medium text-gray-700">Badge Number</label>
+              <div className="pt-1 sm:col-span-2 sm:mt-0">
+                <input
+                  {...register('badgeNumber', { required: false })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                  name="badgeNumber"
+                  type="text"
+                />
+                {errors.badgeNumber && <p className="mt-1 text-xs text-red-500">{errors.badgeNumber.message}</p>}
+              </div>
+            </div>
+
+            <div className="mt-5 sm:col-span-6">
+              <label className="block text-sm font-medium text-gray-700">Tugas Belajar</label>
+              <div className="pt-1 sm:col-span-2 sm:mt-0">
+                <input
+                  {...register('tugasBelajar', { required: false })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                  name="tugasBelajar"
+                  type="text"
+                />
+                {errors.tugasBelajar && <p className="mt-1 text-xs text-red-500">{errors.tugasBelajar.message}</p>}
               </div>
             </div>
 
