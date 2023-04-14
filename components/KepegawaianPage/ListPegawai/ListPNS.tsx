@@ -72,58 +72,58 @@ function ListPNS(props: ListPNSProps) {
   const exportData = () => {
     callAPI<null, ExportCutiRes>(CutiAPI.EXPORT_DATA_CUTI, null, { isBlob: true, method: 'POST' })
       .then(response => {
-        let url = ''
-        
+        let url = '';
+
         if (response.status === 200 && response.data instanceof Blob) {
-          url = window.URL.createObjectURL(response.data)
+          url = window.URL.createObjectURL(response.data);
         }
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', `Data Cuti.xlsx`)
-        document.body.appendChild(link)
-        link.click()
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `Data Cuti.xlsx`);
+        document.body.appendChild(link);
+        link.click();
       })
-      .catch(err => alert(err.message))
-  }
+      .catch(err => alert(err.message));
+  };
 
   return (
     <div className={`bg-white ${containerStyle}`}>
-       <div className='mb-5 flex flex-row items-center px-4 pt-3'>
-        <h3 className='text-xl font-medium leading-6 text-gray-900'>{pageHeaderTitle}</h3>
-        <div className='ml-auto flex gap-x-[4px]'>
-          <div className='flex'>
+      <div className="mb-5 flex flex-row items-center px-4 pt-3">
+        <h3 className="text-xl font-medium leading-6 text-gray-900">{pageHeaderTitle}</h3>
+        <div className="ml-auto flex gap-x-[4px]">
+          <div className="flex">
             <input
-              type='text'
-              className='block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
-              placeholder='Cari...'
+              type="text"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              placeholder="Cari..."
               onChange={e => {
-                changeFilterState({ nama: e.target.value === '' ? undefined : e.target.value })
+                changeFilterState({ nama: e.target.value === '' ? undefined : e.target.value });
               }}
             />
             <button
-              type='button'
+              type="button"
               disabled
-              className='ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none'
+              className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
             >
-              <AdjustmentsIcon className='h-5  w-5 animate-pulse text-gray-400' />
+              <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
             </button>
           </div>
 
           <div
-            className='inline-flex cursor-pointer gap-x-[8px] rounded-[6px] bg-[#4F46E5] px-[18px] py-[9px]'
+            className="inline-flex cursor-pointer gap-x-[8px] rounded-[6px] bg-[#4F46E5] px-[18px] py-[9px]"
             onClick={exportData}
           >
             <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
               strokeWidth={2}
-              stroke='currentColor'
-              className='my-auto h-4 w-4 text-gray-50'
+              stroke="currentColor"
+              className="my-auto h-4 w-4 text-gray-50"
             >
-              <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            <p className='text-[14px] font-[400] text-gray-50'>Export Data</p>
+            <p className="text-[14px] font-[400] text-gray-50">Export Data</p>
           </div>
         </div>
       </div>
