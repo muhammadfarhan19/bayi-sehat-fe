@@ -214,7 +214,6 @@ export default function LiburDanRamadhanForm(props: UploadFormProps) {
                           dropdownMode="select"
                           selected={new Date(value)}
                           dateFormat="dd/MM/yyyy"
-                          minDate={date}
                           onChange={(date: Date) => onChange(format(date, 'yyyy-MM-dd'))}
                           customInput={
                             <input

@@ -1,3 +1,5 @@
+import { Status } from '../Common';
+
 export interface PostCutiReq {
   pegawai_id: number;
   tanggal_klaim: string;
@@ -70,4 +72,8 @@ export interface GetCutiListParams {
   per_page: number;
   status?: number;
   nama?: string;
+}
+
+export interface ExportCutiRes {
+  status: Status;
 }

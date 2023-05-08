@@ -1,9 +1,11 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
-import { KepegawaianAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
+import { CutiAPI, KepegawaianAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
+import { ExportCutiRes } from '../../../types/api/CutiAPI';
 import { GetPegawaiListData, GetPegawaiListReq, PegawaiData } from '../../../types/api/KepegawaianAPI';
 import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
+import { callAPI } from '../../../utils/Fetchers';
 import useAllowSuperAdmin from '../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
@@ -67,26 +69,62 @@ function ListPPNPN(props: ListPPNPNProps) {
     inputTimeout.current = setTimeout(() => setFilterPPNPN(newState), pageAffected ? 0 : 500);
   };
 
+  const exportData = () => {
+    callAPI<null, ExportCutiRes>(CutiAPI.EXPORT_DATA_CUTI, null, { isBlob: true, method: 'POST' })
+      .then(response => {
+        let url = '';
+
+        if (response.status === 200 && response.data instanceof Blob) {
+          url = window.URL.createObjectURL(response.data);
+        }
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `Data Cuti.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch(err => alert(err.message));
+  };
+
   return (
     <div className={`bg-white ${containerStyle}`}>
       <div className="mb-5 flex flex-row items-center px-4 pt-3">
         <h3 className="text-xl font-medium leading-6 text-gray-900">{pageHeaderTitle}</h3>
-        <div className="ml-auto flex">
-          <input
-            type="text"
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="Cari..."
-            onChange={e => {
-              changeFilterState({ nama: e.target.value === '' ? undefined : e.target.value });
-            }}
-          />
-          <button
-            type="button"
-            disabled
-            className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
+        <div className="ml-auto flex gap-x-[4px]">
+          <div className="flex">
+            <input
+              type="text"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              placeholder="Cari..."
+              onChange={e => {
+                changeFilterState({ nama: e.target.value === '' ? undefined : e.target.value });
+              }}
+            />
+            <button
+              type="button"
+              disabled
+              className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
+            >
+              <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
+            </button>
+          </div>
+
+          <div
+            className="inline-flex cursor-pointer gap-x-[8px] rounded-[6px] bg-[#4F46E5] px-[18px] py-[9px]"
+            onClick={exportData}
           >
-            <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
-          </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="my-auto h-4 w-4 text-gray-50"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <p className="text-[14px] font-[400] text-gray-50">Export Data</p>
+          </div>
         </div>
       </div>
 

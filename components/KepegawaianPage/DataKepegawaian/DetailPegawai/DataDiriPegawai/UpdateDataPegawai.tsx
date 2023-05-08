@@ -41,6 +41,8 @@ interface FormState {
   unit_kerja_id: number;
   file_id: string;
   file_name: string;
+  badgeNumber: string;
+  tugasBelajar: string;
 }
 
 function UpdateDataPegawai() {
@@ -428,6 +430,36 @@ function UpdateDataPegawai() {
               )}
             ></Controller>
             {errors.file_name && <p className="mt-1 text-xs text-red-500">{errors.file_name.message}</p>}
+          </div>
+
+          <div className="mt-5">
+            <label htmlFor="badgeNumber" className="block text-sm font-medium text-gray-700">
+              Badge Number
+            </label>
+            <div className="pt-1">
+              <input
+                {...register('badgeNumber', { required: false })}
+                className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                name="badgeNumber"
+                type="text"
+              />
+              {errors.badgeNumber && <p className="mt-1 text-xs text-red-500">{errors.badgeNumber.message}</p>}
+            </div>
+          </div>
+
+          <div className="mt-5">
+            <label htmlFor="tugasBelajar" className="block text-sm font-medium text-gray-700">
+              Tugas Belajar
+            </label>
+            <div className="pt-1">
+              <input
+                {...register('tugasBelajar', { required: false })}
+                className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                name="tugasBelajar"
+                type="text"
+              />
+              {errors.tugasBelajar && <p className="mt-1 text-xs text-red-500">{errors.tugasBelajar.message}</p>}
+            </div>
           </div>
 
           <div className="my-[32px] h-[1px] w-full bg-gray-200"></div>

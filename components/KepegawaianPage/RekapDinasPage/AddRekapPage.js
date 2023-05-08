@@ -111,11 +111,13 @@ function AddRekapPage(props) {
               { method: 'GET' }
             );
 
+            const getDataPegawai = dataProfilPegawai.data.list.find(each => each.pegawai_id === data.pegawai_id)
+
             let dataPegawai = {
-              pegawai_id: dataProfilPegawai.data.list[0].pegawai_id,
-              nama: dataProfilPegawai.data.list[0].name,
-              nip: dataProfilPegawai.data.list[0].nip,
-              unit_kerja: dataProfilPegawai.data.list[0].unit_kerja,
+              pegawai_id: getDataPegawai.pegawai_id,
+              nama: getDataPegawai.name,
+              nip: getDataPegawai.nip,
+              unit_kerja: getDataPegawai.unit_kerja,
               flag: dataAvail.data.data.flag,
               tgl_available: dataAvail.data.data.tgl_available,
             };

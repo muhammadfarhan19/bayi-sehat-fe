@@ -55,6 +55,8 @@ interface FormState {
   file_id_npwp: string;
   file_name_ktp: string;
   file_id_ktp: string;
+  badgeNumber: string;
+  tugasBelajar: string;
   // data diri
   tempat_lahir: string;
   tanggal_lahir: string;
@@ -362,6 +364,34 @@ export default function DataPribadiForm(props: UploadFormProps) {
                   )}
                 />
                 {errors.jabatan && <p className="mt-1 text-xs text-red-500">{errors.jabatan.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="badgeNumber" className="block text-sm font-medium text-gray-700">
+                Badge Number
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('badgeNumber', { required: false })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                  name="badgeNumber"
+                  type="text"
+                />
+                {errors.badgeNumber && <p className="mt-1 text-xs text-red-500">{errors.badgeNumber.message}</p>}
+              </div>
+            </div>
+            <div className="mt-5 sm:col-span-6">
+              <label htmlFor="tugasBelajar" className="block text-sm font-medium text-gray-700">
+                Tugas Belajar
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('tugasBelajar', { required: false })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
+                  name="tugasBelajar"
+                  type="text"
+                />
+                {errors.tugasBelajar && <p className="mt-1 text-xs text-red-500">{errors.tugasBelajar.message}</p>}
               </div>
             </div>
             <div className="mt-5 sm:col-span-6">
