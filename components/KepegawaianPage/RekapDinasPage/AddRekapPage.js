@@ -107,11 +107,11 @@ function AddRekapPage(props) {
           if (dataAvail.status === 200) {
             const { data: dataProfilPegawai } = await callAPI(
               KepegawaianAPI.GET_PEGAWAI_LIST,
-              { nama: data.nama, status_cpns: [0], page: 1, per_page: 10 },
+              { nama: data.nama, status_cpns: [0], page: 1, per_page: 20 },
               { method: 'GET' }
             );
 
-            const getDataPegawai = dataProfilPegawai.data.list.find(each => each.pegawai_id === data.pegawai_id)
+            const getDataPegawai = dataProfilPegawai.data.list.find(each => each.pegawai_id === data.pegawai_id);
 
             let dataPegawai = {
               pegawai_id: getDataPegawai.pegawai_id,
@@ -351,11 +351,13 @@ function AddRekapPage(props) {
       if (dataAvail.status === 200) {
         const { data: dataProfilPegawai } = await callAPI(
           KepegawaianAPI.GET_PEGAWAI_LIST,
-          { nama: dataValue[0], status_cpns: [0], page: 1, per_page: 10 },
+          { nama: dataValue[0], status_cpns: [0], page: 1, per_page: 20 },
           { method: 'GET' }
         );
 
-        const getDataPegawai = dataProfilPegawai?.data?.list?.find(each => Number(each.pegawai_id) === Number(dataValue?.[1]))
+        const getDataPegawai = dataProfilPegawai?.data?.list?.find(
+          each => Number(each.pegawai_id) === Number(dataValue?.[1])
+        );
 
         let dataPegawai = {
           pegawai_id: getDataPegawai.pegawai_id,
