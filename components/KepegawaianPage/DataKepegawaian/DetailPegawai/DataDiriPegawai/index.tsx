@@ -1,42 +1,38 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React from 'react';
+import { useDispatch } from 'react-redux';
 
-import { setSnackbar } from '../../../../../action/CommonAction'
-import { KepegawaianAPI } from '../../../../../constants/APIUrls'
-import { StatusPNSText } from '../../../../../constants/Resource'
-import { SnackbarType } from '../../../../../reducer/CommonReducer'
-import {
-  PostPegawaiInsertReq,
-  PostResetPasswordReq,
-  PostResetPasswordRes,
-} from '../../../../../types/api/KepegawaianAPI'
-import { Status } from '../../../../../types/Common'
-import { callAPI } from '../../../../../utils/Fetchers'
-import { getQueryString } from '../../../../../utils/URLUtils'
-import { CircleProgress } from '../../../../shared/CircleProgress'
-import { withErrorBoundary } from '../../../../shared/hocs/ErrorBoundary'
-import useAllowAdmin from '../../../../shared/hooks/useAllowAdmin'
-import usePersonalData from '../../../../shared/hooks/usePersonalData'
-import Loader from '../../../../shared/Loader/Loader'
-import KarpegModal from './KarpegModal'
+import { setSnackbar } from '../../../../../action/CommonAction';
+import { KepegawaianAPI } from '../../../../../constants/APIUrls';
+import { StatusPNSText } from '../../../../../constants/Resource';
+import { SnackbarType } from '../../../../../reducer/CommonReducer';
+import { PostResetPasswordReq, PostResetPasswordRes } from '../../../../../types/api/KepegawaianAPI';
+import { Status } from '../../../../../types/Common';
+import { callAPI } from '../../../../../utils/Fetchers';
+import { getQueryString } from '../../../../../utils/URLUtils';
+import { CircleProgress } from '../../../../shared/CircleProgress';
+import { withErrorBoundary } from '../../../../shared/hocs/ErrorBoundary';
+import useAllowAdmin from '../../../../shared/hooks/useAllowAdmin';
+import usePersonalData from '../../../../shared/hooks/usePersonalData';
+import Loader from '../../../../shared/Loader/Loader';
+import KarpegModal from './KarpegModal';
 
-function DataDiriPegawai () {
-  const { pegawai_id, type } = getQueryString()
-  const dataPersonal = usePersonalData()
-  const isAllowAdmin = useAllowAdmin()
-  const dispatch = useDispatch()
-  const [loading, setLoading] = React.useState(false)
+function DataDiriPegawai() {
+  const { pegawai_id, type } = getQueryString();
+  const dataPersonal = usePersonalData();
+  const isAllowAdmin = useAllowAdmin();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(false);
 
   if (!dataPersonal) {
     return (
-      <div className='relative h-[150px] w-full divide-y divide-gray-200'>
+      <div className="relative h-[150px] w-full divide-y divide-gray-200">
         <Loader />
       </div>
-    )
+    );
   }
 
   const handleReset = async () => {
-    setLoading(true)
+    setLoading(true);
     const resSubmit = await callAPI<PostResetPasswordReq, PostResetPasswordRes>(
       KepegawaianAPI.POST_RESET_PASSWORD,
       {
@@ -44,7 +40,7 @@ function DataDiriPegawai () {
         pegawai_id: Number(pegawai_id),
       },
       { method: 'put' }
-    )
+    );
 
     if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
       dispatch(
@@ -53,8 +49,8 @@ function DataDiriPegawai () {
           message: 'Sukses! Password telah direset',
           type: SnackbarType.INFO,
         })
-      )
-      setLoading(false)
+      );
+      setLoading(false);
     } else {
       dispatch(
         setSnackbar({
@@ -62,16 +58,16 @@ function DataDiriPegawai () {
           message: 'Gagal memproses data. Mohon coba beberapa saat lagi.',
           type: SnackbarType.ERROR,
         })
-      )
-      setLoading(false)
+      );
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <>
-      <table className='min-w-full divide-y divide-gray-200'>
+      <table className="min-w-full divide-y divide-gray-200">
         <thead></thead>
-        <tbody className='divide-y divide-gray-200 bg-white'>
+        <tbody className="divide-y divide-gray-200 bg-white">
           {[
             { label: 'Unit Kerja', value: dataPersonal.unit_kerja },
             { label: 'NIP/NIP Lama', value: dataPersonal.nip },
@@ -93,18 +89,18 @@ function DataDiriPegawai () {
             },
           ].map((each, index) => (
             <tr key={index}>
-              <td className='px-6 py-4 text-sm font-medium text-[#6B7280]'>{each.label}</td>
-              <td className='px-6 py-4 text-sm text-gray-500'>{each.value}</td>
+              <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
+              <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div className='flex gap-2 justify-end'>
+      <div className="flex justify-end gap-2">
         {isAllowAdmin && (
           <button
             disabled={loading}
             onClick={handleReset}
-            className='rounded-[6px] border-2 border-[#4F46E5] py-[9px] px-[17px] text-[#4F46E5] disabled:bg-gray-400 flex'
+            className="flex rounded-[6px] border-2 border-[#4F46E5] py-[9px] px-[17px] text-[#4F46E5] disabled:bg-gray-400"
           >
             {loading ? <CircleProgress /> : null}
             Reset Password
@@ -114,13 +110,13 @@ function DataDiriPegawai () {
           onClick={() =>
             (window.location.href = `/kepegawaian/data-pegawai/update-data?pegawai_id=${pegawai_id}&type=${type}`)
           }
-          className='rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400'
+          className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
         >
           Perbaharui Data
         </button>
       </div>
     </>
-  )
+  );
 }
 
-export default withErrorBoundary(DataDiriPegawai)
+export default withErrorBoundary(DataDiriPegawai);
