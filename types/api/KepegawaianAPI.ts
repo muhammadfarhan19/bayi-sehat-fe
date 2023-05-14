@@ -224,3 +224,13 @@ export interface LiburanDayData {
   date: string;
   libur_name: string;
 }
+
+export interface PostResetPasswordReq {
+  nip: string;
+  pegawai_id: number;
+}
+
+export interface PostResetPasswordRes {
+  status: Status;
+  data: string;
+}

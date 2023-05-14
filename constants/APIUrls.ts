@@ -61,6 +61,7 @@ export const KepegawaianAPI = {
   GET_CALENDAR_PEGAWAI: config.apiHost + '/dinas/kalender/summary',
   POST_STATUS_KEPEGAWAIAN: config.apiHost + '/pegawai/update-status-kepegawaian',
   UPDATE_PEGAWAI_INFO: config.apiHost + '/pegawai/update-info',
+  POST_RESET_PASSWORD: config.apiHost + '/user/reset-password',
 };
 
 export const PetaAPI = {
