@@ -3,4 +3,5 @@ export interface ModalBadgeUpdate {
   selectedPegawai?: number;
   selectedPegawaiName?: string;
   selectedPegawaiNip?: string;
+  selectedPegawaiBadge?: string;
 }

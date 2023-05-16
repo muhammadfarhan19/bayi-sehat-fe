@@ -30,6 +30,9 @@ function DataDiriPegawai() {
   const [isShownBadgeUpdate, setIsShownBadgeUpdate] = React.useState<BadgeNumberModalType>({
     open: false,
     selectedPegawai: undefined,
+    selectedPegawaiName: undefined,
+    selectedPegawaiNip: undefined,
+    selectedPegawaiBadge: undefined,
   });
 
   /**
@@ -39,14 +42,26 @@ function DataDiriPegawai() {
     open: boolean,
     selectedPegawai?: number,
     selectedPegawaiName?: string,
-    selectedPegawaiNip?: string
+    selectedPegawaiNip?: string,
+    selectedPegawaiBadge?: string
   ) => {
     setIsShownBadgeUpdate({
       open,
       selectedPegawai,
       selectedPegawaiName,
       selectedPegawaiNip,
+      selectedPegawaiBadge,
     });
+  };
+
+  const handleSetForm = () => {
+    handleShowForm(
+      !isShownBadgeUpdate.open,
+      dataPersonal?.pegawai_id,
+      dataPersonal?.nama,
+      dataPersonal?.nip,
+      dataPersonal?.badge_number
+    );
   };
   /**
    * @component Precalculate before return
@@ -58,6 +73,7 @@ function DataDiriPegawai() {
       setOpen={(open: boolean) => handleShowForm(open)}
       pegawaiName={isShownBadgeUpdate.selectedPegawaiName}
       pegawaiNip={isShownBadgeUpdate.selectedPegawaiNip}
+      badgeNumberValue={isShownBadgeUpdate.selectedPegawaiBadge}
     />
   ) : null;
   /**
@@ -146,9 +162,7 @@ function DataDiriPegawai() {
       </table>
       <div className="mt-5 flex justify-between gap-2">
         <button
-          onClick={() =>
-            handleShowForm(!isShownBadgeUpdate.open, dataPersonal?.pegawai_id, dataPersonal?.nama, dataPersonal?.nip)
-          }
+          onClick={handleSetForm}
           className="ml-5 rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
         >
           Badge Number

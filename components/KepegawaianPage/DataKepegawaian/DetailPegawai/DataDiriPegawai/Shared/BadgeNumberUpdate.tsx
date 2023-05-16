@@ -68,7 +68,7 @@ function BadgeNumberUpdate(props: ModalProps) {
         })
       );
       setOpen(!open);
-      setTimeout(() => window.location.reload, 200);
+      setTimeout(() => window.location.reload(), 200);
     } else {
       dispatch(
         setSnackbar({
