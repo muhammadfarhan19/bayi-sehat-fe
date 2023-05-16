@@ -62,6 +62,7 @@ export interface PostPegawaiInsertReq {
   jabatan?: string;
   unit_kerja_id: number;
   jumlah_anak: number;
+  badge_number: string;
 }
 
 export interface PostPegawaiInsertRes {
@@ -223,4 +224,14 @@ export interface PegawaiData {
 export interface LiburanDayData {
   date: string;
   libur_name: string;
+}
+
+export interface PostResetPasswordReq {
+  nip: string;
+  pegawai_id: number;
+}
+
+export interface PostResetPasswordRes {
+  status: Status;
+  data: string;
 }

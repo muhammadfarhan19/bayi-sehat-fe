@@ -71,3 +71,14 @@ export interface MasterHotel {
     total_data: number;
   };
 }
+
+export declare module MasterBadgeNumber {
+  interface Request {
+    peg_id: number;
+    badge_number: string;
+  }
+  interface Response {
+    status: string;
+    data: string;
+  }
+}
