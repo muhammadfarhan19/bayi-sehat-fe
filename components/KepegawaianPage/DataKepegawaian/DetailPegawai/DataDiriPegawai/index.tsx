@@ -12,6 +12,7 @@ import { getQueryString } from '../../../../../utils/URLUtils';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import { withErrorBoundary } from '../../../../shared/hocs/ErrorBoundary';
 import useAllowAdmin from '../../../../shared/hooks/useAllowAdmin';
+import useAllowSuperAdmin from '../../../../shared/hooks/useAllowSuperAdmin';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import Loader from '../../../../shared/Loader/Loader';
 import KarpegModal from './KarpegModal';
@@ -21,6 +22,8 @@ function DataDiriPegawai() {
   const { pegawai_id, type } = getQueryString();
   const dataPersonal = usePersonalData();
   const isAllowAdmin = useAllowAdmin();
+  const isAllowSuperAdmin = useAllowSuperAdmin().isAllowSuperAdminAccessFilter;
+
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
 
@@ -76,6 +79,15 @@ function DataDiriPegawai() {
       badgeNumberValue={isShownBadgeUpdate.selectedPegawaiBadge}
     />
   ) : null;
+  const CTAModalBadgeNumber = isAllowSuperAdmin ? (
+    <button
+      onClick={handleSetForm}
+      className="ml-5 rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
+    >
+      Badge Number
+    </button>
+  ) : null;
+  const CTAContainerStyle = `mt-5 flex ${isAllowSuperAdmin ? 'justify-between' : 'justify-end'} gap-2`;
   /**
    * @description Badge Number display value fallback dash
    */
@@ -160,13 +172,8 @@ function DataDiriPegawai() {
           ))}
         </tbody>
       </table>
-      <div className="mt-5 flex justify-between gap-2">
-        <button
-          onClick={handleSetForm}
-          className="ml-5 rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
-        >
-          Badge Number
-        </button>
+      <div className={CTAContainerStyle}>
+        {CTAModalBadgeNumber}
         <div className="flex justify-end gap-2">
           {isAllowAdmin && (
             <button
