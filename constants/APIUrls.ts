@@ -13,6 +13,7 @@ export const UserAPI = {
   PUT_USER_PASSWORD: config.apiHost + '/user/password',
   POST_USER_UPDATE_PROFILE: config.apiHost + '/user/update-profile',
   POST_USER_UPDATE_DATA_DIRI_PEGAWAI: config.apiHost + '/user/update-data-diri-pegawai',
+  PUT_BADGE_NUMBER_USER: config.apiHost + '/master/presensi-pegawai-ref',
 };
 
 export const RbacAPI = {

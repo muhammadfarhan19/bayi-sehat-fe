@@ -62,6 +62,7 @@ export interface PostPegawaiInsertReq {
   jabatan?: string;
   unit_kerja_id: number;
   jumlah_anak: number;
+  badge_number: string;
 }
 
 export interface PostPegawaiInsertRes {

@@ -126,6 +126,7 @@ function MasterPnsForm() {
         jabatan: formData?.jabatan,
         unit_kerja_id: Number(formData.unit_kerja_id),
         jumlah_anak: Number(formData.jumlah_anak),
+        badge_number: formData?.badgeNumber,
       },
       { method: 'post' }
     );

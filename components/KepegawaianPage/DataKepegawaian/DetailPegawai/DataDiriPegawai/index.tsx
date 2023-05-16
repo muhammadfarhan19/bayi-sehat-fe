@@ -15,6 +15,7 @@ import useAllowAdmin from '../../../../shared/hooks/useAllowAdmin';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import Loader from '../../../../shared/Loader/Loader';
 import KarpegModal from './KarpegModal';
+import { BadgeNumberModalType, BadgeNumberUpdate } from './Shared';
 
 function DataDiriPegawai() {
   const { pegawai_id, type } = getQueryString();
@@ -22,6 +23,50 @@ function DataDiriPegawai() {
   const isAllowAdmin = useAllowAdmin();
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
+
+  /**
+   * @state Badge Number Tray
+   */
+  const [isShownBadgeUpdate, setIsShownBadgeUpdate] = React.useState<BadgeNumberModalType>({
+    open: false,
+    selectedPegawai: undefined,
+  });
+
+  /**
+   * @description Handler function for Badge Number
+   */
+  const handleShowForm = (
+    open: boolean,
+    selectedPegawai?: number,
+    selectedPegawaiName?: string,
+    selectedPegawaiNip?: string
+  ) => {
+    setIsShownBadgeUpdate({
+      open,
+      selectedPegawai,
+      selectedPegawaiName,
+      selectedPegawaiNip,
+    });
+  };
+  /**
+   * @component Precalculate before return
+   */
+  const BadgeNumberComponent = isShownBadgeUpdate.open ? (
+    <BadgeNumberUpdate
+      open={isShownBadgeUpdate.open}
+      selectedPegawai={isShownBadgeUpdate.selectedPegawai}
+      setOpen={(open: boolean) => handleShowForm(open)}
+      pegawaiName={isShownBadgeUpdate.selectedPegawaiName}
+      pegawaiNip={isShownBadgeUpdate.selectedPegawaiNip}
+    />
+  ) : null;
+  /**
+   * @description Badge Number display value fallback dash
+   */
+  const badgeNumberValue = dataPersonal?.badge_number ?? '-';
+  /**
+   * @end
+   */
 
   if (!dataPersonal) {
     return (
@@ -87,6 +132,10 @@ function DataDiriPegawai() {
               label: 'Karpeg',
               value: <KarpegModal />,
             },
+            {
+              label: 'Badge Number',
+              value: badgeNumberValue,
+            },
           ].map((each, index) => (
             <tr key={index}>
               <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
@@ -95,26 +144,37 @@ function DataDiriPegawai() {
           ))}
         </tbody>
       </table>
-      <div className="flex justify-end gap-2">
-        {isAllowAdmin && (
-          <button
-            disabled={loading}
-            onClick={handleReset}
-            className="flex rounded-[6px] border-2 border-[#4F46E5] py-[9px] px-[17px] text-[#4F46E5] disabled:bg-gray-400"
-          >
-            {loading ? <CircleProgress /> : null}
-            Reset Password
-          </button>
-        )}
+      <div className="mt-5 flex justify-between gap-2">
         <button
           onClick={() =>
-            (window.location.href = `/kepegawaian/data-pegawai/update-data?pegawai_id=${pegawai_id}&type=${type}`)
+            handleShowForm(!isShownBadgeUpdate.open, dataPersonal?.pegawai_id, dataPersonal?.nama, dataPersonal?.nip)
           }
-          className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
+          className="ml-5 rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
         >
-          Perbaharui Data
+          Badge Number
         </button>
+        <div className="flex justify-end gap-2">
+          {isAllowAdmin && (
+            <button
+              disabled={loading}
+              onClick={handleReset}
+              className="flex rounded-[6px] border-2 border-[#4F46E5] py-[9px] px-[17px] text-[#4F46E5] disabled:bg-gray-400"
+            >
+              {loading ? <CircleProgress /> : null}
+              Reset Password
+            </button>
+          )}
+          <button
+            onClick={() =>
+              (window.location.href = `/kepegawaian/data-pegawai/update-data?pegawai_id=${pegawai_id}&type=${type}`)
+            }
+            className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
+          >
+            Perbaharui Data
+          </button>
+        </div>
       </div>
+      {BadgeNumberComponent}
     </>
   );
 }

@@ -64,6 +64,7 @@ export interface GetUserPersonalPegawaiData {
   user_id: number;
   golongan_id: number;
   status_kepegawaian: number;
+  badge_number: string;
 }
 
 export type GetUserProfileReq = {

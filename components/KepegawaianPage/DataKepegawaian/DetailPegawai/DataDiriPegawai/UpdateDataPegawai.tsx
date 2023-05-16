@@ -41,7 +41,7 @@ interface FormState {
   unit_kerja_id: number;
   file_id: string;
   file_name: string;
-  badgeNumber: string;
+  // badgeNumber: string;
   tugasBelajar: string;
 }
 
@@ -432,7 +432,7 @@ function UpdateDataPegawai() {
             {errors.file_name && <p className="mt-1 text-xs text-red-500">{errors.file_name.message}</p>}
           </div>
 
-          <div className="mt-5">
+          {/* <div className="mt-5">
             <label htmlFor="badgeNumber" className="block text-sm font-medium text-gray-700">
               Badge Number
             </label>
@@ -445,7 +445,7 @@ function UpdateDataPegawai() {
               />
               {errors.badgeNumber && <p className="mt-1 text-xs text-red-500">{errors.badgeNumber.message}</p>}
             </div>
-          </div>
+          </div> */}
 
           <div className="mt-5">
             <label htmlFor="tugasBelajar" className="block text-sm font-medium text-gray-700">
