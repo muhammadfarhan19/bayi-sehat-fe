@@ -182,7 +182,7 @@ function UpdateDataPegawai() {
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className="px-6 pb-6">
           <div className="flex flex-col">
-            <p className="text-[24px] font-medium text-gray-900">Perbaharui Data Diri Pegawai</p>
+            <p className="text-[24px] font-medium text-gray-900">Perbaharui Data Diri </p>
           </div>
 
           <div className="mt-[32px] w-full">
@@ -190,7 +190,8 @@ function UpdateDataPegawai() {
               <label className="block text-sm font-medium text-gray-700">Unit Kerja</label>
               <div className="pt-1 sm:col-span-2 sm:mt-0">
                 <select
-                  {...register('unit_kerja_id', { required: 'Silahkan masukan unit kerja.' })}
+                  // {...register('unit_kerja_id', { required: 'Silahkan masukan unit kerja.' })}
+                  {...register('unit_kerja_id', { required: false })}
                   name="unit_kerja_id"
                   className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                 >
@@ -216,7 +217,8 @@ function UpdateDataPegawai() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('nip', { required: 'Silahkan masukan nip.' })}
+                    // {...register('nip', { required: 'Silahkan masukan nip.' })}
+                    {...register('nip', { required: false })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="nip"
                     type="text"
@@ -233,7 +235,8 @@ function UpdateDataPegawai() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('tempat_lahir', { required: 'Silahkan masukan tempat lahir.' })}
+                    // {...register('tempat_lahir', { required: 'Silahkan masukan tempat lahir.' })}
+                    {...register('tempat_lahir', { required: false })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="tempat_lahir"
                     type="text"
@@ -248,7 +251,8 @@ function UpdateDataPegawai() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('tanggal_lahir', { required: 'Silahkan masukan tanggal lahir.' })}
+                    // {...register('tanggal_lahir', { required: 'Silahkan masukan tanggal lahir.' })}
+                    {...register('tanggal_lahir', { required: false })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="tanggal_lahir"
                     type="date"
@@ -265,7 +269,8 @@ function UpdateDataPegawai() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('tmt_cpns', { required: 'Silahkan masukan tmt cpns.' })}
+                    // {...register('tmt_cpns', { required: 'Silahkan masukan tmt cpns.' })}
+                    {...register('tmt_cpns', { required: false })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="tmt_cpns"
                     type="date"
@@ -283,7 +288,8 @@ function UpdateDataPegawai() {
                     {statusPegawai.map(each => (
                       <div key={each.type} className="flex items-center">
                         <input
-                          {...register('status_cpns', { required: 'Silahkan masukan status pegawai.' })}
+                          // {...register('status_cpns', { required: 'Silahkan masukan status pegawai.' })}
+                          {...register('status_cpns', { required: false })}
                           id={each.type}
                           value={each.id}
                           name="status_cpns"
@@ -306,7 +312,8 @@ function UpdateDataPegawai() {
                 <Controller
                   control={control}
                   name="jabatan_id"
-                  rules={{ required: 'Silahakan masukan jabatan' }}
+                  rules={{ required: false }}
+                  // rules={{ required: 'Silahakan masukan jabatan' }}
                   render={({ field: { onChange } }) => (
                     <AutoComplete
                       onChange={value => onChange(value.value)}
@@ -339,7 +346,8 @@ function UpdateDataPegawai() {
                 <Controller
                   control={control}
                   name="golongan_id"
-                  rules={{ required: 'Mohon input data golongan.' }}
+                  // rules={{ required: 'Mohon input data golongan.' }}
+                  rules={{ required: false }}
                   render={({ field: { onChange } }) => (
                     <AutoComplete
                       defaultValue={{
@@ -365,7 +373,8 @@ function UpdateDataPegawai() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('tmt_golongan', { required: 'Silahkan masukan tmt golongan.' })}
+                    // {...register('tmt_golongan', { required: 'Silahkan masukan tmt golongan.' })}
+                    {...register('tmt_golongan', { required: false })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="tmt_golongan"
                     type="date"
@@ -382,7 +391,8 @@ function UpdateDataPegawai() {
             </label>
             <div className="pt-1">
               <input
-                {...register('karpeg', { required: 'Silahkan masukan karpeg.' })}
+                // {...register('karpeg', { required: 'Silahkan masukan karpeg.' })}
+                {...register('karpeg', { required: false })}
                 className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                 name="karpeg"
                 type="text"
@@ -395,7 +405,8 @@ function UpdateDataPegawai() {
             <Controller
               control={control}
               name={'file_name'}
-              rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
+              // rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
+              rules={{ required: false }}
               render={({ field: { onChange, value } }) => (
                 <UploadWrapper
                   allowedTypes={['pdf']}
