@@ -2,7 +2,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import * as React from 'react';
 
-import { classNames } from '../../../utils/Components';
+import { classNames } from '../../../../../utils/Components';
 
 const dateToday = new Date();
 export const months = [
@@ -25,7 +25,7 @@ interface Props {
   type?: string;
 }
 
-function DatePicker(props: Props) {
+function MonthPicker(props: Props) {
   const [selectedYear, setSelectedYear] = React.useState(dateToday.getFullYear());
   const [selectedMonth, setSelectedMonth] = React.useState(dateToday.getMonth());
 
@@ -41,19 +41,10 @@ function DatePicker(props: Props) {
     setSelectedMonth(index);
   };
 
-  const handleNextPrevMonth = (increment: number) => {
-    let nextMonth = selectedMonth + increment;
-    if (nextMonth >= 12 || nextMonth < 0) {
-      setSelectedYear(Number(selectedYear) + (nextMonth >= 12 ? 1 : -1));
-      nextMonth = nextMonth >= 12 ? 0 : 11;
-    }
-    setSelectedMonth(nextMonth);
-  };
-
   return (
     <>
       <h1 className="text-lg font-semibold text-gray-900">
-        <Menu as="div" className="relative">
+        <Menu as="div" className="absolute">
           <Menu.Button
             type="button"
             className="flex w-[200px] items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
@@ -113,27 +104,8 @@ function DatePicker(props: Props) {
           </Transition>
         </Menu>
       </h1>
-
-      {typeof props.type === 'undefined' && (
-        <div className="flex items-center">
-          <div className="flex items-center rounded-md shadow-sm md:items-stretch">
-            <button
-              onClick={() => handleNextPrevMonth(-1)}
-              className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
-            >
-              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-            <button
-              onClick={() => handleNextPrevMonth(1)}
-              className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
-            >
-              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-      )}
     </>
   );
 }
 
-export default DatePicker;
+export default MonthPicker;
