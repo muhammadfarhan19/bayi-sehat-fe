@@ -1,18 +1,10 @@
-import { AdjustmentsIcon, ChevronLeftIcon } from '@heroicons/react/outline';
+import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
-import { type PegawaiData } from '../../../../types/api/KepegawaianAPI';
 import Pagination from '../../../shared/Pagination';
 import { ModalResend, MonthPicker } from './Shared';
 
-interface RekapPresensiDetailProps {
-  detailPegawai: PegawaiData;
-  onBack: () => void;
-}
-
-function RekapPresensiDetail(props: RekapPresensiDetailProps) {
-  const { detailPegawai, onBack } = props;
-
+function RekapPresensiDetail() {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean;
@@ -37,13 +29,6 @@ function RekapPresensiDetail(props: RekapPresensiDetailProps) {
 
   return (
     <>
-      <div className="pl-5 pt-5">
-        <span onClick={onBack} className="flex cursor-pointer flex-row items-center gap-x-2">
-          <ChevronLeftIcon className="h-5 w-5" />
-          <div>Kembali</div>
-        </span>
-      </div>
-
       <div className="mb-5 flex flex-row items-center px-4 pt-3">
         <h3 className="text-xl font-medium leading-6 text-gray-900">Rekap Presensi</h3>
         <div className="ml-auto flex">
@@ -196,9 +181,9 @@ function RekapPresensiDetail(props: RekapPresensiDetailProps) {
               <tbody>
                 <tr className={'bg-white hover:bg-gray-100'}>
                   <td className="px-6 py-4 text-xs font-medium text-gray-900">{1}</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{detailPegawai?.nip}</td>
-                  <td className="px-6 py-4 text-xs font-medium text-blue-900">{detailPegawai?.name}</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{detailPegawai?.unit_kerja}</td>
+                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{'045866912939'}</td>
+                  <td className="px-6 py-4 text-xs font-medium text-blue-900">{'Zaqi Akbar'}</td>
+                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{'Setditjen Dikti'}</td>
                   <td className="px-6 py-4 text-xs font-medium text-gray-900">{'01-Jan-2023'}</td>
                   <td className="px-6 py-4 text-xs font-medium text-gray-900">{'-'}</td>
                   <td className="px-6 py-4 text-xs font-medium text-gray-900">{'07.30'}</td>

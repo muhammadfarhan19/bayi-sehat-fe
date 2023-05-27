@@ -1,52 +1,12 @@
 import React from 'react';
 
-import { type PegawaiData } from '../../../types/api/KepegawaianAPI';
 import { classNames } from '../../../utils/Components';
 import { tabs } from '../../DinasPage/DataPegawai/DataDinasPegawai';
-import usePersonalData from '../../shared/hooks/usePersonalData';
 import { RekapPresensiDetail } from './DetailPage';
-import { ListPegawaiPNS, ListPegawaiPPNPN } from './Shared';
 import { type TabName } from './Shared/types/_sharedType';
 
 function RekapPresensi() {
   const [selected, setSelected] = React.useState<string | TabName>('Master PNS');
-  const personalData = usePersonalData();
-
-  const [pegawaiData, setPegawaiData] = React.useState<PegawaiData>();
-
-  const handleSelectEachPegawai = (data: PegawaiData) => setPegawaiData(data);
-
-  const isActiveTabPNS = (selected as TabName) === 'Master PNS';
-  const isActiveTabPPNPN = (selected as TabName) === 'Master PPNPN';
-  const isPNS = 1;
-  const isPPNPN = 2;
-
-  const isPegawaiDataAvail = pegawaiData !== undefined;
-  const isSelectedPNS = isPegawaiDataAvail && pegawaiData.status_cpns === isPNS;
-  const isSelectedPPNPN = isPegawaiDataAvail && pegawaiData.status_cpns === isPPNPN;
-
-  const handleBack = () => setPegawaiData(undefined);
-
-  const renderComponent =
-    isActiveTabPNS && !isPegawaiDataAvail ? (
-      <ListPegawaiPNS
-        CTATitle="Detail"
-        onSelectEachPegawai={handleSelectEachPegawai}
-        pageTitle="Rekap Presensi"
-        unit_kerja_id={Number(personalData?.unit_kerja_id)}
-      />
-    ) : isActiveTabPNS && isSelectedPNS ? (
-      <RekapPresensiDetail onBack={handleBack} detailPegawai={pegawaiData} />
-    ) : isActiveTabPPNPN && !isPegawaiDataAvail ? (
-      <ListPegawaiPPNPN
-        CTATitle="Detail"
-        onSelectEachPegawai={handleSelectEachPegawai}
-        pageTitle="Rekap Presensi"
-        unit_kerja_id={Number(personalData?.unit_kerja_id)}
-      />
-    ) : isActiveTabPPNPN && isSelectedPPNPN ? (
-      <RekapPresensiDetail onBack={handleBack} detailPegawai={pegawaiData} />
-    ) : null;
 
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -75,9 +35,6 @@ function RekapPresensi() {
                   href={tab.href}
                   onClick={() => {
                     setSelected(tab.name);
-                    if (pegawaiData?.user_id) {
-                      setPegawaiData(undefined);
-                    }
                   }}
                   className={classNames(
                     tab.name === selected
@@ -93,7 +50,7 @@ function RekapPresensi() {
           </div>
         </div>
       </div>
-      {renderComponent}
+      <RekapPresensiDetail />
     </div>
   );
 }
