@@ -149,6 +149,48 @@ function RekapPresensiDetail(props: RekapPresensiDetailProps) {
                   >
                     Pulang
                   </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Telat(menit)
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    PSW(menit)
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Status Telat
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Status TK
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Pengurang TK(%)
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Pengurang Terlambat(%)
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Pengurang PSW(%)
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -163,6 +205,13 @@ function RekapPresensiDetail(props: RekapPresensiDetailProps) {
                   <td className="px-6 py-4 text-xs font-medium text-gray-900">{'16.30'}</td>
                   <td className="px-6 py-4 text-xs font-medium">{'08.45'}</td>
                   <td className="px-6 py-4 text-xs font-medium">{'15.45'}</td>
+                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
+                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
+                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
+                  <td className="px-6 py-4 text-xs font-medium">{'5'}</td>
+                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
+                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
+                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
                 </tr>
               </tbody>
             </table>
