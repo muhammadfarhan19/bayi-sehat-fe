@@ -132,7 +132,7 @@ export default function ShiftPns() {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      NIP
+                      Badge No.
                     </th>
                     <th
                       scope="col"
@@ -163,7 +163,7 @@ export default function ShiftPns() {
                       >
                         {data.name}
                       </td>
-                      <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
+                      <td className="px-6 text-xs font-medium text-gray-900">{data?.badge_number}</td>
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">
                         <button

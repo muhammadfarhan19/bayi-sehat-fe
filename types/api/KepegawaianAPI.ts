@@ -36,6 +36,7 @@ export interface GetPegawaiListData {
     tgl_lahir: string;
     usia: string;
     sisa_cuti: number;
+    badge_number: string;
   }[];
   pagination: Pagination;
 }
