@@ -1,11 +1,18 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
+import { RekapPresensiAPI } from '../../../../constants/APIUrls';
+import { type RekapPresensiReq, type RekapPresensiResp } from '../../../../types/api/RekapPresensiAPI';
+import { formatDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
+import useCommonApi from '../../../shared/hooks/useCommonApi';
+import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
 import { ModalResend, MonthPicker } from './Shared';
+import useDownloadRekapPresensi from './utils/useDownloadRekapPresensi';
 
 function RekapPresensiDetail() {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
+  const { handleDownloadRekap } = useDownloadRekapPresensi();
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean;
     selectedId?: number;
@@ -26,6 +33,30 @@ function RekapPresensiDetail() {
     },
     [selectedDate]
   );
+
+  const startDate = selectedDate ? formatDate(selectedDate, 'yyyy-MM-dd') : formatDate(new Date(), 'yyyy-MM-dd');
+
+  const endOfMonth = selectedDate ? getLastDayOfMonth(selectedDate) : new Date();
+
+  const endDate = formatDate(endOfMonth, 'yyyy-MM-dd');
+
+  const { data: rekapPresensi, isValidating } = useCommonApi<RekapPresensiReq, RekapPresensiResp>(
+    RekapPresensiAPI.GET_PRESENSI_SUMMARY_LIST,
+    {
+      page: 1,
+      per_page: 20,
+      start_date: startDate,
+      end_date: endDate,
+    },
+    { method: 'GET' },
+    { skipCall: !selectedDate, revalidateOnMount: true }
+  );
+
+  const downloadRekap = () => {
+    if (selectedDate) {
+      handleDownloadRekap(1, 20, startDate, endDate);
+    }
+  };
 
   return (
     <>
@@ -54,7 +85,7 @@ function RekapPresensiDetail() {
         </div>
         <div className="flex flex-row space-x-2">
           <button
-            disabled
+            onClick={downloadRekap}
             className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
           >
             Download
@@ -67,143 +98,152 @@ function RekapPresensiDetail() {
           </button>
         </div>
       </div>
-
-      <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-        <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-          <div className="sm:rounded-lg">
-            <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    No
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    NIP
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Nama
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Unit Kerja
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Tanggal
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Libur
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Shift Masuk
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Shift Keluar
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Masuk
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Pulang
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Telat(menit)
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    PSW(menit)
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Status Telat
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Status TK
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Pengurang TK(%)
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Pengurang Terlambat(%)
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Pengurang PSW(%)
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className={'bg-white hover:bg-gray-100'}>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{1}</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{'045866912939'}</td>
-                  <td className="px-6 py-4 text-xs font-medium text-blue-900">{'Zaqi Akbar'}</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{'Setditjen Dikti'}</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{'01-Jan-2023'}</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{'-'}</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{'07.30'}</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">{'16.30'}</td>
-                  <td className="px-6 py-4 text-xs font-medium">{'08.45'}</td>
-                  <td className="px-6 py-4 text-xs font-medium">{'15.45'}</td>
-                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
-                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
-                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
-                  <td className="px-6 py-4 text-xs font-medium">{'5'}</td>
-                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
-                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
-                  <td className="px-6 py-4 text-xs font-medium">{'0'}</td>
-                </tr>
-              </tbody>
-            </table>
-            <Pagination onChange={() => null} totalData={1} perPage={1} page={1} />
+      {isValidating ? (
+        <div className="relative h-[150px] w-full divide-y divide-gray-200">
+          <Loader />
+        </div>
+      ) : (
+        <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+          <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+            <div className="sm:rounded-lg">
+              <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      No
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Badge No.
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Nama
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Unit Kerja
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Tanggal
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Libur
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Shift Masuk
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Shift Keluar
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Masuk
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Pulang
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Telat(menit)
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      PSW(menit)
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Status Telat
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Status TK
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Pengurang TK(%)
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Pengurang Terlambat(%)
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Pengurang PSW(%)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(rekapPresensi?.list ?? []).map((data, index) => {
+                    return (
+                      <tr className={'bg-white hover:bg-gray-100'}>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.badge_number}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.date}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.holiday}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_in}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_out}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{data?.check_in}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{data?.check_out}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.telat}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.psw}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_tk}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_terlambat}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_psw}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <Pagination onChange={() => null} totalData={1} perPage={1} page={1} />
+            </div>
           </div>
         </div>
-      </div>
+      )}
       {formModalState?.open && (
         <ModalResend open={formModalState?.open} setOpen={(open: boolean) => handleShowForm(open, 0)} />
       )}
