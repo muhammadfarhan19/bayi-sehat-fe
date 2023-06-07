@@ -167,5 +167,11 @@ export const handleCheckTime = (event?: string) => {
   return;
 };
 
+export function getLastDayOfMonth(date: Date): Date {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  return new Date(year, month, 0);
+}
+
 export const weekendText = 'Weekend';
 export const weekendTextLocaleId = 'Akhir Pekan';
