@@ -1,8 +1,18 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
+import { setSnackbar } from '../../../../../action/CommonAction';
+import { KepegawaianAPI } from '../../../../../constants/APIUrls';
 import { AgamaText, GenderText, StatusMenikahText } from '../../../../../constants/Resource';
+import { SnackbarType } from '../../../../../reducer/CommonReducer';
+import { PostResetPasswordReq, PostResetPasswordRes } from '../../../../../types/api/KepegawaianAPI';
+import { Status } from '../../../../../types/Common';
+import { callAPI } from '../../../../../utils/Fetchers';
+import { getQueryString } from '../../../../../utils/URLUtils';
+import { CircleProgress } from '../../../../shared/CircleProgress';
 import FileLoader from '../../../../shared/FileLoader';
 import { withErrorBoundary } from '../../../../shared/hocs/ErrorBoundary';
+import useAllowAdmin from '../../../../shared/hooks/useAllowAdmin';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import Loader from '../../../../shared/Loader/Loader';
 import DataPribadiForm from './DataPribadiForm';
@@ -19,7 +29,11 @@ const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
 };
 
 function DataDiriPribadiPpnpn() {
+  const dispatch = useDispatch();
+  const { pegawai_id } = getQueryString();
+  const isAllowAdmin = useAllowAdmin();
   const dataApiRes = usePersonalData();
+  const [loading, setLoading] = React.useState(false);
   const [formModalState, setFormModalState] = React.useState<{ open: boolean }>({
     open: false,
   });
@@ -35,6 +49,38 @@ function DataDiriPribadiPpnpn() {
       </div>
     );
   }
+
+  const handleReset = async () => {
+    setLoading(true);
+    const resSubmit = await callAPI<PostResetPasswordReq, PostResetPasswordRes>(
+      KepegawaianAPI.POST_RESET_PASSWORD,
+      {
+        nip: String(dataApiRes.nip),
+        pegawai_id: Number(pegawai_id),
+      },
+      { method: 'put' }
+    );
+
+    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Sukses! Password telah direset',
+          type: SnackbarType.INFO,
+        })
+      );
+      setLoading(false);
+    } else {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Gagal memproses data. Mohon coba beberapa saat lagi.',
+          type: SnackbarType.ERROR,
+        })
+      );
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -94,7 +140,17 @@ function DataDiriPribadiPpnpn() {
               ))}
             </tbody>
           </table>
-          <div className="flex flex-auto flex-col items-end">
+          <div className="flex justify-end gap-2">
+            {isAllowAdmin && (
+              <button
+                disabled={loading}
+                onClick={handleReset}
+                className="flex rounded-[6px] border-2 border-[#4F46E5] py-[9px] px-[17px] text-[#4F46E5] disabled:bg-gray-400"
+              >
+                {loading ? <CircleProgress /> : null}
+                Reset Password
+              </button>
+            )}
             <a
               className="ml-1 inline-flex cursor-pointer items-center rounded-md border border-indigo-600 bg-indigo-600 p-2 px-3 text-sm text-white hover:bg-indigo-700 focus:outline-none"
               onClick={() => handleShowForm(!formModalState.open)}
