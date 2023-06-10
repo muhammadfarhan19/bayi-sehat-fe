@@ -54,7 +54,7 @@ function RekapPresensiDetail() {
 
   const downloadRekap = () => {
     if (selectedDate) {
-      handleDownloadRekap(1, 20, startDate, endDate);
+      handleDownloadRekap(startDate, endDate);
     }
   };
 

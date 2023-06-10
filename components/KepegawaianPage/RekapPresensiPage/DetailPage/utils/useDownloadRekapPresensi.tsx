@@ -4,19 +4,17 @@ import { setSnackbar } from '../../../../../action/CommonAction';
 import { RekapPresensiAPI } from '../../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import { GetDocumentRes } from '../../../../../types/api/DocumentAPI';
-import { RekapPresensiReq } from '../../../../../types/api/RekapPresensiAPI';
 import { callAPI } from '../../../../../utils/Fetchers';
 
 function useDownloadRekapPresensi() {
   const dispatch = useDispatch();
 
-  const handleDownloadRekap = (page: number, perPage: number, startDate: string, endDate: string) => {
-    callAPI<RekapPresensiReq, GetDocumentRes>(RekapPresensiAPI.POST_PRESENSI_SUMMARY_EXPORT, {
-      page: page,
-      per_page: perPage,
-      start_date: startDate,
-      end_date: endDate,
-    })
+  const handleDownloadRekap = (startDate: string, endDate: string) => {
+    callAPI<null, GetDocumentRes>(
+      RekapPresensiAPI.POST_PRESENSI_SUMMARY_EXPORT + `?start_date=${startDate}&end_date=${endDate}`,
+      null,
+      { isBlob: true, method: 'POST' }
+    )
       .then(response => {
         let url = '';
         if (response.status === 200 && response.data instanceof Blob) {
@@ -24,7 +22,7 @@ function useDownloadRekapPresensi() {
         }
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'RekapPresensi.xlsx');
+        link.setAttribute('download', `rekap_presensi_tukin_pegawai_${startDate}_${endDate}.xlsx`);
         document.body.appendChild(link);
         dispatch(
           setSnackbar({
