@@ -215,7 +215,9 @@ function ListPNS(props: ListPNSProps) {
 
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                         {isShownCutiCell ? (
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.sisa_cuti}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {data?.saldo_cuti_tahun_ini || 0}
+                          </td>
                         ) : null}
                         <td className="px-6 py-4 text-xs font-medium">
                           <button
