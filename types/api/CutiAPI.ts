@@ -77,3 +77,31 @@ export interface GetCutiListParams {
 export interface ExportCutiRes {
   status: Status;
 }
+
+export declare module SaldoCuti {
+  interface Request {
+    nama?: string;
+    unit_kerja_id: number;
+    status_cpns: number[];
+  }
+
+  interface Response {
+    list: ListResponse[];
+    pagination: {
+      total_page: number;
+      total_data: number;
+    };
+  }
+  interface ListResponse {
+    pegawai_id: number;
+    nip: string;
+    nama_pegawai: string;
+    unit_kerja_id: number;
+    unit_kerja_str: string;
+    cuti_yang_diambil_2_tahun_lalu: number;
+    cuti_yang_diambil_tahun_lalu: number;
+    cuti_yang_diambil_tahun_ini: number;
+    saldo_cuti_tahun_ini: number;
+    perkiraan_saldo_cuti_tahun_depan: number;
+  }
+}

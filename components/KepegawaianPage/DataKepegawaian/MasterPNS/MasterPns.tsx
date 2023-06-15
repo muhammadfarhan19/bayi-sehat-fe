@@ -91,43 +91,67 @@ export default function MasterPns(props: UnitKerja) {
             </div>
           </div>
         </div>
-        {showAdvancedFilter && (
-          <div className="flex w-full flex-row gap-x-[16px]">
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
-              <select
-                className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-                onChange={e => search('unit_kerja_id', e.target.value)}
-                disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
-              >
-                <option value="">Semua</option>
-                {(unitKerjaList || []).map((item, index) => (
-                  <option
-                    key={`options-${index}`}
-                    value={item?.unit_kerja_id}
-                    selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
-                  >
-                    {item?.name}
-                  </option>
-                ))}
-              </select>
+        <div className="flex flex-row items-center justify-between">
+          {showAdvancedFilter && (
+            <div className="flex w-full flex-row gap-x-[16px]">
+              <div className="w-[202px] pb-2">
+                <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
+                <select
+                  className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                  onChange={e => search('unit_kerja_id', e.target.value)}
+                  disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
+                >
+                  <option value="">Semua</option>
+                  {(unitKerjaList || []).map((item, index) => (
+                    <option
+                      key={`options-${index}`}
+                      value={item?.unit_kerja_id}
+                      selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                    >
+                      {item?.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-[202px] pb-2">
+                <p className="mb-[4px] text-[14px] font-normal">Tipe Jabatan</p>
+                <select
+                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  onChange={e => search('tipe_jabatan', e.target.value)}
+                >
+                  <option value="">Semua</option>
+                  {(jenisJabatanList || []).map((item, index) => (
+                    <option key={`options-${index}`} value={item?.tipe_jabatan}>
+                      {item?.jenis_jabatan}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="w-[202px] pb-2">
-              <p className="mb-[4px] text-[14px] font-normal">Tipe Jabatan</p>
-              <select
-                className="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                onChange={e => search('tipe_jabatan', e.target.value)}
-              >
-                <option value="">Semua</option>
-                {(jenisJabatanList || []).map((item, index) => (
-                  <option key={`options-${index}`} value={item?.tipe_jabatan}>
-                    {item?.jenis_jabatan}
-                  </option>
-                ))}
-              </select>
-            </div>
+          )}
+          <div className="flex flex-row items-center space-x-2">
+            <button
+              type="button"
+              disabled
+              className="rounded-md bg-indigo-600 bg-green-600 px-[40px] py-[7px] text-sm font-medium text-white hover:bg-green-700 focus:outline-none"
+              onClick={() => {
+                null;
+              }}
+            >
+              Import
+            </button>
+            <button
+              type="button"
+              disabled
+              className="rounded-md bg-indigo-600 px-[40px] py-[7px] text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none"
+              onClick={() => {
+                null;
+              }}
+            >
+              Export
+            </button>
           </div>
-        )}
+        </div>
       </div>
       {isValidating ? (
         <div className="relative h-[150px] w-full divide-y divide-gray-200">
