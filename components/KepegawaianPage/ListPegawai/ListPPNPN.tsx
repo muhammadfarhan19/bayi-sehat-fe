@@ -214,9 +214,7 @@ function ListPPNPN(props: ListPPNPNProps) {
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                         {isShownCutiCell ? (
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                            {data?.saldo_cuti_tahun_ini || 0}
-                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.sisa_cuti}</td>
                         ) : null}
                         <td className="px-6 py-4 text-xs font-medium">
                           <button

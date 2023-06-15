@@ -37,7 +37,6 @@ export interface GetPegawaiListData {
     usia: string;
     sisa_cuti: number;
     badge_number: string;
-    saldo_cuti_tahun_ini: number;
   }[];
   pagination: Pagination;
 }
