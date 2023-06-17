@@ -95,20 +95,14 @@ export default function MasterPpnpn(props: UnitKerja) {
             <button
               type="button"
               disabled
-              className="rounded-md bg-indigo-600 bg-green-600 px-[40px] py-[7px] text-sm font-medium text-white hover:bg-green-700 focus:outline-none"
-              onClick={() => {
-                null;
-              }}
+              className="rounded-md bg-green-600 px-[40px] py-[7px] text-sm font-medium text-white hover:bg-green-700 focus:outline-none disabled:bg-green-300"
             >
               Import
             </button>
             <button
               type="button"
               disabled
-              className="rounded-md bg-indigo-600 px-[40px] py-[7px] text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none"
-              onClick={() => {
-                null;
-              }}
+              className="rounded-md bg-indigo-600 px-[40px] py-[7px] text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none disabled:bg-indigo-300"
             >
               Export
             </button>
