@@ -215,6 +215,14 @@ function RekapPresensiDetail() {
                 </thead>
                 <tbody>
                   {(rekapPresensi?.list ?? []).map((data, index) => {
+                    const dataPsw = data?.summary?.psw;
+                    const dataTelat = data?.summary?.telat;
+                    /**
+                     * @description given key below return -1 from Response
+                     */
+                    const isBelowZeroPSW = dataPsw < 0 ? 1 : dataPsw;
+                    const isBelowZeroDataTelat = dataTelat < 0 ? 1 : dataTelat;
+
                     return (
                       <tr className={'bg-white hover:bg-gray-100'}>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
@@ -227,8 +235,8 @@ function RekapPresensiDetail() {
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_out}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.check_in}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.check_out}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.telat}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.psw}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_tk}</td>
