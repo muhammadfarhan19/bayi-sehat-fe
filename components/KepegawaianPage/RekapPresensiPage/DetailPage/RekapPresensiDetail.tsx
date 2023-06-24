@@ -21,6 +21,11 @@ function RekapPresensiDetail() {
     selectedId: undefined,
   });
 
+  const [filterState, setFilterState] = React.useState<{ page: number; per_page: number }>({
+    page: 1,
+    per_page: 20,
+  });
+
   const handleShowForm = (open: boolean, selectedId?: number) => {
     setFormModalState({
       open,
@@ -43,8 +48,8 @@ function RekapPresensiDetail() {
   const { data: rekapPresensi, isValidating } = useCommonApi<RekapPresensiReq, RekapPresensiResp>(
     RekapPresensiAPI.GET_PRESENSI_SUMMARY_LIST,
     {
-      page: 1,
-      per_page: 20,
+      page: filterState?.page,
+      per_page: filterState?.per_page,
       start_date: startDate,
       end_date: endDate,
     },
@@ -56,6 +61,12 @@ function RekapPresensiDetail() {
     if (selectedDate) {
       handleDownloadRekap(startDate, endDate);
     }
+  };
+
+  const search = async <T extends keyof typeof filterState>(type: T, value: typeof filterState[T]) => {
+    const newState = { ...filterState };
+    newState[type] = value;
+    setFilterState(newState);
   };
 
   return (
@@ -191,6 +202,12 @@ function RekapPresensiDetail() {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
+                      Status PSW
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
                       Status TK
                     </th>
                     <th
@@ -217,11 +234,13 @@ function RekapPresensiDetail() {
                   {(rekapPresensi?.list ?? []).map((data, index) => {
                     const dataPsw = data?.summary?.psw;
                     const dataTelat = data?.summary?.telat;
+                    const dataStatusPsw = data?.summary?.status_psw;
                     /**
                      * @description given key below return -1 from Response
                      */
                     const isBelowZeroPSW = dataPsw < 0 ? 1 : dataPsw;
                     const isBelowZeroDataTelat = dataTelat < 0 ? 1 : dataTelat;
+                    const isBelowZeroDataStatusPsw = dataStatusPsw < 0 ? 1 : dataStatusPsw;
 
                     return (
                       <tr className={'bg-white hover:bg-gray-100'}>
@@ -237,6 +256,7 @@ function RekapPresensiDetail() {
                         <td className="px-6 py-4 text-xs font-medium">{data?.check_out}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_tk}</td>
@@ -247,7 +267,14 @@ function RekapPresensiDetail() {
                   })}
                 </tbody>
               </table>
-              <Pagination onChange={() => null} totalData={1} perPage={1} page={1} />
+              <Pagination
+                onChange={value => {
+                  search('page', value);
+                }}
+                totalData={rekapPresensi ? rekapPresensi?.pagination.total_data : 0}
+                perPage={filterState.per_page}
+                page={filterState.page}
+              />
             </div>
           </div>
         </div>
