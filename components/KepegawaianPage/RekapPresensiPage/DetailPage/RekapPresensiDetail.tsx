@@ -7,7 +7,7 @@ import { formatDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
-import { ModalResend, MonthPicker } from './Shared'
+import { ModalResend, MonthPicker } from './Shared';
 import useDownloadRekapPresensi from './utils/useDownloadRekapPresensi';
 
 function RekapPresensiDetail() {
