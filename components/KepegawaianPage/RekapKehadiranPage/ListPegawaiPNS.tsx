@@ -166,6 +166,7 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
                     </thead>
                     <tbody>
                       {(pegawaiList?.list || []).map((data, dataIdx) => {
+                        const isLoaderShown = isSyncLoading.onLoad && isSyncLoading.onSelected === dataIdx;
                         return (
                           <tr key={data?.pegawai_id} className={'bg-white hover:bg-gray-100'}>
                             <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
@@ -193,11 +194,11 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
                                     dataIdx
                                   )
                                 }
-                                // disabled
+                                disabled={isLoaderShown}
                                 type="button"
                                 className={`inline-flex w-20 items-center justify-center rounded border border-transparent bg-green-500 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
                               >
-                                {isSyncLoading.onLoad ? <CircleProgress /> : 'Sync'}
+                                {isLoaderShown ? <CircleProgress /> : 'Sync'}
                               </button>
                             </td>
                           </tr>

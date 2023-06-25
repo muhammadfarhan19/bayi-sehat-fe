@@ -165,48 +165,51 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
                         </tr>
                       </thead>
                       <tbody>
-                        {(ppnpnList?.list || []).map((data, dataIdx) => (
-                          <tr
-                            key={dataIdx}
-                            className={
-                              dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'
-                            }
-                          >
-                            <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                              {filterPPNPN.per_page * (filterPPNPN.page - 1) + (dataIdx + 1)}
-                            </td>
-                            <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
-                            <td className="px-6 py-4 text-xs font-medium text-indigo-800">{data?.name}</td>
-                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
-                            <td className="text-\xs px-6 py-4 font-medium">
-                              <button
-                                onClick={() => {
-                                  setPegawaiId(data?.pegawai_id);
-                                }}
-                                type="button"
-                                className="inline-flex w-20 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
-                              >
-                                Rekap
-                              </button>
-                            </td>
-                            <td className="cursor-pointer px-6 py-4 text-xs font-medium text-green-700">
-                              <button
-                                onClick={() =>
-                                  handleSyncPegawai(
-                                    dateSelected?.dateStarted,
-                                    dateSelected?.dateEnded,
-                                    data?.nip,
-                                    dataIdx
-                                  )
-                                }
-                                type="button"
-                                className={`inline-flex w-20 items-center justify-center rounded border border-transparent bg-green-500 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
-                              >
-                                {isSyncLoading.onLoad ? <CircleProgress /> : 'Sync'}
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
+                        {(ppnpnList?.list || []).map((data, dataIdx) => {
+                          const isLoaderShown = isSyncLoading.onLoad && isSyncLoading.onSelected === dataIdx;
+                          return (
+                            <tr
+                              key={dataIdx}
+                              className={
+                                dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'
+                              }
+                            >
+                              <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                {filterPPNPN.per_page * (filterPPNPN.page - 1) + (dataIdx + 1)}
+                              </td>
+                              <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
+                              <td className="px-6 py-4 text-xs font-medium text-indigo-800">{data?.name}</td>
+                              <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
+                              <td className="text-\xs px-6 py-4 font-medium">
+                                <button
+                                  onClick={() => {
+                                    setPegawaiId(data?.pegawai_id);
+                                  }}
+                                  type="button"
+                                  className="inline-flex w-20 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
+                                >
+                                  Rekap
+                                </button>
+                              </td>
+                              <td className="cursor-pointer px-6 py-4 text-xs font-medium text-green-700">
+                                <button
+                                  onClick={() =>
+                                    handleSyncPegawai(
+                                      dateSelected?.dateStarted,
+                                      dateSelected?.dateEnded,
+                                      data?.nip,
+                                      dataIdx
+                                    )
+                                  }
+                                  type="button"
+                                  className={`inline-flex w-20 items-center justify-center rounded border border-transparent bg-green-500 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
+                                >
+                                  {isLoaderShown ? <CircleProgress /> : 'Sync'}
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                     <Pagination
