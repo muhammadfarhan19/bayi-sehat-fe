@@ -4,8 +4,10 @@ import React from 'react';
 import { KepegawaianAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../types/api/KepegawaianAPI';
 import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
+import { CircleProgress } from '../../shared/CircleProgress';
 import useAllowSuperAdmin from '../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../shared/hooks/useCommonApi';
+import useSyncKehadiran from '../../shared/hooks/useSyncKehadiran';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
 import { SelectedData } from './RekapGroup';
@@ -18,7 +20,7 @@ interface UnitKerjaProps {
 }
 function ListPegawaiPNS(props: UnitKerjaProps) {
   const { unit_kerja_id, onBack, dateSelected } = props;
-
+  const { isSyncLoading, handleSyncPegawai } = useSyncKehadiran();
   const inputTimeout = React.useRef<NodeJS.Timeout>();
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
@@ -27,7 +29,6 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
     unit_kerja_id: unit_kerja_id,
   });
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
-
   const [pegawaiId, setPegawaiId] = React.useState<number>(0);
 
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
@@ -184,13 +185,19 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
                             </td>
                             <td className="cursor-pointer px-6 py-4 text-xs font-medium text-green-700">
                               <button
-                                onClick={() => null}
-                                disabled
+                                onClick={() =>
+                                  handleSyncPegawai(
+                                    dateSelected?.dateStarted,
+                                    dateSelected?.dateEnded,
+                                    data?.nip,
+                                    dataIdx
+                                  )
+                                }
+                                // disabled
                                 type="button"
                                 className={`inline-flex w-20 items-center justify-center rounded border border-transparent bg-green-500 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
                               >
-                                {/* {isLoaderShown ? <CircleProgress /> : 'Sync'} */}
-                                Sync
+                                {isSyncLoading.onLoad ? <CircleProgress /> : 'Sync'}
                               </button>
                             </td>
                           </tr>
