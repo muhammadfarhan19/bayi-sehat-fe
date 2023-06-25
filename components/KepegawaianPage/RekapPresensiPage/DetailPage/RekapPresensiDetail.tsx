@@ -7,7 +7,7 @@ import { formatDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
-import { ModalResend, MonthPicker } from './Shared';
+import { ModalResend, MonthPicker } from './Shared'
 import useDownloadRekapPresensi from './utils/useDownloadRekapPresensi';
 
 function RekapPresensiDetail() {
@@ -69,6 +69,7 @@ function RekapPresensiDetail() {
     setFilterState(newState);
   };
 
+  const replacementOfMinusOneResponse = '-';
   return (
     <>
       <div className="mb-5 flex flex-row items-center px-4 pt-3">
@@ -238,9 +239,9 @@ function RekapPresensiDetail() {
                     /**
                      * @description given key below return -1 from Response
                      */
-                    const isBelowZeroPSW = dataPsw < 0 ? 1 : dataPsw;
-                    const isBelowZeroDataTelat = dataTelat < 0 ? 1 : dataTelat;
-                    const isBelowZeroDataStatusPsw = dataStatusPsw < 0 ? 1 : dataStatusPsw;
+                    const isBelowZeroPSW = dataPsw < 0 ? replacementOfMinusOneResponse : dataPsw;
+                    const isBelowZeroDataTelat = dataTelat < 0 ? replacementOfMinusOneResponse : dataTelat;
+                    const isBelowZeroDataStatusPsw = dataStatusPsw < 0 ? replacementOfMinusOneResponse : dataStatusPsw;
 
                     return (
                       <tr className={'bg-white hover:bg-gray-100'}>

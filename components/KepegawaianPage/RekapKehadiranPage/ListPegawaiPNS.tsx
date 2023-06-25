@@ -155,6 +155,12 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
                         >
                           Aksi
                         </th>
+                        <th
+                          scope="col"
+                          className="w-40 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Sync
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -174,6 +180,17 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
                                 className="inline-flex w-20 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-200"
                               >
                                 Rekap
+                              </button>
+                            </td>
+                            <td className="cursor-pointer px-6 py-4 text-xs font-medium text-green-700">
+                              <button
+                                onClick={() => null}
+                                disabled
+                                type="button"
+                                className={`inline-flex w-20 items-center justify-center rounded border border-transparent bg-green-500 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
+                              >
+                                {/* {isLoaderShown ? <CircleProgress /> : 'Sync'} */}
+                                Sync
                               </button>
                             </td>
                           </tr>
