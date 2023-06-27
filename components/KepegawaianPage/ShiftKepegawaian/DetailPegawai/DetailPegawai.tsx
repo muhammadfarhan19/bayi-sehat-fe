@@ -49,6 +49,7 @@ function DetailPegawai() {
     { method: 'GET' }
   );
 
+  // console.log(presensiShift)
   const { data: dataPresensi, isValidating: dataPresensiLoading } = useCommonApi<null, PresensiShiftData[]>(
     PresensiAPI.PRESENSI_SHIFT_LIST,
     null,
@@ -186,39 +187,45 @@ function DetailPegawai() {
               </tr>
             </thead>
             <tbody>
-              {(presensiShift || []).map((each, dataIdx) => (
-                <tr
-                  key={dataIdx}
-                  className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
-                >
-                  <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">{each?.tanggal}</td>
-                  <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
-                    {dataPresensi?.find(item => item.id === each?.shift_id)?.nama_shift || '-'}
-                  </td>
-                  <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
-                    {dataPresensi?.find(item => item.id === each?.shift_id)?.jam_start_check_in || '-'}
-                  </td>
-                  <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
-                    {dataPresensi?.find(item => item.id === each?.shift_id)?.jam_start_check_out || '-'}
-                  </td>
-                  <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
-                    <button
-                      type="button"
-                      className="mr-[8px] rounded-md bg-[#DC2626] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-red-700 focus:outline-none"
-                      onClick={() => setConfirmId(each?.id)}
-                    >
-                      Hapus
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-md bg-[#4F46E5] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-indigo-700 focus:outline-none"
-                      onClick={() => handleShowForm(!formModalState.open, each)}
-                    >
-                      Edit
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {(presensiShift || []).map((each, dataIdx) => {
+                return (
+                  <tr
+                    key={dataIdx}
+                    className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                  >
+                    <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">{each?.tanggal}</td>
+                    <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
+                      {dataPresensi?.find(item => item.id === each?.shift_id)?.nama_shift || '-'}
+                    </td>
+                    <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
+                      {dataPresensi?.find(item => item.id === each?.shift_id)?.jam_start_check_in ||
+                        dataPresensi?.find(item => item?.id === each?.shift_id)?.shift_start ||
+                        '-'}
+                    </td>
+                    <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
+                      {dataPresensi?.find(item => item.id === each?.shift_id)?.jam_start_check_out ||
+                        dataPresensi?.find(item => item?.id === each?.shift_id)?.shift_end ||
+                        '-'}
+                    </td>
+                    <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
+                      <button
+                        type="button"
+                        className="mr-[8px] rounded-md bg-[#DC2626] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-red-700 focus:outline-none"
+                        onClick={() => setConfirmId(each?.id)}
+                      >
+                        Hapus
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-md bg-[#4F46E5] px-[11px] py-[7px] text-xs font-medium text-white hover:bg-indigo-700 focus:outline-none"
+                        onClick={() => handleShowForm(!formModalState.open, each)}
+                      >
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}

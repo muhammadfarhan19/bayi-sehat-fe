@@ -3,6 +3,7 @@ export interface RekapPresensiReq {
   per_page: number;
   start_date: string;
   end_date: string;
+  status_cpns: number[];
 }
 
 export interface RekapPresensiResp {

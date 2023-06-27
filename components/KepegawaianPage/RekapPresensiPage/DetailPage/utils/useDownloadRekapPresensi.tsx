@@ -14,12 +14,11 @@ function useDownloadRekapPresensi() {
       RekapPresensiAPI.POST_PRESENSI_SUMMARY_EXPORT + `?start_date=${startDate}&end_date=${endDate}`,
       null,
       { isBlob: true, method: 'POST' }
-    )
-      .then(response => {
-        let url = '';
-        if (response.status === 200 && response.data instanceof Blob) {
-          url = window.URL.createObjectURL(response.data);
-        }
+    ).then(response => {
+      console.log(response.status);
+      let url = '';
+      if (response.status === 200 && response.data instanceof Blob) {
+        url = window.URL.createObjectURL(response.data);
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', `rekap_presensi_tukin_pegawai_${startDate}_${endDate}.xlsx`);
@@ -32,8 +31,7 @@ function useDownloadRekapPresensi() {
           })
         );
         link.click();
-      })
-      .catch(() => {
+      } else {
         dispatch(
           setSnackbar({
             show: true,
@@ -41,7 +39,8 @@ function useDownloadRekapPresensi() {
             type: SnackbarType.ERROR,
           })
         );
-      });
+      }
+    });
   };
 
   return { handleDownloadRekap };
