@@ -50,7 +50,7 @@ function RekapPresensi() {
           </div>
         </div>
       </div>
-      <RekapPresensiDetail />
+      <RekapPresensiDetail status_cpns={(selected as TabName) === 'Master PNS' ? [1, 3] : [2]} />
     </div>
   );
 }

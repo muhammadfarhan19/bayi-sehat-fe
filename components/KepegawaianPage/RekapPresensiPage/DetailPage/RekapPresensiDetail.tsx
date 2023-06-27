@@ -10,7 +10,11 @@ import Pagination from '../../../shared/Pagination';
 import { ModalResend, MonthPicker } from './Shared';
 import useDownloadRekapPresensi from './utils/useDownloadRekapPresensi';
 
-function RekapPresensiDetail() {
+interface RekapPresensiProps {
+  status_cpns: number[];
+}
+
+function RekapPresensiDetail(props: RekapPresensiProps) {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const { handleDownloadRekap } = useDownloadRekapPresensi();
   const [formModalState, setFormModalState] = React.useState<{
@@ -21,7 +25,7 @@ function RekapPresensiDetail() {
     selectedId: undefined,
   });
 
-  const [filterState, setFilterState] = React.useState<{ page: number; per_page: number }>({
+  const [filterState, setFilterState] = React.useState<{ page: number; per_page: number; nama?: string }>({
     page: 1,
     per_page: 20,
   });
@@ -52,9 +56,10 @@ function RekapPresensiDetail() {
       per_page: filterState?.per_page,
       start_date: startDate,
       end_date: endDate,
+      status_cpns: props.status_cpns,
     },
     { method: 'GET' },
-    { skipCall: !selectedDate, revalidateOnMount: true }
+    { skipCall: !selectedDate && !props.status_cpns, revalidateOnMount: true }
   );
 
   const downloadRekap = () => {
@@ -79,7 +84,7 @@ function RekapPresensiDetail() {
             type="text"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Cari..."
-            disabled
+            onChange={e => search('nama', e.target.value)}
           />
           <button
             type="button"
@@ -229,6 +234,18 @@ function RekapPresensiDetail() {
                     >
                       Pengurang PSW(%)
                     </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Pengurang Lupa Absen Datang(%)
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Pengurang Lupa Absen Pulang(%)
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -263,6 +280,12 @@ function RekapPresensiDetail() {
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_tk}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_terlambat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_psw}</td>
+                        <td className="px-6 py-4 text-xs font-medium">
+                          {data?.summary?.pengurangan_lupa_absen_datang}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium">
+                          {data?.summary?.pengurangan_lupa_absen_pulang}
+                        </td>
                       </tr>
                     );
                   })}
