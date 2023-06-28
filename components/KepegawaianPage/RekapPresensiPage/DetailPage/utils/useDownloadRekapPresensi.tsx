@@ -9,9 +9,10 @@ import { callAPI } from '../../../../../utils/Fetchers';
 function useDownloadRekapPresensi() {
   const dispatch = useDispatch();
 
-  const handleDownloadRekap = (startDate: string, endDate: string) => {
+  const handleDownloadRekap = (startDate: string, endDate: string, statusPegawai: number[]) => {
     callAPI<null, GetDocumentRes>(
-      RekapPresensiAPI.POST_PRESENSI_SUMMARY_EXPORT + `?start_date=${startDate}&end_date=${endDate}`,
+      RekapPresensiAPI.POST_PRESENSI_SUMMARY_EXPORT +
+        `?start_date=${startDate}&end_date=${endDate}&status_cpns=${statusPegawai}`,
       null,
       { isBlob: true, method: 'POST' }
     ).then(response => {
