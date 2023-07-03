@@ -16,6 +16,7 @@ interface RekapPresensiProps {
 
 function RekapPresensiDetail(props: RekapPresensiProps) {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
   const { handleDownloadRekap } = useDownloadRekapPresensi();
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean;
@@ -50,16 +51,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
 
   const endDate = formatDate(endOfMonth, 'yyyy-MM-dd');
 
-  const filterStateName = {
-    page: filterState?.page,
-    per_page: filterState?.per_page,
-    start_date: startDate,
-    end_date: endDate,
-    status_cpns: props.status_cpns,
-    nama: filterState?.nama,
-  };
-
-  const filterStateGeneral = {
+  const filterStateQuery = {
     page: filterState?.page,
     per_page: filterState?.per_page,
     start_date: startDate,
@@ -69,7 +61,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
 
   const { data: rekapPresensi, isValidating } = useCommonApi<RekapPresensiReq, RekapPresensiResp>(
     RekapPresensiAPI.GET_PRESENSI_SUMMARY_LIST,
-    filterState?.nama !== '' ? filterStateName : filterStateGeneral,
+    filterState?.nama !== '' ? { ...filterStateQuery, nama: filterState?.nama } : filterStateQuery,
     { method: 'GET' },
     { skipCall: !selectedDate && !props.status_cpns, revalidateOnMount: true || filterState?.nama === '' }
   );
@@ -80,10 +72,20 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
     }
   };
 
-  const search = async <T extends keyof typeof filterState>(type: T, value: typeof filterState[T]) => {
-    const newState = { ...filterState };
-    newState[type] = value;
-    setFilterState(newState);
+  const changeFilterState = (inputState: Partial<RekapPresensiReq>) => {
+    const pageAffected = Object.keys(inputState).includes('page');
+    const newState = {
+      ...filterState,
+      ...inputState,
+    };
+
+    if (!pageAffected) {
+      newState.page = 1;
+    }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
 
   const replacementOfMinusOneResponse = '-';
@@ -96,7 +98,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
             type="text"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Cari..."
-            onChange={e => search('nama', e.target.value)}
+            onChange={e => changeFilterState({ nama: e.target.value })}
           />
           <button
             type="button"
@@ -214,13 +216,13 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      Status Telat
+                      Status PSW
                     </th>
                     <th
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      Status PSW
+                      Status Telat
                     </th>
                     <th
                       scope="col"
@@ -305,7 +307,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
               </table>
               <Pagination
                 onChange={value => {
-                  search('page', value);
+                  changeFilterState({ page: value });
                 }}
                 totalData={rekapPresensi ? rekapPresensi?.pagination.total_data : 0}
                 perPage={filterState.per_page}
