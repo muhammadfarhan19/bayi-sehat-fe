@@ -198,14 +198,10 @@ function DetailPegawai() {
                       {dataPresensi?.find(item => item.id === each?.shift_id)?.nama_shift || '-'}
                     </td>
                     <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
-                      {dataPresensi?.find(item => item.id === each?.shift_id)?.jam_start_check_in ||
-                        dataPresensi?.find(item => item?.id === each?.shift_id)?.shift_start ||
-                        '-'}
+                      {dataPresensi?.find(item => item.id === each?.shift_id)?.shift_start ?? '-'}
                     </td>
                     <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
-                      {dataPresensi?.find(item => item.id === each?.shift_id)?.jam_start_check_out ||
-                        dataPresensi?.find(item => item?.id === each?.shift_id)?.shift_end ||
-                        '-'}
+                      {dataPresensi?.find(item => item.id === each?.shift_id)?.shift_end ?? '-'}
                     </td>
                     <td className="px-6 py-4 text-center text-xs font-medium text-gray-900">
                       <button
