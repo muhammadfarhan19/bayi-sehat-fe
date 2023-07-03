@@ -4,6 +4,7 @@ export interface RekapPresensiReq {
   start_date: string;
   end_date: string;
   status_cpns: number[];
+  nama?: string;
 }
 
 export interface RekapPresensiResp {

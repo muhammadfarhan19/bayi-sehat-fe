@@ -28,6 +28,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
   const [filterState, setFilterState] = React.useState<{ page: number; per_page: number; nama?: string }>({
     page: 1,
     per_page: 20,
+    nama: '',
   });
 
   const handleShowForm = (open: boolean, selectedId?: number) => {
@@ -49,22 +50,33 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
 
   const endDate = formatDate(endOfMonth, 'yyyy-MM-dd');
 
+  const filterStateName = {
+    page: filterState?.page,
+    per_page: filterState?.per_page,
+    start_date: startDate,
+    end_date: endDate,
+    status_cpns: props.status_cpns,
+    nama: filterState?.nama,
+  };
+
+  const filterStateGeneral = {
+    page: filterState?.page,
+    per_page: filterState?.per_page,
+    start_date: startDate,
+    end_date: endDate,
+    status_cpns: props.status_cpns,
+  };
+
   const { data: rekapPresensi, isValidating } = useCommonApi<RekapPresensiReq, RekapPresensiResp>(
     RekapPresensiAPI.GET_PRESENSI_SUMMARY_LIST,
-    {
-      page: filterState?.page,
-      per_page: filterState?.per_page,
-      start_date: startDate,
-      end_date: endDate,
-      status_cpns: props.status_cpns,
-    },
+    filterState?.nama !== '' ? filterStateName : filterStateGeneral,
     { method: 'GET' },
-    { skipCall: !selectedDate && !props.status_cpns, revalidateOnMount: true }
+    { skipCall: !selectedDate && !props.status_cpns, revalidateOnMount: true || filterState?.nama === '' }
   );
 
   const downloadRekap = () => {
     if (selectedDate) {
-      handleDownloadRekap(startDate, endDate);
+      handleDownloadRekap(startDate, endDate, props.status_cpns);
     }
   };
 
