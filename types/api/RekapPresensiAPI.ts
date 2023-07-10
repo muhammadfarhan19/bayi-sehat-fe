@@ -23,7 +23,7 @@ interface RekapPresensiData {
   name: string;
   unit_kerja: string;
   date: string;
-  holiday: string;
+  note: string;
   check_in: string;
   check_out: string;
   shift_check_in: string;
