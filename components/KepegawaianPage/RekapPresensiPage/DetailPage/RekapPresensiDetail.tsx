@@ -174,7 +174,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      Libur
+                      Note
                     </th>
                     <th
                       scope="col"
@@ -281,7 +281,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.date}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.holiday}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_in}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_out}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.check_in}</td>
