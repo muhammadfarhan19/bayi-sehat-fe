@@ -2,8 +2,10 @@ import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { RekapPresensiAPI } from '../../../../constants/APIUrls';
+import { useCommonState } from '../../../../reducer/CommonReducer';
 import { type RekapPresensiReq, type RekapPresensiResp } from '../../../../types/api/RekapPresensiAPI';
 import { formatDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
+import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
@@ -18,6 +20,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const { handleDownloadRekap } = useDownloadRekapPresensi();
+  const isDownloading = useCommonState().showLoader;
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean;
     selectedId?: number;
@@ -116,10 +119,11 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
         </div>
         <div className="flex flex-row space-x-2">
           <button
+            disabled={isDownloading}
             onClick={downloadRekap}
             className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
           >
-            Download
+            {isDownloading ? <CircleProgress /> : 'Download'}
           </button>
           <button
             onClick={() => handleShowForm(!formModalState.open, 0)}
