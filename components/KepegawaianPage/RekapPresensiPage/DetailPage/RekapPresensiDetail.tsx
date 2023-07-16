@@ -220,14 +220,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      Status Hadir
-                    </th>
-
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Status Tidak Hadir
+                      Status
                     </th>
                     <th
                       scope="col"
@@ -301,10 +294,6 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       data?.summary?.status_kehadiran?.trim()?.length > 0
                         ? data?.summary?.status_kehadiran
                         : replacementOfMinusOneResponseAsHyphen;
-                    const statusKetidakHadiran =
-                      data?.summary?.status_ketidakhadiran?.trim()?.length > 0
-                        ? data?.summary?.status_ketidakhadiran
-                        : replacementOfMinusOneResponseAsHyphen;
                     return (
                       <tr className={'bg-white hover:bg-gray-100'}>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
@@ -320,7 +309,6 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
                         <td className="px-6 py-4 text-xs font-medium">{statusKehadiran}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{statusKetidakHadiran}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
