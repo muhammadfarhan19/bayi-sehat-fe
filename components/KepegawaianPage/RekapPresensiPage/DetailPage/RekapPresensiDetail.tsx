@@ -2,6 +2,7 @@ import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { RekapPresensiAPI } from '../../../../constants/APIUrls';
+import { UnavailableDataText } from '../../../../constants/Resource';
 import { useCommonState } from '../../../../reducer/CommonReducer';
 import { type RekapPresensiReq, type RekapPresensiResp } from '../../../../types/api/RekapPresensiAPI';
 import { formatDate, formatStringDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
@@ -220,7 +221,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      Status
+                      Status Hadir
                     </th>
                     <th
                       scope="col"
@@ -293,7 +294,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                     const statusKehadiran =
                       data?.summary?.status_kehadiran?.trim()?.length > 0
                         ? data?.summary?.status_kehadiran
-                        : replacementOfMinusOneResponseAsHyphen;
+                        : UnavailableDataText;
                     return (
                       <tr className={'bg-white hover:bg-gray-100'}>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
@@ -308,7 +309,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                         <td className="px-6 py-4 text-xs font-medium">{data?.check_out}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{statusKehadiran}</td>
+                        <td className="py-2 text-xs font-medium">{statusKehadiran}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>

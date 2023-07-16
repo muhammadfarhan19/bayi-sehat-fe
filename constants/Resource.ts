@@ -201,3 +201,5 @@ export enum JamKerja {
   Masuk = 'Jam Kerja Masuk',
   Pulang = 'Jam Kerja Pulang',
 }
+
+export const UnavailableDataText = 'Data Belum Ada';
