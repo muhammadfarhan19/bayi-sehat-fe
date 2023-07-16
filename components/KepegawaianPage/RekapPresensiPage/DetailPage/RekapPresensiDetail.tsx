@@ -118,16 +118,22 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
           <MonthPicker onChange={handleDateChange} />
         </div>
         <div className="flex flex-row space-x-2">
-          <button
+            <button
             disabled={isDownloading}
             onClick={downloadRekap}
-            className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
+            className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
           >
-            {isDownloading ? <CircleProgress /> : 'Download'}
+            {isDownloading ? (
+              <div className="flex items-center justify-center">
+                <CircleProgress />
+              </div>
+            ) : (
+              'Download'
+            )}
           </button>
           <button
             onClick={() => handleShowForm(!formModalState.open, 0)}
-            className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
+            className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
           >
             Kirim Ulang
           </button>
