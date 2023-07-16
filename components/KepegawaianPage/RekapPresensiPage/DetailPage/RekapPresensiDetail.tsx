@@ -91,7 +91,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
     timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
 
-  const replacementOfMinusOneResponse = '-';
+  const replacementOfMinusOneResponseAsHyphen = '-';
   return (
     <>
       <div className="mb-5 flex flex-row items-center px-4 pt-3">
@@ -220,6 +220,19 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
+                      Status Hadir
+                    </th>
+
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Status Tidak Hadir
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
                       Status PSW
                     </th>
                     <th
@@ -274,12 +287,24 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                     /**
                      * @description given key below return -1 from Response
                      */
-                    const isBelowZeroPSW = dataPsw < 0 ? replacementOfMinusOneResponse : dataPsw;
-                    const isBelowZeroDataTelat = dataTelat < 0 ? replacementOfMinusOneResponse : dataTelat;
-                    const isBelowZeroDataStatusPsw = dataStatusPsw < 0 ? replacementOfMinusOneResponse : dataStatusPsw;
+                    const isBelowZeroPSW = dataPsw < 0 ? replacementOfMinusOneResponseAsHyphen : dataPsw;
+                    const isBelowZeroDataTelat = dataTelat < 0 ? replacementOfMinusOneResponseAsHyphen : dataTelat;
+                    const isBelowZeroDataStatusPsw =
+                      dataStatusPsw < 0 ? replacementOfMinusOneResponseAsHyphen : dataStatusPsw;
                     const formattedDateAndDay = formatStringDate(data?.date, 'EEEE, dd-MMM-yyyy');
                     const formattedCheckIn = formatStringDate(data?.shift_check_in, ' HH:mm');
                     const formattedCheckOut = formatStringDate(data?.shift_check_out, ' HH:mm');
+                    /**
+                     * @description Status Kehadiran
+                     */
+                    const statusKehadiran =
+                      data?.summary?.status_kehadiran?.trim()?.length > 0
+                        ? data?.summary?.status_kehadiran
+                        : replacementOfMinusOneResponseAsHyphen;
+                    const statusKetidakHadiran =
+                      data?.summary?.status_ketidakhadiran?.trim()?.length > 0
+                        ? data?.summary?.status_ketidakhadiran
+                        : replacementOfMinusOneResponseAsHyphen;
                     return (
                       <tr className={'bg-white hover:bg-gray-100'}>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
@@ -294,6 +319,8 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                         <td className="px-6 py-4 text-xs font-medium">{data?.check_out}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{statusKehadiran}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{statusKetidakHadiran}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
