@@ -2,10 +2,9 @@ import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { RekapPresensiAPI } from '../../../../constants/APIUrls';
-import { UnavailableDataText } from '../../../../constants/Resource';
 import { useCommonState } from '../../../../reducer/CommonReducer';
 import { type RekapPresensiReq, type RekapPresensiResp } from '../../../../types/api/RekapPresensiAPI';
-import { formatDate, formatStringDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
+import { formatDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
 import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
@@ -285,31 +284,20 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                     const isBelowZeroDataTelat = dataTelat < 0 ? replacementOfMinusOneResponseAsHyphen : dataTelat;
                     const isBelowZeroDataStatusPsw =
                       dataStatusPsw < 0 ? replacementOfMinusOneResponseAsHyphen : dataStatusPsw;
-                    const formattedDateAndDay = formatStringDate(data?.date, 'EEEE, dd-MMM-yyyy');
-                    const formattedCheckIn = formatStringDate(data?.shift_check_in, ' HH:mm');
-                    const formattedCheckOut = formatStringDate(data?.shift_check_out, ' HH:mm');
-                    /**
-                     * @description Status Kehadiran
-                     */
-                    const statusKehadiran =
-                      data?.summary?.status_kehadiran?.trim()?.length > 0
-                        ? data?.summary?.status_kehadiran
-                        : UnavailableDataText;
                     return (
                       <tr className={'bg-white hover:bg-gray-100'}>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedDateAndDay}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.date}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedCheckIn}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedCheckOut}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_in}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_out}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.check_in}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.check_out}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
-                        <td className="py-2 text-xs font-medium">{statusKehadiran}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
