@@ -6,9 +6,10 @@ export const CommonActionType = {
   SET_SNACKBAR: 'SET_SNACKBAR',
   SET_USER_INFO: 'SET_USER_INFO',
   SHOW_PROF_PIC: 'SHOW_PROF_PIC',
+  SET_LOADER: 'SHOW_LOADER',
 } as const;
 
-export const setAPIRes = (key: string, res: Object) => ({ type: CommonActionType.SET_API_RES, key, res });
+export const setAPIRes = (key: string, res: object) => ({ type: CommonActionType.SET_API_RES, key, res });
 
 export const setModal = (modalProps: Partial<CommonState['modal']>) => ({
   type: CommonActionType.SET_MODAL,
@@ -30,9 +31,15 @@ export const setShowProfPic = (show: boolean) => ({
   show,
 });
 
+export const setLoader = (show: boolean) => ({
+  type: CommonActionType.SET_LOADER,
+  show,
+});
+
 export type CommonAction =
   | ReturnType<typeof setAPIRes>
   | ReturnType<typeof setModal>
   | ReturnType<typeof setSnackbar>
   | ReturnType<typeof setUserId>
-  | ReturnType<typeof setShowProfPic>;
+  | ReturnType<typeof setShowProfPic>
+  | ReturnType<typeof setLoader>;

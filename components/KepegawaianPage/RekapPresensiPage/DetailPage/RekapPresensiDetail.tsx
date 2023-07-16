@@ -2,8 +2,10 @@ import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { RekapPresensiAPI } from '../../../../constants/APIUrls';
+import { useCommonState } from '../../../../reducer/CommonReducer';
 import { type RekapPresensiReq, type RekapPresensiResp } from '../../../../types/api/RekapPresensiAPI';
 import { formatDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
+import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
@@ -18,6 +20,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const { handleDownloadRekap } = useDownloadRekapPresensi();
+  const isDownloading = useCommonState().showLoader;
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean;
     selectedId?: number;
@@ -88,7 +91,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
     timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
 
-  const replacementOfMinusOneResponse = '-';
+  const replacementOfMinusOneResponseAsHyphen = '-';
   return (
     <>
       <div className="mb-5 flex flex-row items-center px-4 pt-3">
@@ -116,10 +119,11 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
         </div>
         <div className="flex flex-row space-x-2">
           <button
+            disabled={isDownloading}
             onClick={downloadRekap}
             className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
           >
-            Download
+            {isDownloading ? <CircleProgress /> : 'Download'}
           </button>
           <button
             onClick={() => handleShowForm(!formModalState.open, 0)}
@@ -168,7 +172,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      Tanggal
+                      Hari dan Tanggal
                     </th>
                     <th
                       scope="col"
@@ -270,10 +274,10 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                     /**
                      * @description given key below return -1 from Response
                      */
-                    const isBelowZeroPSW = dataPsw < 0 ? replacementOfMinusOneResponse : dataPsw;
-                    const isBelowZeroDataTelat = dataTelat < 0 ? replacementOfMinusOneResponse : dataTelat;
-                    const isBelowZeroDataStatusPsw = dataStatusPsw < 0 ? replacementOfMinusOneResponse : dataStatusPsw;
-
+                    const isBelowZeroPSW = dataPsw < 0 ? replacementOfMinusOneResponseAsHyphen : dataPsw;
+                    const isBelowZeroDataTelat = dataTelat < 0 ? replacementOfMinusOneResponseAsHyphen : dataTelat;
+                    const isBelowZeroDataStatusPsw =
+                      dataStatusPsw < 0 ? replacementOfMinusOneResponseAsHyphen : dataStatusPsw;
                     return (
                       <tr className={'bg-white hover:bg-gray-100'}>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
