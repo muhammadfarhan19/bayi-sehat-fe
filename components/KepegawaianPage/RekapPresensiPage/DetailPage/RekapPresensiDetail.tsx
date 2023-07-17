@@ -122,10 +122,10 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
           <button
             disabled={isDownloading}
             onClick={downloadRekap}
-            className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
+            className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400"
           >
             {isDownloading ? (
-              <div className="flex items-center justify-center">
+              <div className="ml-4 flex items-center justify-center">
                 <CircleProgress />
               </div>
             ) : (
@@ -134,7 +134,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
           </button>
           <button
             onClick={() => handleShowForm(!formModalState.open, 0)}
-            className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
+            className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400"
           >
             Kirim Ulang
           </button>
