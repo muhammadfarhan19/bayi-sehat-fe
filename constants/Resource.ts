@@ -203,3 +203,18 @@ export enum JamKerja {
 }
 
 export const UnavailableDataText = 'Data Belum Ada';
+
+export const AgamaMap: Record<number, string> = {
+  1: 'Buddha',
+  2: 'Hindu',
+  3: 'Islam',
+  4: 'Katolik',
+  5: 'Protestan',
+  6: 'Tidak dapat disebutkan',
+};
+
+export const RelationshipStatusMap: Record<number, string> = {
+  2: 'Menikah',
+  3: 'Cerai Hidup',
+  4: 'Cerai Meninggal',
+};
