@@ -2,9 +2,11 @@ import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { RekapPresensiAPI } from '../../../../constants/APIUrls';
+import { UnavailableDataText } from '../../../../constants/Resource';
 import { useCommonState } from '../../../../reducer/CommonReducer';
 import { type RekapPresensiReq, type RekapPresensiResp } from '../../../../types/api/RekapPresensiAPI';
-import { formatDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
+import { formatDate, formatStringDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
+import { checkReturnValueOfString } from '../../../../utils/StringUtil';
 import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
@@ -118,13 +120,13 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
           <MonthPicker onChange={handleDateChange} />
         </div>
         <div className="flex flex-row space-x-2">
-            <button
+          <button
             disabled={isDownloading}
             onClick={downloadRekap}
-            className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
+            className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400"
           >
             {isDownloading ? (
-              <div className="flex items-center justify-center">
+              <div className="ml-4 flex items-center justify-center">
                 <CircleProgress />
               </div>
             ) : (
@@ -133,7 +135,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
           </button>
           <button
             onClick={() => handleShowForm(!formModalState.open, 0)}
-            className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-indigo-400"
+            className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400"
           >
             Kirim Ulang
           </button>
@@ -226,6 +228,12 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
+                      Status Hadir
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
                       Status PSW
                     </th>
                     <th
@@ -270,6 +278,12 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                     >
                       Pengurang Lupa Absen Pulang(%)
                     </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Last Sync
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -291,24 +305,45 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.date}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_in}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_out}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          {checkReturnValueOfString(data?.note)}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          {checkReturnValueOfString(data?.shift_check_in)}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          {checkReturnValueOfString(data?.shift_check_out)}
+                        </td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.check_in}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.check_out}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{checkReturnValueOfString(data?.check_out)}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
+                        <td className="py-2 text-xs font-medium">
+                          {checkReturnValueOfString(data?.status, UnavailableDataText)}
+                        </td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_tk}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_terlambat}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_psw}</td>
                         <td className="px-6 py-4 text-xs font-medium">
-                          {data?.summary?.pengurangan_lupa_absen_datang}
+                          {checkReturnValueOfString(data?.summary?.pengurangan_tk)}
                         </td>
                         <td className="px-6 py-4 text-xs font-medium">
-                          {data?.summary?.pengurangan_lupa_absen_pulang}
+                          {checkReturnValueOfString(data?.summary?.pengurangan_terlambat)}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium">
+                          {checkReturnValueOfString(data?.summary?.pengurangan_psw)}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium">
+                          {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_datang)}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium">
+                          {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_pulang)}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium">
+                          {checkReturnValueOfString(
+                            formatStringDate(data?.summary?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss'),
+                            formatStringDate(data?.summary?.created_by, 'EEEE, dd MMM yyyy, HH:mm:ss')
+                          )}
                         </td>
                       </tr>
                     );

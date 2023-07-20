@@ -30,6 +30,7 @@ export const NavigationId = {
   PARENT_SIDE_MENU_KEHADIRAN: 155,
   PARENT_SIDE_MENU_MASTER: 156,
   PARENT_SIDE_STRUKTUR_ORGANISASI: 168,
+  PARENT_SIDE_MENU_REKAP_PRESENSI: 175,
 };
 
 export const UserNavigationList: Navigation[] = [

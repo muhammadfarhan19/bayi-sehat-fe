@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
 import { RiwayatAnakAPI, RiwayatKeluargaAPI } from '../../../../../constants/APIUrls';
+import { AgamaMap, RelationshipStatusMap } from '../../../../../constants/Resource';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import {
   DelAnakList,
@@ -99,6 +100,14 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
     });
   };
 
+  const handleSetAgama = React.useCallback((index: number) => {
+    return setRegiligionState(AgamaMap[index]);
+  }, []);
+
+  const handleSetRelationshipStatus = React.useCallback((index: number) => {
+    return setMarriageState(RelationshipStatusMap[index]);
+  }, []);
+
   const formatDate = (date: any) => {
     if (date !== undefined && date?.length >= 1) {
       return format(new Date(date), 'yyyy-MM-dd');
@@ -117,329 +126,324 @@ export default function DetailPenghargaan(props: DetailAnakProps) {
   };
 
   React.useEffect(() => {
-    if (Number(detailKeluarga?.status_pernikahan) === 2) {
-      setMarriageState('Menikah');
-    } else if (Number(detailKeluarga?.status_pernikahan) === 4) {
-      setMarriageState('Cerai Meninggal');
-    } else if (Number(detailKeluarga?.status_pernikahan) === 3) {
-      setMarriageState('Cerai Hidup');
+    if (detailKeluarga?.status_pernikahan) {
+      handleSetRelationshipStatus(Number(detailKeluarga?.status_pernikahan));
     }
-  }, [Number(detailKeluarga?.status_pernikahan)]);
+  }, [detailKeluarga?.status_pernikahan]);
 
   React.useEffect(() => {
-    if (detailKeluarga?.agama === 1) {
-      setRegiligionState('Buddha');
-    } else if (detailKeluarga?.agama === 2) {
-      setRegiligionState('Hindu');
-    } else if (detailKeluarga?.agama === 3) {
-      setRegiligionState('Islam');
-    } else if (detailKeluarga?.agama === 4) {
-      setRegiligionState('Katolik');
-    } else if (detailKeluarga?.agama === 5) {
-      setRegiligionState('Protestan');
-    } else if (detailKeluarga?.agama === 6) {
-      setRegiligionState('Tidak dapat disebutkan');
+    if (detailKeluarga?.agama) {
+      handleSetAgama(Number(detailKeluarga?.agama));
     }
   }, [detailKeluarga?.agama]);
 
-  return showDetailsAnak.open ? (
-    <DetailAnak
-      riwayatAnakId={Number(riwayatKeluargaId)}
-      onBack={() => {
-        handleShowDetails(!showDetailsAnak.open);
-      }}
-    />
-  ) : formModalState.open ? (
-    <AnakForm
-      onSuccess={() => mutate()}
-      riwayatKeluargaId={Number(riwayatKeluargaId)}
-      open={formModalState.open}
-      setOpen={(open: boolean) => handleShowForm(open)}
-      selectedId={formModalState?.selectedId}
-    />
-  ) : (
+  return (
     <>
-      <div className="flex flex-row items-center justify-between">
-        <div className="my-3 inline-flex cursor-pointer items-center" onClick={onBack}>
-          <ChevronLeftIcon className="mr-1 h-5" />
-          <span className="tracking-wide text-gray-600">Kembali</span>
-        </div>
-        <button
-          onClick={() => handleShowForm(!formModalState.open)}
-          type="button"
-          className="mt-5 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
-        >
-          <PlusIcon className="mr-1 h-4" />
-          Tambah Anak
-        </button>
-      </div>
-      <div>
-        <span className="mb-2 text-[24px] font-[600]">Data Pasangan</span>
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead></thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {[
-              { label: 'Nama', value: detailKeluarga?.nama },
-              { label: 'Tempat Lahir', value: detailKeluarga?.tempat_lahir },
-              { label: 'Tanggal Lahir', value: formatDate(detailKeluarga?.tanggal_lahir) },
-              { label: 'Jenis Kelamin', value: detailKeluarga?.jenis_kelamin === 1 ? 'Laki-Laki' : 'Perempuan' },
+      {showDetailsAnak.open ? (
+        <DetailAnak
+          riwayatAnakId={Number(riwayatKeluargaId)}
+          onBack={() => {
+            handleShowDetails(!showDetailsAnak.open);
+          }}
+        />
+      ) : formModalState.open ? (
+        <AnakForm
+          onSuccess={() => mutate()}
+          riwayatKeluargaId={Number(riwayatKeluargaId)}
+          open={formModalState.open}
+          setOpen={(open: boolean) => handleShowForm(open)}
+          selectedId={formModalState?.selectedId}
+        />
+      ) : (
+        <>
+          <div className="flex flex-row items-center justify-between">
+            <div className="my-3 inline-flex cursor-pointer items-center" onClick={onBack}>
+              <ChevronLeftIcon className="mr-1 h-5" />
+              <span className="tracking-wide text-gray-600">Kembali</span>
+            </div>
+            <button
+              onClick={() => handleShowForm(!formModalState.open)}
+              type="button"
+              className="mt-5 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:bg-indigo-200 disabled:text-gray-200"
+            >
+              <PlusIcon className="mr-1 h-4" />
+              Tambah Anak
+            </button>
+          </div>
+          <div>
+            <span className="mb-2 text-[24px] font-[600]">Data Pasangan</span>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead></thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {[
+                  { label: 'Nama', value: detailKeluarga?.nama },
+                  { label: 'Tempat Lahir', value: detailKeluarga?.tempat_lahir },
+                  { label: 'Tanggal Lahir', value: formatDate(detailKeluarga?.tanggal_lahir) },
+                  { label: 'Jenis Kelamin', value: detailKeluarga?.jenis_kelamin === 1 ? 'Laki-Laki' : 'Perempuan' },
 
-              { label: 'Agama', value: religionState },
-              { label: 'No Hp', value: detailKeluarga?.hp.length === 0 ? '-' : detailKeluarga?.hp },
-              {
-                label: 'Foto Pasangan',
-                value: (
-                  <div className="flex flex-row items-center space-x-2">
-                    {detailKeluarga?.foto_pasangan?.[0]?.document_name == '' ? (
-                      '-'
-                    ) : (
-                      <>
-                        <PhotographIcon style={{ width: 28, height: 28 }} />
-                        <LinkFile
-                          link={detailKeluarga?.foto_pasangan?.[0]?.document_uuid}
-                          value={detailKeluarga?.foto_pasangan?.[0]?.document_name}
-                        />
-                      </>
-                    )}
-                  </div>
-                ),
-              },
-              {
-                label: 'Kartu Identitas',
-                value: (
-                  <div className="flex flex-row items-center space-x-2">
-                    <PDFIcon />
-                    <LinkFile
-                      link={detailKeluarga?.files?.[0]?.document_uuid}
-                      value={detailKeluarga?.files?.[0]?.document_name}
-                    />
-                  </div>
-                ),
-              },
-              { label: 'Alamat', value: detailKeluarga?.alamat },
-              {
-                label: 'Nomor Akta Kelahiran',
-                value: detailKeluarga?.nomor_akta_kelahiran?.length === 0 ? '-' : detailKeluarga?.nomor_akta_kelahiran,
-              },
-              {
-                label: 'Akta Kelahiran',
-                value: (
-                  <div className="flex flex-row items-center space-x-2">
-                    {detailKeluarga?.files?.[2]?.document_name.length === 0 ? (
-                      '-'
-                    ) : (
-                      <>
+                  { label: 'Agama', value: religionState },
+                  { label: 'No Hp', value: detailKeluarga?.hp.length === 0 ? '-' : detailKeluarga?.hp },
+                  {
+                    label: 'Foto Pasangan',
+                    value: (
+                      <div className="flex flex-row items-center space-x-2">
+                        {detailKeluarga?.foto_pasangan?.[0]?.document_name == '' ? (
+                          '-'
+                        ) : (
+                          <>
+                            <PhotographIcon style={{ width: 28, height: 28 }} />
+                            <LinkFile
+                              link={detailKeluarga?.foto_pasangan?.[0]?.document_uuid}
+                              value={detailKeluarga?.foto_pasangan?.[0]?.document_name}
+                            />
+                          </>
+                        )}
+                      </div>
+                    ),
+                  },
+                  {
+                    label: 'Kartu Identitas',
+                    value: (
+                      <div className="flex flex-row items-center space-x-2">
                         <PDFIcon />
                         <LinkFile
-                          link={detailKeluarga?.files?.[2]?.document_uuid}
-                          value={detailKeluarga?.files?.[2]?.document_name}
+                          link={detailKeluarga?.files?.[0]?.document_uuid}
+                          value={detailKeluarga?.files?.[0]?.document_name}
                         />
-                      </>
-                    )}
-                  </div>
-                ),
-              },
-              { label: 'Status Hidup', value: detailKeluarga?.status_hidup === 1 ? 'Hidup' : 'Wafat' },
-              {
-                label: 'Nomer NPWP',
-                value: detailKeluarga?.nomor_npwp?.length === 0 ? '-' : detailKeluarga?.nomor_npwp,
-              },
-              { label: 'Status Pasangan', value: detailKeluarga?.status_pasangan === 1 ? 'Suami' : 'Istri' },
-              { label: 'Status PNS', value: detailKeluarga?.status_pns === 1 ? 'PNS' : 'Non-PNS' },
-              { label: 'Tanggal Menikah', value: formatDate(detailKeluarga?.tanggal_menikah) },
-              { label: 'Nomer Akta Nikah', value: detailKeluarga?.nomor_akta_menikah },
-              {
-                label: 'Akta Nikah',
-                value: (
-                  <div className="flex flex-row items-center space-x-2">
-                    <PDFIcon />
-                    <LinkFile
-                      link={detailKeluarga?.files?.[1]?.document_uuid}
-                      value={detailKeluarga?.files?.[1]?.document_name}
-                    />
-                  </div>
-                ),
-              },
-              {
-                label: 'Tanggal Meninggal',
-                value: detailKeluarga?.tanggal_meninggal == '' ? '-' : formatDate(detailKeluarga?.tanggal_meninggal),
-              },
-              {
-                label: 'Nomer Akta Meninggal',
-                value: detailKeluarga?.nomor_akta_meninggal?.length === 0 ? '-' : detailKeluarga?.nomor_akta_meninggal,
-              },
-              {
-                label: 'Akta Meninggal',
-                value: (
-                  <div className="flex flex-row items-center space-x-2">
-                    {detailKeluarga?.nomor_akta_meninggal?.length === 0 ? (
-                      '-'
-                    ) : detailKeluarga?.files?.[5]?.document_name.length === 0 ? (
-                      <p className="text-[red]">Tidak ada Data</p>
-                    ) : (
-                      <>
+                      </div>
+                    ),
+                  },
+                  { label: 'Alamat', value: detailKeluarga?.alamat },
+                  {
+                    label: 'Nomor Akta Kelahiran',
+                    value:
+                      detailKeluarga?.nomor_akta_kelahiran?.length === 0 ? '-' : detailKeluarga?.nomor_akta_kelahiran,
+                  },
+                  {
+                    label: 'Akta Kelahiran',
+                    value: (
+                      <div className="flex flex-row items-center space-x-2">
+                        {detailKeluarga?.files?.[2]?.document_name.length === 0 ? (
+                          '-'
+                        ) : (
+                          <>
+                            <PDFIcon />
+                            <LinkFile
+                              link={detailKeluarga?.files?.[2]?.document_uuid}
+                              value={detailKeluarga?.files?.[2]?.document_name}
+                            />
+                          </>
+                        )}
+                      </div>
+                    ),
+                  },
+                  { label: 'Status Hidup', value: detailKeluarga?.status_hidup === 1 ? 'Hidup' : 'Wafat' },
+                  {
+                    label: 'Nomer NPWP',
+                    value: detailKeluarga?.nomor_npwp?.length === 0 ? '-' : detailKeluarga?.nomor_npwp,
+                  },
+                  { label: 'Status Pasangan', value: detailKeluarga?.status_pasangan === 1 ? 'Suami' : 'Istri' },
+                  { label: 'Status PNS', value: detailKeluarga?.status_pns === 1 ? 'PNS' : 'Non-PNS' },
+                  { label: 'Tanggal Menikah', value: formatDate(detailKeluarga?.tanggal_menikah) },
+                  { label: 'Nomer Akta Nikah', value: detailKeluarga?.nomor_akta_menikah },
+                  {
+                    label: 'Akta Nikah',
+                    value: (
+                      <div className="flex flex-row items-center space-x-2">
                         <PDFIcon />
                         <LinkFile
-                          link={detailKeluarga?.files?.[5]?.document_uuid}
-                          value={detailKeluarga?.files?.[5]?.document_name}
+                          link={detailKeluarga?.files?.[1]?.document_uuid}
+                          value={detailKeluarga?.files?.[1]?.document_name}
                         />
-                      </>
-                    )}
-                  </div>
-                ),
-              },
-              {
-                label: 'Tanggal Cerai',
-                value: detailKeluarga?.tanggal_cerai == '' ? '-' : formatDate(detailKeluarga?.tanggal_cerai),
-              },
-              {
-                label: 'No Akta Cerai',
-                value: detailKeluarga?.nomor_akta_cerai?.length === 0 ? '-' : detailKeluarga?.nomor_akta_cerai,
-              },
-              {
-                label: 'Akta Cerai',
-                value: (
-                  <div className="flex flex-row items-center space-x-2">
-                    {detailKeluarga?.nomor_akta_cerai?.length === 0 ? (
-                      '-'
-                    ) : detailKeluarga?.files?.[3]?.document_name.length === 0 ? (
-                      <p className="text-[red]">Tidak ada Data</p>
-                    ) : (
-                      <>
-                        <PDFIcon />
-                        <LinkFile
-                          link={detailKeluarga?.files?.[3]?.document_uuid}
-                          value={detailKeluarga?.files?.[3]?.document_name}
-                        />
-                      </>
-                    )}
-                  </div>
-                ),
-              },
-              {
-                label: 'No Kartu Suami/Istri',
-                value:
-                  detailKeluarga?.nomor_kartu_suami_istri?.length === 0 ? '-' : detailKeluarga?.nomor_kartu_suami_istri,
-              },
-              {
-                label: 'Kartu Suami/Istri',
-                value: (
-                  <div className="flex flex-row items-center space-x-2">
-                    {detailKeluarga?.nomor_kartu_suami_istri?.length === 0 ? (
-                      '-'
-                    ) : detailKeluarga?.files?.[4]?.document_name?.length === 0 ? (
-                      <p className="text-[red]">Tidak ada Data</p>
-                    ) : (
-                      <>
-                        <PDFIcon />
-                        <LinkFile
-                          link={detailKeluarga?.files?.[4]?.document_uuid}
-                          value={detailKeluarga?.files?.[4]?.document_name}
-                        />
-                      </>
-                    )}
-                  </div>
-                ),
-              },
-              { label: 'Status Pernikahan', value: marriageState },
-              { label: 'Jumlah Anak', value: detailAnak?.length === 0 ? '-' : detailAnak?.length + ' Anak' },
-            ].map((each, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
-                <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
-              </tr>
+                      </div>
+                    ),
+                  },
+                  {
+                    label: 'Tanggal Meninggal',
+                    value:
+                      detailKeluarga?.tanggal_meninggal == '' ? '-' : formatDate(detailKeluarga?.tanggal_meninggal),
+                  },
+                  {
+                    label: 'Nomer Akta Meninggal',
+                    value:
+                      detailKeluarga?.nomor_akta_meninggal?.length === 0 ? '-' : detailKeluarga?.nomor_akta_meninggal,
+                  },
+                  {
+                    label: 'Akta Meninggal',
+                    value: (
+                      <div className="flex flex-row items-center space-x-2">
+                        {detailKeluarga?.nomor_akta_meninggal?.length === 0 ? (
+                          '-'
+                        ) : detailKeluarga?.files?.[5]?.document_name.length === 0 ? (
+                          <p className="text-[red]">Tidak ada Data</p>
+                        ) : (
+                          <>
+                            <PDFIcon />
+                            <LinkFile
+                              link={detailKeluarga?.files?.[5]?.document_uuid}
+                              value={detailKeluarga?.files?.[5]?.document_name}
+                            />
+                          </>
+                        )}
+                      </div>
+                    ),
+                  },
+                  {
+                    label: 'Tanggal Cerai',
+                    value: detailKeluarga?.tanggal_cerai == '' ? '-' : formatDate(detailKeluarga?.tanggal_cerai),
+                  },
+                  {
+                    label: 'No Akta Cerai',
+                    value: detailKeluarga?.nomor_akta_cerai?.length === 0 ? '-' : detailKeluarga?.nomor_akta_cerai,
+                  },
+                  {
+                    label: 'Akta Cerai',
+                    value: (
+                      <div className="flex flex-row items-center space-x-2">
+                        {detailKeluarga?.nomor_akta_cerai?.length === 0 ? (
+                          '-'
+                        ) : detailKeluarga?.files?.[3]?.document_name.length === 0 ? (
+                          <p className="text-[red]">Tidak ada Data</p>
+                        ) : (
+                          <>
+                            <PDFIcon />
+                            <LinkFile
+                              link={detailKeluarga?.files?.[3]?.document_uuid}
+                              value={detailKeluarga?.files?.[3]?.document_name}
+                            />
+                          </>
+                        )}
+                      </div>
+                    ),
+                  },
+                  {
+                    label: 'No Kartu Suami/Istri',
+                    value:
+                      detailKeluarga?.nomor_kartu_suami_istri?.length === 0
+                        ? '-'
+                        : detailKeluarga?.nomor_kartu_suami_istri,
+                  },
+                  {
+                    label: 'Kartu Suami/Istri',
+                    value: (
+                      <div className="flex flex-row items-center space-x-2">
+                        {detailKeluarga?.nomor_kartu_suami_istri?.length === 0 ? (
+                          '-'
+                        ) : detailKeluarga?.files?.[4]?.document_name?.length === 0 ? (
+                          <p className="text-[red]">Tidak ada Data</p>
+                        ) : (
+                          <>
+                            <PDFIcon />
+                            <LinkFile
+                              link={detailKeluarga?.files?.[4]?.document_uuid}
+                              value={detailKeluarga?.files?.[4]?.document_name}
+                            />
+                          </>
+                        )}
+                      </div>
+                    ),
+                  },
+                  { label: 'Status Pernikahan', value: marriageState },
+                  { label: 'Jumlah Anak', value: detailAnak?.length === 0 ? '-' : detailAnak?.length + ' Anak' },
+                ].map((each, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-5 overflow-auto">
+            <span className="text-[24px] font-[600]">Data Anak</span>
+            {(detailAnak || []).map((each, index) => (
+              <table className="mt-2 min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      No
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Nama
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Status Hubungan Anak
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Tanggal Lahir
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Status Hidup
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-white">
+                  <tr>
+                    <td className="px-2 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
+                    <td className="px-2 py-4 text-sm font-medium text-[#111827]">{each?.nama}</td>
+                    <td className="px-2 py-4 text-sm font-medium text-[#6B7280]">
+                      {each?.status_anak === 2 ? 'Kandung' : 'Angkat'}
+                    </td>
+                    <td className="px-2 py-4 text-sm font-medium text-[#111827]">
+                      {format(new Date(each.tanggal_lahir), 'yyyy-MM-dd')}
+                    </td>
+                    <td className="px-2 py-4 text-sm font-medium text-[#6B7280]">
+                      <div className="whitespace-nowrap">{each?.status_hidup === 1 ? 'Hidup' : 'Wafat'}</div>
+                    </td>
+                    <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
+                      <div className="flex justify-start">
+                        <button
+                          onClick={() => {
+                            handleShowDetails(!showDetailsAnak.open, riwayatKeluargaId);
+                          }}
+                          type="button"
+                          className="mr-2 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200"
+                        >
+                          Lihat
+                        </button>
+                        <button
+                          onClick={() => setConfirmId(each.anak_id)}
+                          type="button"
+                          className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
+                        >
+                          Hapus
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-5 overflow-auto">
-        <span className="text-[24px] font-[600]">Data Anak</span>
-        {(detailAnak || []).map((each, index) => (
-          <table className="mt-2 min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th
-                  scope="col"
-                  className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  No
-                </th>
-                <th
-                  scope="col"
-                  className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  Nama
-                </th>
-                <th
-                  scope="col"
-                  className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  Status Hubungan Anak
-                </th>
-                <th
-                  scope="col"
-                  className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  Tanggal Lahir
-                </th>
-                <th
-                  scope="col"
-                  className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  Status Hidup
-                </th>
-                <th
-                  scope="col"
-                  className="px-2 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  Aksi
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
-              <tr>
-                <td className="px-2 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
-                <td className="px-2 py-4 text-sm font-medium text-[#111827]">{each?.nama}</td>
-                <td className="px-2 py-4 text-sm font-medium text-[#6B7280]">
-                  {each?.status_anak === 2 ? 'Kandung' : 'Angkat'}
-                </td>
-                <td className="px-2 py-4 text-sm font-medium text-[#111827]">
-                  {format(new Date(each.tanggal_lahir), 'yyyy-MM-dd')}
-                </td>
-                <td className="px-2 py-4 text-sm font-medium text-[#6B7280]">
-                  <div className="whitespace-nowrap">{each?.status_hidup === 1 ? 'Hidup' : 'Wafat'}</div>
-                </td>
-                <td className="w-[220px] px-6 py-4 text-sm text-gray-500">
-                  <div className="flex justify-start">
-                    <button
-                      onClick={() => {
-                        handleShowDetails(!showDetailsAnak.open, riwayatKeluargaId);
-                      }}
-                      type="button"
-                      className="mr-2 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:text-gray-200"
-                    >
-                      Lihat
-                    </button>
-                    <button
-                      onClick={() => setConfirmId(each.anak_id)}
-                      type="button"
-                      className="inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-200 disabled:text-gray-200"
-                    >
-                      Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        ))}
-      </div>
-      <ConfirmDialog
-        open={!!confirmId}
-        message="Anda yakin ingin menghapus data ini?"
-        onClose={() => setConfirmId(0)}
-        onConfirm={handleConfirm}
-      />
+          </div>
+          <ConfirmDialog
+            open={!!confirmId}
+            message="Anda yakin ingin menghapus data ini?"
+            onClose={() => setConfirmId(0)}
+            onConfirm={handleConfirm}
+          />
+        </>
+      )}
     </>
   );
 }

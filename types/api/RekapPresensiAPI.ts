@@ -28,6 +28,7 @@ interface RekapPresensiData {
   check_out: string;
   shift_check_in: string;
   shift_check_out: string;
+  status: string;
   summary: {
     presensi_sum_id: number;
     presensi_id: number;
@@ -46,6 +47,10 @@ interface RekapPresensiData {
     pengurangan_lupa_absen_datang: string;
     pengurangan_lupa_absen_pulang: string;
     tidak_ada_ditempat: string;
+    created_at: string;
+    created_by: string;
+    updated_at: string;
+    updated_by: string;
   };
 }
 
