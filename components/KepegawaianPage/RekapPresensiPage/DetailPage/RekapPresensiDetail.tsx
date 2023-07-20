@@ -5,7 +5,8 @@ import { RekapPresensiAPI } from '../../../../constants/APIUrls';
 import { UnavailableDataText } from '../../../../constants/Resource';
 import { useCommonState } from '../../../../reducer/CommonReducer';
 import { type RekapPresensiReq, type RekapPresensiResp } from '../../../../types/api/RekapPresensiAPI';
-import { formatDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
+import { formatDate, formatStringDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
+import { checkReturnValueOfString } from '../../../../utils/StringUtil';
 import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
@@ -277,6 +278,12 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                     >
                       Pengurang Lupa Absen Pulang(%)
                     </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Last Sync
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -291,13 +298,6 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                     const isBelowZeroDataTelat = dataTelat < 0 ? replacementOfMinusOneResponseAsHyphen : dataTelat;
                     const isBelowZeroDataStatusPsw =
                       dataStatusPsw < 0 ? replacementOfMinusOneResponseAsHyphen : dataStatusPsw;
-                    /**
-                     * @description Status Kehadiran
-                     */
-                    const statusKehadiran =
-                      data?.summary?.status_kehadiran?.trim()?.length > 0
-                        ? data?.summary?.status_kehadiran
-                        : UnavailableDataText;
                     return (
                       <tr className={'bg-white hover:bg-gray-100'}>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
@@ -305,25 +305,41 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.date}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          {checkReturnValueOfString(data?.note)}
+                        </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_in}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.shift_check_out}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.check_in}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.check_out}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{checkReturnValueOfString(data?.check_out)}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
-                        <td className="py-2 text-xs font-medium">{statusKehadiran}</td>
+                        <td className="py-2 text-xs font-medium">
+                          {checkReturnValueOfString(data?.status, UnavailableDataText)}
+                        </td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_tk}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_terlambat}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.pengurangan_psw}</td>
                         <td className="px-6 py-4 text-xs font-medium">
-                          {data?.summary?.pengurangan_lupa_absen_datang}
+                          {checkReturnValueOfString(data?.summary?.pengurangan_tk)}
                         </td>
                         <td className="px-6 py-4 text-xs font-medium">
-                          {data?.summary?.pengurangan_lupa_absen_pulang}
+                          {checkReturnValueOfString(data?.summary?.pengurangan_terlambat)}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium">
+                          {checkReturnValueOfString(data?.summary?.pengurangan_psw)}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium">
+                          {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_datang)}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium">
+                          {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_pulang)}
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium">
+                          {checkReturnValueOfString(
+                            formatStringDate(data?.summary?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss'),
+                            formatStringDate(data?.summary?.created_by, 'EEEE, dd MMM yyyy, HH:mm:ss')
+                          )}
                         </td>
                       </tr>
                     );
