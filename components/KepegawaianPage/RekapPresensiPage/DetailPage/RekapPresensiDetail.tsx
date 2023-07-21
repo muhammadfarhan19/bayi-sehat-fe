@@ -342,7 +342,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                         <td className="px-6 py-4 text-xs font-medium">
                           {checkReturnValueOfString(
                             formatStringDate(data?.summary?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss'),
-                            formatStringDate(data?.summary?.created_by, 'EEEE, dd MMM yyyy, HH:mm:ss')
+                            formatStringDate(data?.summary?.created_at, 'EEEE, dd MMM yyyy, HH:mm:ss')
                           )}
                         </td>
                       </tr>
