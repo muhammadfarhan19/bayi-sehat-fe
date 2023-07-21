@@ -303,7 +303,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
+                        <td className="truncate px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.date}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                           {checkReturnValueOfString(data?.note)}
