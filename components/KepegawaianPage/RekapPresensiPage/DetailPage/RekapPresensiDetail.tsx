@@ -15,7 +15,7 @@ import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
-import { ModalResend, MonthPicker } from './Shared';
+import { ExpandableTableData, ModalResend, MonthPicker } from './Shared';
 import useDownloadRekapPresensi from './utils/useDownloadRekapPresensi';
 
 interface RekapPresensiProps {
@@ -317,11 +317,13 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                     const isBelowZeroDataStatusPsw =
                       dataStatusPsw < 0 ? replacementOfMinusOneResponseAsHyphen : dataStatusPsw;
                     return (
-                      <tr className={'bg-white hover:bg-gray-100'} key={data?.nip}>
+                      <tr className={'bg-white hover:bg-gray-100'} key={index}>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
-                        <td className="truncate px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
+                        <td className="truncate px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          <ExpandableTableData data={data?.unit_kerja} expandClass={'w-40 cursor-pointer'} />
+                        </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.date}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                           {checkReturnValueOfString(data?.note)}
