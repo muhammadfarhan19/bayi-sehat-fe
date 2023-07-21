@@ -314,7 +314,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                           {checkReturnValueOfString(data?.shift_check_out)}
                         </td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.check_in}</td>
+                        <td className="px-6 py-4 text-xs font-medium">{checkReturnValueOfString(data?.check_in)}</td>
                         <td className="px-6 py-4 text-xs font-medium">{checkReturnValueOfString(data?.check_out)}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
