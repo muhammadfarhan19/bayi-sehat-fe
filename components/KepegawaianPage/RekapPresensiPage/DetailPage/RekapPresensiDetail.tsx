@@ -156,7 +156,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
           </button>
         </div>
       </div>
-      <div className="text-md font-semi mt-5 flex justify-end px-5 text-[#4F46E5]">
+      <div className="font-semi mt-5 flex justify-end px-5 text-sm text-[#4F46E5]">
         Pembaharuan Terakhir {checkReturnValueOfString(String(formatDateOfLastSync), ' : -')}
       </div>
       {isValidating ? (
