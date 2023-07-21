@@ -4,7 +4,11 @@ import React from 'react';
 import { RekapPresensiAPI } from '../../../../constants/APIUrls';
 import { UnavailableDataText } from '../../../../constants/Resource';
 import { useCommonState } from '../../../../reducer/CommonReducer';
-import { type RekapPresensiReq, type RekapPresensiResp } from '../../../../types/api/RekapPresensiAPI';
+import {
+  type RekapPresensiReq,
+  type RekapPresensiResp,
+  RekapPresensiLastSyncRes,
+} from '../../../../types/api/RekapPresensiAPI';
 import { formatDate, formatStringDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
 import { checkReturnValueOfString } from '../../../../utils/StringUtil';
 import { CircleProgress } from '../../../shared/CircleProgress';
@@ -64,6 +68,13 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
     status_cpns: props.status_cpns,
   };
 
+  const { data: rekapPresensiLastSync } = useCommonApi<Partial<RekapPresensiReq>, RekapPresensiLastSyncRes>(
+    RekapPresensiAPI.GET_PRESENSI_LAST_SYNC_MASTER,
+    { start_date: startDate, end_date: endDate },
+    { method: 'GET' },
+    { skipCall: !selectedDate, revalidateOnMount: true }
+  );
+
   const { data: rekapPresensi, isValidating } = useCommonApi<RekapPresensiReq, RekapPresensiResp>(
     RekapPresensiAPI.GET_PRESENSI_SUMMARY_LIST,
     filterState?.nama !== '' ? { ...filterStateQuery, nama: filterState?.nama } : filterStateQuery,
@@ -94,6 +105,10 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
   };
 
   const replacementOfMinusOneResponseAsHyphen = '-';
+  const formatDateOfLastSync = rekapPresensiLastSync?.last_sync
+    ? formatStringDate(rekapPresensiLastSync?.last_sync, 'EEEE, dd MMM yyyy - HH:mm:ss')
+    : '';
+
   return (
     <>
       <div className="mb-5 flex flex-row items-center px-4 pt-3">
@@ -140,6 +155,9 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
             Kirim Ulang
           </button>
         </div>
+      </div>
+      <div className="text-md font-semi mt-5 flex justify-end px-5 text-[#4F46E5]">
+        Pembaharuan Terakhir {checkReturnValueOfString(String(formatDateOfLastSync), ' : -')}
       </div>
       {isValidating ? (
         <div className="relative h-[150px] w-full divide-y divide-gray-200">
@@ -299,7 +317,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                     const isBelowZeroDataStatusPsw =
                       dataStatusPsw < 0 ? replacementOfMinusOneResponseAsHyphen : dataStatusPsw;
                     return (
-                      <tr className={'bg-white hover:bg-gray-100'}>
+                      <tr className={'bg-white hover:bg-gray-100'} key={data?.nip}>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
                         <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>

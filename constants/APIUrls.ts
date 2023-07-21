@@ -282,4 +282,5 @@ export const RekapPresensiAPI = {
   GET_PRESENSI_SUMMARY_LIST: config.apiHost + '/presensi-summary/list',
   POST_PRESENSI_SUMMARY_EXPORT: config.apiHost + '/presensi-summary/export',
   POST_RESEND_LOG: config.apiHost + '/ext/presensi/resendlog',
+  GET_PRESENSI_LAST_SYNC_MASTER: config.apiHost + '/presensi-summary/lastsync',
 };

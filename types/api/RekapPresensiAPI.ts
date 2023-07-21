@@ -7,6 +7,11 @@ export interface RekapPresensiReq {
   nama?: string;
 }
 
+export interface RekapPresensiLastSyncRes {
+  status: string;
+  last_sync: string;
+}
+
 export interface RekapPresensiResp {
   list: RekapPresensiData[];
   pagination: {
