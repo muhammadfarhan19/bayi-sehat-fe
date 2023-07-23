@@ -11,6 +11,7 @@ export interface CallAPIOptions {
   withToken: boolean;
   isMultipart: boolean;
   isBlob: boolean;
+  timeout: number;
 }
 
 interface CallAPI {
@@ -18,7 +19,14 @@ interface CallAPI {
 }
 
 export const callAPI: CallAPI = async (url, requestData, options) => {
-  const { checkToken = true, isMultipart = false, method = 'post', withToken = true, isBlob = false } = options || {};
+  const {
+    checkToken = true,
+    isMultipart = false,
+    method = 'post',
+    withToken = true,
+    isBlob = false,
+    timeout = config.apiTimeoutMs,
+  } = options || {};
 
   const headers: {
     'Content-Type': string;
@@ -42,7 +50,7 @@ export const callAPI: CallAPI = async (url, requestData, options) => {
   const axiosProps: AxiosRequestConfig = {
     headers,
     method,
-    timeout: config.apiTimeoutMs, // Timeout 15 seconds
+    timeout,
     url,
     paramsSerializer: {
       indexes: null,
