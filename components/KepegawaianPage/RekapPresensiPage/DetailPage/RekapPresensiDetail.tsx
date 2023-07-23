@@ -108,7 +108,8 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
   const formatDateOfLastSync = rekapPresensiLastSync?.last_sync
     ? formatStringDate(rekapPresensiLastSync?.last_sync, 'EEEE, dd MMM yyyy - HH:mm:ss')
     : '';
-
+  const isPPNPNList = props?.status_cpns?.[0] === 2;
+  const tableHeaderIdPegawai = isPPNPNList ? 'NIK' : 'NIP';
   return (
     <>
       <div className="mb-5 flex flex-row items-center px-4 pt-3">
@@ -180,7 +181,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      NIP
+                      {tableHeaderIdPegawai}
                     </th>
                     <th
                       scope="col"
