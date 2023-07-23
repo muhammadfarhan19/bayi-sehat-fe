@@ -28,10 +28,14 @@ function useSyncKehadiran() {
     handleSetLoader(true, selectedIndex);
 
     try {
-      const syncRes = await callAPI<SyncKehadiranReq, SyncKehadiranRes>(SyncKehadiranAPI.POST_SYNC, {
-        start_date: startDate,
-        end_date: endDate,
-      });
+      const syncRes = await callAPI<SyncKehadiranReq, SyncKehadiranRes>(
+        SyncKehadiranAPI.POST_SYNC,
+        {
+          start_date: startDate,
+          end_date: endDate,
+        },
+        { method: 'POST', timeout: 120000 }
+      );
       if (syncRes.status === 200 && syncRes.data?.status === Status.OK) {
         dispatch(
           setSnackbar({
@@ -64,11 +68,15 @@ function useSyncKehadiran() {
   async function handleSyncPegawai(startDate: string, endDate: string, nip: string, selectedIndex: number) {
     handleSetLoader(true, selectedIndex);
 
-    const syncRes = await callAPI<SyncKehadiranReq, SyncKehadiranRes>(SyncKehadiranAPI.POST_SYNC, {
-      start_date: startDate,
-      end_date: endDate,
-      nip: nip,
-    });
+    const syncRes = await callAPI<SyncKehadiranReq, SyncKehadiranRes>(
+      SyncKehadiranAPI.POST_SYNC,
+      {
+        start_date: startDate,
+        end_date: endDate,
+        nip: nip,
+      },
+      { method: 'POST', timeout: 120000 }
+    );
 
     if (syncRes.status === 200 && syncRes.data?.status === Status.OK) {
       dispatch(

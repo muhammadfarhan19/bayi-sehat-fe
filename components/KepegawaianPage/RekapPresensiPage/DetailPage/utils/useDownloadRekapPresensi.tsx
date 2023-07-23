@@ -19,7 +19,7 @@ function useDownloadRekapPresensi() {
       RekapPresensiAPI.POST_PRESENSI_SUMMARY_EXPORT +
         `?start_date=${startDate}&end_date=${endDate}&status_cpns=${statusPegawai}`,
       null,
-      { isBlob: true, method: 'POST' }
+      { isBlob: true, method: 'POST', timeout: 120000 }
     )
       .then(response => {
         let url = '';
