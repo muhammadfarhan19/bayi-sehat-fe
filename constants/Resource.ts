@@ -218,3 +218,27 @@ export const RelationshipStatusMap: Record<number, string> = {
   3: 'Cerai Hidup',
   4: 'Cerai Meninggal',
 };
+
+export type TableRekapPresensi =
+  | 'No'
+  | 'NIP'
+  | 'Nama'
+  | 'Unit Kerja'
+  | 'Hari dan Tanggal'
+  | 'Note'
+  | 'Shift Masuk'
+  | 'Shift Keluar'
+  | 'Masuk'
+  | 'Pulang'
+  | 'Telat(menit)'
+  | 'PSW(menit)'
+  | 'Status Hadir'
+  | 'Status PSW'
+  | 'Status Telat'
+  | 'Status TK'
+  | 'Pengurang TK(%)'
+  | 'Pengurang Terlambat(%)'
+  | 'Pengurang PSW(%)'
+  | 'Pengurang Lupa Absen Datang(%)'
+  | 'Pengurang Lupa Absen Pulang(%)'
+  | 'Last Sync';

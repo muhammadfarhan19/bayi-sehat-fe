@@ -180,7 +180,7 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
                               <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
                               <td className="px-6 py-4 text-xs font-medium text-indigo-800">{data?.name}</td>
                               <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
-                              <td className="text-\xs px-6 py-4 font-medium">
+                              <td className="px-6 py-4 text-xs font-medium">
                                 <button
                                   onClick={() => {
                                     setPegawaiId(data?.pegawai_id);

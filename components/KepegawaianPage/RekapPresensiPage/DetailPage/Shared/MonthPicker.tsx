@@ -23,11 +23,15 @@ export const months = [
 interface Props {
   onChange: (date: Date) => void;
   type?: string;
+  disableYear?: boolean;
+  dataSet?: string[];
 }
 
 function MonthPicker(props: Props) {
   const [selectedYear, setSelectedYear] = React.useState(dateToday.getFullYear());
   const [selectedMonth, setSelectedMonth] = React.useState(dateToday.getMonth());
+
+  const { disableYear = false, dataSet = months } = props;
 
   React.useEffect(() => {
     props.onChange(new Date(selectedYear, selectedMonth));
@@ -41,6 +45,8 @@ function MonthPicker(props: Props) {
     setSelectedMonth(index);
   };
 
+  const selectedYearText = !disableYear ? selectedYear : '';
+
   return (
     <>
       <h1 className="text-lg font-semibold text-gray-900">
@@ -49,7 +55,7 @@ function MonthPicker(props: Props) {
             type="button"
             className="flex w-[200px] items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
           >
-            <span className="w-full">{`${months[selectedMonth]} ${selectedYear}`}</span>
+            <span className="w-full">{`${dataSet[selectedMonth]} ${selectedYearText}`}</span>
             <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
           </Menu.Button>
 
@@ -63,28 +69,30 @@ function MonthPicker(props: Props) {
             leaveTo="transform opacity-0 scale-95"
           >
             <Menu.Items className="absolute right-0 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <div className="flex  w-full items-center rounded-md shadow-sm md:items-stretch">
-                <button
-                  onClick={handleChangeYear(-1)}
-                  className="flex items-center justify-center rounded-l-md bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
-                >
-                  <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-                </button>
-                <button
-                  disabled
-                  className="flex flex-1 flex-row items-center bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
-                >
-                  {selectedYear}
-                </button>
-                <button
-                  onClick={handleChangeYear(1)}
-                  className="flex items-center justify-center rounded-r-md bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
-                >
-                  <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                </button>
-              </div>
+              {!disableYear ? (
+                <div className="flex  w-full items-center rounded-md shadow-sm md:items-stretch">
+                  <button
+                    onClick={handleChangeYear(-1)}
+                    className="flex items-center justify-center rounded-l-md bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+                  >
+                    <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+                  </button>
+                  <button
+                    disabled
+                    className="flex flex-1 flex-row items-center bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
+                  >
+                    {selectedYear}
+                  </button>
+                  <button
+                    onClick={handleChangeYear(1)}
+                    className="flex items-center justify-center rounded-r-md bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+                  >
+                    <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+                  </button>
+                </div>
+              ) : null}
               <div className="py-1">
-                {months.map((each, index) => (
+                {dataSet.map((each, index) => (
                   <Menu.Item key={`month-${index}`}>
                     {({ active }) => (
                       <a
