@@ -59,6 +59,7 @@ export default function BulkForm(props: ModalProps) {
       {
         isMultipart: true,
         method: 'post',
+        timeout: 120000,
       }
     );
 
