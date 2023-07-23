@@ -20,7 +20,7 @@ const DaftarTransaksiMonthOptions = [
 ];
 
 interface DaftarTransaksiListProps {
-  onShowDetail: () => void;
+  onShowDetail: (show: boolean, selectedDate?: Date) => void;
 }
 
 function DaftarTransaksiList(props: DaftarTransaksiListProps) {
@@ -31,7 +31,9 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
     },
     [selectedDate]
   );
-  const { onShowDetail } = props;
+
+  const onShowDetail = props.onShowDetail;
+
   return (
     <>
       <div className="mb-5 flex flex-row items-center px-4 pt-3">
@@ -73,43 +75,43 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
                 <tr>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Kode
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Bulan/Tahun
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Tanggal
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Created by
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Last Sync
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Sync by
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500"
+                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Aksi
                   </th>
@@ -117,25 +119,29 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
               </thead>
               <tbody>
                 <tr className={'bg-white hover:bg-gray-100'}>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">OGUHSBVF</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">Juli 2023</td>
-                  <td className="px-6 py-4 text-xs font-medium text-blue-900">01 Juli 2023-31 Juli 2023</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">Abdul Hakim</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">31 Juli 2023, 09:11:23</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">Abdul Hakim</td>
-                  <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">OGUHSBVF</td>
+                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">Juli 2023</td>
+                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
+                    01 Juli 2023-31 Juli 2023
+                  </td>
+                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">Abdul Hakim</td>
+                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-sky-500">
+                    31 Juli 2023, 09:11:23
+                  </td>
+                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">Abdul Hakim</td>
+                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
                     <div className="flex flex-row items-center justify-between space-x-2">
                       <button
-                        onClick={onShowDetail}
+                        onClick={() => onShowDetail(true, selectedDate)}
                         type="button"
-                        className="inline-flex w-20 items-center justify-center rounded border border-transparent bg-indigo-600 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
+                        className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
                       >
                         Detail
                       </button>
                       <button
                         disabled
                         type="button"
-                        className={`inline-flex w-20 items-center justify-center rounded border border-transparent bg-green-500 px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
+                        className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
                       >
                         Sync
                       </button>

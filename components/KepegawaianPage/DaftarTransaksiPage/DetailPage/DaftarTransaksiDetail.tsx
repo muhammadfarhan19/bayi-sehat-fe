@@ -1,12 +1,16 @@
 import { AdjustmentsIcon, ChevronLeftIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
+import id from 'date-fns/locale/id';
 import React from 'react';
 
 import { UnitKerjaAPI } from '../../../../constants/APIUrls';
 import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
+import { months } from '../../../DinasPage/DataPegawai/DatePicker';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 
 type DaftarTransaksiDetailProps = {
   onBack: () => void;
+  selectedDate?: Date;
 };
 
 function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
@@ -17,6 +21,33 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     null,
     { method: 'GET' }
   );
+
+  const selectedYear =
+    typeof properties.selectedDate !== 'undefined' ? format(properties.selectedDate, 'yyyy', { locale: id }) : '';
+  const selectedMonth =
+    typeof properties.selectedDate !== 'undefined' ? months[properties?.selectedDate?.getMonth() - 1] : '';
+
+  const renderMonthComponent =
+    selectedMonth === undefined ? null : (
+      <div>
+        <>
+          <p className="mb-[4px] text-[14px] font-normal">Bulan</p>
+          <div className="mb-10 block block flex appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
+            {selectedMonth}
+          </div>
+        </>
+      </div>
+    );
+
+  const renderYearComponent =
+    selectedYear === undefined ? null : (
+      <div>
+        <p className="mb-[4px] text-[14px] font-normal">Tahun</p>
+        <div className="mb-10 block block flex appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
+          {selectedYear}
+        </div>
+      </div>
+    );
 
   return (
     <>
@@ -46,19 +77,23 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
       </div>
 
       <div className="flex flex-row items-center justify-between border-b-2 px-5">
-        <div className="w-[202px]">
-          <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
-          <select
-            className="mb-10 block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-            disabled
-          >
-            <option value="">Semua</option>
-            {(unitKerjaList || []).map((item, index) => (
-              <option key={`options-${index}`} value={item?.unit_kerja_id}>
-                {item?.name}
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-row space-x-5">
+          <div className="w-[202px]">
+            <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
+            <select
+              className="mb-10 block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+              disabled
+            >
+              <option value="">Semua</option>
+              {(unitKerjaList || []).map((item, index) => (
+                <option key={`options-${index}`} value={item?.unit_kerja_id}>
+                  {item?.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          {renderMonthComponent}
+          {renderYearComponent}
         </div>
         <div>
           <button
