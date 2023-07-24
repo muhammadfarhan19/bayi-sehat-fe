@@ -2,6 +2,7 @@ import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { MonthPicker } from '../../RekapPresensiPage/DetailPage/Shared';
+import { YearPicker } from '../Shared';
 
 const DaftarTransaksiMonthOptions = [
   'Semua',
@@ -55,10 +56,13 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
         </div>
       </div>
       <div className="flex justify-between px-5">
-        <div className="flex flex-row space-x-2">
+        <div className="flex flex-[0.1]">
           <MonthPicker dataSet={DaftarTransaksiMonthOptions} onChange={handleDateChange} disableYear />
         </div>
-        <div className="flex flex-row space-x-2">
+        <div className="flex flex-[0.5]">
+          <YearPicker onChange={handleDateChange} />
+        </div>
+        <div className="flex-2 flex">
           <button
             disabled
             className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400"

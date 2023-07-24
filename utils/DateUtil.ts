@@ -173,5 +173,15 @@ export function getLastDayOfMonth(date: Date): Date {
   return new Date(year, month, 0);
 }
 
+export function generateYearList(): number[] {
+  const dateToday = new Date();
+  const currentYear = dateToday.getFullYear();
+  const yearList = [];
+  for (let i = 0; i < 11; i++) {
+    yearList.push(currentYear - i);
+  }
+  return yearList;
+}
+
 export const weekendText = 'Weekend';
 export const weekendTextLocaleId = 'Akhir Pekan';
