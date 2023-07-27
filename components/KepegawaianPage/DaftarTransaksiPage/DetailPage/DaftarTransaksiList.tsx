@@ -1,31 +1,32 @@
 import { AdjustmentsIcon } from '@heroicons/react/outline';
+import format from 'date-fns/format';
+import id from 'date-fns/locale/id';
 import React from 'react';
 
+import { DaftarTransaksiAPI } from '../../../../constants/APIUrls';
+import { DaftarTransaksi } from '../../../../types/api/DaftarTransaksiAPI';
+import { ConditionalRendering } from '../../../../utils/Components';
+import useCommonApi from '../../../shared/hooks/useCommonApi';
+import Pagination from '../../../shared/Pagination';
 import { MonthPicker } from '../../RekapPresensiPage/DetailPage/Shared';
+import { PengirimanUlangForm } from '../FormPage';
 import { YearPicker } from '../Shared';
-
-const DaftarTransaksiMonthOptions = [
-  'Semua',
-  'Januari',
-  'Februari',
-  'Maret',
-  'April',
-  'Mei',
-  'Juni',
-  'Juli',
-  'Agustus',
-  'September',
-  'Oktober',
-  'November',
-  'Desember',
-];
+import { useResyncTransaction } from '../utils';
 
 interface DaftarTransaksiListProps {
-  onShowDetail: (show: boolean, selectedDate?: Date) => void;
+  onShowDetail: (show: boolean, selectedDate?: Date, code?: string) => void;
 }
 
 function DaftarTransaksiList(props: DaftarTransaksiListProps) {
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [selectedDate, setSelectedDate] = React.useState<Date>();
+  const [formModalState, setFormModalState] = React.useState(false);
+  const [filterState, setFilterState] = React.useState<DaftarTransaksi.GetListReq>({
+    page: 1,
+    per_page: 20,
+  });
+  const reSync = useResyncTransaction();
+
   const handleDateChange = React.useCallback(
     (date: Date) => {
       setSelectedDate(date);
@@ -34,6 +35,42 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
   );
 
   const onShowDetail = props.onShowDetail;
+
+  const { data: daftarTransaksiList, mutate } = useCommonApi<DaftarTransaksi.GetListReq, DaftarTransaksi.GetListRes>(
+    DaftarTransaksiAPI.GET_DAFTAR_TRANSAKSI_LIST,
+    filterState,
+    { method: 'GET' }
+  );
+
+  const handleShowForm = () => {
+    setFormModalState(true);
+  };
+  const formattedSelectedDate = selectedDate
+    ? format(selectedDate, 'MMMM - yyyy', { locale: id })
+    : format(new Date(), 'MMMM - yyyy', { locale: id });
+
+  const handleResync = React.useCallback((code: string) => {
+    return reSync.syncHandler({
+      code,
+      onSuccess: mutate,
+    });
+  }, []);
+
+  const changeFilterState = (inputState: Partial<DaftarTransaksi.GetListReq>) => {
+    const pageAffected = Object.keys(inputState).includes('page');
+    const newState = {
+      ...filterState,
+      ...inputState,
+    };
+
+    if (!pageAffected) {
+      newState.page = 1;
+    }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
+  };
 
   return (
     <>
@@ -44,7 +81,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
             type="text"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Cari..."
-            disabled
+            onChange={e => changeFilterState({ kode: e.target.value })}
           />
           <button
             type="button"
@@ -57,14 +94,31 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
       </div>
       <div className="flex justify-between px-5">
         <div className="flex flex-[0.1]">
-          <MonthPicker dataSet={DaftarTransaksiMonthOptions} onChange={handleDateChange} disableYear />
+          <MonthPicker
+            viewAll
+            onChange={date => {
+              handleDateChange(date);
+              if (selectedDate) {
+                changeFilterState({ month: selectedDate?.getMonth() + 1 });
+              }
+            }}
+            disableYear
+          />
         </div>
         <div className="flex flex-[0.5]">
-          <YearPicker onChange={handleDateChange} />
+          <YearPicker
+            onChange={date => {
+              handleDateChange(date);
+              if (selectedDate) {
+                changeFilterState({ year: selectedDate?.getFullYear() });
+              }
+            }}
+            selectedMonth={selectedDate?.getMonth()}
+          />
         </div>
         <div className="flex-2 flex">
           <button
-            disabled
+            onClick={handleShowForm}
             className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400"
           >
             Buat Transaksi
@@ -122,41 +176,67 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
                 </tr>
               </thead>
               <tbody>
-                <tr className={'bg-white hover:bg-gray-100'}>
-                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">OGUHSBVF</td>
-                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">Juli 2023</td>
-                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
-                    01 Juli 2023-31 Juli 2023
-                  </td>
-                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">Abdul Hakim</td>
-                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-sky-500">
-                    31 Juli 2023, 09:11:23
-                  </td>
-                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">Abdul Hakim</td>
-                  <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
-                    <div className="flex flex-row items-center justify-between space-x-2">
-                      <button
-                        onClick={() => onShowDetail(true, selectedDate)}
-                        type="button"
-                        className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
-                      >
-                        Detail
-                      </button>
-                      <button
-                        disabled
-                        type="button"
-                        className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
-                      >
-                        Sync
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                {(daftarTransaksiList?.list ?? []).map((item, index) => {
+                  return (
+                    <tr className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}>
+                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">{item?.kode}</td>
+                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
+                        {item?.month} {item?.year}
+                      </td>
+                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
+                        {item?.tanggal_awal_akhir}
+                      </td>
+                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
+                        {item?.created_by}
+                      </td>
+                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-sky-500">{item?.last_sync}</td>
+                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">{item?.sync_by}</td>
+                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
+                        <div className="flex flex-row items-center justify-between space-x-2">
+                          <button
+                            onClick={() => onShowDetail(true, selectedDate, '')}
+                            type="button"
+                            className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
+                          >
+                            Detail
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleResync(item?.kode);
+                            }}
+                            type="button"
+                            className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
+                          >
+                            Sync
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
+            <Pagination
+              onChange={value => {
+                changeFilterState({ page: value });
+              }}
+              totalData={daftarTransaksiList ? daftarTransaksiList?.pagination.total_data : 0}
+              perPage={filterState?.per_page}
+              page={filterState?.page}
+            />
           </div>
         </div>
       </div>
+      {ConditionalRendering(
+        formModalState,
+        <PengirimanUlangForm
+          selectedMonth={selectedDate && selectedDate?.getMonth() + 1}
+          selectedYear={selectedDate && selectedDate?.getFullYear()}
+          formMonthAndYearValue={formattedSelectedDate}
+          open={formModalState}
+          setOpen={(open: boolean) => setFormModalState(open)}
+        />
+      )}
     </>
   );
 }

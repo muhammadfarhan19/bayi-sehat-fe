@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { Navigation } from '../components/shared/MainLayout/NavigationProps';
 import { NavigationList } from '../constants/NavigationList';
 
@@ -8,7 +10,7 @@ export function classNames(...classes: string[]) {
 export function filterMenu(currentLocation: string, allowedMap?: Record<number, boolean>): Navigation[] {
   if (typeof window !== 'undefined') {
     const currentAppender = (listOfMenu: Navigation[], parent?: Navigation): Navigation[] => {
-      let result = [];
+      const result = [];
       let parentUpdated = false;
       for (const iterator of listOfMenu) {
         if (iterator.href) {
@@ -39,9 +41,8 @@ export function filterMenu(currentLocation: string, allowedMap?: Record<number, 
       return result;
     };
     return currentAppender(NavigationList);
-  } else {
-    return NavigationList;
   }
+  return NavigationList;
 }
 
 export const composeListDefaultValue = <T extends Array<any>>(
@@ -58,3 +59,17 @@ export const composeListDefaultValue = <T extends Array<any>>(
     };
   }
 };
+
+/**
+ *
+ * @param value
+ * @param children
+ * @returns
+ * @link [DOCS](https://react.dev/learn/conditional-rendering)
+ */
+export function ConditionalRendering(value: boolean, children: ReactNode) {
+  if (value) {
+    return children;
+  }
+  return null;
+}

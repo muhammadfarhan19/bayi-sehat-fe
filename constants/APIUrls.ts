@@ -284,3 +284,10 @@ export const RekapPresensiAPI = {
   POST_RESEND_LOG: config.apiHost + '/ext/presensi/resendlog',
   GET_PRESENSI_LAST_SYNC_MASTER: config.apiHost + '/presensi-summary/lastsync',
 };
+
+export const DaftarTransaksiAPI = {
+  GET_DAFTAR_TRANSAKSI_LIST: config.apiHost + '/transaksi/list',
+  GET_DAFTAR_TRANSAKSI: config.apiHost + '/presensi/transaction/detail',
+  POST_DAFTAR_TRANSAKSI: config.apiHost + '/presensi/transaction/generate',
+  POST_TRANSAKSI: config.apiHost + '/transaksi',
+};

@@ -8,16 +8,16 @@ import { generateYearList } from '../../../../utils/DateUtil';
 const dateToday = new Date();
 interface YearProps {
   onChange: (date: Date) => void;
+  selectedMonth?: number;
 }
 
 function YearPicker(props: YearProps) {
   const [selectedYear, setSelectedYear] = React.useState(dateToday.getFullYear());
-  const [selectedMonth] = React.useState(dateToday.getMonth());
   const dataSet = generateYearList();
 
   React.useEffect(() => {
-    props.onChange(new Date(selectedYear, selectedMonth));
-  }, [selectedYear, selectedMonth]);
+    props.onChange(new Date(selectedYear, props.selectedMonth ?? dateToday?.getMonth()));
+  }, [selectedYear, props.selectedMonth]);
 
   const handleChangeYear = (year: number) => () => {
     setSelectedYear(year);

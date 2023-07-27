@@ -12,7 +12,7 @@ import { Status } from '../../../../../types/Common';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { InputLabelled } from '../../../DataKepegawaian/DetailPegawai/RiwayatKeluarga/Shared/KeluargaComponents';
 
-interface ModalProps {
+export interface ModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }

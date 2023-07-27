@@ -219,6 +219,8 @@ export const RelationshipStatusMap: Record<number, string> = {
   4: 'Cerai Meninggal',
 };
 
+export const HyphenText = '-';
+
 export type TableRekapPresensi =
   | 'No'
   | 'NIP'
