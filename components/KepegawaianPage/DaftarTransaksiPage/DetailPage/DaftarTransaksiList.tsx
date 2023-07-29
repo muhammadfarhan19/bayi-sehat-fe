@@ -21,13 +21,10 @@ interface DaftarTransaksiListProps {
 }
 
 function DaftarTransaksiList(props: DaftarTransaksiListProps) {
+  const { onShowDetail } = props;
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [formModalState, setFormModalState] = React.useState(false);
-  const [filterState, setFilterState] = React.useState<DaftarTransaksi.GetListReq>({
-    page: 1,
-    per_page: 20,
-  });
   const reSync = useResyncTransaction();
 
   const handleDateChange = React.useCallback(
@@ -37,7 +34,18 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
     [selectedDate]
   );
 
-  const { onShowDetail } = props;
+  const defaultFilterState: DaftarTransaksi.GetListReq = {
+    page: 1,
+    per_page: 20,
+  };
+
+  const handleViewAllSelected = () => {
+    const updatedFilterState = { ...filterState };
+    delete updatedFilterState.month;
+    setFilterState(updatedFilterState);
+  };
+
+  const [filterState, setFilterState] = React.useState<DaftarTransaksi.GetListReq>(defaultFilterState);
 
   const {
     data: daftarTransaksiList,
@@ -113,7 +121,9 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
               handleDateChange(date);
               changeFilterState({ month: date.getMonth() + 1 });
             }}
+            onViewAllSelected={handleViewAllSelected}
             disableYear
+            viewAllText
           />
         </div>
         <div className="flex flex-[0.5]">
@@ -194,23 +204,23 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
                     const isLoaderShown = reSync.loading.show && reSync.loading.selectedIndex === index;
                     return (
                       <tr className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}>
-                        <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">{item?.kode}</td>
-                        <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                        <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">{item?.kode}</td>
+                        <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
                           {months[item?.month - 1]} {item?.year}
                         </td>
-                        <td className="truncate px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                        <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
                           {item?.tanggal_awal_akhir}
                         </td>
-                        <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                        <td className="truncate px-6 py-4 text-center text-[10px] font-medium text-gray-900">
                           {item?.created_by}
                         </td>
-                        <td className="truncate px-6 py-4 text-justify text-[10px] font-medium text-sky-500">
+                        <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-sky-500">
                           {item?.last_sync}
                         </td>
-                        <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                        <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
                           {item?.sync_by}
                         </td>
-                        <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                        <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">
                           <div className="flex flex-row items-center justify-between space-x-2">
                             <button
                               onClick={() => onShowDetail(true, selectedDate, item?.kode)}

@@ -34,20 +34,36 @@ function MonthPicker(props: Props) {
   const [selectedYear, setSelectedYear] = React.useState(dateToday.getFullYear());
   const [selectedMonth, setSelectedMonth] = React.useState(dateToday.getMonth());
   const { disableYear = false, dataSet = months, viewAllText = false, onViewAllSelected } = props;
+  const [viewAllSelected, setViewAllSelected] = React.useState(true);
 
   React.useEffect(() => {
-    props.onChange(new Date(selectedYear, selectedMonth));
-  }, [selectedYear, selectedMonth]);
+    if (viewAllSelected) {
+      setSelectedMonth(-1);
+    } else {
+      props.onChange(new Date(selectedYear, selectedMonth));
+    }
+  }, [selectedYear, selectedMonth, viewAllSelected]);
 
   const handleChangeYear = (increment: number) => () => {
     setSelectedYear(selectedYear + increment);
   };
 
   const handleChangeMonth = (index: number) => () => {
+    if (viewAllSelected) {
+      setViewAllSelected(false);
+    }
     setSelectedMonth(index);
   };
 
   const selectedYearText = !disableYear ? selectedYear : '';
+
+  const handleViewAllSelected = () => {
+    setSelectedMonth(-1);
+    setViewAllSelected(true);
+    if (onViewAllSelected) {
+      onViewAllSelected();
+    }
+  };
 
   return (
     <>
@@ -57,7 +73,9 @@ function MonthPicker(props: Props) {
             type="button"
             className="flex w-[200px] items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
           >
-            <span className="w-full">{`${dataSet[selectedMonth]} ${selectedYearText}`}</span>
+            <span className="w-full">
+              {viewAllSelected ? 'Semua' : `${dataSet[selectedMonth]} ${selectedYearText}`}
+            </span>
             <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
           </Menu.Button>
 
@@ -95,7 +113,7 @@ function MonthPicker(props: Props) {
               ) : null}
               <div className="py-1">
                 {viewAllText && (
-                  <p onClick={onViewAllSelected} className="block cursor-pointer px-4 py-2 text-sm">
+                  <p onClick={handleViewAllSelected} className="block cursor-pointer px-4 py-2 text-sm">
                     Semua
                   </p>
                 )}

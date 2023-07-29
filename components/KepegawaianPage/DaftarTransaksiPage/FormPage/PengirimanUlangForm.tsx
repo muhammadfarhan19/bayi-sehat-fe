@@ -9,6 +9,7 @@ import { DaftarTransaksiAPI } from '../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../reducer/CommonReducer';
 import { DaftarTransaksi } from '../../../../types/api/DaftarTransaksiAPI';
 import { Status } from '../../../../types/Common';
+import { classNames } from '../../../../utils/Components';
 import { callAPI } from '../../../../utils/Fetchers';
 import { generateUniqueString } from '../../../../utils/StringUtil';
 import { ArrowPath } from '../../../shared/ArrowProgress';
@@ -24,6 +25,7 @@ interface PengirimanUlangForm {
 
 function PengirimanUlangForm(props: ModalProps & PengirimanUlangForm) {
   const { open, setOpen, formMonthAndYearValue = '', onSuccess } = props;
+  const [isSpinning, setIsSpinning] = React.useState(false);
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -78,7 +80,11 @@ function PengirimanUlangForm(props: ModalProps & PengirimanUlangForm) {
   }, [open]);
 
   const handleUniqueCode = () => {
+    setIsSpinning(true);
     setValue('kode', generateUniqueString());
+    setTimeout(() => {
+      setIsSpinning(false);
+    }, 300);
   };
 
   const handleCopyClipboard = async () => {
@@ -92,6 +98,7 @@ function PengirimanUlangForm(props: ModalProps & PengirimanUlangForm) {
     }
   };
   const watchValueKode = watch('kode')?.trim()?.length === 9 ? true : false;
+
   return (
     <Transition appear show={open} as={React.Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={toggleModal}>
@@ -162,7 +169,8 @@ function PengirimanUlangForm(props: ModalProps & PengirimanUlangForm) {
                   onClick={handleUniqueCode}
                   className="mt-5 flex cursor-pointer justify-end text-sm text-green-600 underline sm:col-span-6"
                 >
-                  Generate Kode {<ArrowPath />}
+                  Generate Kode{' '}
+                  {<ArrowPath iconStyle={classNames(isSpinning ? 'animate-spin' : '', 'ml-2 mt-0.5 h-4 w-4 ')} />}
                 </div>
                 <div className="mt-5">
                   <button

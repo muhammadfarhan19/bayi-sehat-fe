@@ -1,4 +1,4 @@
-export function ArrowPath() {
+export function ArrowPath({ iconStyle = 'ml-2 mt-0.5 h-4 w-4' }: { iconStyle?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -6,7 +6,7 @@ export function ArrowPath() {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className={'ml-2 mt-0.5 h-4 w-4 animate-spin'}
+      className={iconStyle}
     >
       <path
         strokeLinecap="round"
