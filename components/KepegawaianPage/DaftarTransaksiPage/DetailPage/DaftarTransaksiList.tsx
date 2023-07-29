@@ -203,7 +203,10 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
                   {(daftarTransaksiList?.list || []).map((item, index) => {
                     const isLoaderShown = reSync.loading.show && reSync.loading.selectedIndex === index;
                     return (
-                      <tr className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}>
+                      <tr
+                        key={item.kode}
+                        className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                      >
                         <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">{item?.kode}</td>
                         <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
                           {months[item?.month - 1]} {item?.year}
