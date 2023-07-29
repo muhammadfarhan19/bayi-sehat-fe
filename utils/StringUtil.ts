@@ -18,3 +18,7 @@ export function generateUniqueString() {
   }
   return uniqueString;
 }
+
+export function setWhitespacePerWord(inputString: string) {
+  return inputString.split(' ').join(' ');
+}

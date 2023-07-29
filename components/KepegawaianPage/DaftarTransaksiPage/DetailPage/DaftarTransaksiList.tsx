@@ -6,9 +6,11 @@ import React from 'react';
 import { DaftarTransaksiAPI } from '../../../../constants/APIUrls';
 import { DaftarTransaksi } from '../../../../types/api/DaftarTransaksiAPI';
 import { ConditionalRendering } from '../../../../utils/Components';
+import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Pagination from '../../../shared/Pagination';
 import { MonthPicker } from '../../RekapPresensiPage/DetailPage/Shared';
+import { months } from '../../RekapPresensiPage/DetailPage/Shared/MonthPicker';
 import { PengirimanUlangForm } from '../FormPage';
 import { YearPicker } from '../Shared';
 import { useResyncTransaction } from '../utils';
@@ -34,7 +36,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
     [selectedDate]
   );
 
-  const onShowDetail = props.onShowDetail;
+  const { onShowDetail } = props;
 
   const { data: daftarTransaksiList, mutate } = useCommonApi<DaftarTransaksi.GetListReq, DaftarTransaksi.GetListRes>(
     DaftarTransaksiAPI.GET_DAFTAR_TRANSAKSI_LIST,
@@ -49,9 +51,13 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
     ? format(selectedDate, 'MMMM - yyyy', { locale: id })
     : format(new Date(), 'MMMM - yyyy', { locale: id });
 
-  const handleResync = React.useCallback((code: string) => {
+  const handleResync = React.useCallback((code: string, year: number, month: number, selectedIndex: number) => {
     return reSync.syncHandler({
       code,
+      listSelected: true,
+      year,
+      month,
+      selectedIndex,
       onSuccess: mutate,
     });
   }, []);
@@ -68,6 +74,9 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
     }
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+    }
+    if (Object.keys(inputState).includes('month')) {
+      setFilterState(newState);
     }
     timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
@@ -95,12 +104,9 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
       <div className="flex justify-between px-5">
         <div className="flex flex-[0.1]">
           <MonthPicker
-            viewAll
             onChange={date => {
               handleDateChange(date);
-              if (selectedDate) {
-                changeFilterState({ month: selectedDate?.getMonth() + 1 });
-              }
+              changeFilterState({ month: date.getMonth() + 1 });
             }}
             disableYear
           />
@@ -109,9 +115,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
           <YearPicker
             onChange={date => {
               handleDateChange(date);
-              if (selectedDate) {
-                changeFilterState({ year: selectedDate?.getFullYear() });
-              }
+              changeFilterState({ year: date?.getFullYear() });
             }}
             selectedMonth={selectedDate?.getMonth()}
           />
@@ -133,81 +137,89 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
                 <tr>
                   <th
                     scope="col"
-                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Kode
                   </th>
                   <th
                     scope="col"
-                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Bulan/Tahun
                   </th>
                   <th
                     scope="col"
-                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Tanggal
                   </th>
                   <th
                     scope="col"
-                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Created by
                   </th>
                   <th
                     scope="col"
-                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Last Sync
                   </th>
                   <th
                     scope="col"
-                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Sync by
                   </th>
                   <th
                     scope="col"
-                    className="py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
                   >
                     Aksi
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {(daftarTransaksiList?.list ?? []).map((item, index) => {
+                {(daftarTransaksiList?.list || []).map((item, index) => {
+                  const isLoaderShown = reSync.loading.show && reSync.loading.selectedIndex === index;
                   return (
                     <tr className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}>
-                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">{item?.kode}</td>
-                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
-                        {item?.month} {item?.year}
+                      <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">{item?.kode}</td>
+                      <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                        {months[item?.month - 1]} {item?.year}
                       </td>
-                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
+                      <td className="truncate px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
                         {item?.tanggal_awal_akhir}
                       </td>
-                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
+                      <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
                         {item?.created_by}
                       </td>
-                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-sky-500">{item?.last_sync}</td>
-                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">{item?.sync_by}</td>
-                      <td className="px-4 py-4 text-justify text-[10px] font-medium text-gray-900">
+                      <td className="truncate px-6 py-4 text-justify text-[10px] font-medium text-sky-500">
+                        {item?.last_sync}
+                      </td>
+                      <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">{item?.sync_by}</td>
+                      <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
                         <div className="flex flex-row items-center justify-between space-x-2">
                           <button
-                            onClick={() => onShowDetail(true, selectedDate, '')}
+                            onClick={() => onShowDetail(true, selectedDate, item?.kode)}
                             type="button"
                             className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
                           >
                             Detail
                           </button>
                           <button
+                            disabled={reSync.loading.show}
                             onClick={() => {
-                              handleResync(item?.kode);
+                              handleResync(item?.kode, item?.year, item?.month, index);
                             }}
                             type="button"
                             className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
                           >
-                            Sync
+                            {isLoaderShown ? (
+                              <CircleProgress containerStyle="h-4 w-4 animate-spin text-gray-600" />
+                            ) : (
+                              'Sync'
+                            )}
                           </button>
                         </div>
                       </td>
@@ -230,6 +242,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
       {ConditionalRendering(
         formModalState,
         <PengirimanUlangForm
+          onSuccess={mutate}
           selectedMonth={selectedDate && selectedDate?.getMonth() + 1}
           selectedYear={selectedDate && selectedDate?.getFullYear()}
           formMonthAndYearValue={formattedSelectedDate}

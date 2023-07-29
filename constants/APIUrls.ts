@@ -287,7 +287,7 @@ export const RekapPresensiAPI = {
 
 export const DaftarTransaksiAPI = {
   GET_DAFTAR_TRANSAKSI_LIST: config.apiHost + '/transaksi/list',
-  GET_DAFTAR_TRANSAKSI: config.apiHost + '/presensi/transaction/detail',
-  POST_DAFTAR_TRANSAKSI: config.apiHost + '/presensi/transaction/generate',
+  GET_DAFTAR_TRANSAKSI: config.apiHost + '/transaksi/presensi/detail',
+  POST_DAFTAR_TRANSAKSI: config.apiHost + '/transaksi/presensi/generate',
   POST_TRANSAKSI: config.apiHost + '/transaksi',
 };

@@ -18,10 +18,11 @@ interface PengirimanUlangForm {
   formMonthAndYearValue: string;
   selectedMonth?: number;
   selectedYear?: number;
+  onSuccess: () => void;
 }
 
 function PengirimanUlangForm(props: ModalProps & PengirimanUlangForm) {
-  const { open, setOpen, formMonthAndYearValue = '' } = props;
+  const { open, setOpen, formMonthAndYearValue = '', onSuccess } = props;
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -48,11 +49,12 @@ function PengirimanUlangForm(props: ModalProps & PengirimanUlangForm) {
         dispatch(
           setSnackbar({
             show: true,
-            message: `${resSubmit?.data?.data} .`,
+            message: `${resSubmit?.data?.data}.`,
             type: SnackbarType.INFO,
           })
         );
         setOpen(!open);
+        onSuccess();
       } else {
         dispatch(
           setSnackbar({

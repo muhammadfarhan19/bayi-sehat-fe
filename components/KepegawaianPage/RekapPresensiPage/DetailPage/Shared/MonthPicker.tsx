@@ -25,13 +25,15 @@ interface Props {
   type?: string;
   disableYear?: boolean;
   dataSet?: string[];
+  viewAllText?: boolean;
+  onViewAllSelected?: () => void;
   viewAll?: boolean;
 }
 
 function MonthPicker(props: Props) {
   const [selectedYear, setSelectedYear] = React.useState(dateToday.getFullYear());
   const [selectedMonth, setSelectedMonth] = React.useState(dateToday.getMonth());
-  const { disableYear = false, dataSet = months, viewAll = false } = props;
+  const { disableYear = false, dataSet = months, viewAllText = false, onViewAllSelected } = props;
 
   React.useEffect(() => {
     props.onChange(new Date(selectedYear, selectedMonth));
@@ -92,7 +94,11 @@ function MonthPicker(props: Props) {
                 </div>
               ) : null}
               <div className="py-1">
-                {viewAll && <p className="block cursor-pointer px-4 py-2 text-sm">Semua</p>}
+                {viewAllText && (
+                  <p onClick={onViewAllSelected} className="block cursor-pointer px-4 py-2 text-sm">
+                    Semua
+                  </p>
+                )}
                 {dataSet.map((each, index) => (
                   <Menu.Item key={`month-${index}`}>
                     {({ active }) => (
