@@ -37,12 +37,12 @@ function MonthPicker(props: Props) {
   const [viewAllSelected, setViewAllSelected] = React.useState(true);
 
   React.useEffect(() => {
-    if (viewAllSelected) {
+    if (viewAllSelected && viewAllText) {
       setSelectedMonth(-1);
     } else {
       props.onChange(new Date(selectedYear, selectedMonth));
     }
-  }, [selectedYear, selectedMonth, viewAllSelected]);
+  }, [selectedYear, selectedMonth, viewAllSelected, viewAllText]);
 
   const handleChangeYear = (increment: number) => () => {
     setSelectedYear(selectedYear + increment);
@@ -74,7 +74,7 @@ function MonthPicker(props: Props) {
             className="flex w-[200px] items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
           >
             <span className="w-full">
-              {viewAllSelected ? 'Semua' : `${dataSet[selectedMonth]} ${selectedYearText}`}
+              {viewAllSelected && viewAllText ? 'Semua' : `${dataSet[selectedMonth]} ${selectedYearText}`}
             </span>
             <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
           </Menu.Button>
