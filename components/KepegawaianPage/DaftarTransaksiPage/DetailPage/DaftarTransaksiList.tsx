@@ -223,7 +223,12 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
                         <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">
                           <div className="flex flex-row items-center justify-between space-x-2">
                             <button
-                              onClick={() => onShowDetail(true, selectedDate, item?.kode)}
+                              onClick={() => {
+                                if (item?.year && item?.month) {
+                                  const selectedDate = new Date(item.year, item?.month - 1);
+                                  onShowDetail(true, selectedDate, item?.kode);
+                                }
+                              }}
                               type="button"
                               className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
                             >
