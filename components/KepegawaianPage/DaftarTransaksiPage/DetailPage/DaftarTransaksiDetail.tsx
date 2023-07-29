@@ -49,7 +49,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     DaftarTransaksiAPI.GET_DAFTAR_TRANSAKSI,
     filterState,
     { method: 'GET' },
-    { skipCall: isCodeUnavail }
+    { skipCall: isCodeUnavail, revalidateOnMount: true }
   );
 
   const selectedYear =
