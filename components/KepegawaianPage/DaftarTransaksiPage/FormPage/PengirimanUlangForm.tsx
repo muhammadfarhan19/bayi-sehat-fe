@@ -49,6 +49,7 @@ function PengirimanUlangForm(props: ModalProps & PengirimanUlangForm) {
   const {
     register,
     formState: { errors },
+    getValues,
     handleSubmit,
     setValue,
   } = useForm<DaftarTransaksi.PostRequest>();
@@ -97,6 +98,17 @@ function PengirimanUlangForm(props: ModalProps & PengirimanUlangForm) {
     setValue('kode', generateUniqueString());
   };
 
+  const handleCopyClipboard = async () => {
+    try {
+      const permission = await window.navigator.permissions.query({ name: 'clipboard-write' as PermissionName });
+      if (permission.state === 'granted' || permission.state === 'prompt') {
+        if (getValues('kode')) await window.navigator.clipboard.writeText(getValues('kode'));
+      }
+    } catch (error) {
+      console.error('Failed to copy text to clipboard:', error);
+    }
+  };
+
   return (
     <Transition appear show={open} as={React.Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={toggleModal}>
@@ -142,14 +154,24 @@ function PengirimanUlangForm(props: ModalProps & PengirimanUlangForm) {
                   isUneditable
                 />
                 <InputLabelled
+                  clipBoard
                   isError={errors.kode}
+                  additionalLabelStyle="flex flex-row justify-between"
                   maxLength={9}
+                  onCopyToClipboard={handleCopyClipboard}
                   errorMessage={errors.kode?.message}
-                  validation={{ ...register('kode', { required: 'Silahkan Masukkan Kode', minLength: 9 }) }}
+                  validation={{
+                    ...register('kode', {
+                      required: 'Silahkan Masukkan Kode',
+                      pattern: {
+                        value: /^[A-Z]+$/,
+                        message: 'Silahkan Masukkan 9 Aphabetical Karakter dan Kapital',
+                      },
+                    }),
+                  }}
                   name="kode"
                   type="text"
                   label="Kode"
-                  isUneditable
                 />
                 <div
                   onClick={handleUniqueCode}
