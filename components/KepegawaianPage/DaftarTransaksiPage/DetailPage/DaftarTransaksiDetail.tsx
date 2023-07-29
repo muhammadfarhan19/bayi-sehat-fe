@@ -104,7 +104,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     }
     timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
-
+  const TableHeaderPegawaiNipNik = properties?.selectedTab === 'Master PNS' ? 'NIP' : 'NIK';
   return (
     <>
       <div className="px-5 pt-5 pb-1">
@@ -169,7 +169,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
         <div>
           <button
             disabled
-            className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-600"
+            className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-300"
           >
             Download
           </button>
@@ -196,7 +196,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      NIP
+                      {TableHeaderPegawaiNipNik}
                     </th>
                     <th
                       scope="col"

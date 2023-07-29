@@ -8,6 +8,7 @@ import { DaftarTransaksi } from '../../../../types/api/DaftarTransaksiAPI';
 import { ConditionalRendering } from '../../../../utils/Components';
 import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
+import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
 import { MonthPicker } from '../../RekapPresensiPage/DetailPage/Shared';
 import { months } from '../../RekapPresensiPage/DetailPage/Shared/MonthPicker';
@@ -38,7 +39,11 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
 
   const { onShowDetail } = props;
 
-  const { data: daftarTransaksiList, mutate } = useCommonApi<DaftarTransaksi.GetListReq, DaftarTransaksi.GetListRes>(
+  const {
+    data: daftarTransaksiList,
+    mutate,
+    isValidating,
+  } = useCommonApi<DaftarTransaksi.GetListReq, DaftarTransaksi.GetListRes>(
     DaftarTransaksiAPI.GET_DAFTAR_TRANSAKSI_LIST,
     filterState,
     { method: 'GET' }
@@ -129,116 +134,124 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
           </button>
         </div>
       </div>
-      <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-        <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-          <div className="sm:rounded-lg">
-            <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Kode
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Bulan/Tahun
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Tanggal
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Created by
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Last Sync
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Sync by
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                  >
-                    Aksi
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {(daftarTransaksiList?.list || []).map((item, index) => {
-                  const isLoaderShown = reSync.loading.show && reSync.loading.selectedIndex === index;
-                  return (
-                    <tr className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}>
-                      <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">{item?.kode}</td>
-                      <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
-                        {months[item?.month - 1]} {item?.year}
-                      </td>
-                      <td className="truncate px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
-                        {item?.tanggal_awal_akhir}
-                      </td>
-                      <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
-                        {item?.created_by}
-                      </td>
-                      <td className="truncate px-6 py-4 text-justify text-[10px] font-medium text-sky-500">
-                        {item?.last_sync}
-                      </td>
-                      <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">{item?.sync_by}</td>
-                      <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
-                        <div className="flex flex-row items-center justify-between space-x-2">
-                          <button
-                            onClick={() => onShowDetail(true, selectedDate, item?.kode)}
-                            type="button"
-                            className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
-                          >
-                            Detail
-                          </button>
-                          <button
-                            disabled={reSync.loading.show}
-                            onClick={() => {
-                              handleResync(item?.kode, item?.year, item?.month, index);
-                            }}
-                            type="button"
-                            className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
-                          >
-                            {isLoaderShown ? (
-                              <CircleProgress containerStyle="h-4 w-4 animate-spin text-gray-600" />
-                            ) : (
-                              'Sync'
-                            )}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <Pagination
-              onChange={value => {
-                changeFilterState({ page: value });
-              }}
-              totalData={daftarTransaksiList ? daftarTransaksiList?.pagination.total_data : 0}
-              perPage={filterState?.per_page}
-              page={filterState?.page}
-            />
+      {isValidating ? (
+        <div className="relative h-[150px] w-full divide-y divide-gray-200">
+          <Loader />
+        </div>
+      ) : (
+        <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+          <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+            <div className="sm:rounded-lg">
+              <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Kode
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Bulan/Tahun
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Tanggal
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Created by
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Last Sync
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Sync by
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                    >
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(daftarTransaksiList?.list || []).map((item, index) => {
+                    const isLoaderShown = reSync.loading.show && reSync.loading.selectedIndex === index;
+                    return (
+                      <tr className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}>
+                        <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">{item?.kode}</td>
+                        <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                          {months[item?.month - 1]} {item?.year}
+                        </td>
+                        <td className="truncate px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                          {item?.tanggal_awal_akhir}
+                        </td>
+                        <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                          {item?.created_by}
+                        </td>
+                        <td className="truncate px-6 py-4 text-justify text-[10px] font-medium text-sky-500">
+                          {item?.last_sync}
+                        </td>
+                        <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                          {item?.sync_by}
+                        </td>
+                        <td className="px-6 py-4 text-justify text-[10px] font-medium text-gray-900">
+                          <div className="flex flex-row items-center justify-between space-x-2">
+                            <button
+                              onClick={() => onShowDetail(true, selectedDate, item?.kode)}
+                              type="button"
+                              className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
+                            >
+                              Detail
+                            </button>
+                            <button
+                              disabled={reSync.loading.show}
+                              onClick={() => {
+                                handleResync(item?.kode, item?.year, item?.month, index);
+                              }}
+                              type="button"
+                              className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
+                            >
+                              {isLoaderShown ? (
+                                <CircleProgress containerStyle="h-4 w-4 animate-spin text-gray-600" />
+                              ) : (
+                                'Sync'
+                              )}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <Pagination
+                onChange={value => {
+                  changeFilterState({ page: value });
+                }}
+                totalData={daftarTransaksiList ? daftarTransaksiList?.pagination.total_data : 0}
+                perPage={filterState?.per_page}
+                page={filterState?.page}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
       {ConditionalRendering(
         formModalState,
         <PengirimanUlangForm
