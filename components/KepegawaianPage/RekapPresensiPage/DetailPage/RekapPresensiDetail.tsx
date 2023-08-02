@@ -30,7 +30,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
   const { handleDownloadRekap } = useDownloadRekapPresensi();
   const isDownloading = useCommonState().showLoader;
   const StatusHadirPickers = StatusHadirPicker().renderComponent({
-    onChange: e => changeFilterState({ search: e.target.value }),
+    onChange: e => changeFilterState({ status: e.target.value }),
   });
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean;
