@@ -102,7 +102,7 @@ function ModalResend(props: ModalProps) {
                   validation={{ ...register('date', { required: 'Silahkan Pilih Tanggal' }) }}
                   name="date"
                   type="date"
-                  label="tanggal"
+                  label="Tanggal"
                 />
                 <div className="mt-5 sm:col-span-6"></div>
                 <div className="mt-5">
