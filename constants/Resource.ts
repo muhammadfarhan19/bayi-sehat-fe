@@ -244,3 +244,21 @@ export type TableRekapPresensi =
   | 'Pengurang Lupa Absen Datang(%)'
   | 'Pengurang Lupa Absen Pulang(%)'
   | 'Last Sync';
+
+export const StatusHadirRekapPresensi = [
+  'Remote',
+  'Tepat Waktu',
+  'Terlambat',
+  'Pulang Lebih Awal',
+  'Terlambat dan Pulang Lebih Awal',
+  'Dinas',
+  'Tidak Hadir',
+  'Libur Weekend',
+  'Libur Nasional/Spesial',
+  'Cuti',
+  'Shift Libur',
+  'Lupa Absen Datang',
+  'Lupa Absen Pulang',
+  'Lupa Absen Datang Dan Pulang Lebih Awal',
+  'Terlambat Dan Lupa Absen Pulang',
+];

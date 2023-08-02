@@ -15,7 +15,7 @@ import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
-import { ExpandableTableData, ModalResend, MonthPicker } from './Shared';
+import { ExpandableTableData, ModalResend, MonthPicker, StatusHadirPicker } from './Shared';
 import useDownloadRekapPresensi from './utils/useDownloadRekapPresensi';
 
 interface RekapPresensiProps {
@@ -24,9 +24,14 @@ interface RekapPresensiProps {
 
 function RekapPresensiDetail(props: RekapPresensiProps) {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
+
+  const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const { handleDownloadRekap } = useDownloadRekapPresensi();
   const isDownloading = useCommonState().showLoader;
+  const StatusHadirPickers = StatusHadirPicker().renderComponent({
+    onChange: e => changeFilterState({ search: e.target.value }),
+  });
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean;
     selectedId?: number;
@@ -35,10 +40,10 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
     selectedId: undefined,
   });
 
-  const [filterState, setFilterState] = React.useState<{ page: number; per_page: number; nama?: string }>({
+  const [filterState, setFilterState] = React.useState<{ page: number; per_page: number; search?: string }>({
     page: 1,
     per_page: 20,
-    nama: '',
+    search: '',
   });
 
   const handleShowForm = (open: boolean, selectedId?: number) => {
@@ -77,15 +82,19 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
 
   const { data: rekapPresensi, isValidating } = useCommonApi<RekapPresensiReq, RekapPresensiResp>(
     RekapPresensiAPI.GET_PRESENSI_SUMMARY_LIST,
-    filterState?.nama !== '' ? { ...filterStateQuery, nama: filterState?.nama } : filterStateQuery,
+    filterState?.search !== '' ? { ...filterStateQuery, search: filterState?.search } : filterStateQuery,
     { method: 'GET' },
-    { skipCall: !selectedDate && !props.status_cpns, revalidateOnMount: true || filterState?.nama === '' }
+    { skipCall: !selectedDate && !props.status_cpns, revalidateOnMount: true || filterState?.search === '' }
   );
 
   const downloadRekap = () => {
     if (selectedDate) {
       handleDownloadRekap(startDate, endDate, props.status_cpns);
     }
+  };
+
+  const toggleAdvancedFilter = () => {
+    setshowAdvancedFilter(!showAdvancedFilter);
   };
 
   const changeFilterState = (inputState: Partial<RekapPresensiReq>) => {
@@ -119,11 +128,11 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
             type="text"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Cari..."
-            onChange={e => changeFilterState({ nama: e.target.value })}
+            onChange={e => changeFilterState({ search: e.target.value })}
           />
           <button
             type="button"
-            disabled
+            onClick={toggleAdvancedFilter}
             className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
           >
             <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
@@ -131,10 +140,17 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
         </div>
       </div>
 
-      <div className="flex justify-between px-5">
-        <div className="flex flex-row space-x-2">
-          <MonthPicker onChange={handleDateChange} />
+      {showAdvancedFilter && (
+        <div className="flex w-full flex-row items-center gap-x-[16px] px-5">
+          {StatusHadirPickers}
+          <div className="mt-[-46px]">
+            <p className="mb-[4px] text-[14px] font-normal">Bulan dan Tahun</p>
+            <MonthPicker onChange={handleDateChange} />
+          </div>
         </div>
+      )}
+
+      <div className="flex justify-end px-5">
         <div className="flex flex-row space-x-2">
           <button
             disabled={isDownloading}
