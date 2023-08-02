@@ -220,6 +220,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
       setValue('hp', String(pegawai?.hp));
       setValue('agama', Number(pegawai?.agama));
       setValue('golongan_darah', String(pegawai?.golongan_darah));
+      setValue('badgeNumber', String(pegawai?.badge_number));
 
       if (pegawai?.uuid_bpjs?.length) {
         setValue('file_id_bpjs_kesehatan', String(pegawai?.uuid_bpjs?.[0]?.document_uuid));
@@ -448,7 +449,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
               <div className="mt-1">
                 <select
                   className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-                  {...register('golongan_darah', { required: 'Silahkan masukan golongan darah.' })}
+                  {...register('golongan_darah', { required: false })}
                 >
                   <option value={''}>Silahkan Pilih</option>
                   <option value={'A'}>A</option>
@@ -465,7 +466,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
               </label>
               <div className="mt-1">
                 <input
-                  {...register('hp', { required: 'Silahkan masukan nomor ponsel.' })}
+                  {...register('hp', { required: false })}
                   className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                   name="hp"
                   type="text"
@@ -479,7 +480,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
               </label>
               <div className="mt-1">
                 <input
-                  {...register('email', { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, required: true })}
+                  {...register('email', { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, required: false })}
                   className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                   name="email"
                   type="text"
@@ -639,7 +640,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
               </label>
               <div className="mt-1">
                 <input
-                  {...register('no_bpjs_kt', { required: 'Silahkan masukan bpjs ketenagakerjaan.' })}
+                  {...register('no_bpjs_kt', { required: false })}
                   className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                   name="no_bpjs_kt"
                   type="text"
