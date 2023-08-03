@@ -120,7 +120,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
             type="text"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Cari..."
-            disabled
+            onChange={e => changeFilterState({ search: e.target.value })}
           />
           <button
             type="button"
