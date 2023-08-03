@@ -167,6 +167,7 @@ export default function UpdateDataDiriPribadi() {
             <Controller
               control={control}
               name="status_menikah"
+              rules={{ required: false }}
               render={({ field: { onChange } }) => (
                 <select
                   defaultValue={data?.status_menikah}
