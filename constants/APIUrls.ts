@@ -290,4 +290,5 @@ export const DaftarTransaksiAPI = {
   GET_DAFTAR_TRANSAKSI: config.apiHost + '/transaksi/presensi/detail',
   POST_DAFTAR_TRANSAKSI: config.apiHost + '/transaksi/presensi/generate',
   POST_TRANSAKSI: config.apiHost + '/transaksi',
+  POST_BLOB_TRANSAKSI: config.apiHost + '/transaksi/export',
 };

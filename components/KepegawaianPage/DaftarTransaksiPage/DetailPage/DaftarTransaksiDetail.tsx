@@ -17,6 +17,7 @@ import Pagination from '../../../shared/Pagination';
 import { ExpandableTableData } from '../../RekapPresensiPage/DetailPage/Shared';
 import { type TabName } from '../../RekapPresensiPage/Shared/types/_sharedType';
 import { useResyncTransaction } from '../utils';
+import useDownloadTransaksi from '../utils/useDownloadTransaksi';
 
 type DaftarTransaksiDetailProps = {
   onBack: () => void;
@@ -29,6 +30,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
   const properties = props;
   const reSync = useResyncTransaction();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const downloadTransaksi = useDownloadTransaksi();
   const [filterState, setFilterState] = React.useState<DaftarTransaksi.Request>({
     page: 1,
     per_page: 20,
@@ -168,10 +170,19 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
         </div>
         <div>
           <button
-            disabled
+            disabled={downloadTransaksi.loading}
+            onClick={() =>
+              downloadTransaksi.downloadTransaksi(filterState, `Daftar_Transaksi_${selectedYear}_${selectedMonth}`)
+            }
             className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-300"
           >
-            Download
+            {downloadTransaksi?.loading ? (
+              <div className="flex items-center justify-center">
+                <CircleProgress containerStyle="h-4 w-4 animate-spin text-gray-600" />
+              </div>
+            ) : (
+              'Download'
+            )}
           </button>
         </div>
       </div>
