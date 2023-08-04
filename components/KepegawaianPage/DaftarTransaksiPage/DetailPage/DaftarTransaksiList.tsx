@@ -13,6 +13,7 @@ import Pagination from '../../../shared/Pagination';
 import { MonthPicker } from '../../RekapPresensiPage/DetailPage/Shared';
 import { months } from '../../RekapPresensiPage/DetailPage/Shared/MonthPicker';
 import { PengirimanUlangForm } from '../FormPage';
+import ModalConfirmation from '../FormPage/ModalConfirmation';
 import { YearPicker } from '../Shared';
 import { useResyncTransaction } from '../utils';
 
@@ -25,6 +26,13 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [formModalState, setFormModalState] = React.useState(false);
+  const [formModalSyncShow, setFormModalSyncShow] = React.useState(false);
+  const [formModalSync, setFormModalSync] = React.useState({
+    kode: '',
+    month: 0,
+    year: 0,
+    index: 0,
+  });
   const reSync = useResyncTransaction();
 
   const handleDateChange = React.useCallback(
@@ -65,7 +73,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
     : format(new Date(), 'MMMM - yyyy', { locale: id });
 
   const handleResync = React.useCallback((code: string, year: number, month: number, selectedIndex: number) => {
-    return reSync.syncHandler({
+    reSync.syncHandler({
       code,
       listSelected: true,
       year,
@@ -73,6 +81,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
       selectedIndex,
       onSuccess: mutate,
     });
+    setFormModalSyncShow(false);
   }, []);
 
   const changeFilterState = (inputState: Partial<DaftarTransaksi.GetListReq>) => {
@@ -203,57 +212,64 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
                   {(daftarTransaksiList?.list || []).map((item, index) => {
                     const isLoaderShown = reSync.loading.show && reSync.loading.selectedIndex === index;
                     return (
-                      <tr
-                        key={item.kode}
-                        className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
-                      >
-                        <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">{item?.kode}</td>
-                        <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
-                          {months[item?.month - 1]} {item?.year}
-                        </td>
-                        <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
-                          {item?.tanggal_awal_akhir}
-                        </td>
-                        <td className="truncate px-6 py-4 text-center text-[10px] font-medium text-gray-900">
-                          {item?.created_by}
-                        </td>
-                        <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-sky-500">
-                          {item?.last_sync}
-                        </td>
-                        <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
-                          {item?.sync_by}
-                        </td>
-                        <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">
-                          <div className="flex flex-row items-center justify-between space-x-2">
-                            <button
-                              onClick={() => {
-                                if (item?.year && item?.month) {
-                                  const selectedDate = new Date(item.year, item?.month - 1);
-                                  onShowDetail(true, selectedDate, item?.kode);
-                                }
-                              }}
-                              type="button"
-                              className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
-                            >
-                              Detail
-                            </button>
-                            <button
-                              disabled={reSync.loading.show}
-                              onClick={() => {
-                                handleResync(item?.kode, item?.year, item?.month, index);
-                              }}
-                              type="button"
-                              className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
-                            >
-                              {isLoaderShown ? (
-                                <CircleProgress containerStyle="h-4 w-4 animate-spin text-gray-600" />
-                              ) : (
-                                'Sync'
-                              )}
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
+                      <>
+                        <tr
+                          key={item.kode}
+                          className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                        >
+                          <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">{item?.kode}</td>
+                          <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
+                            {months[item?.month - 1]} {item?.year}
+                          </td>
+                          <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
+                            {item?.tanggal_awal_akhir}
+                          </td>
+                          <td className="truncate px-6 py-4 text-center text-[10px] font-medium text-gray-900">
+                            {item?.created_by}
+                          </td>
+                          <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-sky-500">
+                            {item?.last_sync}
+                          </td>
+                          <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
+                            {item?.sync_by}
+                          </td>
+                          <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">
+                            <div className="flex flex-row items-center justify-between space-x-2">
+                              <button
+                                onClick={() => {
+                                  if (item?.year && item?.month) {
+                                    const selectedDate = new Date(item.year, item?.month - 1);
+                                    onShowDetail(true, selectedDate, item?.kode);
+                                  }
+                                }}
+                                type="button"
+                                className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
+                              >
+                                Detail
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setFormModalSync({
+                                    kode: item?.kode,
+                                    month: item?.month,
+                                    year: item?.year,
+                                    index,
+                                  });
+                                  setFormModalSyncShow(true);
+                                }}
+                                type="button"
+                                className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
+                              >
+                                {isLoaderShown ? (
+                                  <CircleProgress containerStyle="h-4 w-4 animate-spin text-gray-600" />
+                                ) : (
+                                  'Sync'
+                                )}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </>
                     );
                   })}
                 </tbody>
@@ -279,6 +295,17 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
           formMonthAndYearValue={formattedSelectedDate}
           open={formModalState}
           setOpen={(open: boolean) => setFormModalState(open)}
+        />
+      )}
+      {ConditionalRendering(
+        formModalSyncShow,
+        <ModalConfirmation
+          disabled={reSync.loading.show}
+          open={formModalSyncShow}
+          onSubmit={() => {
+            handleResync(formModalSync.kode, formModalSync.year, formModalSync.month, formModalSync.index);
+          }}
+          setOpen={(open: boolean) => setFormModalSyncShow(open)}
         />
       )}
     </>

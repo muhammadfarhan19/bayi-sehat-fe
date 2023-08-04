@@ -4,8 +4,13 @@ import React from 'react';
 
 import { ModalProps } from '../../RekapPresensiPage/DetailPage/Shared/ModalResend';
 
-function ModalConfirmation(props: ModalProps) {
-  const { open, setOpen } = props;
+interface ModalConfirmationProps {
+  onSubmit: React.MouseEventHandler<HTMLButtonElement>;
+  disabled: boolean;
+}
+
+function ModalConfirmation(props: ModalProps & ModalConfirmationProps) {
+  const { open, setOpen, onSubmit, disabled } = props;
 
   const toggleModal = () => {
     setOpen(!open);
@@ -43,18 +48,21 @@ function ModalConfirmation(props: ModalProps) {
               <Dialog.Title as="div" className="flex justify-end">
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
-              <form onSubmit={() => null}>
+              <form>
                 <p className="font-semi text-center text-xl">Yakin ingin Sync?</p>
                 <p className="font-regular text-md mt-5 text-center text-gray-500">Apakah anda yakin ingin Sync?</p>
                 <div className="mt-5 flex flex-row justify-between space-x-2">
                   <button
                     type="button"
+                    onClick={toggleModal}
                     className="w-full rounded border border-black px-2.5  py-1.5 text-center text-sm font-medium shadow-sm hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-400"
                   >
                     Tidak
                   </button>
                   <button
-                    type="submit"
+                    disabled={disabled}
+                    onClick={onSubmit}
+                    type="button"
                     className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-400"
                   >
                     Ya
