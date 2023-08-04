@@ -26,8 +26,8 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [formModalState, setFormModalState] = React.useState(false);
-  const [formModalSyncShow, setFormModalSyncShow] = React.useState(false);
   const [formModalSync, setFormModalSync] = React.useState({
+    show: false,
     kode: '',
     month: 0,
     year: 0,
@@ -81,7 +81,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
       selectedIndex,
       onSuccess: mutate,
     });
-    setFormModalSyncShow(false);
+    setFormModalSync(prevState => ({ ...prevState, show: false }));
   }, []);
 
   const changeFilterState = (inputState: Partial<DaftarTransaksi.GetListReq>) => {
@@ -250,12 +250,12 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
                               <button
                                 onClick={() => {
                                   setFormModalSync({
+                                    show: true,
                                     kode: item?.kode,
                                     month: item?.month,
                                     year: item?.year,
                                     index,
                                   });
-                                  setFormModalSyncShow(true);
                                 }}
                                 type="button"
                                 className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
@@ -298,14 +298,14 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
         />
       )}
       {ConditionalRendering(
-        formModalSyncShow,
+        formModalSync.show,
         <ModalConfirmation
           disabled={reSync.loading.show}
-          open={formModalSyncShow}
+          open={formModalSync.show}
           onSubmit={() => {
             handleResync(formModalSync.kode, formModalSync.year, formModalSync.month, formModalSync.index);
           }}
-          setOpen={(open: boolean) => setFormModalSyncShow(open)}
+          setOpen={(open: boolean) => setFormModalSync(prevState => ({ ...prevState, show: open }))}
         />
       )}
     </>
