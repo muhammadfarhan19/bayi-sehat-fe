@@ -1,103 +1,97 @@
-import { AdjustmentsIcon } from '@heroicons/react/outline';
+import { AdjustmentsIcon, ChevronLeftIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
+import id from 'date-fns/locale/id';
 import React from 'react';
 
-import { RekapPresensiAPI } from '../../../../constants/APIUrls';
-import { UnavailableDataText } from '../../../../constants/Resource';
-import { useCommonState } from '../../../../reducer/CommonReducer';
-import {
-  type RekapPresensiReq,
-  type RekapPresensiResp,
-  RekapPresensiLastSyncRes,
-} from '../../../../types/api/RekapPresensiAPI';
-import { formatDate, formatStringDate, getLastDayOfMonth } from '../../../../utils/DateUtil';
+import { DaftarTransaksiAPI, UnitKerjaAPI } from '../../../../constants/APIUrls';
+import { HyphenText, UnavailableDataText } from '../../../../constants/Resource';
+import { type DaftarTransaksi } from '../../../../types/api/DaftarTransaksiAPI';
+import { type GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
+import { formatStringDate } from '../../../../utils/DateUtil';
 import { checkReturnValueOfString } from '../../../../utils/StringUtil';
+import { months } from '../../../DinasPage/DataPegawai/DatePicker';
 import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
-import { ExpandableTableData, ModalResend, MonthPicker, StatusHadirPicker } from './Shared';
-import useDownloadRekapPresensi from './utils/useDownloadRekapPresensi';
+import { ExpandableTableData } from '../../RekapPresensiPage/DetailPage/Shared';
+import { type TabName } from '../../RekapPresensiPage/Shared/types/_sharedType';
+import { useResyncTransaction } from '../utils';
+import useDownloadTransaksi from '../utils/useDownloadTransaksi';
 
-interface RekapPresensiProps {
-  status_cpns: number[];
-}
+type DaftarTransaksiDetailProps = {
+  onBack: () => void;
+  selectedDate?: Date;
+  code?: string;
+  selectedTab: string | TabName;
+};
 
-function RekapPresensiDetail(props: RekapPresensiProps) {
-  const [selectedDate, setSelectedDate] = React.useState<Date>();
-
-  const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
+function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
+  const properties = props;
+  const reSync = useResyncTransaction();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
-  const { handleDownloadRekap } = useDownloadRekapPresensi();
-  const isDownloading = useCommonState().showLoader;
-  const StatusHadirPickers = StatusHadirPicker().renderComponent({
-    onChange: e => changeFilterState({ status: e.target.value }),
-  });
-  const [formModalState, setFormModalState] = React.useState<{
-    open: boolean;
-    selectedId?: number;
-  }>({
-    open: false,
-    selectedId: undefined,
-  });
-
-  const [filterState, setFilterState] = React.useState<{ page: number; per_page: number; search?: string }>({
+  const downloadTransaksi = useDownloadTransaksi();
+  const [filterState, setFilterState] = React.useState<DaftarTransaksi.Request>({
     page: 1,
     per_page: 20,
-    search: '',
+    kode_transaksi: String(properties.code),
+    type: properties?.selectedTab === 'Master PNS' ? 'pns' : 'ppnpn',
   });
-
-  const handleShowForm = (open: boolean, selectedId?: number) => {
-    setFormModalState({
-      open,
-      selectedId,
-    });
-  };
-  const handleDateChange = React.useCallback(
-    (date: Date) => {
-      setSelectedDate(date);
-    },
-    [selectedDate]
+  const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
+    UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
+    null,
+    { method: 'GET' }
   );
-
-  const startDate = selectedDate ? formatDate(selectedDate, 'yyyy-MM-dd') : formatDate(new Date(), 'yyyy-MM-dd');
-
-  const endOfMonth = selectedDate ? getLastDayOfMonth(selectedDate) : new Date();
-
-  const endDate = formatDate(endOfMonth, 'yyyy-MM-dd');
-
-  const filterStateQuery = {
-    page: filterState?.page,
-    per_page: filterState?.per_page,
-    start_date: startDate,
-    end_date: endDate,
-    status_cpns: props.status_cpns,
-  };
-
-  const { data: rekapPresensiLastSync } = useCommonApi<Partial<RekapPresensiReq>, RekapPresensiLastSyncRes>(
-    RekapPresensiAPI.GET_PRESENSI_LAST_SYNC_MASTER,
-    { start_date: startDate, end_date: endDate },
+  const isCodeUnavail = properties.code?.trim()?.length === 0;
+  const {
+    data: daftarTransaksiList,
+    mutate,
+    isValidating,
+  } = useCommonApi<DaftarTransaksi.Request, DaftarTransaksi.Response>(
+    DaftarTransaksiAPI.GET_DAFTAR_TRANSAKSI,
+    filterState,
     { method: 'GET' },
-    { skipCall: !selectedDate, revalidateOnMount: true }
+    { skipCall: isCodeUnavail, revalidateOnMount: true }
   );
 
-  const { data: rekapPresensi, isValidating } = useCommonApi<RekapPresensiReq, RekapPresensiResp>(
-    RekapPresensiAPI.GET_PRESENSI_SUMMARY_LIST,
-    filterState?.search !== '' ? { ...filterStateQuery, search: filterState?.search } : filterStateQuery,
-    { method: 'GET' },
-    { skipCall: !selectedDate && !props.status_cpns, revalidateOnMount: true || filterState?.search === '' }
-  );
+  const selectedYear =
+    typeof properties.selectedDate !== 'undefined' ? format(properties.selectedDate, 'yyyy', { locale: id }) : '';
+  const selectedMonth =
+    typeof properties.selectedDate !== 'undefined' ? months[properties?.selectedDate?.getMonth()] : '';
 
-  const downloadRekap = () => {
-    if (selectedDate) {
-      handleDownloadRekap(startDate, endDate, props.status_cpns);
+  const renderMonthComponent =
+    selectedMonth === undefined ? null : (
+      <div>
+        <>
+          <p className="mb-[4px] text-[14px] font-normal">Bulan</p>
+          <div className="mb-10 block block flex appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
+            {selectedMonth}
+          </div>
+        </>
+      </div>
+    );
+
+  const renderYearComponent =
+    selectedYear === undefined ? null : (
+      <div>
+        <p className="mb-[4px] text-[14px] font-normal">Tahun</p>
+        <div className="mb-10 block block flex appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
+          {selectedYear}
+        </div>
+      </div>
+    );
+
+  const handleResync = React.useCallback(() => {
+    if (properties.code) {
+      return reSync.syncHandler({
+        code: properties.code,
+        selectedDate: props.selectedDate,
+        onSuccess: mutate,
+      });
     }
-  };
+  }, [properties.code]);
 
-  const toggleAdvancedFilter = () => {
-    setshowAdvancedFilter(!showAdvancedFilter);
-  };
-
-  const changeFilterState = (inputState: Partial<RekapPresensiReq>) => {
+  const changeFilterState = (inputState: Partial<DaftarTransaksi.Request>) => {
     const pageAffected = Object.keys(inputState).includes('page');
     const newState = {
       ...filterState,
@@ -112,17 +106,17 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
     }
     timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
-
-  const replacementOfMinusOneResponseAsHyphen = '-';
-  const formatDateOfLastSync = rekapPresensiLastSync?.last_sync
-    ? formatStringDate(rekapPresensiLastSync?.last_sync, 'EEEE, dd MMM yyyy - HH:mm:ss')
-    : '';
-  const isPPNPNList = props?.status_cpns?.[0] === 2;
-  const tableHeaderIdPegawai = isPPNPNList ? 'NIK' : 'NIP';
+  const TableHeaderPegawaiNipNik = properties?.selectedTab === 'Master PNS' ? 'NIP' : 'NIK';
   return (
     <>
-      <div className="mb-5 flex flex-row items-center px-4 pt-3">
-        <h3 className="text-xl font-medium leading-6 text-gray-900">Rekap Presensi</h3>
+      <div className="px-5 pt-5 pb-1">
+        <span onClick={properties.onBack} className="mb-5 flex cursor-pointer flex-row items-center gap-x-2">
+          <ChevronLeftIcon className="h-5 w-5" />
+          <div>Daftar Transaksi</div>
+        </span>
+      </div>
+      <div className="mb-1 flex flex-row items-center px-4">
+        <h3 className="text-xl font-medium leading-6 text-gray-900">Kode Transaksi : {properties.code || '-'}</h3>
         <div className="ml-auto flex">
           <input
             type="text"
@@ -132,7 +126,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
           />
           <button
             type="button"
-            onClick={toggleAdvancedFilter}
+            disabled
             className="ml-1 rounded-md border border-gray-300 p-2 focus:bg-gray-50 focus:outline-none"
           >
             <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
@@ -140,41 +134,57 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
         </div>
       </div>
 
-      {showAdvancedFilter && (
-        <div className="flex w-full flex-row items-center gap-x-[16px] px-5">
-          {StatusHadirPickers}
-          <div className="mt-[-46px]">
-            <p className="mb-[4px] text-[14px] font-normal">Bulan dan Tahun</p>
-            <MonthPicker onChange={handleDateChange} />
+      <div className="flex flex-row items-center justify-between border-b-2 px-5">
+        <div className="flex flex-row space-x-5">
+          <div className="w-[202px]">
+            <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
+            <select
+              className="mb-10 block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+              onChange={e => changeFilterState({ unit_kerja: e.target.value })}
+            >
+              <option value="">Semua</option>
+              {(unitKerjaList || []).map((item, index) => (
+                <option key={`options-${index}`} value={item?.name}>
+                  {item?.name}
+                </option>
+              ))}
+            </select>
           </div>
+          {renderMonthComponent}
+          {renderYearComponent}
         </div>
-      )}
-
-      <div className="flex justify-end px-5">
-        <div className="flex flex-row space-x-2">
+        <div>
           <button
-            disabled={isDownloading}
-            onClick={downloadRekap}
-            className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400"
+            disabled={reSync.loading.show}
+            onClick={handleResync}
+            type="button"
+            className="flex w-36 items-center justify-center rounded-[6px] bg-amber-500 py-[9px] px-[2px] text-gray-50 disabled:bg-amber-300"
           >
-            {isDownloading ? (
-              <div className="ml-4 flex items-center justify-center">
-                <CircleProgress />
+            {reSync.loading.show ? <CircleProgress containerStyle="h-5 w-5 animate-spin text-gray-600" /> : 'Sync'}
+          </button>
+        </div>
+      </div>
+      <div className="my-5 flex flex-row items-center justify-between px-5">
+        <div className="w-[202px]">
+          <h3 className="text-xl font-medium leading-6 text-gray-900">Data Rekap</h3>
+        </div>
+        <div>
+          <button
+            disabled={downloadTransaksi.loading}
+            onClick={() =>
+              downloadTransaksi.downloadTransaksi(filterState, `Daftar_Transaksi_${selectedYear}_${selectedMonth}`)
+            }
+            className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-300"
+          >
+            {downloadTransaksi?.loading ? (
+              <div className="flex items-center justify-center">
+                <CircleProgress containerStyle="h-4 w-4 animate-spin text-gray-600" />
               </div>
             ) : (
               'Download'
             )}
           </button>
-          <button
-            onClick={() => handleShowForm(!formModalState.open, 0)}
-            className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400"
-          >
-            Kirim Ulang
-          </button>
         </div>
-      </div>
-      <div className="font-semi mt-5 flex justify-end px-5 text-sm text-[#4F46E5]">
-        Pembaharuan Terakhir {checkReturnValueOfString(String(formatDateOfLastSync), ' : -')}
       </div>
       {isValidating ? (
         <div className="relative h-[150px] w-full divide-y divide-gray-200">
@@ -197,7 +207,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
-                      {tableHeaderIdPegawai}
+                      {TableHeaderPegawaiNipNik}
                     </th>
                     <th
                       scope="col"
@@ -216,12 +226,6 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
                       Hari dan Tanggal
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Note
                     </th>
                     <th
                       scope="col"
@@ -322,17 +326,13 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {(rekapPresensi?.list ?? []).map((data, index) => {
+                  {(daftarTransaksiList?.list ?? [])?.map((data, index) => {
                     const dataPsw = data?.summary?.psw;
                     const dataTelat = data?.summary?.telat;
                     const dataStatusPsw = data?.summary?.status_psw;
-                    /**
-                     * @description given key below return -1 from Response
-                     */
-                    const isBelowZeroPSW = dataPsw < 0 ? replacementOfMinusOneResponseAsHyphen : dataPsw;
-                    const isBelowZeroDataTelat = dataTelat < 0 ? replacementOfMinusOneResponseAsHyphen : dataTelat;
-                    const isBelowZeroDataStatusPsw =
-                      dataStatusPsw < 0 ? replacementOfMinusOneResponseAsHyphen : dataStatusPsw;
+                    const isBelowZeroPSW = dataPsw < 0 ? HyphenText : dataPsw;
+                    const isBelowZeroDataTelat = dataTelat < 0 ? HyphenText : dataTelat;
+                    const isBelowZeroDataStatusPsw = dataStatusPsw < 0 ? HyphenText : dataStatusPsw;
                     return (
                       <tr className={'bg-white hover:bg-gray-100'} key={index}>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
@@ -342,9 +342,6 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                           <ExpandableTableData data={data?.unit_kerja} expandClass={'w-40 cursor-pointer'} />
                         </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.date}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                          {checkReturnValueOfString(data?.note)}
-                        </td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">
                           {checkReturnValueOfString(data?.shift_check_in)}
                         </td>
@@ -391,19 +388,16 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
                 onChange={value => {
                   changeFilterState({ page: value });
                 }}
-                totalData={rekapPresensi ? rekapPresensi?.pagination.total_data : 0}
-                perPage={filterState.per_page}
-                page={filterState.page}
+                totalData={daftarTransaksiList ? daftarTransaksiList?.pagination.total_data : 0}
+                perPage={filterState?.per_page}
+                page={filterState?.page}
               />
             </div>
           </div>
         </div>
       )}
-      {formModalState?.open && (
-        <ModalResend open={formModalState?.open} setOpen={(open: boolean) => handleShowForm(open, 0)} />
-      )}
     </>
   );
 }
 
-export default RekapPresensiDetail;
+export default DaftarTransaksiDetail;

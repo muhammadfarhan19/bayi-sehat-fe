@@ -23,7 +23,7 @@ export default function MasterPns(props: UnitKerja) {
     page: 1,
     per_page: 20,
     status_cpns: [1, 3],
-    unit_kerja_id: String(unit_kerja_id),
+    unit_kerja_id,
   });
 
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
@@ -31,7 +31,8 @@ export default function MasterPns(props: UnitKerja) {
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
     KepegawaianAPI.GET_PEGAWAI_LIST,
     filter,
-    { method: 'GET' }
+    { method: 'GET' },
+    { revalidateOnMount: true }
   );
 
   const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(

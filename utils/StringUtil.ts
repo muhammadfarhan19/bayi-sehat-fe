@@ -4,3 +4,21 @@ export const checkReturnValueOfString = (valueOf: string, fallback = '-') => {
   }
   return fallback;
 };
+
+export const generateRandomChar = () => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const randomIndex = Math.floor(Math.random() * characters.length);
+  return characters.charAt(randomIndex);
+};
+
+export function generateUniqueString() {
+  let uniqueString = '';
+  while (uniqueString.length < 9) {
+    uniqueString += generateRandomChar();
+  }
+  return uniqueString;
+}
+
+export function setWhitespacePerWord(inputString: string) {
+  return inputString.split(' ').join(' ');
+}

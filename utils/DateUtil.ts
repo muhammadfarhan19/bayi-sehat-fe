@@ -173,5 +173,41 @@ export function getLastDayOfMonth(date: Date): Date {
   return new Date(year, month, 0);
 }
 
+export function generateYearList(): number[] {
+  const dateToday = new Date();
+  const currentYear = dateToday.getFullYear();
+  const yearList = [];
+  for (let i = 0; i < 11; i++) {
+    yearList.push(currentYear - i);
+  }
+  return yearList;
+}
+
 export const weekendText = 'Weekend';
 export const weekendTextLocaleId = 'Akhir Pekan';
+
+export const monthList = [
+  'Januari',
+  'Februari',
+  'Maret',
+  'April',
+  'Mei',
+  'Juni',
+  'Juli',
+  'Agustus',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+];
+
+export function generateDropdownMonth({ selectedYear }: { selectedYear?: number }) {
+  const getCurrentMonth = new Date().getMonth();
+  const year = new Date().getFullYear();
+  const currentMonth = [];
+  if (selectedYear && selectedYear < year) {
+    return monthList;
+  }
+  currentMonth.push(...monthList.slice(0, getCurrentMonth + 1));
+  return currentMonth;
+}

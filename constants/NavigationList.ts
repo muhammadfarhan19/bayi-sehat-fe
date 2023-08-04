@@ -168,6 +168,11 @@ export const NavigationList: Navigation[] = [
         childMenu: [
           {
             id: NavigationId.REKAP_KEHADIRAN,
+            name: 'Daftar Transaksi',
+            href: '/kepegawaian/daftar-transaksi',
+          },
+          {
+            id: NavigationId.REKAP_KEHADIRAN,
             name: 'Rekap Kehadiran',
             href: '/kepegawaian/rekap-kehadiran',
           },

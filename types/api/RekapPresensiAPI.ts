@@ -5,6 +5,8 @@ export interface RekapPresensiReq {
   end_date: string;
   status_cpns: number[];
   nama?: string;
+  search?: string;
+  status?: string;
 }
 
 export interface RekapPresensiLastSyncRes {

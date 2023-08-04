@@ -218,3 +218,47 @@ export const RelationshipStatusMap: Record<number, string> = {
   3: 'Cerai Hidup',
   4: 'Cerai Meninggal',
 };
+
+export const HyphenText = '-';
+
+export type TableRekapPresensi =
+  | 'No'
+  | 'NIP'
+  | 'Nama'
+  | 'Unit Kerja'
+  | 'Hari dan Tanggal'
+  | 'Note'
+  | 'Shift Masuk'
+  | 'Shift Keluar'
+  | 'Masuk'
+  | 'Pulang'
+  | 'Telat(menit)'
+  | 'PSW(menit)'
+  | 'Status Hadir'
+  | 'Status PSW'
+  | 'Status Telat'
+  | 'Status TK'
+  | 'Pengurang TK(%)'
+  | 'Pengurang Terlambat(%)'
+  | 'Pengurang PSW(%)'
+  | 'Pengurang Lupa Absen Datang(%)'
+  | 'Pengurang Lupa Absen Pulang(%)'
+  | 'Last Sync';
+
+export const StatusHadirRekapPresensi = [
+  'Remote',
+  'Tepat Waktu',
+  'Terlambat',
+  'Pulang Lebih Awal',
+  'Terlambat dan Pulang Lebih Awal',
+  'Dinas',
+  'Tidak Hadir',
+  'Libur Weekend',
+  'Libur Nasional/Spesial',
+  'Cuti',
+  'Shift Libur',
+  'Lupa Absen Datang',
+  'Lupa Absen Pulang',
+  'Lupa Absen Datang Dan Pulang Lebih Awal',
+  'Terlambat Dan Lupa Absen Pulang',
+];

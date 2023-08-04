@@ -132,6 +132,10 @@ function DataDiriPribadiPpnpn() {
                   value: dataApiRes?.status_menikah ? StatusMenikahText[dataApiRes.status_menikah] : '-',
                 },
                 { label: 'Jumlah Anak', value: dataApiRes.jumlah_anak + ' ' + 'Anak' },
+                {
+                  label: 'Badge Number',
+                  value: dataApiRes?.badge_number ? dataApiRes?.badge_number : '-',
+                },
               ].map((each, index) => (
                 <tr key={index}>
                   <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
