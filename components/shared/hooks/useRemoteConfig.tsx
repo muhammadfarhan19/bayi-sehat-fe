@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { superApps } from '../../../config/firebase';
 
 const remoteConfigSettings: RemoteConfigSettings = {
-  minimumFetchIntervalMillis: 1800000, // 30 minutes (optional: adjust this based on Intra needs)
+  minimumFetchIntervalMillis: 0, // 5 minutes (optional: adjust this based on Intra needs)
   fetchTimeoutMillis: 60000, // 1 minute (optional: adjust this based on Intra needs)
 };
 

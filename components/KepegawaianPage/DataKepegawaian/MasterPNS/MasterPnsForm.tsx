@@ -4,6 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../action/CommonAction';
+import { useRemoteConfigAddPegawai } from '../../../../config/remote/getConfigDataPegawai';
 import { JabatanAPI, KepegawaianAPI, MasterAPI, UnitKerjaAPI } from '../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../reducer/CommonReducer';
 import { GetJabatanReq, JabatanData } from '../../../../types/api/JabatanAPI';
@@ -71,7 +72,7 @@ function MasterPnsForm() {
   } = useForm<FormState>();
   const [golongan, setGolongan] = React.useState<React.SetStateAction<any>>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-
+  const formConfig = useRemoteConfigAddPegawai();
   const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
     UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
     null,
@@ -180,7 +181,7 @@ function MasterPnsForm() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('nama', { required: false })}
+                    {...register('nama', { required: formConfig?.nama })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="nama"
                     type="text"
@@ -194,7 +195,7 @@ function MasterPnsForm() {
               <label className="block text-sm font-medium text-gray-700">Unit Organisasi</label>
               <div className="pt-1 sm:col-span-2 sm:mt-0">
                 <select
-                  {...register('unit_kerja_id', { required: false })}
+                  {...register('unit_kerja_id', { required: formConfig?.unit_kerja })}
                   name="unit_kerja_id"
                   className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                 >
@@ -216,7 +217,7 @@ function MasterPnsForm() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('nip', { required: 'Silahkan masukan nip.' })}
+                    {...register('nip', { required: formConfig?.nip })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="nip"
                     type="text"
@@ -233,7 +234,7 @@ function MasterPnsForm() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('tempat_lahir', { required: false })}
+                    {...register('tempat_lahir', { required: formConfig?.tempat_lahir })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="tempat_lahir"
                     type="text"
@@ -248,7 +249,7 @@ function MasterPnsForm() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('tanggal_lahir', { required: false })}
+                    {...register('tanggal_lahir', { required: formConfig?.tanggal_lahir })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="tanggal_lahir"
                     type="date"
@@ -265,7 +266,7 @@ function MasterPnsForm() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('tmt_cpns', { required: false })}
+                    {...register('tmt_cpns', { required: formConfig?.tmt_cpns })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="tmt_cpns"
                     type="date"
@@ -283,7 +284,7 @@ function MasterPnsForm() {
                     {statusPegawai.map(each => (
                       <div key={each.type} className="flex items-center">
                         <input
-                          {...register('status_cpns', { required: false })}
+                          {...register('status_cpns', { required: formConfig?.status_pegawai })}
                           id={each.type}
                           name="status_cpns"
                           type="radio"
@@ -344,8 +345,8 @@ function MasterPnsForm() {
                     {golongan?.data?.map(
                       (each: {
                         golongan_id: string | number | readonly string[] | undefined;
-                        golongan: any;
-                        pangkat: any;
+                        golongan: string;
+                        pangkat: string;
                       }) => (
                         <option value={each?.golongan_id}>{`${each?.golongan}, ${each?.pangkat}`}</option>
                       )
@@ -403,7 +404,7 @@ function MasterPnsForm() {
               <label className="block text-sm font-medium text-gray-700">Karpeg</label>
               <div className="pt-1 sm:col-span-2 sm:mt-0">
                 <input
-                  {...register('karpeg', { required: false })}
+                  {...register('karpeg', { required: formConfig?.karpeg })}
                   className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                   name="karpeg"
                   type="text"
@@ -416,7 +417,7 @@ function MasterPnsForm() {
               <label className="block text-sm font-medium text-gray-700">Badge Number</label>
               <div className="pt-1 sm:col-span-2 sm:mt-0">
                 <input
-                  {...register('badgeNumber', { required: 'Silahkan Masukkan Badge Number' })}
+                  {...register('badgeNumber', { required: formConfig?.badge_number })}
                   className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                   name="badgeNumber"
                   type="text"
@@ -429,7 +430,7 @@ function MasterPnsForm() {
               <label className="block text-sm font-medium text-gray-700">Tugas Belajar</label>
               <div className="pt-1 sm:col-span-2 sm:mt-0">
                 <input
-                  {...register('tugasBelajar', { required: false })}
+                  {...register('tugasBelajar', { required: formConfig?.tugas_belajar })}
                   className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                   name="tugasBelajar"
                   type="text"
@@ -448,7 +449,7 @@ function MasterPnsForm() {
               <label className="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
               <div className="pt-1 sm:col-span-2 sm:mt-0">
                 <select
-                  {...register('jenis_kelamin', { required: false })}
+                  {...register('jenis_kelamin', { required: formConfig?.gender })}
                   name="jenis_kelamin"
                   className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                 >
@@ -464,7 +465,7 @@ function MasterPnsForm() {
               <label className="block text-sm font-medium text-gray-700">Status Nikah</label>
               <div className="pt-1 sm:col-span-2 sm:mt-0">
                 <select
-                  {...register('status_menikah', { required: false })}
+                  {...register('status_menikah', { required: formConfig?.marriage_status })}
                   name="status_menikah"
                   className="w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                 >
@@ -501,7 +502,7 @@ function MasterPnsForm() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('ktp', { required: false })}
+                    {...register('ktp', { required: formConfig?.nik })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="ktp"
                     type="text"
@@ -568,7 +569,7 @@ function MasterPnsForm() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('alamat', { required: false })}
+                    {...register('alamat', { required: formConfig?.address })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="alamat"
                     type="text"
@@ -585,7 +586,7 @@ function MasterPnsForm() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('npwp', { required: false })}
+                    {...register('npwp', { required: formConfig?.npwp })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="npwp"
                     type="text"
@@ -602,7 +603,7 @@ function MasterPnsForm() {
                 </label>
                 <div className="pt-1">
                   <input
-                    {...register('bpjs', { required: false })}
+                    {...register('bpjs', { required: formConfig?.bpjs_kesehatan })}
                     className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                     name="bpjs"
                     type="text"
