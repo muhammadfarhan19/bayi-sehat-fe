@@ -23,7 +23,7 @@ function useDownloadTransaksi() {
     const callApiDownload = await callAPI<Partial<DaftarTransaksi.Request>, DaftarTransaksi.PostResponse>(
       DaftarTransaksiAPI.POST_BLOB_TRANSAKSI,
       { ...updatedFilterState },
-      { method: 'POST' }
+      { method: 'GET', isBlob: true, timeout: 120000 }
     );
     if (callApiDownload.status === 200 && callApiDownload.data instanceof Blob) {
       let url = '';
