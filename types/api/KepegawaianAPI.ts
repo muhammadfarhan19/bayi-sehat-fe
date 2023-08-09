@@ -69,6 +69,7 @@ export interface PostPegawaiInsertReq {
 export interface PostPegawaiInsertRes {
   status: Status;
   data: string;
+  error_code: string;
 }
 
 export interface PostPegawaiKarpegUpdateReq {
