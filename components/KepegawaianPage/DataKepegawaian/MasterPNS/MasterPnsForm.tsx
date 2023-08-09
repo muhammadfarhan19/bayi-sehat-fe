@@ -35,6 +35,11 @@ const statusNikah = [
   { id: '4', title: 'Cerai Hidup' },
 ];
 
+export const ERROR_CODE = {
+  'Duplicated Badge Number': '0010',
+  'Duplicated NIP': '0003',
+};
+
 interface FormState {
   nip: string;
   nama: string;
@@ -143,6 +148,22 @@ function MasterPnsForm() {
       setTimeout(() => {
         window.location.href = '/kepegawaian/data-pegawai';
       }, 1000);
+    } else if (resSubmit.data?.error_code === ERROR_CODE['Duplicated Badge Number']) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Gagal menyimpan data. Duplikat pada Badge Number.',
+          type: SnackbarType.ERROR,
+        })
+      );
+    } else if (resSubmit.data?.error_code === ERROR_CODE['Duplicated NIP']) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: 'Gagal menyimpan data. Duplikat pada NIP.',
+          type: SnackbarType.ERROR,
+        })
+      );
     } else {
       dispatch(
         setSnackbar({
