@@ -40,10 +40,16 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
     selectedId: undefined,
   });
 
-  const [filterState, setFilterState] = React.useState<{ page: number; per_page: number; search?: string }>({
+  const [filterState, setFilterState] = React.useState<{
+    page: number;
+    per_page: number;
+    search?: string;
+    status?: string;
+  }>({
     page: 1,
     per_page: 20,
     search: '',
+    status: '',
   });
 
   const handleShowForm = (open: boolean, selectedId?: number) => {
@@ -82,7 +88,9 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
 
   const { data: rekapPresensi, isValidating } = useCommonApi<RekapPresensiReq, RekapPresensiResp>(
     RekapPresensiAPI.GET_PRESENSI_SUMMARY_LIST,
-    filterState?.search !== '' ? { ...filterStateQuery, search: filterState?.search } : filterStateQuery,
+    filterState?.search?.trim() !== ''
+      ? { ...filterStateQuery, search: filterState?.search?.trim(), status: filterState.status }
+      : filterStateQuery,
     { method: 'GET' },
     { skipCall: !selectedDate && !props.status_cpns, revalidateOnMount: true || filterState?.search === '' }
   );
