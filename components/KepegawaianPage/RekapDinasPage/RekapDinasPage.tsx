@@ -1,3 +1,5 @@
+import { Popover, Transition } from '@headlessui/react';
+import { InformationCircleIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { RekapDinasAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
@@ -193,6 +195,19 @@ function RekapDinasPage(props: UnitKerja) {
                         >
                           Isi Penugasan
                         </th>
+                        <th
+                          scope="col"
+                          className="flex flex-row items-center px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          <p> Sync Terakhir</p>
+                          <MyPopover />
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Update Terakhir
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -217,6 +232,8 @@ function RekapDinasPage(props: UnitKerja) {
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_selesai}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jenis_dinas}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.isi_penugasan}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{'-'}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{'-'}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -243,6 +260,34 @@ function RekapDinasPage(props: UnitKerja) {
         <SummaryDinasCalendar unit_kerja_id={unit_kerja_id} />
       </div>
     </>
+  );
+}
+
+function MyPopover() {
+  const [show, setShow] = React.useState(false);
+  const handleShow = React.useCallback(() => setShow(!show), [show]);
+  return (
+    <Popover as="div" className="relative">
+      <Popover.Button as="button" onClick={handleShow} onMouseEnter={handleShow} onMouseLeave={handleShow}>
+        <InformationCircleIcon className="ml-2 h-[20px] w-[20px]" />
+      </Popover.Button>
+      <Transition
+        show={show}
+        as={React.Fragment}
+        enter="transition duration-100 ease-out"
+        enterFrom="transform scale-95 opacity-0"
+        enterTo="transform scale-100 opacity-100"
+        leave="transition duration-75 ease-out"
+        leaveFrom="transform scale-100 opacity-100"
+        leaveTo="transform scale-95 opacity-0"
+      >
+        <Popover.Overlay className="absolute z-10 rounded-md border bg-gray-100 px-6 py-5 shadow-xl">
+          <div className="grid-col-2 grid">
+            <p>Terakhir melakukan sinkronisasi data dari INTRA DIKTI ke DIKBUD HR</p>
+          </div>
+        </Popover.Overlay>
+      </Transition>
+    </Popover>
   );
 }
 
