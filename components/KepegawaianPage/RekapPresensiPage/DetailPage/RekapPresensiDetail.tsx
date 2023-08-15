@@ -77,6 +77,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
     start_date: startDate,
     end_date: endDate,
     status_cpns: props.status_cpns,
+    status: filterState.status,
   };
 
   const { data: rekapPresensiLastSync } = useCommonApi<Partial<RekapPresensiReq>, RekapPresensiLastSyncRes>(
@@ -89,7 +90,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
   const { data: rekapPresensi, isValidating } = useCommonApi<RekapPresensiReq, RekapPresensiResp>(
     RekapPresensiAPI.GET_PRESENSI_SUMMARY_LIST,
     filterState?.search?.trim() !== ''
-      ? { ...filterStateQuery, search: filterState?.search?.trim(), status: filterState.status }
+      ? { ...filterStateQuery, search: filterState?.search?.trim() }
       : filterStateQuery,
     { method: 'GET' },
     { skipCall: !selectedDate && !props.status_cpns, revalidateOnMount: true || filterState?.search === '' }
