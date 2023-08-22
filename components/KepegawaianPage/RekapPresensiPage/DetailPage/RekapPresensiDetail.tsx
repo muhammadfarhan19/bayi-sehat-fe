@@ -80,6 +80,16 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
     status: filterState.status,
   };
 
+  const handleQuery = () => {
+    if (filterState?.status === '') {
+      delete filterStateQuery?.status;
+    }
+    if (filterState?.search?.trim() !== '') {
+      return { ...filterStateQuery, search: filterState?.search?.trim() };
+    }
+    return filterStateQuery;
+  };
+
   const { data: rekapPresensiLastSync } = useCommonApi<Partial<RekapPresensiReq>, RekapPresensiLastSyncRes>(
     RekapPresensiAPI.GET_PRESENSI_LAST_SYNC_MASTER,
     { start_date: startDate, end_date: endDate },
@@ -89,9 +99,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
 
   const { data: rekapPresensi, isValidating } = useCommonApi<RekapPresensiReq, RekapPresensiResp>(
     RekapPresensiAPI.GET_PRESENSI_SUMMARY_LIST,
-    filterState?.search?.trim() !== ''
-      ? { ...filterStateQuery, search: filterState?.search?.trim() }
-      : filterStateQuery,
+    handleQuery(),
     { method: 'GET' },
     { skipCall: !selectedDate && !props.status_cpns, revalidateOnMount: true || filterState?.search === '' }
   );
