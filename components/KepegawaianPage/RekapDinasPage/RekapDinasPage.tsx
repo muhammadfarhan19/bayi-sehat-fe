@@ -3,6 +3,8 @@ import React from 'react';
 import { RekapDinasAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
 import { GetRekapReq, RekapData } from '../../../types/api/RekapDinasAPI';
 import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
+import { formatStringDate } from '../../../utils/DateUtil';
+import { checkReturnValueOfString } from '../../../utils/StringUtil';
 import SummaryDinasCalendar from '../../DinasPage/DataPegawai/SummaryDinasCalendar';
 import useAllowSuperAdmin from '../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../shared/hooks/useCommonApi';
@@ -231,8 +233,14 @@ function RekapDinasPage(props: UnitKerja) {
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_selesai}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jenis_dinas}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.isi_penugasan}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{'-'}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{'-'}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {checkReturnValueOfString(formatStringDate(data?.last_sync, 'EEEE, dd MMM yyyy, HH:mm:ss'))}
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {checkReturnValueOfString(
+                              formatStringDate(data?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss')
+                            )}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
