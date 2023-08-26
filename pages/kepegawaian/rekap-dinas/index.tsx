@@ -8,6 +8,7 @@ import usePersonalData from '../../../components/shared/hooks/usePersonalData';
 import LeftMenu from '../../../components/shared/MainLayout/LeftMenu';
 import MainLayout from '../../../components/shared/MainLayout/MainLayout';
 import { NavigationId } from '../../../constants/NavigationList';
+import { Case, Default, Switch } from '../../../utils/Components';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function RekapDinas() {
@@ -25,15 +26,20 @@ function RekapDinas() {
 
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <section aria-labelledby="section-1-title">
-            {typeof type !== 'undefined' ? (
-              <AddRekapPage type={type} dinas_id={dinas_id} />
-            ) : typeof dinas_id !== 'undefined' ? (
-              <DetailRekapPage dinas_id={dinas_id} />
-            ) : typeof date !== 'undefined' ? (
-              <DetailCalendarPage date={date} />
-            ) : (
-              <RekapDinasPage unit_kerja_id={personalPegawai?.unit_kerja_id} />
-            )}
+            <Switch>
+              <Case condition={typeof type !== 'undefined'}>
+                <AddRekapPage type={type} dinas_id={dinas_id} />
+              </Case>
+              <Case condition={typeof dinas_id !== 'undefined'}>
+                <DetailRekapPage dinas_id={dinas_id} />
+              </Case>
+              <Case condition={typeof date !== 'undefined'}>
+                <DetailCalendarPage date={date} />
+              </Case>
+              <Default>
+                <RekapDinasPage unit_kerja_id={personalPegawai?.unit_kerja_id} />
+              </Default>
+            </Switch>
           </section>
         </div>
       </div>
