@@ -1,5 +1,6 @@
 import { UserCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
+import { isMobile } from 'react-device-detect';
 import { useDispatch } from 'react-redux';
 
 import { setShowProfPic } from '../../../action/CommonAction';
@@ -7,6 +8,7 @@ import { LogHarianAPI, RekapDinasAPI, UserProfileAPI } from '../../../constants/
 import { GetLogHarianPegawaiReq, GetLogHarianPegawaiRes } from '../../../types/api/LogHarianAPI';
 import { GetOptPhotoReq, GetPhotoProfileRes } from '../../../types/api/ProfilePhotoAPI';
 import { GetRekapDinasPegawaiReq, GetRekapDinasPegawaiRes } from '../../../types/api/RekapDinasAPI';
+import { Case, Switch } from '../../../utils/Components';
 import { convertIndonesiaFormat } from '../../../utils/DateUtil';
 import { callAPI } from '../../../utils/Fetchers';
 import { getQueryString } from '../../../utils/URLUtils';
@@ -14,6 +16,7 @@ import NotificationListPage from '../../Notification/NotificationListPage/Notifi
 import Card from '../../shared/Card';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
+import ShiftWidget from '../../shared/MainLayout/ShiftWidget';
 import DinasCalendar from './DinasCalendar';
 import JadwalDinas from './JadwalDinas';
 import { ResumeCards } from './shared/ResumeCards';
@@ -112,6 +115,11 @@ export default function DetailDinas() {
       )}
 
       <div className="grid-grid-cols-1 mb-[24px] grid gap-[24px] lg:grid-cols-2">
+        <Switch>
+          <Case condition={isMobile}>
+            <ShiftWidget />
+          </Case>
+        </Switch>
         <Card
           title="Jadwal Dinas"
           sub_title={`Dinas dibulan ${convertIndonesiaFormat(dateNowStr).split(' ')[1]}`}

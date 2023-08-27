@@ -3,11 +3,17 @@ import { ChevronRightIcon, SearchIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import * as React from 'react';
 
-import { classNames } from '../../../utils/Components';
+import { Case, classNames, Switch } from '../../../utils/Components';
 import { useAuthorizedMenuContext } from '../context/AuthorizedMenuContext';
 import { Navigation } from './NavigationProps';
+import ShiftWidget from './ShiftWidget';
 
-export default function LeftMenu() {
+interface LeftMenuProps {
+  includeShiftWidget?: boolean;
+}
+
+export default function LeftMenu(props: LeftMenuProps) {
+  const { includeShiftWidget = false } = props;
   const debounce = React.useRef<number>();
   const navigationContext = useAuthorizedMenuContext();
   const navigation = React.useCallback<() => Navigation[]>(() => {
@@ -78,7 +84,11 @@ export default function LeftMenu() {
           </div>
         </div>
       </form>
-
+      <Switch>
+        <Case condition={includeShiftWidget}>
+          <ShiftWidget />
+        </Case>
+      </Switch>
       <nav className="hidden flex-1 rounded-md bg-white lg:block" aria-label="Sidebar">
         {(filteredNavigation || []).map((item, index) =>
           !item.childMenu ? (
