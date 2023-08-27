@@ -120,7 +120,7 @@ const PresensiIcon = ({ asTapIn }: { asTapIn?: boolean }) => {
 
 const HoursComponent = ({ timeCheckIn, timeCheckOut }: { timeCheckIn?: string; timeCheckOut?: string }) => {
   return (
-    <div className="flex flex-row rounded-br-md rounded-bl-md bg-zinc-50 shadow-md">
+    <div className="flex flex-row rounded-br-md rounded-bl-md bg-zinc-50">
       <div className="flex flex-1 flex-col items-center justify-center border-t-2 border-r-2 border-gray-300 py-2 px-2 ">
         <p className="text-md font-bold text-green-600">{checkReturnValueOfString(timeCheckIn as string, '-:-')} WIB</p>
         <p className="text-xs">Jam Masuk</p>
@@ -168,7 +168,7 @@ function ShiftWidget() {
   const SubmitShiftVM = SubmitShift();
   return (
     <>
-      <div className="flex-1 rounded-md bg-white lg:block" aria-label="Widget">
+      <div className="flex-1 rounded-md bg-white shadow-lg lg:block" aria-label="Widget">
         <div className="px-6 py-4">
           <p className="text-sm font-bold text-indigo-600">Shift Berikutnya</p>
           <p className="text-md font-medium text-gray-600">{SubmitShiftVM?.formatDate}</p>
