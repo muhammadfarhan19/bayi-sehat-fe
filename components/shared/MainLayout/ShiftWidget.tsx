@@ -34,6 +34,7 @@ interface FormShift {
 function SubmitShift() {
   const dispatch = useDispatch();
   const personalData = usePersonalData();
+  const disabledForPns = personalData?.status_cpns !== 2;
   const asDay = 'EEEE, dd/MMM/yyyy';
   const { data: shift, mutate } = useCommonApi<null, PresensiOnlineResp>(PresensiOnlineAPI.GET_PRESENSI_ONLINE, null, {
     method: 'GET',
@@ -48,13 +49,11 @@ function SubmitShift() {
   const timeComparison = new Date(shift?.check_out as unknown as Date);
   const now = new Date();
   const handleDisabledButton = (statusData: string | StatusShift, timeCompare: Date): boolean => {
+    if (disabledForPns) return true;
     if (!statusData) return true;
-    if (statusData === 'pegawai has check_in' && timeCompare < now) {
-      return true;
-    }
-    if (statusData === 'pegawai has check_out') {
-      return true;
-    }
+    if (statusData === 'pegawai has check_in' && timeCompare > now) return true;
+    if (statusData === 'pegawai has check_in') return true;
+    if (statusData === 'pegawai has check_out') return true;
     return false;
   };
 
@@ -95,9 +94,9 @@ function SubmitShift() {
 }
 
 const PresensiIcon = ({ asTapIn }: { asTapIn?: boolean }) => {
-  const arrowLeft = '.25V15m3 0l3-3m0 0l-3-3m3 3H9';
-  const arrowRight = '.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75';
-  const renderArrowIcon = asTapIn ? arrowRight : arrowLeft;
+  const arrowRight = '.25V15m3 0l3-3m0 0l-3-3m3 3H9';
+  const arrowLeft = '.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75';
+  const renderArrowIcon = asTapIn ? arrowLeft : arrowRight;
   return (
     <>
       <svg
@@ -155,9 +154,11 @@ const ButtonPresensiComponent = ({
         'mt-2 flex w-full flex-row items-center justify-center rounded-md  py-2 text-white disabled:bg-gray-400'
       )}
     >
-      <PresensiIcon asTapIn={SubmitShiftVM?.handleDisabledButton(statusData, timeCompare)} />
+      <PresensiIcon asTapIn={statusData === 'pegawai has not check_in'} />
       <Switch>
-        <Case condition={statusData === 'pegawai has not check_out'}>Presensi Keluar</Case>
+        <Case condition={statusData === 'pegawai has not check_out' || statusData === 'pegawai has check_in'}>
+          Presensi Keluar
+        </Case>
         <Default>Presensi Masuk</Default>
       </Switch>
     </button>
