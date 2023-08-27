@@ -211,3 +211,35 @@ export function generateDropdownMonth({ selectedYear }: { selectedYear?: number 
   currentMonth.push(...monthList.slice(0, getCurrentMonth + 1));
   return currentMonth;
 }
+
+export function incrementToMonday(dateStr: string): string {
+  const inputDate = new Date(dateStr);
+  const dayOfWeek = inputDate.getDay();
+
+  if (dayOfWeek === 6) {
+    inputDate.setDate(inputDate.getDate() + 2);
+  } else if (dayOfWeek === 0) {
+    inputDate.setDate(inputDate.getDate() + 1);
+  }
+
+  return inputDate.toISOString().slice(0, 10);
+}
+
+export function getCurrentTime(): string {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+
+  return `${hours}:${minutes}:${seconds}`;
+}
+
+export function formatTimestamp(timeStamp?: string, includeSeconds = false) {
+  const hoursAndMinutes = 'HH:mm';
+  const formattedString = includeSeconds ? hoursAndMinutes?.concat(':ss') : hoursAndMinutes;
+  if (timeStamp) {
+    const formatDate = formatStringDate(timeStamp, formattedString);
+    return formatDate;
+  }
+  return '';
+}
