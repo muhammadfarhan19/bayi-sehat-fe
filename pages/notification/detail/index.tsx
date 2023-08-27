@@ -7,6 +7,7 @@ import { withAuthenticatedPage } from '../../../components/shared/hocs/Authentic
 import { withReduxPage } from '../../../components/shared/hocs/ReduxPage';
 import LeftMenu from '../../../components/shared/MainLayout/LeftMenu';
 import MainLayout from '../../../components/shared/MainLayout/MainLayout';
+import { Case, Default, Switch } from '../../../utils/Components';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function DetailNotification() {
@@ -17,11 +18,14 @@ function DetailNotification() {
         <LeftMenu />
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <CardHeader />
-          {typeof date !== 'undefined' && date !== '' ? (
-            <DetailNotificationPage />
-          ) : (
-            <DetailRekapPage dinas_id={dinas_id} viewOnly={true} />
-          )}
+          <Switch>
+            <Case condition={typeof date !== 'undefined' && date !== ''}>
+              <DetailNotificationPage />
+            </Case>
+            <Default>
+              <DetailRekapPage dinas_id={dinas_id} viewOnly={true} />
+            </Default>
+          </Switch>
         </div>
       </div>
     </MainLayout>

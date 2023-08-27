@@ -5,6 +5,7 @@ import { withReduxPage } from '../../../components/shared/hocs/ReduxPage';
 import LeftMenu from '../../../components/shared/MainLayout/LeftMenu';
 import MainLayout from '../../../components/shared/MainLayout/MainLayout';
 import { NavigationId } from '../../../constants/NavigationList';
+import { Case, Default, Switch } from '../../../utils/Components';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function ShiftPegawai() {
@@ -17,7 +18,16 @@ function ShiftPegawai() {
 
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <section aria-labelledby="section-1-title">
-            <div>{typeof pegawai_id === 'undefined' ? <ShiftKepegawaian /> : <DetailPegawai />}</div>
+            <div>
+              <Switch>
+                <Case condition={typeof pegawai_id === 'undefined'}>
+                  <ShiftKepegawaian />{' '}
+                </Case>
+                <Default>
+                  <DetailPegawai />
+                </Default>
+              </Switch>
+            </div>
           </section>
         </div>
       </div>
