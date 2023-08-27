@@ -67,12 +67,10 @@ const HoursComponent = ({ timeCheckIn, timeCheckOut }: { timeCheckIn?: string; t
 };
 
 const ButtonPresensiComponent = ({
-  isAbleToCheckIn,
   onCheckIn,
   statusData,
   timeCompare,
 }: {
-  isAbleToCheckIn?: boolean;
   onCheckIn: React.MouseEventHandler<HTMLButtonElement>;
   statusData: StatusShift;
   timeCompare: Date;
@@ -80,6 +78,7 @@ const ButtonPresensiComponent = ({
   const now = new Date();
 
   const handleDisabledButton = (): boolean => {
+    if (!statusData) return true;
     if (statusData === 'pegawai has check_in' && timeCompare < now) {
       return true;
     }
@@ -95,13 +94,13 @@ const ButtonPresensiComponent = ({
       disabled={handleDisabledButton()}
       onClick={onCheckIn}
       className={classNames(
-        isAbleToCheckIn ? 'bg-green-600 hover:bg-green-300' : 'bg-red-600 hover:bg-red-300',
+        statusData === 'pegawai has not check_in' ? 'bg-green-600 hover:bg-green-300' : 'bg-red-600 hover:bg-red-300',
         'mt-2 flex w-full flex-row items-center justify-center rounded-md  py-2 text-white disabled:bg-gray-400'
       )}
     >
-      <PresensiIcon asTapIn={isAbleToCheckIn} />
+      <PresensiIcon asTapIn={handleDisabledButton()} />
       <Switch>
-        <Case condition={!isAbleToCheckIn as boolean}>Presensi Keluar</Case>
+        <Case condition={statusData === 'pegawai has not check_out'}>Presensi Keluar</Case>
         <Default>Presensi Masuk</Default>
       </Switch>
     </button>
@@ -199,7 +198,6 @@ function ShiftWidget() {
           <ButtonPresensiComponent
             timeCompare={new Date(shift?.check_out as unknown as Date)}
             statusData={shift?.status as StatusShift}
-            isAbleToCheckIn={shift?.can_do_absence}
             onCheckIn={() =>
               submitHandler({
                 dateSubmitted: shift?.date as string,
