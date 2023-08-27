@@ -7,6 +7,7 @@ import { withReduxPage } from '../../../components/shared/hocs/ReduxPage';
 import LeftMenu from '../../../components/shared/MainLayout/LeftMenu';
 import MainLayout from '../../../components/shared/MainLayout/MainLayout';
 import { NavigationId } from '../../../constants/NavigationList';
+import { Case, Default, Switch } from '../../../utils/Components';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function DaftarDinas() {
@@ -17,7 +18,14 @@ function DaftarDinas() {
         <LeftMenu />
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <section aria-labelledby="section-1-title">
-            {type === 'detail' ? <DetailDinasPegawaiData /> : <ListDaftarDinas />}
+            <Switch>
+              <Case condition={type === 'detail'}>
+                <DetailDinasPegawaiData />
+              </Case>
+              <Default>
+                <ListDaftarDinas />
+              </Default>
+            </Switch>
           </section>
         </div>
       </div>

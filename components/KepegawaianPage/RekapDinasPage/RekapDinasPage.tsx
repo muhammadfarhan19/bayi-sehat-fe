@@ -3,11 +3,14 @@ import React from 'react';
 import { RekapDinasAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
 import { GetRekapReq, RekapData } from '../../../types/api/RekapDinasAPI';
 import { GetUnitKerjaData } from '../../../types/api/UnitKerjaAPI';
+import { formatStringDate } from '../../../utils/DateUtil';
+import { checkReturnValueOfString } from '../../../utils/StringUtil';
 import SummaryDinasCalendar from '../../DinasPage/DataPegawai/SummaryDinasCalendar';
 import useAllowSuperAdmin from '../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import ToolTip from '../../shared/ToolTip';
 import AdminDinasAccess from './AdminDinasAccess';
 
 interface UnitKerja {
@@ -193,6 +196,19 @@ function RekapDinasPage(props: UnitKerja) {
                         >
                           Isi Penugasan
                         </th>
+                        <th
+                          scope="col"
+                          className="flex flex-row items-center px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          <p> Sync Terakhir</p>
+                          <ToolTip message="Terakhir melakukan sinkronisasi data dari INTRA DIKTI ke DIKBUD HR" />
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Update Terakhir
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -217,6 +233,14 @@ function RekapDinasPage(props: UnitKerja) {
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_selesai}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jenis_dinas}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.isi_penugasan}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {checkReturnValueOfString(formatStringDate(data?.last_sync, 'EEEE, dd MMM yyyy, HH:mm:ss'))}
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {checkReturnValueOfString(
+                              formatStringDate(data?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss')
+                            )}
+                          </td>
                         </tr>
                       ))}
                     </tbody>

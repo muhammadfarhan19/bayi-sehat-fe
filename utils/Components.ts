@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { FC, ReactElement, ReactNode } from 'react';
 
 import { Navigation } from '../components/shared/MainLayout/NavigationProps';
 import { NavigationList } from '../constants/NavigationList';
@@ -73,3 +73,49 @@ export function ConditionalRendering(value: boolean, children: ReactNode) {
   }
   return null;
 }
+
+/**
+ * Composable Readable of Nesting conditional Rendering of a Component
+ */
+interface SwitchProps {
+  children: ReactNode;
+}
+
+interface CaseProps {
+  children: ReactNode;
+  condition: boolean;
+}
+
+interface DefaultProps {
+  children: ReactNode;
+}
+
+const Switch: FC<SwitchProps> = ({ children }) => {
+  let matchChild: ReactElement | null = null;
+  let defaultCase: ReactElement | null = null;
+
+  React.Children.forEach(children, child => {
+    if (!matchChild && React.isValidElement(child) && child.type === Case) {
+      const { condition } = child.props;
+      const conditionResult = Boolean(condition);
+
+      if (conditionResult) {
+        matchChild = child;
+      }
+    } else if (!defaultCase && React.isValidElement(child) && child.type === Default) {
+      defaultCase = child;
+    }
+  });
+
+  return matchChild ?? defaultCase ?? null;
+};
+
+const Case: FC<CaseProps> = ({ children }) => {
+  return children as ReactElement;
+};
+
+const Default: FC<DefaultProps> = ({ children }) => {
+  return children as ReactElement;
+};
+
+export { Case, Default, Switch };

@@ -5,6 +5,7 @@ import { withAuthenticatedPage } from '../../../components/shared/hocs/Authentic
 import { withReduxPage } from '../../../components/shared/hocs/ReduxPage';
 import LeftMenu from '../../../components/shared/MainLayout/LeftMenu';
 import MainLayout from '../../../components/shared/MainLayout/MainLayout';
+import { Case, Default, Switch } from '../../../utils/Components';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function PetaJabatan() {
@@ -20,13 +21,17 @@ function PetaJabatan() {
             <section aria-labelledby="section-1-title">
               <div className="rounded-lg bg-white shadow">
                 <div>
-                  {typeof jabatanId === 'undefined' ? (
-                    <PetaJabatanPage />
-                  ) : typeof direktoratId !== 'undefined' ? (
-                    <DetailDirektoratPage />
-                  ) : (
-                    <DetailPetaJabatanPage />
-                  )}
+                  <Switch>
+                    <Case condition={typeof jabatanId === 'undefined'}>
+                      <PetaJabatanPage />
+                    </Case>
+                    <Case condition={typeof direktoratId !== 'undefined'}>
+                      <DetailDirektoratPage />
+                    </Case>
+                    <Default>
+                      <DetailPetaJabatanPage />
+                    </Default>
+                  </Switch>
                 </div>
               </div>
             </section>

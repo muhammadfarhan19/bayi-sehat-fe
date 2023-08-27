@@ -292,3 +292,7 @@ export const DaftarTransaksiAPI = {
   POST_TRANSAKSI: config.apiHost + '/transaksi',
   POST_BLOB_TRANSAKSI: config.apiHost + '/transaksi/export',
 };
+
+export const PresensiOnlineAPI = {
+  GET_PRESENSI_ONLINE: config.apiHost + '/presensi-pegawai/online-status',
+};

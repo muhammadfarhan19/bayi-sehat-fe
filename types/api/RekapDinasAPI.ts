@@ -34,6 +34,8 @@ export interface RekapData {
     tgl_selesai: number;
     jenis_dinas: string;
     isi_penugasan: string;
+    last_sync: string;
+    updated_at: string;
   }[];
   pagination: {
     total_page: number;

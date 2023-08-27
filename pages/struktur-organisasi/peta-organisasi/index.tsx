@@ -5,6 +5,7 @@ import LeftMenu from '../../../components/shared/MainLayout/LeftMenu';
 import MainLayout from '../../../components/shared/MainLayout/MainLayout';
 import DetailPetaOrganisasiPage from '../../../components/StrukturOrganisasi/PetaOrganisasiPage/DetailPetaOrganisasiPage';
 import PetaOrganisasiPage from '../../../components/StrukturOrganisasi/PetaOrganisasiPage/PetaOrganisasiPage';
+import { Case, Default, Switch } from '../../../utils/Components';
 import { getQueryString } from '../../../utils/URLUtils';
 
 function PetaOrganisasi() {
@@ -22,11 +23,14 @@ function PetaOrganisasi() {
 
         <div className="grid grid-cols-1 gap-4 lg:col-span-3">
           <section aria-labelledby="section-1-title">
-            {typeof id !== 'undefined' ? (
-              <DetailPetaOrganisasiPage />
-            ) : (
-              <PetaOrganisasiPage unit_kerja_id={personalPegawai?.unit_kerja_id} />
-            )}
+            <Switch>
+              <Case condition={typeof id !== 'undefined'}>
+                <DetailPetaOrganisasiPage />
+              </Case>
+              <Default>
+                <PetaOrganisasiPage unit_kerja_id={personalPegawai?.unit_kerja_id} />
+              </Default>
+            </Switch>
           </section>
         </div>
       </div>
