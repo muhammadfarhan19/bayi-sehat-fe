@@ -262,3 +262,5 @@ export const StatusHadirRekapPresensi = [
   'Lupa Absen Datang Dan Pulang Lebih Awal',
   'Terlambat Dan Lupa Absen Pulang',
 ];
+
+export const FilterDataRekapPresensi = ['Data Lain'];

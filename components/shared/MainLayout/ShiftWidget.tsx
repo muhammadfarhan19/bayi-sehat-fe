@@ -31,36 +31,13 @@ interface FormShift {
   checkIn: boolean;
 }
 
-function SubmitShift() {
+function callApiSubmitShiftWidget() {
+  const pegawaiPersonalData = usePersonalData();
   const dispatch = useDispatch();
-  const personalData = usePersonalData();
-  const disabledForPns = personalData?.status_cpns !== 2;
-  const asDay = 'EEEE, dd/MMM/yyyy';
-  const { data: shift, mutate } = useCommonApi<null, PresensiOnlineResp>(PresensiOnlineAPI.GET_PRESENSI_ONLINE, null, {
-    method: 'GET',
-  });
-  const formatDate = shift?.date && formatStringDate(shift?.date, asDay);
-  const shiftTime = {
-    check_in: formatTimestamp(shift?.check_in),
-    check_out: formatTimestamp(shift?.check_out),
-    timeSubmittedCheckIn: formatTimestamp(shift?.time_check_in),
-    timeSubmittedCheckOut: formatTimestamp(shift?.time_check_out),
-  };
-  const timeComparison = new Date(shift?.check_out as unknown as Date);
-  const now = new Date();
-  const handleDisabledButton = (statusData: string | StatusShift, timeCompare: Date): boolean => {
-    if (disabledForPns) return true;
-    if (!statusData) return true;
-    if (statusData === 'pegawai has check_in' && timeCompare > now) return true;
-    if (statusData === 'pegawai has check_in') return true;
-    if (statusData === 'pegawai has check_out') return true;
-    return false;
-  };
-
-  const submitHandler = async (formData: FormShift) => {
+  const submitHandler = async (formData: FormShift, mutateApi: () => void) => {
     const formatDatePreCalculated = formatStringDate(formData?.dateSubmitted, 'yyyy-MM-dd');
     const requestBody = {
-      pegawai_id: personalData?.pegawai_id as number,
+      pegawai_id: pegawaiPersonalData?.pegawai_id as number,
       date: formatDatePreCalculated,
       check_in: getCurrentTime(),
       check_out: '',
@@ -79,7 +56,7 @@ function SubmitShift() {
           type: SnackbarType.INFO,
         })
       );
-      mutate();
+      mutateApi();
     } else {
       dispatch(
         setSnackbar({
@@ -90,7 +67,44 @@ function SubmitShift() {
       );
     }
   };
-  return { submitHandler, asDay, shift, formatDate, shiftTime, timeComparison, handleDisabledButton };
+  return { submitHandler, pegawaiPersonalData };
+}
+
+function getApiDataShiftWidget() {
+  const { data: shift, mutate } = useCommonApi<null, PresensiOnlineResp>(PresensiOnlineAPI.GET_PRESENSI_ONLINE, null, {
+    method: 'GET',
+  });
+  const asDay = 'EEEE, dd/MMM/yyyy';
+  const formatDate = shift?.date && formatStringDate(shift?.date, asDay);
+  const shiftTime = {
+    check_in: formatTimestamp(shift?.check_in),
+    check_out: formatTimestamp(shift?.check_out),
+    timeSubmittedCheckIn: formatTimestamp(shift?.time_check_in),
+    timeSubmittedCheckOut: formatTimestamp(shift?.time_check_out),
+  };
+  const timeComparison = new Date(shift?.check_out as unknown as Date);
+  return { mutate, shiftTime, formatDate, timeComparison, shift };
+}
+
+function disabledOnSubmisson(statusPns: number) {
+  const disabledForPns = statusPns !== 2;
+  const now = new Date();
+  const handleDisabledButton = (statusData: string | StatusShift, timeCompare: Date): boolean => {
+    if (disabledForPns) return true;
+    if (!statusData) return true;
+    if (statusData === 'pegawai has check_in' && timeCompare > now) return true;
+    if (statusData === 'pegawai has check_in') return true;
+    if (statusData === 'pegawai has check_out') return true;
+    return false;
+  };
+  return { handleDisabledButton };
+}
+
+function SubmitShiftController() {
+  const postShift = callApiSubmitShiftWidget();
+  const getShiftData = getApiDataShiftWidget();
+  const shouldDisabledOnSubmisson = disabledOnSubmisson(postShift.pegawaiPersonalData?.status_cpns as number);
+  return { postShift, getShiftData, shouldDisabledOnSubmisson };
 }
 
 const PresensiIcon = ({ asTapIn }: { asTapIn?: boolean }) => {
@@ -143,11 +157,11 @@ const ButtonPresensiComponent = ({
   statusData: StatusShift;
   timeCompare: Date;
 }) => {
-  const SubmitShiftVM = SubmitShift();
+  const SubmitShiftVM = SubmitShiftController();
   return (
     <button
       type="button"
-      disabled={SubmitShiftVM?.handleDisabledButton(statusData, timeCompare)}
+      disabled={SubmitShiftVM?.shouldDisabledOnSubmisson.handleDisabledButton(statusData, timeCompare)}
       onClick={onCheckIn}
       className={classNames(
         statusData === 'pegawai has not check_in' ? 'bg-green-600 hover:bg-green-300' : 'bg-red-600 hover:bg-red-300',
@@ -166,31 +180,34 @@ const ButtonPresensiComponent = ({
 };
 
 function ShiftWidget() {
-  const SubmitShiftVM = SubmitShift();
+  const SubmitShiftVM = SubmitShiftController();
   return (
     <>
       <div className="flex-1 rounded-md bg-white shadow-lg lg:block" aria-label="Widget">
         <div className="px-6 py-4">
           <p className="text-sm font-bold text-indigo-600">Shift Berikutnya</p>
-          <p className="text-md font-medium text-gray-600">{SubmitShiftVM?.formatDate}</p>
+          <p className="text-md font-medium text-gray-600">{SubmitShiftVM?.getShiftData?.formatDate}</p>
           <p className="text-xl font-medium text-gray-600">
-            {SubmitShiftVM?.shiftTime?.check_in} - {SubmitShiftVM?.shiftTime?.check_out}
+            {SubmitShiftVM?.getShiftData?.shiftTime?.check_in} - {SubmitShiftVM?.getShiftData?.shiftTime?.check_out}
           </p>
-          <p className="mt-1 text-xs font-light text-gray-600">{SubmitShiftVM?.shift?.shift}</p>
+          <p className="mt-1 text-xs font-light text-gray-600">{SubmitShiftVM?.getShiftData.shift?.shift}</p>
           <ButtonPresensiComponent
-            timeCompare={SubmitShiftVM?.timeComparison}
-            statusData={SubmitShiftVM?.shift?.status as StatusShift}
+            timeCompare={SubmitShiftVM?.getShiftData.timeComparison}
+            statusData={SubmitShiftVM?.getShiftData.shift?.status as StatusShift}
             onCheckIn={() =>
-              SubmitShiftVM.submitHandler({
-                dateSubmitted: SubmitShiftVM.shift?.date as string,
-                checkIn: SubmitShiftVM.shift?.status as unknown as boolean,
-              })
+              SubmitShiftVM.postShift.submitHandler(
+                {
+                  dateSubmitted: SubmitShiftVM?.getShiftData.shift?.date as string,
+                  checkIn: SubmitShiftVM?.getShiftData.shift?.status as unknown as boolean,
+                },
+                SubmitShiftVM.getShiftData.mutate
+              )
             }
           />
         </div>
         <HoursComponent
-          timeCheckIn={SubmitShiftVM?.shiftTime?.timeSubmittedCheckIn}
-          timeCheckOut={SubmitShiftVM?.shiftTime?.timeSubmittedCheckOut}
+          timeCheckIn={SubmitShiftVM?.getShiftData.shiftTime?.timeSubmittedCheckIn}
+          timeCheckOut={SubmitShiftVM?.getShiftData.shiftTime?.timeSubmittedCheckOut}
         />
       </div>
     </>
