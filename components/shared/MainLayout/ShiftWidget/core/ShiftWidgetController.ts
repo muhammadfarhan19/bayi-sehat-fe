@@ -80,7 +80,8 @@ function getApiDataShiftWidget() {
     timeSubmittedCheckOut: formatTimestamp(shift?.time_check_out),
   };
   const timeComparison = new Date(shift?.check_out as unknown as Date);
-  return { mutate, shiftTime, formatDate, timeComparison, shift };
+  const status = shift?.status
+  return { mutate, shiftTime, formatDate, timeComparison, shift, status };
 }
 
 function disabledOnSubmisson(statusPns: number) {
