@@ -2,7 +2,7 @@ import { AdjustmentsIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { RekapPresensiAPI } from '../../../../constants/APIUrls';
-import { UnavailableDataText } from '../../../../constants/Resource';
+import { FilterDataRekapPresensi, StatusHadirRekapPresensi, UnavailableDataText } from '../../../../constants/Resource';
 import { useCommonState } from '../../../../reducer/CommonReducer';
 import {
   type RekapPresensiReq,
@@ -15,7 +15,7 @@ import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
-import { ExpandableTableData, ModalResend, MonthPicker, StatusHadirPicker } from './Shared';
+import { ExpandableTableData, FilterDropdownPicker, ModalResend, MonthPicker } from './Shared';
 import useDownloadRekapPresensi from './utils/useDownloadRekapPresensi';
 
 interface RekapPresensiProps {
@@ -29,9 +29,20 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const { handleDownloadRekap } = useDownloadRekapPresensi();
   const isDownloading = useCommonState().showLoader;
-  const StatusHadirPickers = StatusHadirPicker().renderComponent({
+
+  const StatusHadirPickers = FilterDropdownPicker().renderComponent({
+    textLabel: 'Status Hadir',
     onChange: e => changeFilterState({ status: e.target.value }),
+    dataSet: StatusHadirRekapPresensi,
   });
+
+  const FilterDataPickers = FilterDropdownPicker().renderComponent({
+    onChange: () => null,
+    textLabel: 'Title',
+    unMappedOptionTitle: 'Data SDM',
+    dataSet: FilterDataRekapPresensi,
+  });
+
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean;
     selectedId?: number;
@@ -159,6 +170,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
 
       {showAdvancedFilter && (
         <div className="flex w-full flex-row items-center gap-x-[16px] px-5">
+          {FilterDataPickers}
           {StatusHadirPickers}
           <div className="mt-[-46px]">
             <p className="mb-[4px] text-[14px] font-normal">Bulan dan Tahun</p>
