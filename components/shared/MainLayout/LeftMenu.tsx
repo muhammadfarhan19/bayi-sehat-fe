@@ -6,7 +6,7 @@ import * as React from 'react';
 import { Case, classNames, Switch } from '../../../utils/Components';
 import { useAuthorizedMenuContext } from '../context/AuthorizedMenuContext';
 import { Navigation } from './NavigationProps';
-import { ShiftWidget } from './ShiftWidget';
+import ShiftWidget  from './ShiftWidget';
 
 interface LeftMenuProps {
   includeShiftWidget?: boolean;
