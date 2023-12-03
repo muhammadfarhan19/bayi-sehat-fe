@@ -5,6 +5,7 @@ import { tabs } from '../../DinasPage/DataPegawai/DataDinasPegawai';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import ListPegawaiPNS from './ListPegawaiPNS';
 import ListPegawaiPPNPN from './ListPegawaiPPNPN';
+import ListPegawaiPPPK from './ListPegawaiPPPK';
 import RekapGroup, { SelectedData } from './RekapGroup';
 
 function RekapKehadiranAdminPage() {
@@ -63,6 +64,12 @@ function RekapKehadiranAdminPage() {
           />
         ) : isShownDetail !== undefined && selected === 'Master PNS' ? (
           <ListPegawaiPNS
+            unit_kerja_id={Number(personalPegawai?.unit_kerja_id)}
+            onBack={handleBack}
+            dateSelected={isShownDetail}
+          />
+        ) : isShownDetail !== undefined && selected === 'Master PPPK' ? (
+          <ListPegawaiPPPK
             unit_kerja_id={Number(personalPegawai?.unit_kerja_id)}
             onBack={handleBack}
             dateSelected={isShownDetail}

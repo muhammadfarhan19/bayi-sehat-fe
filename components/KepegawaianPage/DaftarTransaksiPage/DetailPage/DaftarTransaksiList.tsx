@@ -18,7 +18,7 @@ import { YearPicker } from '../Shared';
 import { useResyncTransaction } from '../utils';
 
 interface DaftarTransaksiListProps {
-  onShowDetail: (show: boolean, selectedDate?: Date, code?: string) => void;
+  onShowDetail: (show: boolean, selectedDate?: Date, code?: string, type?: string) => void;
 }
 
 function DaftarTransaksiList(props: DaftarTransaksiListProps) {
@@ -239,13 +239,25 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
                                 onClick={() => {
                                   if (item?.year && item?.month) {
                                     const selectedDate = new Date(item.year, item?.month - 1);
-                                    onShowDetail(true, selectedDate, item?.kode);
+                                    onShowDetail(true, selectedDate, item?.kode, 'transaction_detail');
                                   }
                                 }}
                                 type="button"
                                 className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
                               >
-                                Detail
+                                Rekap
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (item?.year && item?.month) {
+                                    const selectedDate = new Date(item.year, item?.month - 1);
+                                    onShowDetail(true, selectedDate, item?.kode, 'resume_detail');
+                                  }
+                                }}
+                                type="button"
+                                className="inline-flex items-center justify-center rounded border border-transparent bg-blue-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
+                              >
+                                Resume
                               </button>
                               <button
                                 onClick={() => {

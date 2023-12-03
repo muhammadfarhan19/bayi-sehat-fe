@@ -5,10 +5,12 @@ import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import { DataDinasPNS } from './DataDinasPNS/DataDinasPNS';
 import { DataDinasPPNPN } from './DataDinasPPNPN/DataDinasPPNPN';
+import { DataDinasPPPK } from './DataDinasPPPK/DataDinasPPPK';
 
 export const tabs = [
   { name: 'Master PNS', href: '#' },
   { name: 'Master PPNPN', href: '#' },
+  { name: 'Master PPPK', href: '#' },
 ];
 
 export function DataDinasPegawai() {
@@ -58,9 +60,11 @@ export function DataDinasPegawai() {
       <div>
         {selected === 'Master PNS' ? (
           <DataDinasPNS unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
-        ) : (
+        ) : selected == 'Master PPNPN' ? (
           <DataDinasPPNPN unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
-        )}
+        ) :
+          <DataDinasPPPK unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
+        }
       </div>
     </div>
   );

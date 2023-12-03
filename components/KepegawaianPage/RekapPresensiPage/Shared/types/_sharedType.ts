@@ -7,4 +7,4 @@ export interface ListPegawaiProps {
   CTATitle: string;
 }
 
-export type TabName = 'Master PNS' | 'Master PPNPN';
+export type TabName = 'Master PNS' | 'Master PPNPN' | 'Master PPPK';

@@ -176,11 +176,11 @@ export const NavigationList: Navigation[] = [
             name: 'Rekap Kehadiran',
             href: '/kepegawaian/rekap-kehadiran',
           },
-          {
-            id: NavigationId.REKAP_KEHADIRAN,
-            name: 'Rekap Presensi',
-            href: '/kepegawaian/rekap-presensi',
-          },
+          // {
+          //   id: NavigationId.REKAP_KEHADIRAN,
+          //   name: 'Rekap Presensi',
+          //   href: '/kepegawaian/rekap-presensi',
+          // },
           {
             id: NavigationId.JADWAL_CUTI,
             name: 'Jadwal Cuti',

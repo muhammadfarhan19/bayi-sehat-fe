@@ -296,3 +296,8 @@ export const DaftarTransaksiAPI = {
 export const PresensiOnlineAPI = {
   GET_PRESENSI_ONLINE: config.apiHost + '/presensi-pegawai/online-status',
 };
+
+export const ResumeAPI = {
+  GET_RESUME_LIST: config.apiHost + '/transaksi/resume',
+  GET_RESUME_EXPORT: config.apiHost + '/transaksi/resume/export',
+};

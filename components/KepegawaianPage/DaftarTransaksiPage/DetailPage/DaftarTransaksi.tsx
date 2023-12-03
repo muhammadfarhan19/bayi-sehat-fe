@@ -5,21 +5,24 @@ import { tabs } from '../../../DinasPage/DataPegawai/DataDinasPegawai';
 import { type TabName } from '../../RekapPresensiPage/Shared/types/_sharedType';
 import DaftarTransaksiDetail from './DaftarTransaksiDetail';
 import DaftarTransaksiList from './DaftarTransaksiList';
+import ResumeTransactionDetail from './ResumeTransactionDetail';
 
 function DaftarTransaksi() {
   const [selected, setSelected] = React.useState<string | TabName>('Master PNS');
 
-  const [detailPage, setDetailPage] = React.useState<{ show: boolean; date?: Date; code?: string }>({
+  const [detailPage, setDetailPage] = React.useState<{ show: boolean; date?: Date; code?: string; type?: string }>({
     show: false,
     date: undefined,
     code: undefined,
+    type: undefined,
   });
 
-  const handleShowDetail = (show: boolean, date?: Date, code?: string) => {
+  const handleShowDetail = (show: boolean, date?: Date, code?: string, type?: string) => {
     return setDetailPage({
       show,
       date,
       code,
+      type,
     });
   };
 
@@ -80,13 +83,25 @@ function DaftarTransaksi() {
           </div>
         </div>
       </div>
-      {detailPage?.show ? (
-        <DaftarTransaksiDetail
-          selectedTab={selected}
-          code={detailPage?.code}
-          selectedDate={detailPage?.date}
-          onBack={handleBack}
-        />
+      {detailPage.show ? (
+        <>
+          {detailPage.type === 'transaction_detail' && (
+            <DaftarTransaksiDetail
+              selectedTab={selected}
+              code={detailPage?.code}
+              selectedDate={detailPage?.date}
+              onBack={handleBack}
+            />
+          )}
+          {detailPage.type === 'resume_detail' && (
+            <ResumeTransactionDetail
+              selectedTab={selected}
+              code={detailPage?.code}
+              selectedDate={detailPage?.date}
+              onBack={handleBack}
+            />
+          )}
+        </>
       ) : (
         <DaftarTransaksiList onShowDetail={handleShowDetail} />
       )}

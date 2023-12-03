@@ -5,12 +5,14 @@ import config from '../../../utils/Config';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import MasterPns from './MasterPNS/MasterPns';
 import MasterPpnpn from './MasterPPNPN/MasterPpnpn';
+import MasterPppk from './MasterPPPK/MasterPppk';
 
 export default function DataKepegawaian() {
   const personalPegawai = usePersonalData();
   const tabs = [
     { name: 'Master PNS', href: '#' },
     { name: 'Master PPNPN', href: '#' },
+    { name: 'Master PPPK', href: '#' },
   ];
 
   const [selected, setSelected] = React.useState('Master PNS');
@@ -63,8 +65,10 @@ export default function DataKepegawaian() {
       <div>
         {selected === 'Master PNS' ? (
           <MasterPns unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
-        ) : (
+        ) : selected === 'Master PPNPN' ? (
           <MasterPpnpn unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
+        ) : (
+          <MasterPppk unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
         )}
       </div>
     </div>

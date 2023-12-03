@@ -16,6 +16,7 @@
     "commit": "cz"
   },
   "dependencies": {
+    "@firebase/remote-config": "^0.4.4",
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.1",
     "@reduxjs/toolkit": "^1.8.5",

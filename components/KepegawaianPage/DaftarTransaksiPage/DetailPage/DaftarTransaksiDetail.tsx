@@ -35,7 +35,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     page: 1,
     per_page: 20,
     kode_transaksi: String(properties.code),
-    type: properties?.selectedTab === 'Master PNS' ? 'pns' : 'ppnpn',
+    type: properties?.selectedTab === 'Master PNS' ? 'pns' : properties?.selectedTab === 'Master PPNPN' ? 'ppnpn' : 'pppk',
   });
   const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
     UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,

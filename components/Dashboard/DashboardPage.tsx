@@ -14,7 +14,7 @@ import TwoGraph from './TwoGraph';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const tabs = ['Data PNS', 'Data PPNPN'];
+const tabs = ['Data PNS', 'Data PPNPN', 'Data PPPK'];
 
 const dateNowStr = new Date().toISOString().slice(0, 10);
 
@@ -83,7 +83,7 @@ function DashboardPage() {
         <div className="overflow-hidden rounded-lg bg-white shadow">
           <div className="p-6">
             <h3 className="text-xl font-medium leading-6 text-gray-900">Data Pegawai</h3>
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
               <div className="overflow-hidden rounded-lg bg-gray-100 px-4 py-5 shadow sm:p-6">
                 <dt className="truncate text-sm text-gray-500">Jumlah Pegawai PNS</dt>
                 <dd className="mt-1 text-3xl font-semibold text-indigo-700">{totalPegawai(2)} PNS</dd>
@@ -92,6 +92,11 @@ function DashboardPage() {
               <div className="overflow-hidden rounded-lg bg-gray-100 px-4 py-5 shadow sm:p-6">
                 <dt className="truncate text-sm text-gray-500">Jumlah Pegawai PPNPN</dt>
                 <dd className="mt-1 text-3xl font-semibold text-indigo-700">{totalPegawai(3)} PPNPN</dd>
+              </div>
+
+              <div className="overflow-hidden rounded-lg bg-gray-100 px-4 py-5 shadow sm:p-6">
+                <dt className="truncate text-sm text-gray-500">Jumlah Pegawai PPPK</dt>
+                <dd className="mt-1 text-3xl font-semibold text-indigo-700">{totalPegawai(4)} PPPK</dd>
               </div>
             </dl>
 
@@ -121,6 +126,12 @@ function DashboardPage() {
                           >
                             Pegawai PPNPN
                           </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs uppercase tracking-wider text-gray-500"
+                          >
+                            Pegawai PPPK
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200 bg-white">
@@ -130,6 +141,7 @@ function DashboardPage() {
                             <td className="px-6 py-4 text-xs text-gray-500">{row[1]}</td>
                             <td className="px-6 py-4 text-center text-xs text-gray-500">{row[2]}</td>
                             <td className="px-6 py-4 text-center text-xs text-gray-500">{row[3]}</td>
+                            <td className="px-6 py-4 text-center text-xs text-gray-500">{row[4]}</td>
                           </tr>
                         ))}
                       </tbody>
