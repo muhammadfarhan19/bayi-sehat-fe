@@ -6,6 +6,7 @@ import { tabs } from '../../DinasPage/DataPegawai/DataDinasPegawai';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import ListPNS from './ListPNS';
 import ListPPNPN from './ListPPNPN';
+import ListPPPK from './ListPPPK';
 
 interface ListMenuPegawaiProps {
   isShownNipCell?: boolean;
@@ -68,8 +69,17 @@ function ListPnsPpnpn(props: ListMenuPegawaiProps) {
             onClickEachPegawai={props.onClickEachPpnpn}
             actionButtonTitle={props.buttonTitle}
           />
-        ) : (
+        ) : selected === 'Master PNS' ? (
           <ListPNS
+            isShownCutiCell={props.isShownCutiCell}
+            isShownNipCell={props.isShownNipCell}
+            pageHeaderTitle={'Data Cuti Pegawai'}
+            unitKerjaId={personalData?.unit_kerja_id ?? 0}
+            onClickEachPegawai={props.onClickEachPns}
+            actionButtonTitle={props.buttonTitle}
+          />
+        ) : (
+          <ListPPPK
             isShownCutiCell={props.isShownCutiCell}
             isShownNipCell={props.isShownNipCell}
             pageHeaderTitle={'Data Cuti Pegawai'}
