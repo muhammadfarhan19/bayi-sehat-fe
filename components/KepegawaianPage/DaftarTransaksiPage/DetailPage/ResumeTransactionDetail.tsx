@@ -216,7 +216,7 @@ function ResumeTransactionDetail(props: DaftarTransaksiDetailProps) {
                         { text: 'At_Ipc(Total Ijin Pulang Awal)' },
                         { text: 'Total Ijin Terlambat & Pulang Awal' },
                         { text: 'At_Lpd (Lupa Absen Datang)' },
-                        { text: 'At_Lpp (Lupa Absen Datang)' },
+                        { text: 'At_Lpp (Lupa Absen Pulang)' },
                         { text: 'Ab_St(Dinas Sppd)' },
                         { text: 'Ab_Ct:Cuti Tahunan' },
                         { text: 'Ab_Cap:Cuti Alasan Penting' },
