@@ -261,6 +261,18 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
                               </button>
                               <button
                                 onClick={() => {
+                                  if (item?.year && item?.month) {
+                                    const selectedDate = new Date(item.year, item?.month - 1);
+                                    onShowDetail(true, selectedDate, item?.kode, 'summary_detail');
+                                  }
+                                }}
+                                type="button"
+                                className="inline-flex items-center justify-center rounded border border-transparent bg-orange-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
+                              >
+                                Summary
+                              </button>
+                              <button
+                                onClick={() => {
                                   setFormModalSync({
                                     show: true,
                                     kode: item?.kode,

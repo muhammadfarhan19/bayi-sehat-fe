@@ -301,3 +301,8 @@ export const ResumeAPI = {
   GET_RESUME_LIST: config.apiHost + '/transaksi/resume',
   GET_RESUME_EXPORT: config.apiHost + '/transaksi/resume/export',
 };
+
+export const SummaryAPI = {
+  GET_SUMMARY_LIST: config.apiHost + '/transaksi/summary',
+  GET_SUMMARY_EXPORT: config.apiHost + '/transaksi/summary/export',
+};

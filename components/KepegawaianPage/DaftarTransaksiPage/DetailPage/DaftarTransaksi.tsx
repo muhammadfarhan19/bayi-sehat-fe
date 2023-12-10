@@ -6,6 +6,7 @@ import { type TabName } from '../../RekapPresensiPage/Shared/types/_sharedType';
 import DaftarTransaksiDetail from './DaftarTransaksiDetail';
 import DaftarTransaksiList from './DaftarTransaksiList';
 import ResumeTransactionDetail from './ResumeTransactionDetail';
+import SummaryTransactionDetail from './SummaryTransactionDetail';
 
 function DaftarTransaksi() {
   const [selected, setSelected] = React.useState<string | TabName>('Master PNS');
@@ -95,6 +96,14 @@ function DaftarTransaksi() {
           )}
           {detailPage.type === 'resume_detail' && (
             <ResumeTransactionDetail
+              selectedTab={selected}
+              code={detailPage?.code}
+              selectedDate={detailPage?.date}
+              onBack={handleBack}
+            />
+          )}
+          {detailPage.type === 'summary_detail' && (
+            <SummaryTransactionDetail
               selectedTab={selected}
               code={detailPage?.code}
               selectedDate={detailPage?.date}
