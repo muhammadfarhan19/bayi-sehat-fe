@@ -235,13 +235,13 @@ function SummaryTransactionDetail(props: DaftarTransaksiDetailProps) {
                           {each.detail_tanggal_tk}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {each.percent_telat}
+                          {parseFloat(each.percent_telat) * 100} %
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {each.percent_psw}
+                          {parseFloat(each.percent_psw) * 100} %
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {each.percent_tk}
+                          {parseFloat(each.percent_tk) * 100} %
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
                           {each.kumulatif_jam_telat}
