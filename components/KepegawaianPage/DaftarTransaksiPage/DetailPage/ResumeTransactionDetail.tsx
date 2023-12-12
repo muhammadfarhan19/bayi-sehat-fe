@@ -206,7 +206,6 @@ function ResumeTransactionDetail(props: DaftarTransaksiDetailProps) {
                         { text: 'Kehadiran' },
                         { text: 'Ketidak Hadiran' },
                         { text: 'Total Alpha' },
-                        { text: 'Detail Alpha' },
                         { text: 'Total Terlambat' },
                         { text: 'Total Jam Terlambat' },
                         { text: 'Total Pulang Awal' },
@@ -265,9 +264,6 @@ function ResumeTransactionDetail(props: DaftarTransaksiDetailProps) {
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
                           {each.total_alpha}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {each.detail_alpha}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
                           {each.total_terlambat}
