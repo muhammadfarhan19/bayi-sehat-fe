@@ -226,10 +226,11 @@ function ResumeTransactionDetail(props: DaftarTransaksiDetailProps) {
                         { text: 'Ab_Cb23:Cuti Besar 2 - 3 Bulan' },
                         { text: 'Ab_Cltn:Cuti Luar Tanggungan Negara' },
                         { text: 'Ab_Cs>6:Cuti Sakit>6 Bulan' },
-                        { text: 'Ab_Cta:Cuti Alasan Penting' },
                         { text: 'Pengurang Alpa (%)' },
                         { text: 'Pengurang Terlambat (%)' },
                         { text: 'Pengurang Pulang Awal (%)' },
+                        { text: 'Pengurang Lupa Absen Datang (%)' },
+                        { text: 'Pengurang Lupa Absen Pulang (%)' },
                         { text: 'Total Pengurang Kehadiran (%)' },
                       ].map(each => (
                         <th
@@ -326,19 +327,22 @@ function ResumeTransactionDetail(props: DaftarTransaksiDetailProps) {
                           {each.total_cuti_sakit_lebih_6_bulan}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {each.pengurang_alpha}
+                          {(each.pengurang_alpha * 100).toFixed(2)} %
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {each.pengurang_cuti}
+                          {(each.pengurang_terlambat * 100).toFixed(2)} %
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {each.pengurang_terlambat}
+                          {(each.pengurang_pulang_awal * 100).toFixed(2)} %
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {each.pengurang_pulang_awal}
+                          {(each.pengurang_lupa_absen_datang * 100).toFixed(2)} %
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {each.total_pengurang_kehadiran}
+                          {(each.pengurang_lupa_absen_pulang * 100).toFixed(2)} %
+                        </td>
+                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                          {(each.total_pengurang_kehadiran * 100).toFixed(2)} %
                         </td>
                       </tr>
                     ))}

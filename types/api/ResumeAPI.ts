@@ -49,6 +49,8 @@ export interface ResumeListData {
     pengurang_cuti: number;
     pengurang_terlambat: number;
     pengurang_pulang_awal: number;
+    pengurang_lupa_absen_datang: number;
+    pengurang_lupa_absen_pulang: number;
     total_pengurang_kehadiran: number;
   }[];
   pagination: Pagination;
