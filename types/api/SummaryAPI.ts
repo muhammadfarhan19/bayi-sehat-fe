@@ -35,6 +35,13 @@ export interface SummaryDownloadReq {
   kode_transaksi: string;
 }
 
+export interface SummaryDownloadRangedMonthReq {
+  start_date?: string;
+  end_date?: string;
+  kode_transaksi?: string;
+  type?: string;
+}
+
 export interface SummaryDownloadRes {
   status: string;
   data: string;

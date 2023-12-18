@@ -112,7 +112,7 @@ function DaftarTransaksi() {
           )}
         </>
       ) : (
-        <DaftarTransaksiList onShowDetail={handleShowDetail} />
+        <DaftarTransaksiList onShowDetail={handleShowDetail} selectedTab={selected}/>
       )}
     </>
   );

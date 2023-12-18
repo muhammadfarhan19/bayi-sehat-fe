@@ -12,17 +12,21 @@ import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
 import { MonthPicker } from '../../RekapPresensiPage/DetailPage/Shared';
 import { months } from '../../RekapPresensiPage/DetailPage/Shared/MonthPicker';
+import { type TabName } from '../../RekapPresensiPage/Shared/types/_sharedType';
 import { PengirimanUlangForm } from '../FormPage';
 import ModalConfirmation from '../FormPage/ModalConfirmation';
+import SummaryMonthlyModal from '../FormPage/SummaryMonthlyModal';
 import { YearPicker } from '../Shared';
 import { useResyncTransaction } from '../utils';
 
 interface DaftarTransaksiListProps {
   onShowDetail: (show: boolean, selectedDate?: Date, code?: string, type?: string) => void;
+  selectedTab: string | TabName;
 }
 
 function DaftarTransaksiList(props: DaftarTransaksiListProps) {
-  const { onShowDetail } = props;
+  const { onShowDetail, selectedTab } = props;
+
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [formModalState, setFormModalState] = React.useState(false);
@@ -33,6 +37,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
     year: 0,
     index: 0,
   });
+  const [summaryMonthlyModalState, setSummaryMonthlyModalState] = React.useState(false);
   const reSync = useResyncTransaction();
 
   const handleDateChange = React.useCallback(
@@ -68,6 +73,11 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
   const handleShowForm = () => {
     setFormModalState(true);
   };
+
+  const handleShowSummaryForm = () => {
+    setSummaryMonthlyModalState(true);
+  };
+  
   const formattedSelectedDate = selectedDate
     ? format(selectedDate, 'MMMM - yyyy', { locale: id })
     : format(new Date(), 'MMMM - yyyy', { locale: id });
@@ -145,6 +155,14 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
           />
         </div>
         <div className="flex-2 flex">
+        {selectedTab == "Master PPNPN" ? (
+          <button
+            onClick={handleShowSummaryForm}
+            className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400  mr-1"
+          >
+            Cetak 
+          </button>
+        ) : ("")}
           <button
             onClick={handleShowForm}
             className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400"
@@ -330,6 +348,17 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
             handleResync(formModalSync.kode, formModalSync.year, formModalSync.month, formModalSync.index);
           }}
           setOpen={(open: boolean) => setFormModalSync(prevState => ({ ...prevState, show: open }))}
+        />
+      )}
+       {ConditionalRendering(
+        summaryMonthlyModalState,
+        <SummaryMonthlyModal
+          onSuccess={mutate}
+          selectedMonth={selectedDate && selectedDate?.getMonth() + 1}
+          selectedYear={selectedDate && selectedDate?.getFullYear()}
+          formMonthAndYearValue={formattedSelectedDate}
+          open={summaryMonthlyModalState}
+          setOpen={(open: boolean) => setSummaryMonthlyModalState(open)}
         />
       )}
     </>
