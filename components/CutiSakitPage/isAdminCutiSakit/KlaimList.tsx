@@ -14,6 +14,7 @@ import AutoComplete from '../../shared/Input/ComboBox';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
 import { PengajuanType, StatusPengajuan, StatusText } from '../Shared/_resource';
+import BatalModal from './BatalModal';
 import KlaimModal from './KlaimModal';
 
 type ListKlaimProps = {
@@ -58,11 +59,34 @@ function KlaimList(props: ListKlaimProps) {
     selectedId: undefined,
   });
 
+  const [formBatalModalState, setFormBatalModalState] = React.useState<{
+    open: boolean;
+    selectedId?: number;
+    name?: string;
+    date?: string;
+  }>({
+    open: false,
+    selectedId: undefined,
+    name: undefined,
+    date: undefined,
+  });
+
   const handleShowForm = (open: boolean, selectedId?: number) => {
     setFormModalState({
       open,
       selectedId,
     });
+  };
+
+  const handleShowBatalForm = (open: boolean, selectedId?: number, name?: string, date?: string) => {
+    setFormBatalModalState({
+      open,
+      selectedId,
+      name,
+      date,
+    });
+    console.log(name)
+    console.log(date)
   };
 
   const changeFilterState = (inputState: Partial<GetKehadiranList>) => {
@@ -275,6 +299,25 @@ function KlaimList(props: ListKlaimProps) {
                           >
                             Proses Klaim
                           </button>
+                          
+                          <br />
+
+                          <button
+                            onClick={() => {
+                              handleShowBatalForm(
+                                !formBatalModalState?.open,
+                                data?.id,
+                                data?.nama_pegawai,
+                                data?.tanggal,
+                              );
+                            }}
+                            type="button"
+                            className={`my-1 inline-flex w-36 items-center justify-center rounded border border-transparent ${
+                              'bg-rose-600 hover:bg-rose-700 disabled:bg-indigo-200'
+                            } px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
+                          >
+                            Batal
+                          </button>
                         </td>
                       </tr>
                     );
@@ -289,6 +332,18 @@ function KlaimList(props: ListKlaimProps) {
                   onSuccess={() => mutate()}
                 />
               )}
+
+              {formBatalModalState?.open && (
+                <BatalModal
+                  open={formBatalModalState?.open}
+                  setOpen={(open: boolean) => handleShowBatalForm(open)}
+                  onSuccess={() => mutate()}
+                  selectedId={formBatalModalState?.selectedId}
+                  name={formBatalModalState?.name}
+                  date={formBatalModalState?.date}
+                />
+              )}
+
               <Pagination
                 onChange={value => {
                   changeFilterState({ page: value });

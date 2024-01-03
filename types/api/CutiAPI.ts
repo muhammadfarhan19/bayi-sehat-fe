@@ -61,6 +61,10 @@ export interface PutCutiReq {
   alasan: string;
 }
 
+export interface DelCutiReq {
+  id: number;
+}
+
 export interface GetCutiListParams {
   Peg_id?: number;
   user_id?: number;

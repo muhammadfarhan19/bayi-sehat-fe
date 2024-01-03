@@ -259,6 +259,7 @@ export const KeuanganDinasAPI = {
 export const CutiAPI = {
   POST_CUTI: config.apiHost + '/cuti/insert',
   PUT_CUTI: config.apiHost + '/cuti/update',
+  DEL_CUTI: config.apiHost + '/cuti/delete',
   GET_CUTI_LIST: config.apiHost + '/cuti/list',
   GET_CUTI_QUOTA: config.apiHost + '/cuti/stat-pengajuan',
   EXPORT_DATA_CUTI: config.apiHost + '/cuti/export',
