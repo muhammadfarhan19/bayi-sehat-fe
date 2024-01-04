@@ -13,7 +13,7 @@ import usePersonalData from '../../shared/hooks/usePersonalData';
 import AutoComplete from '../../shared/Input/ComboBox';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
-import { PengajuanType, StatusPengajuan, StatusText } from '../Shared/_resource';
+import { PengajuanTypeCuti, StatusPengajuan, StatusText } from '../Shared/_resource';
 import BatalModal from './BatalModal';
 import KlaimModal from './KlaimModal';
 
@@ -251,7 +251,7 @@ function KlaimList(props: ListKlaimProps) {
                     const formattedDateSelesai: string = data?.tanggal_selesai
                       ? formatDate(new Date(data?.tanggal_selesai), 'dd MMM yyyy')
                       : '';
-                    const statType = PengajuanType.find(item => item?.value === data?.type);
+                    const statType = PengajuanTypeCuti.find(item => item?.value === data?.type);
                     const isDitolakNorIsDiterima =
                       data?.status === StatusPengajuan.Ditolak || data?.status === StatusPengajuan.Diterima;
                     const currentStatus =
