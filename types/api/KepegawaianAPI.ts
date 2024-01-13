@@ -150,20 +150,28 @@ export interface GetPegawaiStatisticListRes {
 }
 
 export interface GetPresensiPegawaiSummaryReq {
-  pegawai_id: number;
-  month: number;
-  year: number;
+  pegawai_id?: number;
+  month?: number;
+  year?: number;
 }
 
 export interface GetPresensiPegawaiSummaryRes {
   status: string;
   data: {
-    masuk: number;
-    dinas: number;
-    terlambat: number;
-    pulang_terlambat: number;
-    terlambat_pulang_awal: number;
-    tidak_hadir: number;
+    masuk: string;
+    dinas: string;
+    terlambat: string;
+    pulang_terlambat: string;
+    terlambat_pulang_awal: string;
+    tidak_hadir: string; 
+    total_kali_tk: string;
+    total_kali_terlambat: string;
+    total_menit_terlambat: string;
+    total_kali_psw: string;
+    total_menit_psw: string;
+    total_kali_lupa_absen_datang: string;
+    total_kali_lupa_absen_pulang: string;
+    total_presentase_pengurang_kehadiran: number;
   };
 }
 
