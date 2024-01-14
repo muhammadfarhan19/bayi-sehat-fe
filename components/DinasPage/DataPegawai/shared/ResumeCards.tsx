@@ -89,7 +89,7 @@ export function ResumeCards() {
                   {summaryPersonal?.total_kali_terlambat == "" ? 0 : summaryPersonal?.total_kali_terlambat} Keterlambatan
                 </div>
                 <div className="text-base font-medium text-gray-500">
-                  {summaryPersonal?.total_menit_terlambat == "" ? 0 : summaryPersonal?.total_kali_terlambat} Menit Terlambat
+                  {summaryPersonal?.total_menit_terlambat == "" ? 0 : summaryPersonal?.total_menit_terlambat} Menit Terlambat
                 </div>
               </div>
 
@@ -100,7 +100,7 @@ export function ResumeCards() {
                   {summaryPersonal?.total_kali_psw == "" ? 0 : summaryPersonal?.total_kali_psw} Pulang Sebelum Waktunya
                 </div>
                 <div className="text-base font-medium text-gray-500">
-                  {summaryPersonal?.total_menit_psw == "" ? 0 : summaryPersonal?.total_kali_psw} Menit PSW
+                  {summaryPersonal?.total_menit_psw == "" ? 0 : summaryPersonal?.total_menit_psw} Menit PSW
                 </div>
               </div>
 
