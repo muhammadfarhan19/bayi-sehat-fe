@@ -5,7 +5,7 @@ import { KepegawaianAPI } from '../../../../constants/APIUrls';
 import { GetPresensiPegawaiSummaryReq, GetPresensiPegawaiSummaryRes } from '../../../../types/api/KepegawaianAPI';
 import { Status } from '../../../../types/Common';
 import { callAPI } from '../../../../utils/Fetchers';
-import usePersonalData from '../../../shared/hooks/usePersonalData';
+import { getPegawai } from '../../../shared/hooks/usePersonalData';
 import MonthPicker from '../DatePicker';
 
 //type SummaryKey = keyof GetPresensiPegawaiSummaryRes['data'];
@@ -22,26 +22,32 @@ import MonthPicker from '../DatePicker';
 export function ResumeCards() {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [summaryPersonal, setSummaryPersonal] = React.useState<GetPresensiPegawaiSummaryRes['data']>();
-  const pegawai = usePersonalData();
-
-  const fetchPersonalSummary = async () => {
-    const resSubmit = await callAPI<GetPresensiPegawaiSummaryReq, GetPresensiPegawaiSummaryRes>(
-      KepegawaianAPI.GET_PEGAWAI_PRESENSI_SUMMARY,
-      {
-        month: selectedDate?.getMonth() === undefined ? 1 : selectedDate.getMonth() + 1,
-        pegawai_id: pegawai?.pegawai_id || 0,
-        year: selectedDate?.getFullYear(),
-      },
-      { method: 'post' }
-    );
-
-    if (resSubmit.status === 200 && resSubmit.data?.status === Status.OK) {
-      setSummaryPersonal(resSubmit.data.data)
-    }
-  }
 
   React.useEffect(() => {
-    fetchPersonalSummary()
+    (async () => {
+      const month = selectedDate?.getMonth()
+      const year = selectedDate?.getFullYear()
+
+      if(month == undefined || year == undefined) {
+        return
+      }
+
+      const pegawai = await getPegawai()
+
+      const personalSummRaw = await callAPI<GetPresensiPegawaiSummaryReq, GetPresensiPegawaiSummaryRes>(
+        KepegawaianAPI.GET_PEGAWAI_PRESENSI_SUMMARY,
+        {
+          month: selectedDate?.getMonth() === undefined ? 1 : selectedDate.getMonth() + 1,
+          pegawai_id: pegawai?.pegawai_id,
+          year: selectedDate?.getFullYear(),
+        },
+        { method: 'post' }
+      );
+  
+      if (personalSummRaw.status === 200 && personalSummRaw.data?.status === Status.OK) {
+        setSummaryPersonal(personalSummRaw.data.data)
+      }
+    })()
   }, [selectedDate]);
 
   return (

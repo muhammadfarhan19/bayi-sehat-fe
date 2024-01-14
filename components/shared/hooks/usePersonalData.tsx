@@ -2,9 +2,12 @@ import { UserAPI } from '../../../constants/APIUrls';
 import {
   GetUserPersonalPegawaiData,
   GetUserPersonalPegawaiReq,
+  GetUserPersonalPegawaiRes,
   GetUserProfileData,
   GetUserProfileReq,
 } from '../../../types/api/UserAPI';
+import { Status } from '../../../types/Common';
+import { callAPI } from '../../../utils/Fetchers';
 import { getQueryString } from '../../../utils/URLUtils';
 import useCommonApi from './useCommonApi';
 
@@ -26,4 +29,18 @@ export default function usePersonalData(props?: { useQueryString?: boolean }): R
   });
 
   return { ...personalPegawai, ...userProfile };
+}
+
+export async function getPegawai():Promise<GetUserPersonalPegawaiData | undefined>{
+  const PersonalPegRaw = await callAPI<GetUserPersonalPegawaiReq, GetUserPersonalPegawaiRes>(
+    UserAPI.GET_USER_PERSONAL_PEGAWAI,
+    {},
+    { method: 'GET' }
+  );
+
+  if (PersonalPegRaw.status === 200 && PersonalPegRaw.data?.status === Status.OK) {
+    return PersonalPegRaw.data.data
+  } 
+    return undefined
+  
 }
