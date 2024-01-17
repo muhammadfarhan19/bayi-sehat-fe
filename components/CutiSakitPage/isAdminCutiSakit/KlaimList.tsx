@@ -85,8 +85,8 @@ function KlaimList(props: ListKlaimProps) {
       name,
       date,
     });
-    console.log(name)
-    console.log(date)
+    console.log(name);
+    console.log(date);
   };
 
   const changeFilterState = (inputState: Partial<GetKehadiranList>) => {
@@ -299,7 +299,7 @@ function KlaimList(props: ListKlaimProps) {
                           >
                             Proses Klaim
                           </button>
-                          
+
                           <br />
 
                           <button
@@ -308,13 +308,11 @@ function KlaimList(props: ListKlaimProps) {
                                 !formBatalModalState?.open,
                                 data?.id,
                                 data?.nama_pegawai,
-                                data?.tanggal,
+                                data?.tanggal
                               );
                             }}
                             type="button"
-                            className={`my-1 inline-flex w-36 items-center justify-center rounded border border-transparent ${
-                              'bg-rose-600 hover:bg-rose-700 disabled:bg-indigo-200'
-                            } px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
+                            className={`my-1 inline-flex w-36 items-center justify-center rounded border border-transparent ${'bg-rose-600 hover:bg-rose-700 disabled:bg-indigo-200'} px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
                           >
                             Batal
                           </button>

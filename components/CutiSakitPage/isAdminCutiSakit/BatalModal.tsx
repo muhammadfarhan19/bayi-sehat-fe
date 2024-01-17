@@ -27,16 +27,14 @@ interface FormState {
 }
 
 function BatalModal(props: ModalProps) {
-  const { open, setOpen, selectedId, onSuccess, name, date} = props;
+  const { open, setOpen, selectedId, onSuccess, name, date } = props;
   const toggleModal = () => {
     setOpen(!open);
   };
 
   const dispatch = useDispatch();
 
-  const {
-    handleSubmit,
-  } = useForm<FormState>();
+  const { handleSubmit } = useForm<FormState>();
 
   const submitHandler = async () => {
     const resSubmit = await callAPI<DelCutiReq, PostCutiRes>(
@@ -103,8 +101,10 @@ function BatalModal(props: ModalProps) {
               </Dialog.Title>
               <form onSubmit={handleSubmit(submitHandler)}>
                 <div className="mt-5">
-                    <p className='p-2 text-sm'>Anda yakin membatalkan cuti pegawai atas nama <b>{name}</b> pada tanggal <b>{date}</b> ?</p>
-                    <br />
+                  <p className="p-2 text-sm">
+                    Anda yakin membatalkan cuti pegawai atas nama <b>{name}</b> pada tanggal <b>{date}</b> ?
+                  </p>
+                  <br />
                   <button
                     type="submit"
                     className="w-full rounded border border-transparent bg-rose-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

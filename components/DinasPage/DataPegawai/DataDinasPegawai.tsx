@@ -62,9 +62,9 @@ export function DataDinasPegawai() {
           <DataDinasPNS unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
         ) : selected == 'Master PPNPN' ? (
           <DataDinasPPNPN unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
-        ) :
+        ) : (
           <DataDinasPPPK unit_kerja_id={Number(personalPegawai?.unit_kerja_id)} />
-        }
+        )}
       </div>
     </div>
   );

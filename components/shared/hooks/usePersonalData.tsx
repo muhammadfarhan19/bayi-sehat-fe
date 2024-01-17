@@ -31,7 +31,7 @@ export default function usePersonalData(props?: { useQueryString?: boolean }): R
   return { ...personalPegawai, ...userProfile };
 }
 
-export async function getPegawai():Promise<GetUserPersonalPegawaiData | undefined>{
+export async function getPegawai(): Promise<GetUserPersonalPegawaiData | undefined> {
   const PersonalPegRaw = await callAPI<GetUserPersonalPegawaiReq, GetUserPersonalPegawaiRes>(
     UserAPI.GET_USER_PERSONAL_PEGAWAI,
     {},
@@ -39,8 +39,7 @@ export async function getPegawai():Promise<GetUserPersonalPegawaiData | undefine
   );
 
   if (PersonalPegRaw.status === 200 && PersonalPegRaw.data?.status === Status.OK) {
-    return PersonalPegRaw.data.data
-  } 
-    return undefined
-  
+    return PersonalPegRaw.data.data;
+  }
+  return undefined;
 }

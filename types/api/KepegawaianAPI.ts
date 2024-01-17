@@ -163,7 +163,7 @@ export interface GetPresensiPegawaiSummaryRes {
     terlambat: string;
     pulang_terlambat: string;
     terlambat_pulang_awal: string;
-    tidak_hadir: string; 
+    tidak_hadir: string;
     total_kali_tk: string;
     total_kali_terlambat: string;
     total_menit_terlambat: string;

@@ -71,7 +71,7 @@ function DatePicker(props: Props) {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 h-40 mt-3 w-36 origin-top-right overflow-scroll rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items className="absolute right-0 mt-3 h-40 w-36 origin-top-right overflow-scroll rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="flex  w-full items-center rounded-md shadow-sm md:items-stretch">
                 <button
                   onClick={handleChangeYear(-1)}

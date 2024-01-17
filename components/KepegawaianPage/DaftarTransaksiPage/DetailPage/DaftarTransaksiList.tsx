@@ -77,7 +77,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
   const handleShowSummaryForm = () => {
     setSummaryMonthlyModalState(true);
   };
-  
+
   const formattedSelectedDate = selectedDate
     ? format(selectedDate, 'MMMM - yyyy', { locale: id })
     : format(new Date(), 'MMMM - yyyy', { locale: id });
@@ -155,14 +155,16 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
           />
         </div>
         <div className="flex-2 flex">
-        {selectedTab == "Master PPNPN" ? (
-          <button
-            onClick={handleShowSummaryForm}
-            className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400  mr-1"
-          >
-            Cetak 
-          </button>
-        ) : ("")}
+          {selectedTab == 'Master PPNPN' ? (
+            <button
+              onClick={handleShowSummaryForm}
+              className="mr-1 w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[2px] text-gray-50  disabled:bg-indigo-400"
+            >
+              Cetak
+            </button>
+          ) : (
+            ''
+          )}
           <button
             onClick={handleShowForm}
             className="w-36 rounded-[6px] bg-[#4F46E5] py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-400"
@@ -350,7 +352,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
           setOpen={(open: boolean) => setFormModalSync(prevState => ({ ...prevState, show: open }))}
         />
       )}
-       {ConditionalRendering(
+      {ConditionalRendering(
         summaryMonthlyModalState,
         <SummaryMonthlyModal
           onSuccess={mutate}

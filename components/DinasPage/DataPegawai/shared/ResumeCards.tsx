@@ -18,21 +18,20 @@ import MonthPicker from '../DatePicker';
 //  { field: 'total_presentase_pengurang_kehadiran', text: 'Pemotongan Nilai Presensi' },
 //] as { field: SummaryKey; text: string }[];
 
-
 export function ResumeCards() {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [summaryPersonal, setSummaryPersonal] = React.useState<GetPresensiPegawaiSummaryRes['data']>();
 
   React.useEffect(() => {
     (async () => {
-      const month = selectedDate?.getMonth()
-      const year = selectedDate?.getFullYear()
+      const month = selectedDate?.getMonth();
+      const year = selectedDate?.getFullYear();
 
-      if(month == undefined || year == undefined) {
-        return
+      if (month == undefined || year == undefined) {
+        return;
       }
 
-      const pegawai = await getPegawai()
+      const pegawai = await getPegawai();
 
       const personalSummRaw = await callAPI<GetPresensiPegawaiSummaryReq, GetPresensiPegawaiSummaryRes>(
         KepegawaianAPI.GET_PEGAWAI_PRESENSI_SUMMARY,
@@ -43,20 +42,18 @@ export function ResumeCards() {
         },
         { method: 'post' }
       );
-  
+
       if (personalSummRaw.status === 200 && personalSummRaw.data?.status === Status.OK) {
-        setSummaryPersonal(personalSummRaw.data.data)
+        setSummaryPersonal(personalSummRaw.data.data);
       }
-    })()
+    })();
   }, [selectedDate]);
 
   return (
     <div className="mb-[24px] overflow-hidden rounded-lg bg-white shadow">
       <div className="my-4 px-7 py-1">
         <div className="mb-4 flex flex-row justify-between">
-          <h3 className="inline-flex text-xl font-semibold tracking-wider text-gray-700">
-            Resume Data Kehadiran
-          </h3>
+          <h3 className="inline-flex text-xl font-semibold tracking-wider text-gray-700">Resume Data Kehadiran</h3>
           <MonthPicker onChange={date => setSelectedDate(date)} type="oke" />
           <Link href="/kehadiran">
             <a className="flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200">
@@ -66,71 +63,63 @@ export function ResumeCards() {
         </div>
         <div>
           <div className="grid grid-cols-3 gap-3">
-              <div
-                className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3"
-              >
-                <div className="text-base font-medium text-indigo-700">
-                  {summaryPersonal?.masuk == "" ? 0 : summaryPersonal?.masuk} Kehadiran 
-                </div>
-                <div className="text-base font-medium text-gray-500">
-                  &nbsp;
-                </div>
+            <div className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3">
+              <div className="text-base font-medium text-indigo-700">
+                {summaryPersonal?.masuk == '' ? 0 : summaryPersonal?.masuk} Kehadiran
               </div>
+              <div className="text-base font-medium text-gray-500">&nbsp;</div>
+            </div>
 
-              <div
-                className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3"
-              >
-                <div className="text-base font-medium text-indigo-700">
-                  {summaryPersonal?.total_kali_tk == "" ? 0 : summaryPersonal?.total_kali_tk} Tanpa Keterangan
-                </div>
-                <div className="text-base font-medium text-gray-500">
-                  &nbsp;
-                </div>
+            <div className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3">
+              <div className="text-base font-medium text-indigo-700">
+                {summaryPersonal?.total_kali_tk == '' ? 0 : summaryPersonal?.total_kali_tk} Tanpa Keterangan
               </div>
+              <div className="text-base font-medium text-gray-500">&nbsp;</div>
+            </div>
 
-              <div
-                className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3"
-              >
-                <div className="text-base font-medium text-indigo-700">
-                  {summaryPersonal?.total_kali_terlambat == "" ? 0 : summaryPersonal?.total_kali_terlambat} Keterlambatan
-                </div>
-                <div className="text-base font-medium text-gray-500">
-                  {summaryPersonal?.total_menit_terlambat == "" ? 0 : summaryPersonal?.total_menit_terlambat} Menit Terlambat
-                </div>
+            <div className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3">
+              <div className="text-base font-medium text-indigo-700">
+                {summaryPersonal?.total_kali_terlambat == '' ? 0 : summaryPersonal?.total_kali_terlambat} Keterlambatan
               </div>
+              <div className="text-base font-medium text-gray-500">
+                {summaryPersonal?.total_menit_terlambat == '' ? 0 : summaryPersonal?.total_menit_terlambat} Menit
+                Terlambat
+              </div>
+            </div>
 
-              <div
-                className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3"
-              >
-                <div className="text-base font-medium text-indigo-700">
-                  {summaryPersonal?.total_kali_psw == "" ? 0 : summaryPersonal?.total_kali_psw} Pulang Sebelum Waktunya
-                </div>
-                <div className="text-base font-medium text-gray-500">
-                  {summaryPersonal?.total_menit_psw == "" ? 0 : summaryPersonal?.total_menit_psw} Menit PSW
-                </div>
+            <div className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3">
+              <div className="text-base font-medium text-indigo-700">
+                {summaryPersonal?.total_kali_psw == '' ? 0 : summaryPersonal?.total_kali_psw} Pulang Sebelum Waktunya
               </div>
+              <div className="text-base font-medium text-gray-500">
+                {summaryPersonal?.total_menit_psw == '' ? 0 : summaryPersonal?.total_menit_psw} Menit PSW
+              </div>
+            </div>
 
-              <div
-                className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3"
-              >
-                <div className="text-base font-medium text-indigo-700">
-                  {summaryPersonal?.total_kali_lupa_absen_datang == "" ? 0 : summaryPersonal?.total_kali_lupa_absen_datang} Lupa Absen Datang
-                </div>
-                <div className="text-base font-medium text-gray-500">
-                  {summaryPersonal?.total_kali_lupa_absen_pulang == "" ? 0 : summaryPersonal?.total_kali_lupa_absen_pulang} Lupa Absen Pulang
-                </div>
+            <div className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3">
+              <div className="text-base font-medium text-indigo-700">
+                {summaryPersonal?.total_kali_lupa_absen_datang == ''
+                  ? 0
+                  : summaryPersonal?.total_kali_lupa_absen_datang}{' '}
+                Lupa Absen Datang
               </div>
+              <div className="text-base font-medium text-gray-500">
+                {summaryPersonal?.total_kali_lupa_absen_pulang == ''
+                  ? 0
+                  : summaryPersonal?.total_kali_lupa_absen_pulang}{' '}
+                Lupa Absen Pulang
+              </div>
+            </div>
 
-              <div
-                className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3"
-              >
-                <div className="text-base font-medium text-indigo-700">
-                  Pemotongan Nilai Presensi 
-                </div>
-                <div className="text-base font-medium text-gray-500">
-                  {summaryPersonal?.total_presentase_pengurang_kehadiran === undefined ? 0 : (summaryPersonal?.total_presentase_pengurang_kehadiran * 100).toFixed(2)} %
-                </div>
+            <div className="w-full items-center rounded-md border border-transparent bg-indigo-100 px-5 py-3">
+              <div className="text-base font-medium text-indigo-700">Pemotongan Nilai Presensi</div>
+              <div className="text-base font-medium text-gray-500">
+                {summaryPersonal?.total_presentase_pengurang_kehadiran === undefined
+                  ? 0
+                  : (summaryPersonal?.total_presentase_pengurang_kehadiran * 100).toFixed(2)}{' '}
+                %
               </div>
+            </div>
           </div>
         </div>
       </div>
