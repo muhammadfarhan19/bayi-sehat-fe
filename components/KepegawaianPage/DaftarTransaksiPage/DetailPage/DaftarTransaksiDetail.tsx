@@ -65,7 +65,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
       <div>
         <>
           <p className="mb-[4px] text-[14px] font-normal">Bulan</p>
-          <div className="mb-10 block block flex appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
+          <div className="mb-10 block appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
             {selectedMonth}
           </div>
         </>
@@ -76,7 +76,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     selectedYear === undefined ? null : (
       <div>
         <p className="mb-[4px] text-[14px] font-normal">Tahun</p>
-        <div className="mb-10 block block flex appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
+        <div className="mb-10 block appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
           {selectedYear}
         </div>
       </div>
@@ -108,6 +108,11 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
   const TableHeaderPegawaiNipNik = properties?.selectedTab === 'Master PNS' ? 'NIP' : 'NIK';
+
+  const isShow: boolean =
+    (selectedMonth === 'Januari' && Number(selectedYear) > 2023) ||
+    (Number(selectedYear) <= 2023 && properties?.selectedTab === 'Master PPNPN');
+
   return (
     <>
       <div className="px-5 pt-5 pb-1">
@@ -288,36 +293,40 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
                     >
                       Status TK
                     </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pengurang TK(%)
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pengurang Terlambat(%)
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pengurang PSW(%)
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pengurang Lupa Absen Datang(%)
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pengurang Lupa Absen Pulang(%)
-                    </th>
+                    {isShow && (
+                      <React.Fragment>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurang TK(%)
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurang Terlambat(%)
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurang PSW(%)
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurang Lupa Absen Datang(%)
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurang Lupa Absen Pulang(%)
+                        </th>
+                      </React.Fragment>
+                    )}
                     <th
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -359,21 +368,25 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(data?.summary?.pengurangan_tk)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(data?.summary?.pengurangan_terlambat)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(data?.summary?.pengurangan_psw)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_datang)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_pulang)}
-                        </td>
+                        {isShow && (
+                          <React.Fragment>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {checkReturnValueOfString(data?.summary?.pengurangan_tk)}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {checkReturnValueOfString(data?.summary?.pengurangan_terlambat)}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {checkReturnValueOfString(data?.summary?.pengurangan_psw)}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_datang)}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_pulang)}
+                            </td>
+                          </React.Fragment>
+                        )}
                         <td className="truncate px-6 py-4 text-xs font-medium">
                           {checkReturnValueOfString(
                             formatStringDate(data?.summary?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss'),
