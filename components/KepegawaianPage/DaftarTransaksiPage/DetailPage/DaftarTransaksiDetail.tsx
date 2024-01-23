@@ -31,6 +31,12 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
   const reSync = useResyncTransaction();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const downloadTransaksi = useDownloadTransaksi();
+
+  const selectedYear =
+    typeof properties.selectedDate !== 'undefined' ? format(properties.selectedDate, 'yyyy', { locale: id }) : '';
+  const selectedMonth =
+    typeof properties.selectedDate !== 'undefined' ? months[properties?.selectedDate?.getMonth()] : '';
+
   const [filterState, setFilterState] = React.useState<DaftarTransaksi.Request>({
     page: 1,
     per_page: 20,
@@ -38,6 +44,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     type:
       properties?.selectedTab === 'Master PNS' ? 'pns' : properties?.selectedTab === 'Master PPNPN' ? 'ppnpn' : 'pppk',
   });
+
   const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
     UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
     null,
@@ -54,11 +61,6 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     { method: 'GET' },
     { skipCall: isCodeUnavail, revalidateOnMount: true }
   );
-
-  const selectedYear =
-    typeof properties.selectedDate !== 'undefined' ? format(properties.selectedDate, 'yyyy', { locale: id }) : '';
-  const selectedMonth =
-    typeof properties.selectedDate !== 'undefined' ? months[properties?.selectedDate?.getMonth()] : '';
 
   const renderMonthComponent =
     selectedMonth === undefined ? null : (
@@ -178,7 +180,14 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
           <button
             disabled={downloadTransaksi.loading}
             onClick={() =>
-              downloadTransaksi.downloadTransaksi(filterState, `Daftar_Transaksi_${selectedYear}_${selectedMonth}`)
+              downloadTransaksi.downloadTransaksi(
+                {
+                  ...filterState,
+                  month: String(daftarTransaksiList?.transaksi?.month),
+                  year: String(daftarTransaksiList?.transaksi?.year),
+                },
+                `Daftar_Transaksi_${selectedYear}_${selectedMonth}`
+              )
             }
             className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-300"
           >

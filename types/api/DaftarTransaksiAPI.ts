@@ -43,10 +43,12 @@ export declare module DaftarTransaksi {
     type: string;
     page: number;
     per_page: number;
+    month?: string;
+    year?: string;
   }
 
   interface Response {
-    transaction: {
+    transaksi: {
       code: string;
       last_sync: string;
       month: number;
