@@ -73,6 +73,7 @@ export declare module DaftarTransaksi {
         presensi_id: number;
         pegawai_id: number;
         date: string;
+        denda_pengurangan: number;
         status_kehadiran: string;
         status_ketidakhadiran: string;
         telat: number;

@@ -111,9 +111,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
   };
   const TableHeaderPegawaiNipNik = properties?.selectedTab === 'Master PNS' ? 'NIP' : 'NIK';
 
-  const isShow: boolean =
-    (selectedMonth === 'Januari' && Number(selectedYear) > 2023) ||
-    (Number(selectedYear) <= 2023 && properties?.selectedTab === 'Master PPNPN');
+  const isShow: boolean = Number(selectedYear) <= 2023 && properties?.selectedTab === 'Master PPNPN';
 
   return (
     <>
@@ -336,6 +334,14 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
                         </th>
                       </React.Fragment>
                     )}
+                    {!isShow && (
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Pengurangan
+                      </th>
+                    )}
                     <th
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -396,6 +402,12 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
                             </td>
                           </React.Fragment>
                         )}
+                        {!isShow && (
+                          <td className="px-6 py-4 text-xs font-medium">
+                            {data?.summary?.denda_pengurangan ? 'Rp 30.000,00' : 'Rp 0,00'}
+                          </td>
+                        )}
+
                         <td className="truncate px-6 py-4 text-xs font-medium">
                           {checkReturnValueOfString(
                             formatStringDate(data?.summary?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss'),
