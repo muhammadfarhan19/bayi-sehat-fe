@@ -50,6 +50,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
   const defaultFilterState: DaftarTransaksi.GetListReq = {
     page: 1,
     per_page: 20,
+    year: new Date().getFullYear(),
   };
 
   const handleViewAllSelected = () => {

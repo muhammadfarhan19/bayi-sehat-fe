@@ -31,6 +31,12 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
   const reSync = useResyncTransaction();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const downloadTransaksi = useDownloadTransaksi();
+
+  const selectedYear =
+    typeof properties.selectedDate !== 'undefined' ? format(properties.selectedDate, 'yyyy', { locale: id }) : '';
+  const selectedMonth =
+    typeof properties.selectedDate !== 'undefined' ? months[properties?.selectedDate?.getMonth()] : '';
+
   const [filterState, setFilterState] = React.useState<DaftarTransaksi.Request>({
     page: 1,
     per_page: 20,
@@ -38,6 +44,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     type:
       properties?.selectedTab === 'Master PNS' ? 'pns' : properties?.selectedTab === 'Master PPNPN' ? 'ppnpn' : 'pppk',
   });
+
   const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
     UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
     null,
@@ -55,17 +62,12 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     { skipCall: isCodeUnavail, revalidateOnMount: true }
   );
 
-  const selectedYear =
-    typeof properties.selectedDate !== 'undefined' ? format(properties.selectedDate, 'yyyy', { locale: id }) : '';
-  const selectedMonth =
-    typeof properties.selectedDate !== 'undefined' ? months[properties?.selectedDate?.getMonth()] : '';
-
   const renderMonthComponent =
     selectedMonth === undefined ? null : (
       <div>
         <>
           <p className="mb-[4px] text-[14px] font-normal">Bulan</p>
-          <div className="mb-10 block block flex appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
+          <div className="mb-10 block appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
             {selectedMonth}
           </div>
         </>
@@ -76,7 +78,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     selectedYear === undefined ? null : (
       <div>
         <p className="mb-[4px] text-[14px] font-normal">Tahun</p>
-        <div className="mb-10 block block flex appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
+        <div className="mb-10 block appearance-none items-center justify-center rounded-md border border-gray-300 py-2 px-6 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm">
           {selectedYear}
         </div>
       </div>
@@ -108,6 +110,12 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
     timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
   const TableHeaderPegawaiNipNik = properties?.selectedTab === 'Master PNS' ? 'NIP' : 'NIK';
+
+  const isShow: boolean =
+    (Number(selectedYear) <= 2023 && properties?.selectedTab === 'Master PPNPN') ||
+    properties?.selectedTab !== 'Master PPNPN';
+  console.log(properties?.selectedTab);
+
   return (
     <>
       <div className="px-5 pt-5 pb-1">
@@ -173,7 +181,14 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
           <button
             disabled={downloadTransaksi.loading}
             onClick={() =>
-              downloadTransaksi.downloadTransaksi(filterState, `Daftar_Transaksi_${selectedYear}_${selectedMonth}`)
+              downloadTransaksi.downloadTransaksi(
+                {
+                  ...filterState,
+                  month: String(daftarTransaksiList?.transaksi?.month),
+                  year: String(daftarTransaksiList?.transaksi?.year),
+                },
+                `Daftar_Transaksi_${selectedYear}_${selectedMonth}`
+              )
             }
             className="w-36 rounded-[6px] bg-indigo-600 py-[9px] px-[2px] text-gray-50 disabled:bg-indigo-300"
           >
@@ -288,36 +303,48 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
                     >
                       Status TK
                     </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pengurang TK(%)
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pengurang Terlambat(%)
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pengurang PSW(%)
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pengurang Lupa Absen Datang(%)
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pengurang Lupa Absen Pulang(%)
-                    </th>
+                    {isShow && (
+                      <React.Fragment>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurang TK(%)
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurang Terlambat(%)
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurang PSW(%)
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurang Lupa Absen Datang(%)
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurang Lupa Absen Pulang(%)
+                        </th>
+                      </React.Fragment>
+                    )}
+                    {!isShow && (
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Pengurangan
+                      </th>
+                    )}
                     <th
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -359,21 +386,31 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
                         <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
                         <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(data?.summary?.pengurangan_tk)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(data?.summary?.pengurangan_terlambat)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(data?.summary?.pengurangan_psw)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_datang)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_pulang)}
-                        </td>
+                        {isShow && (
+                          <React.Fragment>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {checkReturnValueOfString(data?.summary?.pengurangan_tk)}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {checkReturnValueOfString(data?.summary?.pengurangan_terlambat)}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {checkReturnValueOfString(data?.summary?.pengurangan_psw)}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_datang)}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_pulang)}
+                            </td>
+                          </React.Fragment>
+                        )}
+                        {!isShow && (
+                          <td className="px-6 py-4 text-xs font-medium">
+                            {data?.summary?.denda_pengurangan ? 'Rp 30.000,00' : 'Rp 0,00'}
+                          </td>
+                        )}
+
                         <td className="truncate px-6 py-4 text-xs font-medium">
                           {checkReturnValueOfString(
                             formatStringDate(data?.summary?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss'),

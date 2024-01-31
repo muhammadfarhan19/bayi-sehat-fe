@@ -47,3 +47,134 @@ export interface ListAnggota {
   unit_kerja_str: number;
   divisi: string;
 }
+
+export const siteMapContents = [
+  [
+    {
+      title: 'Akun',
+      contents: [
+        {
+          name: 'Paket Berlangganan Aktif',
+          href: '/profile?tab=Paket%20Berlangganan%20Aktif',
+        },
+        {
+          name: 'Riwayat Transaksi',
+          href: '/profile?tab=Riwayat%20Transaksi',
+        },
+        {
+          name: 'Manajemen Perangkat',
+          href: '/profile?tab=Manajemen%20Perangkat',
+        },
+        {
+          name: 'Refferal',
+          href: '/profile?tab=Referral',
+        },
+        {
+          name: 'Akun Saya',
+          href: '/profile',
+        },
+        {
+          name: 'Beli Paket',
+          href: '/purchase',
+        },
+        {
+          name: 'Input Voucher',
+          href: '/voucher',
+        },
+        {
+          name: 'Benefit Kupon',
+          href: '/coupons',
+        },
+      ],
+    },
+    {
+      title: 'Favorit',
+      contents: [
+        {
+          name: 'Favorit Saya',
+          href: '/my-list?tab=Favorit%20Saya',
+        },
+        {
+          name: 'VOD dan Paket Dibeli',
+          href: '/my-list?tab=VOD%20dan%20Paket%20Dibeli',
+        },
+        {
+          name: 'Lanjutkan Menonton',
+          href: '/my-list?tab=Lanjutkan%20Menonton',
+        },
+      ],
+    },
+    {
+      title: 'Kredensial',
+      contents: [
+        {
+          name: 'Masuk',
+          href: '/login?type=signin',
+        },
+        {
+          name: 'Daftar',
+          href: '/login?type=signup',
+        },
+        {
+          name: 'Ubah Profile',
+          href: '/profile/settings',
+        },
+        {
+          name: 'Ubah Personalisasi',
+          href: '/personalization?isEdit=true',
+        },
+        {
+          name: 'Kontrol Orang Tua',
+          href: '/profile/settings',
+        },
+        {
+          name: 'Ubah Password',
+          href: '/profile/settings',
+        },
+        {
+          name: 'Lupa Password',
+          href: '/forgot-password',
+        },
+      ],
+    },
+  ],
+  [
+    {
+      title: 'Tentang Cubmu',
+      contents: [
+        {
+          name: 'Syarat dan Ketentuan',
+          href: '/terms-conditions',
+        },
+        {
+          name: 'Kebijakan Privasi',
+          href: '/terms-conditions',
+        },
+        {
+          name: 'Kontak Kami',
+          href: '/contact-us',
+        },
+      ],
+    },
+    {
+      title: 'Radio Online',
+      contents: [
+        {
+          name: 'Vision Radio 1',
+          href: 'http://visionradio1.com',
+        },
+      ],
+    },
+  ],
+  [
+    {
+      title: 'Artikel',
+      contents: [
+        {
+          name: 'Artikel',
+          href: '/articles',
+        },
+      ],
+    },
+  ],
+];
