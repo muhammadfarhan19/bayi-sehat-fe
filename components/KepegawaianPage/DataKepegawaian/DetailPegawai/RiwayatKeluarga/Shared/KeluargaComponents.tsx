@@ -35,6 +35,7 @@ interface Picker {
   moreOptions?: any;
   firstValue?: any;
   secondValue?: any;
+  disabled?: any;
 }
 
 interface ButtonRows {
@@ -77,7 +78,8 @@ export function DropdownPicker(props: Picker) {
         <select
           {...props.validation}
           name={props.formVerification}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+          disabled={props?.disabled}
         >
           <option value={''}>{props.defaultOption}</option>
           <option value={props.firstValue}>{props.firstOption}</option>
