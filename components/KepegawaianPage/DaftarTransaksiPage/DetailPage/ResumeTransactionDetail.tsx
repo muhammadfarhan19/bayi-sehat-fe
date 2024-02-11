@@ -1,4 +1,6 @@
 import { AdjustmentsIcon, ChevronLeftIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -102,6 +104,56 @@ function ResumeTransactionDetail(props: DaftarTransaksiDetailProps) {
     }
   };
 
+  const selectedYear =
+    typeof properties.selectedDate !== 'undefined' ? format(properties.selectedDate, 'yyyy', { locale: id }) : '';
+
+  const isShow: boolean =
+    (Number(selectedYear) <= 2023 && properties?.selectedTab === 'Master PPNPN') ||
+    properties?.selectedTab !== 'Master PPNPN';
+
+  const tableHeader = [
+    { text: 'NO' },
+    { text: TableHeaderPegawaiNipNik },
+    { text: 'Nama' },
+    { text: 'Total Hari' },
+    { text: 'Hari Kerja' },
+    { text: 'Libur (Bukan Hari Kerja)' },
+    { text: 'Kehadiran' },
+    { text: 'Ketidak Hadiran' },
+    { text: 'Total Alpha' },
+    { text: 'Total Terlambat' },
+    { text: 'Total Jam Terlambat' },
+    { text: 'Total Pulang Awal' },
+    { text: 'Total Jam Pulang Awal' },
+    { text: 'Total Jam Kumulatif' },
+    { text: 'At_Idt(Total Ijin Terlambat)' },
+    { text: 'At_Ipc(Total Ijin Pulang Awal)' },
+    { text: 'Total Ijin Terlambat & Pulang Awal' },
+    { text: 'At_Lpd (Lupa Absen Datang)' },
+    { text: 'At_Lpp (Lupa Absen Pulang)' },
+    { text: 'Ab_St(Dinas Sppd)' },
+    { text: 'Ab_Ct:Cuti Tahunan' },
+    { text: 'Ab_Cap:Cuti Alasan Penting' },
+    { text: 'Ab_Cm:Cuti Melahirkan' },
+    { text: 'Ab_Cb:Cuti Besar < 2 Bulan' },
+    { text: 'Ab_Cs Cuti Sakit < 1 Bln' },
+    { text: 'Ab_Cs16:Cuti Sakit / Sakit 1 - 6 Bulan' },
+    { text: 'Ab_Cb23:Cuti Besar 2 - 3 Bulan' },
+    { text: 'Ab_Cltn:Cuti Luar Tanggungan Negara' },
+    { text: 'Ab_Cs>6:Cuti Sakit>6 Bulan' },
+  ];
+
+  if (isShow) {
+    tableHeader.push(
+      { text: 'Pengurang Alpa (%)' },
+      { text: 'Pengurang Terlambat (%)' },
+      { text: 'Pengurang Pulang Awal (%)' },
+      { text: 'Pengurang Lupa Absen Datang (%)' },
+      { text: 'Pengurang Lupa Absen Pulang (%)' },
+      { text: 'Total Pengurang Kehadiran (%)' }
+    );
+  }
+
   return (
     <>
       <div className="px-5 pt-5 pb-1">
@@ -196,43 +248,7 @@ function ResumeTransactionDetail(props: DaftarTransaksiDetailProps) {
                 <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
                   <thead className="bg-gray-50">
                     <tr>
-                      {[
-                        { text: 'NO' },
-                        { text: TableHeaderPegawaiNipNik },
-                        { text: 'Nama' },
-                        { text: 'Total Hari' },
-                        { text: 'Hari Kerja' },
-                        { text: 'Libur (Bukan Hari Kerja)' },
-                        { text: 'Kehadiran' },
-                        { text: 'Ketidak Hadiran' },
-                        { text: 'Total Alpha' },
-                        { text: 'Total Terlambat' },
-                        { text: 'Total Jam Terlambat' },
-                        { text: 'Total Pulang Awal' },
-                        { text: 'Total Jam Pulang Awal' },
-                        { text: 'Total Jam Kumulatif' },
-                        { text: 'At_Idt(Total Ijin Terlambat)' },
-                        { text: 'At_Ipc(Total Ijin Pulang Awal)' },
-                        { text: 'Total Ijin Terlambat & Pulang Awal' },
-                        { text: 'At_Lpd (Lupa Absen Datang)' },
-                        { text: 'At_Lpp (Lupa Absen Pulang)' },
-                        { text: 'Ab_St(Dinas Sppd)' },
-                        { text: 'Ab_Ct:Cuti Tahunan' },
-                        { text: 'Ab_Cap:Cuti Alasan Penting' },
-                        { text: 'Ab_Cm:Cuti Melahirkan' },
-                        { text: 'Ab_Cb:Cuti Besar < 2 Bulan' },
-                        { text: 'Ab_Cs Cuti Sakit < 1 Bln' },
-                        { text: 'Ab_Cs16:Cuti Sakit / Sakit 1 - 6 Bulan' },
-                        { text: 'Ab_Cb23:Cuti Besar 2 - 3 Bulan' },
-                        { text: 'Ab_Cltn:Cuti Luar Tanggungan Negara' },
-                        { text: 'Ab_Cs>6:Cuti Sakit>6 Bulan' },
-                        { text: 'Pengurang Alpa (%)' },
-                        { text: 'Pengurang Terlambat (%)' },
-                        { text: 'Pengurang Pulang Awal (%)' },
-                        { text: 'Pengurang Lupa Absen Datang (%)' },
-                        { text: 'Pengurang Lupa Absen Pulang (%)' },
-                        { text: 'Total Pengurang Kehadiran (%)' },
-                      ].map(each => (
+                      {tableHeader.map(each => (
                         <th
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -326,24 +342,28 @@ function ResumeTransactionDetail(props: DaftarTransaksiDetailProps) {
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
                           {each.total_cuti_sakit_lebih_6_bulan}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {(each.pengurang_alpha * 100).toFixed(2)} %
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {(each.pengurang_terlambat * 100).toFixed(2)} %
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {(each.pengurang_pulang_awal * 100).toFixed(2)} %
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {(each.pengurang_lupa_absen_datang * 100).toFixed(2)} %
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {(each.pengurang_lupa_absen_pulang * 100).toFixed(2)} %
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
-                          {(each.total_pengurang_kehadiran * 100).toFixed(2)} %
-                        </td>
+                        {isShow && (
+                          <React.Fragment>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              {(each.pengurang_alpha * 100).toFixed(2)} %
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              {(each.pengurang_terlambat * 100).toFixed(2)} %
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              {(each.pengurang_pulang_awal * 100).toFixed(2)} %
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              {(each.pengurang_lupa_absen_datang * 100).toFixed(2)} %
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              {(each.pengurang_lupa_absen_pulang * 100).toFixed(2)} %
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              {(each.total_pengurang_kehadiran * 100).toFixed(2)} %
+                            </td>
+                          </React.Fragment>
+                        )}
                       </tr>
                     ))}
                   </tbody>
