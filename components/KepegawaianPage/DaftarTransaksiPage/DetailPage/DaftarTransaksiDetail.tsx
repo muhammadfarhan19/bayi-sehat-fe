@@ -114,7 +114,6 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
   const isShow: boolean =
     (Number(selectedYear) <= 2023 && properties?.selectedTab === 'Master PPNPN') ||
     properties?.selectedTab !== 'Master PPNPN';
-  console.log(properties?.selectedTab);
 
   return (
     <>

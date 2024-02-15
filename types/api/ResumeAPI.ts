@@ -52,6 +52,11 @@ export interface ResumeListData {
     pengurang_lupa_absen_datang: number;
     pengurang_lupa_absen_pulang: number;
     total_pengurang_kehadiran: number;
+    gaji_utuh: number;
+    jumlah_hari_bermasalah: number;
+    detail_tanggal_bermasalah: number;
+    jumlah_pengurangan: number;
+    total_gaji: number;
   }[];
   pagination: Pagination;
 }

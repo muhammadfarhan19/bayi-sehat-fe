@@ -57,6 +57,7 @@ function KlaimKehadiran() {
   const dispatch = useDispatch();
 
   const personalPegawaiData = usePersonalData();
+  const isPpnpn = Number(personalPegawaiData?.status_cpns || 0) === 2;
 
   const [detailModalState, setDetailModalState] = React.useState<{
     status: 'success' | 'failed';
@@ -120,6 +121,8 @@ function KlaimKehadiran() {
     KELUAR_KANTOR_OPTIONS: klaimInfo ? klaimInfo?.jenis_klaim?.[4]?.label : 'Izin keluar kantor pada jam kerja"',
     KELUAR_KANTOR_VALUE: klaimInfo ? klaimInfo?.jenis_klaim?.[4]?.name : 'KELUAR_KANTOR',
   };
+
+  const isDisabledKlaim = isPpnpn && !klaimInfo?.jenis_klaim?.[0]?.kuota;
 
   const submitHandler = async (formData: FormState) => {
     const resSubmit = await callAPI<PostKehadiranData, PostKehadiranReqData>(
@@ -223,7 +226,9 @@ function KlaimKehadiran() {
                 return (
                   <div key={index} className="overflow-hidden rounded-lg bg-gray-100 px-4 py-5 shadow sm:p-6">
                     <dt className="truncate text-sm text-gray-500">Sisa Kuota Klaim {data?.label}</dt>
-                    <dd className="mt-1 text-3xl font-semibold text-indigo-700">{substractData} Hari</dd>
+                    <dd className="mt-1 text-3xl font-semibold text-indigo-700">
+                      {substractData} {isPpnpn ? 'Kali' : 'Hari'}
+                    </dd>
                   </div>
                 );
               })}
@@ -254,6 +259,7 @@ function KlaimKehadiran() {
             name="tanggal_klaim"
             type="date"
             label="Tanggal Klaim"
+            isUneditable={isDisabledKlaim}
           />
 
           <DropdownPicker
@@ -278,6 +284,7 @@ function KlaimKehadiran() {
               </>
             }
             formVerification="jenis_pengajuan"
+            disabled={isDisabledKlaim}
           />
           <InputLabelled
             isError={errors.alasan_klaim}
@@ -286,6 +293,7 @@ function KlaimKehadiran() {
             name="alasan_klaim"
             type="text"
             label="Alasan"
+            isUneditable={isDisabledKlaim}
           />
           <div className="mt-5 sm:col-span-6">
             <label className="mb-2 block text-sm font-medium text-gray-700">
@@ -317,7 +325,7 @@ function KlaimKehadiran() {
                           </div>
                         </div>
                         <button
-                          disabled={loading}
+                          disabled={loading || isDisabledKlaim}
                           type="button"
                           className="inline-flex items-center rounded border border-green-300 bg-white px-2.5 py-1.5 text-xs font-medium text-green-700 shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:text-gray-300"
                         >
@@ -339,7 +347,8 @@ function KlaimKehadiran() {
                     : handleSubmit(submitHandler)
                 }
                 type="submit"
-                className="rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-200"
+                disabled={isDisabledKlaim}
               >
                 Klaim Kehadiran
               </button>
