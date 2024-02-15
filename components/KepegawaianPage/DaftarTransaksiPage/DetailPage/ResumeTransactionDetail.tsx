@@ -154,6 +154,20 @@ function ResumeTransactionDetail(props: DaftarTransaksiDetailProps) {
     );
   }
 
+  const salaryObject = [
+    { text: 'Gaji Utuh' },
+    { text: 'Jumlah Hari Bermasalah' },
+    { text: 'Detail Tgl Bermasalah' },
+    { text: 'Jumlah Pengurangan' },
+    { text: 'Total Gaji' },
+  ];
+
+  const indexOfTotalJamKumulatif = tableHeader.findIndex(header => header.text === 'Total Jam Kumulatif');
+
+  if (!isShow && indexOfTotalJamKumulatif !== -1) {
+    tableHeader.splice(indexOfTotalJamKumulatif + 1, 0, ...salaryObject);
+  }
+
   return (
     <>
       <div className="px-5 pt-5 pb-1">
@@ -297,6 +311,25 @@ function ResumeTransactionDetail(props: DaftarTransaksiDetailProps) {
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
                           {each.total_jam_kumulatif}
                         </td>
+                        {!isShow && (
+                          <React.Fragment>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              Rp {each.gaji_utuh}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              {each.jumlah_hari_bermasalah}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              {each.detail_tanggal_bermasalah || '-'}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              Rp {each.jumlah_pengurangan}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
+                              Rp {each.total_gaji}
+                            </td>
+                          </React.Fragment>
+                        )}
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
                           {each.total_ijin_terlambat}
                         </td>
