@@ -12,6 +12,7 @@ import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
 import ToolTip from '../../shared/ToolTip';
 import AdminDinasAccess from './AdminDinasAccess';
+import TextLimiter from './TextLimiter';
 
 interface UnitKerja {
   unit_kerja_id: number;
@@ -147,7 +148,7 @@ function RekapDinasPage(props: UnitKerja) {
             <Loader />
           </div>
         ) : (
-          <div className="flex">
+          <div className="flex max-h-[600px] flex-col">
             <div className="my-[24px] overflow-x-auto sm:mx-0 ">
               <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
                 <div className=" sm:rounded-lg">
@@ -232,7 +233,9 @@ function RekapDinasPage(props: UnitKerja) {
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_mulai}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_selesai}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jenis_dinas}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.isi_penugasan}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            <TextLimiter text={data.isi_penugasan} limit={5} key={data.dinas_id} />
+                          </td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">
                             {checkReturnValueOfString(formatStringDate(data?.last_sync, 'EEEE, dd MMM yyyy, HH:mm:ss'))}
                           </td>
@@ -245,17 +248,17 @@ function RekapDinasPage(props: UnitKerja) {
                       ))}
                     </tbody>
                   </table>
-                  <Pagination
-                    onChange={value => {
-                      changeFilterState({ page: value });
-                    }}
-                    totalData={dataTable ? dataTable?.pagination.total_data : 0}
-                    perPage={filterState.per_page}
-                    page={filterState.page}
-                  />
                 </div>
               </div>
             </div>
+            <Pagination
+              onChange={value => {
+                changeFilterState({ page: value });
+              }}
+              totalData={dataTable ? dataTable?.pagination.total_data : 0}
+              perPage={filterState.per_page}
+              page={filterState.page}
+            />
           </div>
         )}
       </div>
