@@ -65,7 +65,7 @@ function StatusKepegawaian() {
         <p className="py-4 pl-6 text-sm font-medium text-[#6B7280]">Status</p>
         <p className="ml-[10%] py-4 text-sm text-gray-500">
           {typeof dataPersonal?.status_kepegawaian !== 'undefined' &&
-            StatusPegawai.filter(each => each.value === dataPersonal?.status_kepegawaian)[0].text}
+            StatusPegawai.filter(each => each.value === dataPersonal?.status_kepegawaian)[0]?.text}
         </p>
         {isAllowAdmin && (
           <select
