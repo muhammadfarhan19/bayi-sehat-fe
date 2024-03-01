@@ -8,7 +8,6 @@ import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import { PostResetPasswordReq, PostResetPasswordRes } from '../../../../../types/api/KepegawaianAPI';
 import { Status } from '../../../../../types/Common';
 import { callAPI } from '../../../../../utils/Fetchers';
-import { getQueryString } from '../../../../../utils/URLUtils';
 import { CircleProgress } from '../../../../shared/CircleProgress';
 import FileLoader from '../../../../shared/FileLoader';
 import { withErrorBoundary } from '../../../../shared/hocs/ErrorBoundary';
@@ -30,7 +29,6 @@ const LinkFile = ({ link, value }: { link?: string; value?: string }) => {
 
 function DataDiriPribadiPpnpn() {
   const dispatch = useDispatch();
-  const { pegawai_id } = getQueryString();
   const isAllowAdmin = useAllowAdmin();
   const dataApiRes = usePersonalData();
   const [loading, setLoading] = React.useState(false);
@@ -56,7 +54,7 @@ function DataDiriPribadiPpnpn() {
       KepegawaianAPI.POST_RESET_PASSWORD,
       {
         nip: String(dataApiRes.nip),
-        pegawai_id: Number(pegawai_id),
+        pegawai_id: Number(dataApiRes.pegawai_id),
       },
       { method: 'put' }
     );
