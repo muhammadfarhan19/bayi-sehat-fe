@@ -9,6 +9,7 @@ export interface GetRekapReq {
   tgl_mulai?: string;
   tgl_selesai?: string;
   pic_pumk?: string;
+  tipe?: string;
 }
 
 export interface GetRekapPegawaiReq {

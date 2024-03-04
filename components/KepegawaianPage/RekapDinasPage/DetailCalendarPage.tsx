@@ -21,6 +21,7 @@ function DetailCalendarPage(props: CalendarProps) {
     page: 1,
     per_page: 20,
     tgl_mulai: date,
+    tipe: 'summary',
   });
 
   const {
