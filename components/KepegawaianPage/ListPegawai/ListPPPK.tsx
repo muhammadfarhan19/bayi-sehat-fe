@@ -207,7 +207,9 @@ function ListPPPK(props: ListPPPKProps) {
                   {(PPPKList?.list || []).map((data, dataIdx) => {
                     return (
                       <tr key={data?.pegawai_id} className={'bg-white hover:bg-gray-100'}>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          {filterPPPK.per_page * (filterPPPK.page - 1) + (dataIdx + 1)}
+                        </td>
                         {isShownNipCell ? (
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
                         ) : null}
