@@ -22,10 +22,11 @@ function RekapDinasPage(props: UnitKerja) {
   const { unit_kerja_id } = props;
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [loaded, setLoaded] = React.useState(false);
+  const [dateFiltersFilled, setDateFiltersFilled] = React.useState(false);
 
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     unit_kerja_id: unit_kerja_id,
   });
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
@@ -64,6 +65,17 @@ function RekapDinasPage(props: UnitKerja) {
     }
     timeoutRef.current = setTimeout(() => setFilterState(newState), pageAffected ? 0 : 800);
   };
+
+  React.useEffect(() => {
+    // Pemeriksaan apakah kedua tanggal sudah diisi
+    if (filterState.tgl_mulai || filterState.tgl_selesai) {
+      setDateFiltersFilled(false);
+    } else {
+      setDateFiltersFilled(true);
+    }
+  }, [filterState.tgl_mulai, filterState.tgl_selesai]);
+
+  const isDateFiltersFilled = dateFiltersFilled || (filterState.tgl_mulai && filterState.tgl_selesai);
 
   return (
     <>
@@ -141,6 +153,9 @@ function RekapDinasPage(props: UnitKerja) {
                 }}
               />
             </div>
+            {!dateFiltersFilled && !isDateFiltersFilled && (
+              <div className="px-6 py-2 text-red-500">Harap isi kedua filter tanggal</div>
+            )}
           </div>
         </div>
         {isValidating ? (
@@ -212,41 +227,47 @@ function RekapDinasPage(props: UnitKerja) {
                         </th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {(dataTable?.list || []).map((data, dataIdx) => (
-                        <tr
-                          key={dataIdx}
-                          className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
-                        >
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                            {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
-                          </td>
-                          <td
-                            className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900 underline underline-offset-1"
-                            onClick={() =>
-                              (window.location.href = `/kepegawaian/rekap-dinas?dinas_id=${data.dinas_id}`)
+                    {isDateFiltersFilled && !isValidating && (
+                      <tbody>
+                        {(dataTable?.list || []).map((data, dataIdx) => (
+                          <tr
+                            key={dataIdx}
+                            className={
+                              dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'
                             }
                           >
-                            {data.no_sp}
-                          </td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.unit_kerja_str}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_mulai}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_selesai}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jenis_dinas}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                            <TextLimiter text={data.isi_penugasan} limit={5} key={data.dinas_id} />
-                          </td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                            {checkReturnValueOfString(formatStringDate(data?.last_sync, 'EEEE, dd MMM yyyy, HH:mm:ss'))}
-                          </td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                            {checkReturnValueOfString(
-                              formatStringDate(data?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss')
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                              {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
+                            </td>
+                            <td
+                              className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-900 underline underline-offset-1"
+                              onClick={() =>
+                                (window.location.href = `/kepegawaian/rekap-dinas?dinas_id=${data.dinas_id}`)
+                              }
+                            >
+                              {data.no_sp}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.unit_kerja_str}</td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_mulai}</td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.tgl_selesai}</td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jenis_dinas}</td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                              <TextLimiter text={data.isi_penugasan} limit={5} key={data.dinas_id} />
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                              {checkReturnValueOfString(
+                                formatStringDate(data?.last_sync, 'EEEE, dd MMM yyyy, HH:mm:ss')
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                              {checkReturnValueOfString(
+                                formatStringDate(data?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss')
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    )}
                   </table>
                 </div>
               </div>
