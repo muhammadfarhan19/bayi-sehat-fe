@@ -63,7 +63,7 @@ export default function SummaryDinasCalendar(props: UnitKerja) {
     });
 
   const handleClick = (event: EventDate) => () => {
-    window.location.href = `?date=${event.dateKey}&tipe=summary`;
+    window.location.href = `?date=${event.dateKey}&tipe=summary&unit_kerja_id=${unit_kerja_id}`;
   };
 
   const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(

@@ -5,6 +5,7 @@ import React from 'react';
 import { RekapDinasAPI } from '../../../constants/APIUrls';
 import { GetRekapReq, RekapData } from '../../../types/api/RekapDinasAPI';
 import { formatStringDate } from '../../../utils/DateUtil';
+import { getQueryString } from '../../../utils/URLUtils';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
@@ -15,6 +16,7 @@ interface CalendarProps {
 
 function DetailCalendarPage(props: CalendarProps) {
   const { date } = props;
+  const queryParams = getQueryString<{ unit_kerja_id: number }>();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [loaded, setLoaded] = React.useState(false);
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
@@ -22,6 +24,7 @@ function DetailCalendarPage(props: CalendarProps) {
     per_page: 20,
     tgl_mulai: date,
     tipe: 'summary',
+    unit_kerja_id: queryParams.unit_kerja_id || 0,
   });
 
   const {
