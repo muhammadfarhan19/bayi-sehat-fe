@@ -114,7 +114,7 @@ function ListRoleUser() {
             <Loader />
           </div>
         ) : (
-          <div className="flex">
+          <div className="flex flex-col">
             <div className="mb-15 overflow-x-auto sm:mx-0 ">
               <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
                 <table className="w-max table-auto rounded-lg bg-gray-100">
@@ -190,16 +190,16 @@ function ListRoleUser() {
                     ))}
                   </tbody>
                 </table>
-                <Pagination
-                  onChange={() => {
-                    return null;
-                  }}
-                  totalData={listUser?.length ?? 0}
-                  perPage={listUser?.length ?? 0}
-                  page={1}
-                />
               </div>
             </div>
+            <Pagination
+              onChange={() => {
+                return null;
+              }}
+              totalData={listUser?.length ?? 0}
+              perPage={listUser?.length ?? 0}
+              page={1}
+            />
           </div>
         )}
         {formModalState?.open && (

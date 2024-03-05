@@ -99,8 +99,8 @@ export default function ShiftPpnpn() {
           <Loader />
         </div>
       ) : (
-        <div className="flex">
-          <div className="my-[24px] w-full  sm:mx-0">
+        <div className="flex flex-col">
+          <div className="my-[24px] w-full overflow-x-auto sm:mx-0">
             <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
               <table className="w-full table-auto rounded-lg bg-gray-100">
                 <thead className="bg-gray-50">
@@ -169,16 +169,16 @@ export default function ShiftPpnpn() {
                   ))}
                 </tbody>
               </table>
-              <Pagination
-                onChange={value => {
-                  search('page', value);
-                }}
-                totalData={pegawaiList ? pegawaiList?.pagination.total_data : 0}
-                perPage={filter.per_page}
-                page={filter.page}
-              />
             </div>
           </div>
+          <Pagination
+            onChange={value => {
+              search('page', value);
+            }}
+            totalData={pegawaiList ? pegawaiList?.pagination.total_data : 0}
+            perPage={filter.per_page}
+            page={filter.page}
+          />
         </div>
       )}
     </>

@@ -152,146 +152,147 @@ function KlaimAdmin(props: ListKlaimProps) {
           <Loader />
         </div>
       ) : (
-        <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-          <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-            <div className="sm:rounded-lg">
-              <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      No
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Nama
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Tanggal
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Jenis Pengajuan
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Alasan
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-5 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Dokumen
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Status
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 pl-5 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Aksi
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(getKlaimKehadiran?.list || []).map((data, dataIdx) => {
-                    const isStatusProcessed = data?.status_klaim === 2 || data?.status_klaim === 3;
-                    const disabledButton = isStatusProcessed
-                      ? 'bg-gray-300 hover:bg-gray-700 disabled:bg-gray-500'
-                      : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-200';
-                    return (
-                      <tr
-                        key={data?.id}
-                        className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+        <div className="flex flex-col">
+          <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+            <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+              <div className="sm:rounded-lg">
+                <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                          {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
-                        </td>
-                        <td
-                          onClick={() => onShowDetail(data?.id)}
-                          className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-500"
+                        No
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Nama
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Tanggal
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Jenis Pengajuan
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Alasan
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-5 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Dokumen
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Status
+                      </th>
+                      <th
+                        scope="col"
+                        className="py-3 pl-5 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Aksi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(getKlaimKehadiran?.list || []).map((data, dataIdx) => {
+                      const isStatusProcessed = data?.status_klaim === 2 || data?.status_klaim === 3;
+                      const disabledButton = isStatusProcessed
+                        ? 'bg-gray-300 hover:bg-gray-700 disabled:bg-gray-500'
+                        : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-200';
+                      return (
+                        <tr
+                          key={data?.id}
+                          className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                         >
-                          {data?.nama}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.tanggal_klaim}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jenis_pengajuan}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.alasan_klaim}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-blue-900">
-                          <FileLoader uuid={data?.files?.[0]?.document_uuid} asLink>
-                            {data?.files?.[0]?.document_name?.length === 0 ? '-' : data?.files?.[0]?.document_name}
-                          </FileLoader>
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.status_klaim_str}</td>
-                        <td className="py-4 pl-5">
-                          <button
-                            onClick={() => {
-                              handleShowForm(
-                                !formModalState?.open,
-                                data?.tanggal_klaim,
-                                data?.jenis_pengajuan,
-                                data?.user_id,
-                                data?.id,
-                                data?.nama,
-                                data?.unit_kerja_str,
-                                data?.alasan_klaim,
-                                data?.files?.[0]?.document_uuid,
-                                data?.files?.[0]?.document_name
-                              );
-                            }}
-                            disabled={isStatusProcessed}
-                            type="button"
-                            className={`inline-flex w-36 items-center justify-center rounded border border-transparent ${disabledButton} px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
+                          </td>
+                          <td
+                            onClick={() => onShowDetail(data?.id)}
+                            className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-500"
                           >
-                            Proses Klaim
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              {formModalState?.open && (
-                <KlaimModal
-                  open={formModalState?.open}
-                  setOpen={(open: boolean) => handleShowForm(open, '', '')}
-                  selectedId={formModalState?.selectedId}
-                  tanggalKlaimSelected={formModalState?.tanggal_klaim}
-                  pegawaiIdSelected={formModalState?.user_id}
-                  jenisPengajuanSelected={formModalState?.jenis_pengajuan}
-                  onSuccess={() => mutate()}
-                  namaPegawai={formModalState?.nama}
-                  unitKerja={formModalState?.unitKerja}
-                  alasan={formModalState?.alasan}
-                  uploadedDocument={formModalState?.uuid}
-                  uploadedDocumentName={formModalState?.docName}
-                />
-              )}
-
-              <Pagination
-                onChange={value => {
-                  changeFilterState({ page: value });
-                }}
-                totalData={getKlaimKehadiran ? getKlaimKehadiran?.pagination.total_data : 0}
-                perPage={filterState?.per_page}
-                page={filterState?.page}
-              />
+                            {data?.nama}
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.tanggal_klaim}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jenis_pengajuan}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.alasan_klaim}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-blue-900">
+                            <FileLoader uuid={data?.files?.[0]?.document_uuid} asLink>
+                              {data?.files?.[0]?.document_name?.length === 0 ? '-' : data?.files?.[0]?.document_name}
+                            </FileLoader>
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.status_klaim_str}</td>
+                          <td className="py-4 pl-5">
+                            <button
+                              onClick={() => {
+                                handleShowForm(
+                                  !formModalState?.open,
+                                  data?.tanggal_klaim,
+                                  data?.jenis_pengajuan,
+                                  data?.user_id,
+                                  data?.id,
+                                  data?.nama,
+                                  data?.unit_kerja_str,
+                                  data?.alasan_klaim,
+                                  data?.files?.[0]?.document_uuid,
+                                  data?.files?.[0]?.document_name
+                                );
+                              }}
+                              disabled={isStatusProcessed}
+                              type="button"
+                              className={`inline-flex w-36 items-center justify-center rounded border border-transparent ${disabledButton} px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
+                            >
+                              Proses Klaim
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {formModalState?.open && (
+                  <KlaimModal
+                    open={formModalState?.open}
+                    setOpen={(open: boolean) => handleShowForm(open, '', '')}
+                    selectedId={formModalState?.selectedId}
+                    tanggalKlaimSelected={formModalState?.tanggal_klaim}
+                    pegawaiIdSelected={formModalState?.user_id}
+                    jenisPengajuanSelected={formModalState?.jenis_pengajuan}
+                    onSuccess={() => mutate()}
+                    namaPegawai={formModalState?.nama}
+                    unitKerja={formModalState?.unitKerja}
+                    alasan={formModalState?.alasan}
+                    uploadedDocument={formModalState?.uuid}
+                    uploadedDocumentName={formModalState?.docName}
+                  />
+                )}
+              </div>
             </div>
           </div>
+          <Pagination
+            onChange={value => {
+              changeFilterState({ page: value });
+            }}
+            totalData={getKlaimKehadiran ? getKlaimKehadiran?.pagination.total_data : 0}
+            perPage={filterState?.per_page}
+            page={filterState?.page}
+          />
         </div>
       )}
     </div>
