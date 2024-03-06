@@ -9,7 +9,7 @@ import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
 
-const PER_PAGE = 20;
+const PER_PAGE = 10;
 
 function DaftarPegawai() {
   const { name, unit, id } = getQueryString<{ id: number; name: string; unit: string }>();

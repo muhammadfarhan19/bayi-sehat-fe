@@ -21,7 +21,7 @@ function KlaimAdmin(props: ListKlaimProps) {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [filterState, setFilterState] = React.useState<GetKehadiranList>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     unit_kerja_id: unit_kerja_id,
   });
 

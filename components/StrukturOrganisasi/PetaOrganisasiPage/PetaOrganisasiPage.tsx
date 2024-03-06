@@ -22,7 +22,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
 
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     unit_kerja_id: unit_kerja_id,
   });
 

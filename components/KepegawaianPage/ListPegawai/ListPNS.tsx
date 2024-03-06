@@ -35,7 +35,7 @@ function ListPNS(props: ListPNSProps) {
   const inputTimeout = React.useRef<NodeJS.Timeout>();
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     status_cpns: [1, 3],
     unit_kerja_id: unitKerjaId,
   });

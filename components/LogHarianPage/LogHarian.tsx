@@ -14,7 +14,7 @@ function LogHarian() {
   const [selected, setSelected] = React.useState('Master PNS');
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     status_cpns: [1, 3],
   });
 

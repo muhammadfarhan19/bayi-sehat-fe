@@ -28,7 +28,7 @@ function DaftarJabatan() {
   });
   const [filterState, setFilterState] = React.useState<GetJabatanReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
   });
 
   const {
