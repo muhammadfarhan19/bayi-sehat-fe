@@ -124,7 +124,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
         no_bpjs_kt: String(formData?.no_bpjs_kt),
         jumlah_anak: Number(formData.jumlah_anak),
         status_menikah: Number(formData.status_menikah),
-        status_cpns: Number(formData?.status_cpns),
+        status_cpns: Number(formData.status_cpns),
         pegawai_id: Number(pegawai?.pegawai_id),
         uuid_bpjs: [
           {
@@ -375,7 +375,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
 
                   <div className="mt-1">
                     <select
-                      {...register('status_cpns', { required: false })}
+                      {...register('status_cpns', { required: true })}
                       id="status_cpns"
                       className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
                       disabled={!isAllowAdmin}
