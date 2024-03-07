@@ -109,6 +109,7 @@ export interface PutUserPasswordRes {
 export interface PostUserProfileReq {
   pegawai_id: number;
   status_menikah: StatusMenikah;
+  status_cpns?: StatusCpns;
   jumlah_anak: number;
   nik: string;
   email: string;
@@ -159,7 +160,7 @@ export interface PostUserUpdateDataDiriPegawaiReq {
   tempat_lahir: string;
   tanggal_lahir: string;
   tmt_cpns: string;
-  status_cpns: number;
+  status_cpns?: number;
   jabatan: number;
   tmt_golongan: string;
   pangkat: number;

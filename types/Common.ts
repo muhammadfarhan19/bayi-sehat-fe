@@ -34,6 +34,7 @@ export enum StatusCpns {
   PNS = 1,
   PPNPN = 2,
   CPNS = 3,
+  PPPK = 4,
 }
 
 export enum DocumentUploadType {

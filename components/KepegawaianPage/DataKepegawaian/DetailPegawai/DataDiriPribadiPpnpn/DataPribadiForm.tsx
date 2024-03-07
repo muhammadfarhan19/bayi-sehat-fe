@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../../action/CommonAction';
 import { JabatanAPI, UnitKerjaAPI, UserAPI } from '../../../../../constants/APIUrls';
-import { AgamaText, GenderText, StatusMenikahText } from '../../../../../constants/Resource';
+import { AgamaText, GenderText, StatusMenikahText, StatusPNSText } from '../../../../../constants/Resource';
 import { SnackbarType } from '../../../../../reducer/CommonReducer';
 import { GetJabatanReq, JabatanData } from '../../../../../types/api/JabatanAPI';
 import { GetUnitKerjaData } from '../../../../../types/api/UnitKerjaAPI';
@@ -15,7 +15,7 @@ import {
   PostUserUpdateDataDiriPegawaiReq,
   PostUserUpdateDataDiriPegawaiRes,
 } from '../../../../../types/api/UserAPI';
-import { Agama, Gender, Status, StatusMenikah } from '../../../../../types/Common';
+import { Agama, Gender, Status, StatusCpns, StatusMenikah } from '../../../../../types/Common';
 import { classNames } from '../../../../../utils/Components';
 import { callAPI } from '../../../../../utils/Fetchers';
 import { CircleProgress } from '../../../../shared/CircleProgress';
@@ -60,6 +60,7 @@ interface FormState {
   // data diri
   tempat_lahir: string;
   tanggal_lahir: string;
+  status_cpns: string;
   jabatan: string;
   jenis_kelamin: number;
   unit_kerja_id: number;
@@ -123,6 +124,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
         no_bpjs_kt: String(formData?.no_bpjs_kt),
         jumlah_anak: Number(formData.jumlah_anak),
         status_menikah: Number(formData.status_menikah),
+        status_cpns: Number(formData?.status_cpns),
         pegawai_id: Number(pegawai?.pegawai_id),
         uuid_bpjs: [
           {
@@ -161,7 +163,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
         tempat_lahir: String(formData?.tempat_lahir),
         tanggal_lahir: String(formData?.tanggal_lahir),
         tmt_cpns: String(pegawai?.tmt_cpns),
-        status_cpns: Number(pegawai?.status_cpns),
+        status_cpns: Number(formData?.status_cpns),
         jabatan: Number.isNaN(Number(formData?.jabatan)) ? 0 : Number(formData?.jabatan),
         custom_jabatan_name: Number.isNaN(Number(formData?.jabatan)) ? formData?.jabatan : '',
         tmt_golongan: String(pegawai?.tmt_golongan),
@@ -243,6 +245,7 @@ export default function DataPribadiForm(props: UploadFormProps) {
       }
 
       setValue('tanggal_lahir', String(pegawai?.tanggal_lahir));
+      setValue('status_cpns', String(pegawai?.status_cpns));
       setValue('tempat_lahir', String(pegawai?.tempat_lahir));
       setValue('jenis_kelamin', Number(pegawai?.jenis_kelamin));
       setValue('jabatan', String(getJabatan?.list?.[0]?.jabatan_id || pegawai?.jabatan));
@@ -336,37 +339,60 @@ export default function DataPribadiForm(props: UploadFormProps) {
                 />
                 {errors.tanggal_lahir && <p className="mt-1 text-xs text-red-500">{errors.tanggal_lahir.message}</p>}
               </div>
-            </div>
-            <div className="mt-5 sm:col-span-6">
-              <div className="mt-1">
-                <Controller
-                  control={control}
-                  name="jabatan"
-                  rules={{ required: false }}
-                  render={({ field: { onChange } }) => (
-                    <AutoCompleteCustom
-                      disabled={!isAllowSuperAdminAccessFilter}
-                      onChange={value => onChange(value.value)}
-                      label={'Nama Jabatan'}
-                      defaultValue={{ text: formJabatanState.text || '', value: formJabatanState.value || '' }}
-                      onQueryChange={queryText => {
-                        if (debounce.current) {
-                          clearTimeout(debounce.current);
-                        }
-                        debounce.current = window.setTimeout(() => {
-                          setQueryJabatan(queryText);
-                        }, 500);
-                      }}
-                      options={(daftarJabatan?.list || []).map(each => ({
-                        text: each.name,
-                        value: String(each.jabatan_id),
-                      }))}
-                    />
-                  )}
-                />
-                {errors.jabatan && <p className="mt-1 text-xs text-red-500">{errors.jabatan.message}</p>}
+              <div className="grid grid-cols-3 gap-x-6">
+                <div className="col-span-2 mt-5">
+                  <Controller
+                    control={control}
+                    name="jabatan"
+                    rules={{ required: false }}
+                    render={({ field: { onChange } }) => (
+                      <AutoCompleteCustom
+                        disabled={!isAllowSuperAdminAccessFilter}
+                        onChange={value => onChange(value.value)}
+                        label={'Nama Jabatan'}
+                        defaultValue={{ text: formJabatanState.text || '', value: formJabatanState.value || '' }}
+                        onQueryChange={queryText => {
+                          if (debounce.current) {
+                            clearTimeout(debounce.current);
+                          }
+                          debounce.current = window.setTimeout(() => {
+                            setQueryJabatan(queryText);
+                          }, 500);
+                        }}
+                        options={(daftarJabatan?.list || []).map(each => ({
+                          text: each.name,
+                          value: String(each.jabatan_id),
+                        }))}
+                      />
+                    )}
+                  />
+                  {errors.jabatan && <p className="mt-1 text-xs text-red-500">{errors.jabatan.message}</p>}
+                </div>
+                <div className="mt-5">
+                  <label htmlFor="status_cpns" className="block text-sm font-medium text-gray-700">
+                    Status Pegawai
+                  </label>
+
+                  <div className="mt-1">
+                    <select
+                      {...register('status_cpns', { required: false })}
+                      id="status_cpns"
+                      className="block w-full rounded-md border-gray-300 shadow-sm disabled:bg-gray-200 sm:text-sm"
+                      disabled={!isAllowAdmin}
+                    >
+                      <option value="">Pilih Status Pegawai</option>
+                      {Object.keys(StatusPNSText).map(key => (
+                        <option key={key} value={key}>
+                          {StatusPNSText[parseInt(key) as StatusCpns]}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {errors.status_cpns && <p className="mt-1 text-xs text-red-500">{errors.status_cpns.message}</p>}
+                </div>
               </div>
             </div>
+
             <div className="mt-5 sm:col-span-6">
               <label htmlFor="badgeNumber" className="block text-sm font-medium text-gray-700">
                 Badge Number

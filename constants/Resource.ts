@@ -16,6 +16,7 @@ export const StatusPNSText: Record<StatusCpns, string> = {
   [StatusCpns.PNS]: 'PNS',
   [StatusCpns.PPNPN]: 'PPNPN',
   [StatusCpns.CPNS]: 'CPNS',
+  [StatusCpns.PPPK]: 'PPPK',
 };
 
 export const AgamaText: Record<Agama, string> = {
