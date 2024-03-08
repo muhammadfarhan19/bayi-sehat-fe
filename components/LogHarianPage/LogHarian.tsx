@@ -187,7 +187,9 @@ function LogHarian() {
                         <tbody>
                           {(pegawaiList?.list || []).map((data, dataIdx) => (
                             <tr key={data?.pegawai_id} className={'bg-white hover:bg-gray-100'}>
-                              <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                              <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                                {filter.per_page * (filter.page - 1) + (dataIdx + 1)}
+                              </td>
                               <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
                               <td className="px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
                               <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
