@@ -61,7 +61,7 @@ function KlaimCutiSakit() {
 
   const [filterState, setFilterState] = React.useState<GetCutiListParams>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
   });
 
   const personalPegawaiData = usePersonalData();

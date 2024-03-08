@@ -49,7 +49,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
 
   const defaultFilterState: DaftarTransaksi.GetListReq = {
     page: 1,
-    per_page: 20,
+    per_page: 10,
     year: new Date().getFullYear(),
   };
 

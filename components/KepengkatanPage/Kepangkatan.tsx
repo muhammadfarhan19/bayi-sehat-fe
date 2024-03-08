@@ -34,7 +34,7 @@ function Kepangkatan() {
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(false);
   const [filterState] = React.useState({
     page: 1,
-    per_page: 20,
+    per_page: 10,
   });
 
   const { data: dataTable, isValidating } = useCommonApi<Kepangkatan, GetKepangkatanList>(

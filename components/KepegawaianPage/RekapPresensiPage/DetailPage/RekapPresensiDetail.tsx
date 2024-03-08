@@ -58,7 +58,7 @@ function RekapPresensiDetail(props: RekapPresensiProps) {
     status?: string;
   }>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     search: '',
     status: '',
   });

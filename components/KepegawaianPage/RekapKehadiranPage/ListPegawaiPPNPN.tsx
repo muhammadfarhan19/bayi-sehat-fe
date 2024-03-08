@@ -25,7 +25,7 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
   const inputTimeout = React.useRef<NodeJS.Timeout>();
   const [filterPPNPN, setFilterPPNPN] = React.useState<GetPegawaiListReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     status_cpns: [2],
     unit_kerja_id: unit_kerja_id,
   });

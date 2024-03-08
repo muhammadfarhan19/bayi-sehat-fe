@@ -17,7 +17,7 @@ function ListDaftarDinas() {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
   });
 
   const toggleAdvancedFilter = () => {

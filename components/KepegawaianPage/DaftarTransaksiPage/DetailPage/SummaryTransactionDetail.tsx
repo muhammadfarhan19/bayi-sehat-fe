@@ -31,7 +31,7 @@ function SummaryTransactionDetail(props: DaftarTransaksiDetailProps) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [filterState, setFilterState] = React.useState<DaftarTransaksi.Request>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     kode_transaksi: String(properties.code),
     type:
       properties?.selectedTab === 'Master PNS' ? 'pns' : properties?.selectedTab === 'Master PPNPN' ? 'ppnpn' : 'pppk',

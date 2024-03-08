@@ -19,7 +19,7 @@ function GolonganDetail() {
 
   const [filter, setFilter] = React.useState<GetPegawaiStatisticListReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     golongan_id: Number(queryString?.golonganId || 0),
     unit_kerja_id: queryString?.unitKerjaId ? +queryString?.unitKerjaId : null,
   });

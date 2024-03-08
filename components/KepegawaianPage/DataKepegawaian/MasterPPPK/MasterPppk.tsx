@@ -24,7 +24,7 @@ export default function MasterPppk(props: UnitKerja) {
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     status_cpns: [4],
     unit_kerja_id: String(unit_kerja_id),
   });

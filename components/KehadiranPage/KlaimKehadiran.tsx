@@ -74,7 +74,7 @@ function KlaimKehadiran() {
 
   const [filterState, setFilterState] = React.useState<GetKehadiranList>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
   });
 
   const { data: getKlaimKehadiran } = useCommonApi<GetKehadiranList, GetKehadiranDataList>(

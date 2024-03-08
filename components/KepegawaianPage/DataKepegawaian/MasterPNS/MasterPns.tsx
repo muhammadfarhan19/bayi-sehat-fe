@@ -21,7 +21,7 @@ export default function MasterPns(props: UnitKerja) {
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     status_cpns: [1, 3],
     unit_kerja_id,
   });
