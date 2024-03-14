@@ -31,6 +31,7 @@ export interface GetPegawaiListData {
     tipe_jabatan: string;
     jabatan: string;
     status_cpns: number;
+    status_kepegawaian: number;
     gender_id: number;
     gender: string;
     tgl_lahir: string;

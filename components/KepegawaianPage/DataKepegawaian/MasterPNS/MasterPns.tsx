@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { KepegawaianAPI, MasterAPI, UnitKerjaAPI } from '../../../../constants/APIUrls';
+import { StatusPegawai } from '../../../../constants/Resource';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../../types/api/KepegawaianAPI';
 import { JenisJabatanListData } from '../../../../types/api/MasterAPI';
 import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
@@ -14,6 +15,16 @@ import Pagination from '../../../shared/Pagination';
 interface UnitKerja {
   unit_kerja_id: number;
 }
+
+MasterPns.GetStatusInfo = (statusValue: number) => {
+  const statusInfo = StatusPegawai.find(status => status.value === statusValue);
+  if (!statusInfo) return { className: '', text: '' };
+
+  const { text } = statusInfo;
+  const className = text === 'Aktif' ? 'text-green-500' : 'text-red-500';
+
+  return { className, text };
+};
 
 export default function MasterPns(props: UnitKerja) {
   const { unit_kerja_id } = props;
@@ -199,6 +210,12 @@ export default function MasterPns(props: UnitKerja) {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                     >
+                      Status
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    >
                       Aksi
                     </th>
                   </tr>
@@ -222,6 +239,12 @@ export default function MasterPns(props: UnitKerja) {
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.golongan}</td>
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
+                      <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                        <span className={MasterPns.GetStatusInfo(data.status_kepegawaian).className}>
+                          {' '}
+                          {MasterPns.GetStatusInfo(data.status_kepegawaian).text}{' '}
+                        </span>
+                      </td>
                       <td className="px-6 py-4 text-xs font-medium text-gray-900">
                         <button
                           type="button"

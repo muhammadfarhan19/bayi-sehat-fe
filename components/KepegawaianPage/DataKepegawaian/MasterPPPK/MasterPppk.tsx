@@ -9,6 +9,7 @@ import useAllowSuperAdmin from '../../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
+import MasterPns from '../MasterPNS/MasterPns';
 
 interface UnitKerja {
   unit_kerja_id: number;
@@ -150,6 +151,12 @@ export default function MasterPppk(props: UnitKerja) {
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
+                        Status
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Jabatan
                       </th>
                     </tr>
@@ -174,6 +181,12 @@ export default function MasterPppk(props: UnitKerja) {
                         <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          <span className={MasterPns.GetStatusInfo(data.status_kepegawaian).className}>
+                            {' '}
+                            {MasterPns.GetStatusInfo(data.status_kepegawaian).text}{' '}
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
