@@ -182,7 +182,7 @@ function KlaimList(props: ListKlaimProps) {
         </div>
       ) : (
         <>
-          <div className="my-[24px] max-h-[500px] overflow-auto sm:mx-0 ">
+          <div className="my-[24px] overflow-auto sm:mx-0 ">
             <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
               <div className="overflow-auto sm:rounded-lg">
                 <table className="table-fix w-full overflow-auto rounded-lg bg-gray-100">
