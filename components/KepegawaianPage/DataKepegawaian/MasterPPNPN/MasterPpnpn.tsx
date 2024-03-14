@@ -153,13 +153,13 @@ export default function MasterPpnpn(props: UnitKerja) {
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
-                        Status
+                        Jabatan
                       </th>
                       <th
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
-                        Jabatan
+                        Status
                       </th>
                     </tr>
                   </thead>
