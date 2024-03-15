@@ -12,7 +12,7 @@ export interface GetPegawaiListReq {
   unit_kerja_id?: string | null | number;
   page: number;
   per_page: number;
-  status_kepegawaian: string;
+  status_kepegawaian?: string;
 }
 
 export interface GetPegawaiListRes {

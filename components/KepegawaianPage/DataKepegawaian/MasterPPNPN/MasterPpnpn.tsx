@@ -30,7 +30,7 @@ export default function MasterPpnpn(props: UnitKerja) {
     per_page: 10,
     status_cpns: [2],
     unit_kerja_id: String(unit_kerja_id),
-    status_kepegawaian: "aktif",
+    status_kepegawaian: 'aktif',
   });
 
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
