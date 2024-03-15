@@ -27,6 +27,7 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
     per_page: 10,
     status_cpns: [1, 3],
     unit_kerja_id: unit_kerja_id,
+    status_kepegawaian: 'aktif',
   });
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
   const [pegawaiId, setPegawaiId] = React.useState<number>(0);

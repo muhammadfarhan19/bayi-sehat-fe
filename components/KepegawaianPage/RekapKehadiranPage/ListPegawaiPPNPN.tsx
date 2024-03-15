@@ -28,6 +28,7 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
     per_page: 10,
     status_cpns: [2],
     unit_kerja_id: unit_kerja_id,
+    status_kepegawaian: 'aktif',
   });
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
 
