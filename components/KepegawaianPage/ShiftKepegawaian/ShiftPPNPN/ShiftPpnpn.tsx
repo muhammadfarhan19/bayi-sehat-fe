@@ -16,6 +16,7 @@ export default function ShiftPpnpn() {
     page: 1,
     per_page: 10,
     status_cpns: [2],
+    status_kepegawaian: 'aktif',
   });
 
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
