@@ -11,6 +11,7 @@ export interface GetRekapReq {
   pic_pumk?: string;
   tipe?: string;
   keyword?: string;
+  status_kepegawaian?: string;
 }
 
 export interface GetRekapPegawaiReq {

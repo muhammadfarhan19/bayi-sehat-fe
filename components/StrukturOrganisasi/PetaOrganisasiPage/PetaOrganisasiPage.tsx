@@ -25,6 +25,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
     per_page: 10,
     unit_kerja_id: unit_kerja_id,
     keyword: '',
+    status_kepegawaian: 'aktif',
   });
 
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();

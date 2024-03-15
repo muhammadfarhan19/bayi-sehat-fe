@@ -22,6 +22,7 @@ export default function ListPegawaiKompetensi() {
     page: 1,
     per_page: 10,
     status_cpns: [1, 3],
+    status_kepegawaian: 'aktif',
   });
 
   const [isShownDetailPage, setIsShownDetailPage] = React.useState<boolean>(false);
