@@ -32,13 +32,13 @@ export interface GetPegawaiListData {
     tipe_jabatan: string;
     jabatan: string;
     status_cpns: number;
-    status_kepegawaian: number;
     gender_id: number;
     gender: string;
     tgl_lahir: string;
     usia: string;
     sisa_cuti: number;
     badge_number: string;
+    status_kepegawaian: number;
   }[];
   pagination: Pagination;
 }

@@ -25,6 +25,7 @@ export function DataDinasPPPK(props: UnitKerjaProps) {
     per_page: 10,
     status_cpns: [4],
     unit_kerja_id: unit_kerja_id,
+    status_kepegawaian: 'aktif',
   });
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
 

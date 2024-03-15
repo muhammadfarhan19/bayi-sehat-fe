@@ -58,6 +58,8 @@ function DaftarPegawai() {
     });
   };
 
+  const activeEmployees = dataTable?.list.filter(list => list.status_kepegawaian === 1);
+
   if (throwError) {
     throw throwError;
   }
@@ -70,7 +72,7 @@ function DaftarPegawai() {
           <Loader />
         </div>
       ) : (
-        <div className="flex">
+        <div className="flex flex-col">
           <div className="my-[24px] overflow-x-auto sm:mx-0 ">
             <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
               <div className="overflow-hidden sm:rounded-lg">
@@ -110,7 +112,7 @@ function DaftarPegawai() {
                     </tr>
                   </thead>
                   <tbody>
-                    {(dataTable?.list || []).map((data, dataIdx) => (
+                    {(activeEmployees || []).map((data, dataIdx) => (
                       <tr
                         key={dataIdx}
                         className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
@@ -126,15 +128,15 @@ function DaftarPegawai() {
                     ))}
                   </tbody>
                 </table>
-                <Pagination
-                  onChange={handlePageChange}
-                  totalData={dataTable ? dataTable.pagination.total_data : 0}
-                  perPage={PER_PAGE}
-                  page={pageNumber}
-                />
               </div>
             </div>
           </div>
+          <Pagination
+            onChange={handlePageChange}
+            totalData={dataTable ? dataTable.pagination.total_data : 0}
+            perPage={PER_PAGE}
+            page={pageNumber}
+          />
         </div>
       )}
     </>
