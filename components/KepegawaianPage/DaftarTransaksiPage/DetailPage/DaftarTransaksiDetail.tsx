@@ -363,7 +363,9 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
                       const isBelowZeroDataStatusPsw = dataStatusPsw < 0 ? HyphenText : dataStatusPsw;
                       return (
                         <tr className={'bg-white hover:bg-gray-100'} key={index}>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {filterState.per_page * (filterState.page - 1) + (index + 1)}
+                          </td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
                           <td className="truncate px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">

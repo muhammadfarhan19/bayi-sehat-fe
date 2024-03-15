@@ -221,7 +221,9 @@ function SummaryTransactionDetail(props: DaftarTransaksiDetailProps) {
                   <tbody>
                     {(daftarTransaksiList?.list || []).map((each, index) => (
                       <tr className={'bg-white hover:bg-gray-100'} key={index}>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          {filterState.per_page * (filterState.page - 1) + (index + 1)}
+                        </td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">{each.name}</td>
                         <td className="whitespace-nowrap px-6 py-4 text-xs font-medium text-gray-900">
                           {each.badge_number}
