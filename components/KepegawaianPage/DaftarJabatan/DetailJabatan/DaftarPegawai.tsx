@@ -41,6 +41,7 @@ function DaftarPegawai() {
         status_cpns: [1, 3],
         unit_kerja_id: unit,
         jabatan_id: id,
+        status_kepegawaian: 'aktif',
       },
       {
         method: 'GET',
@@ -57,8 +58,6 @@ function DaftarPegawai() {
       }
     });
   };
-
-  const activeEmployees = dataTable?.list.filter(list => list.status_kepegawaian === 1);
 
   if (throwError) {
     throw throwError;
@@ -112,7 +111,7 @@ function DaftarPegawai() {
                     </tr>
                   </thead>
                   <tbody>
-                    {(activeEmployees || []).map((data, dataIdx) => (
+                    {(dataTable?.list || []).map((data, dataIdx) => (
                       <tr
                         key={dataIdx}
                         className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
