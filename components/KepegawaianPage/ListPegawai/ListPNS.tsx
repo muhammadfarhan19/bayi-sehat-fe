@@ -38,6 +38,7 @@ function ListPNS(props: ListPNSProps) {
     per_page: 10,
     status_cpns: [1, 3],
     unit_kerja_id: unitKerjaId,
+    status_kepegawaian: 'aktif',
   });
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
     KepegawaianAPI.GET_PEGAWAI_LIST,

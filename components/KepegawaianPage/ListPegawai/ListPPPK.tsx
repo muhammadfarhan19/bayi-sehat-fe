@@ -38,6 +38,7 @@ function ListPPPK(props: ListPPPKProps) {
     per_page: 10,
     status_cpns: [4],
     unit_kerja_id: unitKerjaId,
+    status_kepegawaian: 'aktif',
   });
 
   const { data: PPPKList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(

@@ -35,7 +35,6 @@ export default function MasterPns(props: UnitKerja) {
     per_page: 10,
     status_cpns: [1, 3],
     unit_kerja_id,
-    status_kepegawaian: 'aktif',
   });
 
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
