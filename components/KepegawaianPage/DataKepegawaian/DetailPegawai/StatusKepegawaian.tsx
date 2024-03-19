@@ -82,6 +82,10 @@ function StatusKepegawaian() {
           </select>
         )}
       </div>
+      <div className="grid grid-cols-2 lg:grid-cols-3">
+        <p className="py-4 pl-6 text-sm font-medium text-[#6B7280]">Terakhir Diubah</p>
+        <p className="ml-[10%] py-4 text-sm text-gray-500">{dataPersonal?.updated_at_sk}</p>
+      </div>
       <div className="mt-[20px] h-[1px] w-full bg-gray-200"></div>
       {isAllowAdmin && (
         <div className="mt-[29px] flex">
