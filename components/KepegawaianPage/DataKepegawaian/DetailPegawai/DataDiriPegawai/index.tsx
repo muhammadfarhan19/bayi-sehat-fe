@@ -110,7 +110,7 @@ function DataDiriPegawai() {
       KepegawaianAPI.POST_RESET_PASSWORD,
       {
         nip: String(dataPersonal.nip),
-        pegawai_id: Number(pegawai_id),
+        pegawai_id: Number(pegawai_id ? pegawai_id : dataPersonal?.pegawai_id),
       },
       { method: 'put' }
     );
