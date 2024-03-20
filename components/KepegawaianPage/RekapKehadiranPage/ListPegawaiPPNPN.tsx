@@ -10,6 +10,7 @@ import useCommonApi from '../../shared/hooks/useCommonApi';
 import useSyncKehadiran from '../../shared/hooks/useSyncKehadiran';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import { statusAktifPegawai } from './ListPegawaiPNS';
 import { SelectedData } from './RekapGroup';
 import RekapKehadiranPNS from './RekapKehadiranPNS';
 
@@ -94,26 +95,54 @@ function ListPegawaiPPNPN(props: UnitKerjaProps) {
               </button>
             </div>
           </div>
-          <div className="w-[202px] pl-5">
-            <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
-            <select
-              className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-              onChange={e => {
-                changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
-              }}
-              disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
-            >
-              <option value="">Semua</option>
-              {(unitKerjaList || []).map((item, index) => (
-                <option
-                  selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
-                  key={`options-${index}`}
-                  value={item?.unit_kerja_id}
+          <div className="flex flex-row items-center justify-between">
+            <div className="flex w-full flex-row gap-x-[16px]">
+              <div className="w-[202px] pl-5">
+                <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
+                <select
+                  className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                  onChange={e => {
+                    changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
+                  }}
+                  disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
                 >
-                  {item?.name}
-                </option>
-              ))}
-            </select>
+                  <option value="">Semua</option>
+                  {(unitKerjaList || []).map((item, index) => (
+                    <option
+                      selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                      key={`options-${index}`}
+                      value={item?.unit_kerja_id}
+                    >
+                      {item?.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-[202px] pl-5">
+                <p className="mb-[4px] text-[14px] font-normal">Status Aktif Pegawai</p>
+                <select
+                  className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                  onChange={e => {
+                    const selectedStatus = e.target.value;
+                    const selectedStatusType = statusAktifPegawai.find(status => status.title === selectedStatus)?.type;
+                    changeFilterState({
+                      status_kepegawaian: e.target.value === '' ? undefined : selectedStatusType,
+                    });
+                  }}
+                  disabled={!!statusAktifPegawai && !isAllowSuperAdminAccessFilter}
+                >
+                  {(statusAktifPegawai || []).map((item, index) => (
+                    <option
+                      selected={unit_kerja_id === Number(item?.id) ? true : false}
+                      key={`options-${index}`}
+                      value={item?.title}
+                    >
+                      {item?.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
           {isValidating ? (
             <div className="relative h-[150px] w-full divide-y divide-gray-200">

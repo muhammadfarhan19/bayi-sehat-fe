@@ -13,7 +13,7 @@ import Pagination from '../../shared/Pagination';
 import { SelectedData } from './RekapGroup';
 import RekapKehadiranPNS from './RekapKehadiranPNS';
 
-const statusPegawai = [
+export const statusAktifPegawai = [
   { id: '1', title: 'Aktif', type: 'aktif' },
   { id: '2', title: 'Non-Aktif', type: 'non_aktif' },
   { id: '3', title: 'Semua', type: '' },
@@ -131,14 +131,14 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
                   className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
                   onChange={e => {
                     const selectedStatus = e.target.value;
-                    const selectedStatusType = statusPegawai.find(status => status.title === selectedStatus)?.type;
+                    const selectedStatusType = statusAktifPegawai.find(status => status.title === selectedStatus)?.type;
                     changeFilterState({
                       status_kepegawaian: e.target.value === '' ? undefined : selectedStatusType,
                     });
                   }}
-                  disabled={!!statusPegawai && !isAllowSuperAdminAccessFilter}
+                  disabled={!!statusAktifPegawai && !isAllowSuperAdminAccessFilter}
                 >
-                  {(statusPegawai || []).map((item, index) => (
+                  {(statusAktifPegawai || []).map((item, index) => (
                     <option
                       selected={unit_kerja_id === Number(item?.id) ? true : false}
                       key={`options-${index}`}
