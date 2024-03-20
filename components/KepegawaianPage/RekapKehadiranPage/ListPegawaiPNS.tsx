@@ -13,11 +13,18 @@ import Pagination from '../../shared/Pagination';
 import { SelectedData } from './RekapGroup';
 import RekapKehadiranPNS from './RekapKehadiranPNS';
 
+const statusPegawai = [
+  { id: '1', title: 'Aktif', type: 'aktif' },
+  { id: '2', title: 'Non-Aktif', type: 'non_aktif' },
+  { id: '3', title: 'Semua', type: '' },
+];
+
 interface UnitKerjaProps {
   unit_kerja_id: number;
   onBack: () => void;
   dateSelected: SelectedData;
 }
+
 function ListPegawaiPNS(props: UnitKerjaProps) {
   const { unit_kerja_id, onBack, dateSelected } = props;
   const { isSyncLoading, handleSyncPegawai } = useSyncKehadiran();
@@ -27,7 +34,7 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
     per_page: 10,
     status_cpns: [1, 3],
     unit_kerja_id: unit_kerja_id,
-    status_kepegawaian: 'aktif',
+    status_kepegawaian: '',
   });
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
   const [pegawaiId, setPegawaiId] = React.useState<number>(0);
@@ -95,26 +102,54 @@ function ListPegawaiPNS(props: UnitKerjaProps) {
               </button>
             </div>
           </div>
-          <div className="w-[202px] pl-5">
-            <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
-            <select
-              className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-              onChange={e => {
-                changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
-              }}
-              disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
-            >
-              <option value="">Semua</option>
-              {(unitKerjaList || []).map((item, index) => (
-                <option
-                  selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
-                  key={`options-${index}`}
-                  value={item?.unit_kerja_id}
+          <div className="flex flex-row items-center justify-between">
+            <div className="flex w-full flex-row gap-x-[16px]">
+              <div className="w-[202px] pl-5">
+                <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
+                <select
+                  className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                  onChange={e => {
+                    changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
+                  }}
+                  disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
                 >
-                  {item?.name}
-                </option>
-              ))}
-            </select>
+                  <option value="">Semua</option>
+                  {(unitKerjaList || []).map((item, index) => (
+                    <option
+                      selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                      key={`options-${index}`}
+                      value={item?.unit_kerja_id}
+                    >
+                      {item?.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-[202px] pl-5">
+                <p className="mb-[4px] text-[14px] font-normal">Status Aktif Pegawai</p>
+                <select
+                  className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                  onChange={e => {
+                    const selectedStatus = e.target.value;
+                    const selectedStatusType = statusPegawai.find(status => status.title === selectedStatus)?.type;
+                    changeFilterState({
+                      status_kepegawaian: e.target.value === '' ? undefined : selectedStatusType,
+                    });
+                  }}
+                  disabled={!!statusPegawai && !isAllowSuperAdminAccessFilter}
+                >
+                  {(statusPegawai || []).map((item, index) => (
+                    <option
+                      selected={unit_kerja_id === Number(item?.id) ? true : false}
+                      key={`options-${index}`}
+                      value={item?.title}
+                    >
+                      {item?.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
           {isValidating ? (
             <div className="relative h-[150px] w-full divide-y divide-gray-200">
