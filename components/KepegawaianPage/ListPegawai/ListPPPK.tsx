@@ -35,9 +35,10 @@ function ListPPPK(props: ListPPPKProps) {
   const inputTimeout = React.useRef<NodeJS.Timeout>();
   const [filterPPPK, setFilterPPPK] = React.useState<GetPegawaiListReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     status_cpns: [4],
     unit_kerja_id: unitKerjaId,
+    status_kepegawaian: 'aktif',
   });
 
   const { data: PPPKList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
@@ -207,7 +208,9 @@ function ListPPPK(props: ListPPPKProps) {
                   {(PPPKList?.list || []).map((data, dataIdx) => {
                     return (
                       <tr key={data?.pegawai_id} className={'bg-white hover:bg-gray-100'}>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          {filterPPPK.per_page * (filterPPPK.page - 1) + (dataIdx + 1)}
+                        </td>
                         {isShownNipCell ? (
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
                         ) : null}

@@ -49,7 +49,7 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
 
   const defaultFilterState: DaftarTransaksi.GetListReq = {
     page: 1,
-    per_page: 20,
+    per_page: 10,
     year: new Date().getFullYear(),
   };
 
@@ -179,156 +179,158 @@ function DaftarTransaksiList(props: DaftarTransaksiListProps) {
           <Loader />
         </div>
       ) : (
-        <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-          <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-            <div className="sm:rounded-lg">
-              <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Kode
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Bulan/Tahun
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Tanggal
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Created by
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Last Sync
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Sync by
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Aksi
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(daftarTransaksiList?.list || []).map((item, index) => {
-                    const isLoaderShown = reSync.loading.show && reSync.loading.selectedIndex === index;
-                    return (
-                      <>
-                        <tr
-                          key={item.kode}
-                          className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
-                        >
-                          <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">{item?.kode}</td>
-                          <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
-                            {months[item?.month - 1]} {item?.year}
-                          </td>
-                          <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
-                            {item?.tanggal_awal_akhir}
-                          </td>
-                          <td className="truncate px-6 py-4 text-center text-[10px] font-medium text-gray-900">
-                            {item?.created_by}
-                          </td>
-                          <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-sky-500">
-                            {item?.last_sync}
-                          </td>
-                          <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
-                            {item?.sync_by}
-                          </td>
-                          <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">
-                            <div className="flex flex-row items-center justify-between space-x-2">
-                              <button
-                                onClick={() => {
-                                  if (item?.year && item?.month) {
-                                    const selectedDate = new Date(item.year, item?.month - 1);
-                                    onShowDetail(true, selectedDate, item?.kode, 'transaction_detail');
-                                  }
-                                }}
-                                type="button"
-                                className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
-                              >
-                                Rekap
-                              </button>
-                              <button
-                                onClick={() => {
-                                  if (item?.year && item?.month) {
-                                    const selectedDate = new Date(item.year, item?.month - 1);
-                                    onShowDetail(true, selectedDate, item?.kode, 'resume_detail');
-                                  }
-                                }}
-                                type="button"
-                                className="inline-flex items-center justify-center rounded border border-transparent bg-blue-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
-                              >
-                                Resume
-                              </button>
-                              <button
-                                onClick={() => {
-                                  if (item?.year && item?.month) {
-                                    const selectedDate = new Date(item.year, item?.month - 1);
-                                    onShowDetail(true, selectedDate, item?.kode, 'summary_detail');
-                                  }
-                                }}
-                                type="button"
-                                className="inline-flex items-center justify-center rounded border border-transparent bg-orange-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
-                              >
-                                Summary
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setFormModalSync({
-                                    show: true,
-                                    kode: item?.kode,
-                                    month: item?.month,
-                                    year: item?.year,
-                                    index,
-                                  });
-                                }}
-                                type="button"
-                                className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
-                              >
-                                {isLoaderShown ? (
-                                  <CircleProgress containerStyle="h-4 w-4 animate-spin text-gray-600" />
-                                ) : (
-                                  'Sync'
-                                )}
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      </>
-                    );
-                  })}
-                </tbody>
-              </table>
-              <Pagination
-                onChange={value => {
-                  changeFilterState({ page: value });
-                }}
-                totalData={daftarTransaksiList ? daftarTransaksiList?.pagination.total_data : 0}
-                perPage={filterState?.per_page}
-                page={filterState?.page}
-              />
+        <div className="flex flex-col">
+          <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+            <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+              <div className="sm:rounded-lg">
+                <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Kode
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Bulan/Tahun
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Tanggal
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Created by
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Last Sync
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Sync by
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3 text-center text-[10px] font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Aksi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(daftarTransaksiList?.list || []).map((item, index) => {
+                      const isLoaderShown = reSync.loading.show && reSync.loading.selectedIndex === index;
+                      return (
+                        <>
+                          <tr
+                            key={item.kode}
+                            className={index % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+                          >
+                            <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">{item?.kode}</td>
+                            <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
+                              {months[item?.month - 1]} {item?.year}
+                            </td>
+                            <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
+                              {item?.tanggal_awal_akhir}
+                            </td>
+                            <td className="truncate px-6 py-4 text-center text-[10px] font-medium text-gray-900">
+                              {item?.created_by}
+                            </td>
+                            <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-sky-500">
+                              {item?.last_sync}
+                            </td>
+                            <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
+                              {item?.sync_by}
+                            </td>
+                            <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">
+                              <div className="flex flex-row items-center justify-between space-x-2">
+                                <button
+                                  onClick={() => {
+                                    if (item?.year && item?.month) {
+                                      const selectedDate = new Date(item.year, item?.month - 1);
+                                      onShowDetail(true, selectedDate, item?.kode, 'transaction_detail');
+                                    }
+                                  }}
+                                  type="button"
+                                  className="inline-flex items-center justify-center rounded border border-transparent bg-indigo-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
+                                >
+                                  Rekap
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    if (item?.year && item?.month) {
+                                      const selectedDate = new Date(item.year, item?.month - 1);
+                                      onShowDetail(true, selectedDate, item?.kode, 'resume_detail');
+                                    }
+                                  }}
+                                  type="button"
+                                  className="inline-flex items-center justify-center rounded border border-transparent bg-blue-600 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
+                                >
+                                  Resume
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    if (item?.year && item?.month) {
+                                      const selectedDate = new Date(item.year, item?.month - 1);
+                                      onShowDetail(true, selectedDate, item?.kode, 'summary_detail');
+                                    }
+                                  }}
+                                  type="button"
+                                  className="inline-flex items-center justify-center rounded border border-transparent bg-orange-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-500 disabled:text-gray-200"
+                                >
+                                  Summary
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setFormModalSync({
+                                      show: true,
+                                      kode: item?.kode,
+                                      month: item?.month,
+                                      year: item?.year,
+                                      index,
+                                    });
+                                  }}
+                                  type="button"
+                                  className={`inline-flex items-center justify-center rounded border border-transparent bg-green-500 px-6 py-1 text-center text-[10px] font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-300 disabled:text-white`}
+                                >
+                                  {isLoaderShown ? (
+                                    <CircleProgress containerStyle="h-4 w-4 animate-spin text-gray-600" />
+                                  ) : (
+                                    'Sync'
+                                  )}
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
+          <Pagination
+            onChange={value => {
+              changeFilterState({ page: value });
+            }}
+            totalData={daftarTransaksiList ? daftarTransaksiList?.pagination.total_data : 0}
+            perPage={filterState?.per_page}
+            page={filterState?.page}
+          />
         </div>
       )}
       {ConditionalRendering(

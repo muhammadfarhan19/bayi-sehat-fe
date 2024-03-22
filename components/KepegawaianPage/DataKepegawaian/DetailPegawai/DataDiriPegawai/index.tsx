@@ -110,7 +110,7 @@ function DataDiriPegawai() {
       KepegawaianAPI.POST_RESET_PASSWORD,
       {
         nip: String(dataPersonal.nip),
-        pegawai_id: Number(pegawai_id),
+        pegawai_id: Number(pegawai_id ? pegawai_id : dataPersonal?.pegawai_id),
       },
       { method: 'put' }
     );
@@ -176,23 +176,25 @@ function DataDiriPegawai() {
         {CTAModalBadgeNumber}
         <div className="flex justify-end gap-2">
           {isAllowAdmin && (
-            <button
-              disabled={loading}
-              onClick={handleReset}
-              className="flex rounded-[6px] border-2 border-[#4F46E5] py-[9px] px-[17px] text-[#4F46E5] disabled:bg-gray-400"
-            >
-              {loading ? <CircleProgress /> : null}
-              Reset Password
-            </button>
+            <>
+              <button
+                disabled={loading}
+                onClick={handleReset}
+                className="flex rounded-[6px] border-2 border-[#4F46E5] py-[9px] px-[17px] text-[#4F46E5] disabled:bg-gray-400"
+              >
+                {loading ? <CircleProgress /> : null}
+                Reset Password
+              </button>
+              <button
+                onClick={() =>
+                  (window.location.href = `/kepegawaian/data-pegawai/update-data?pegawai_id=${pegawai_id}&type=${type}`)
+                }
+                className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
+              >
+                Perbaharui Data
+              </button>
+            </>
           )}
-          <button
-            onClick={() =>
-              (window.location.href = `/kepegawaian/data-pegawai/update-data?pegawai_id=${pegawai_id}&type=${type}`)
-            }
-            className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-gray-50 disabled:bg-gray-400"
-          >
-            Perbaharui Data
-          </button>
         </div>
       </div>
       {BadgeNumberComponent}

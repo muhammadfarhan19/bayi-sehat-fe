@@ -15,8 +15,9 @@ export default function ShiftPns() {
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     status_cpns: [1, 3],
+    status_kepegawaian: 'aktif',
   });
 
   const { data: pegawaiList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
@@ -110,7 +111,7 @@ export default function ShiftPns() {
           <Loader />
         </div>
       ) : (
-        <div className="flex">
+        <div className="flex flex-col">
           <div className="my-[24px] w-full  sm:mx-0">
             <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
               <table className="w-full table-auto rounded-lg bg-gray-100">
@@ -180,19 +181,19 @@ export default function ShiftPns() {
                   ))}
                 </tbody>
               </table>
-              <Pagination
-                onChange={value => {
-                  search('page', value);
-                }}
-                totalData={pegawaiList ? pegawaiList?.pagination.total_data : 0}
-                perPage={filter.per_page}
-                page={filter.page}
-              />
             </div>
             {formModalState.open ? (
               <BulkForm open={formModalState.open} setOpen={(open: boolean) => handleShowForm(open)} />
             ) : null}
           </div>
+          <Pagination
+            onChange={value => {
+              search('page', value);
+            }}
+            totalData={pegawaiList ? pegawaiList?.pagination.total_data : 0}
+            perPage={filter.per_page}
+            page={filter.page}
+          />
         </div>
       )}
     </>

@@ -3,16 +3,19 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { KepegawaianAPI, UnitKerjaAPI } from '../../../../constants/APIUrls';
+// import { StatusPegawai } from '../../../../constants/Resource';
 import { GetPegawaiListData, GetPegawaiListReq } from '../../../../types/api/KepegawaianAPI';
 import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
 import useAllowSuperAdmin from '../../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
+import MasterPns from '../MasterPNS/MasterPns';
 
 interface UnitKerja {
   unit_kerja_id: number;
 }
+// const isActiveEmployee: boolean = status_kepegawaian === 1;
 
 export default function MasterPpnpn(props: UnitKerja) {
   const { unit_kerja_id } = props;
@@ -24,7 +27,7 @@ export default function MasterPpnpn(props: UnitKerja) {
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
   const [filter, setFilter] = React.useState<GetPegawaiListReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     status_cpns: [2],
     unit_kerja_id: String(unit_kerja_id),
   });
@@ -152,6 +155,12 @@ export default function MasterPpnpn(props: UnitKerja) {
                       >
                         Jabatan
                       </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Status
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -174,6 +183,12 @@ export default function MasterPpnpn(props: UnitKerja) {
                         <td className="px-6 text-xs font-medium text-gray-900">{data?.nip}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.unit_kerja}</td>
                         <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.jabatan}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          <span className={MasterPns.GetStatusInfo(data.status_kepegawaian).className}>
+                            {' '}
+                            {MasterPns.GetStatusInfo(data.status_kepegawaian).text}{' '}
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

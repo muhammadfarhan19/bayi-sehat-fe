@@ -26,7 +26,7 @@ function KlaimDetail(props: DetailPenghargaanProps) {
 
   const filterData = getKlaimCuti?.list?.find(data => data.id === klaimDetailId);
 
-  const formattedDate = formatDate(new Date(filterData?.tanggal ?? ''), 'dd MMM yyyy');
+  const formattedDate = filterData?.tanggal ? formatDate(new Date(filterData.tanggal ?? ''), 'dd MMM yyyy') : '';
 
   return (
     <div className="rounded-md bg-white px-6 py-6">
@@ -49,8 +49,8 @@ function KlaimDetail(props: DetailPenghargaanProps) {
                   <div className="flex flex-row items-center space-x-2">
                     <PDFIcon />
                     <LinkFile
-                      link={filterData?.files?.[0].document_uuid}
-                      value={filterData?.files?.[0].document_name}
+                      link={filterData?.files?.[0]?.document_uuid}
+                      value={filterData?.files?.[0]?.document_name}
                     />
                   </div>
                 ),

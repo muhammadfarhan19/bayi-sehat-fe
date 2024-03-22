@@ -4,6 +4,7 @@ import { UserCircleIcon } from '@heroicons/react/solid';
 import React, { Fragment } from 'react';
 
 import { UserProfileAPI } from '../../../../constants/APIUrls';
+import { StatusPegawai } from '../../../../constants/Resource';
 import { GetOptPhotoReq, GetPhotoProfileRes } from '../../../../types/api/ProfilePhotoAPI';
 import { classNames } from '../../../../utils/Components';
 import { callAPI } from '../../../../utils/Fetchers';
@@ -80,6 +81,8 @@ function DetailPegawai() {
   const userId = personalPegawaiData?.user_id;
   const profileDataId = profile?.user_id;
 
+  const isActiveEmployee: boolean = personalPegawaiData?.status_kepegawaian === 1;
+
   const photos = () => {
     if (dataId && userId === profileDataId) {
       callAPI(UserProfileAPI.GET_USER_DOC_PHOTO + `/${dataId}`, null, {
@@ -107,14 +110,6 @@ function DetailPegawai() {
     return () => unSubscribe;
   }, [profileDataId === userId && dataId]);
 
-  if (!personalPegawaiData) {
-    return (
-      <div className="relative h-[150px] w-full divide-y divide-gray-200">
-        <Loader />
-      </div>
-    );
-  }
-
   const downloadImage = () => {
     const link = document.createElement('a');
     link.href = img;
@@ -122,6 +117,14 @@ function DetailPegawai() {
     link.click();
     link.remove();
   };
+
+  if (personalPegawaiData && !Object.keys(personalPegawaiData).length) {
+    return (
+      <div className="relative h-[150px] w-full divide-y divide-gray-200">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -133,9 +136,23 @@ function DetailPegawai() {
         )}
         <div className="flex w-full flex-col gap-y-2 lg:flex-row">
           <div className="my-auto ml-2 flex flex-col">
-            <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
+            <div className="flex items-center gap-3">
+              <p className="text-[24px] font-[700]">{personalPegawaiData?.nama}</p>
+              <span
+                className={`rounded-md px-2 text-sm font-medium text-white ${
+                  isActiveEmployee ? 'bg-indigo-600' : 'bg-red-500'
+                }`}
+              >
+                {isActiveEmployee ? 'Aktif' : 'Non-Aktif'}
+              </span>
+            </div>
             <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.jabatan}</p>
             <p className="text-[14px] font-[500] text-[#6B7280]">{personalPegawaiData?.unit_kerja}</p>
+            {!isActiveEmployee && (
+              <p className="text-[14px] font-[500] text-red-500">
+                {StatusPegawai.filter(each => each.value === personalPegawaiData?.status_kepegawaian)[0]?.text}
+              </p>
+            )}
           </div>
           <div className="my-auto ml-2 lg:ml-auto">
             <button

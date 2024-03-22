@@ -12,6 +12,7 @@ export interface GetPegawaiListReq {
   unit_kerja_id?: string | null | number;
   page: number;
   per_page: number;
+  status_kepegawaian?: string;
 }
 
 export interface GetPegawaiListRes {
@@ -37,6 +38,7 @@ export interface GetPegawaiListData {
     usia: string;
     sisa_cuti: number;
     badge_number: string;
+    status_kepegawaian: number;
   }[];
   pagination: Pagination;
 }

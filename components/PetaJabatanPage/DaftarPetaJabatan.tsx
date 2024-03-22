@@ -40,7 +40,7 @@ export default function DaftarPetaJabatan() {
 
   const [filterState, setFilterState] = React.useState<GetPetaReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     is_dikti: 1,
     unit_kerja_id: userData?.unit_kerja_id,
   });

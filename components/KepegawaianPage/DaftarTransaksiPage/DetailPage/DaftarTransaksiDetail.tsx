@@ -39,7 +39,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
 
   const [filterState, setFilterState] = React.useState<DaftarTransaksi.Request>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     kode_transaksi: String(properties.code),
     type:
       properties?.selectedTab === 'Master PNS' ? 'pns' : properties?.selectedTab === 'Master PPNPN' ? 'ppnpn' : 'pppk',
@@ -206,231 +206,235 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
           <Loader />
         </div>
       ) : (
-        <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-          <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-            <div className="sm:rounded-lg">
-              <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      No
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      {TableHeaderPegawaiNipNik}
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Nama
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Unit Kerja
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Hari dan Tanggal
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Shift Masuk
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Shift Keluar
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Masuk
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Pulang
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Telat(menit)
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      PSW(menit)
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Status Hadir
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Status PSW
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Status Telat
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Status TK
-                    </th>
-                    {isShow && (
-                      <React.Fragment>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          Pengurang TK(%)
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          Pengurang Terlambat(%)
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          Pengurang PSW(%)
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          Pengurang Lupa Absen Datang(%)
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                        >
-                          Pengurang Lupa Absen Pulang(%)
-                        </th>
-                      </React.Fragment>
-                    )}
-                    {!isShow && (
+        <div className="flex flex-col">
+          <div className="my-[24px] overflow-x-auto sm:mx-0 ">
+            <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+              <div className="sm:rounded-lg">
+                <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        No
+                      </th>
                       <th
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
-                        Pengurangan
+                        {TableHeaderPegawaiNipNik}
                       </th>
-                    )}
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Last Sync
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(daftarTransaksiList?.list ?? [])?.map((data, index) => {
-                    const dataPsw = data?.summary?.psw;
-                    const dataTelat = data?.summary?.telat;
-                    const dataStatusPsw = data?.summary?.status_psw;
-                    const isBelowZeroPSW = dataPsw < 0 ? HyphenText : dataPsw;
-                    const isBelowZeroDataTelat = dataTelat < 0 ? HyphenText : dataTelat;
-                    const isBelowZeroDataStatusPsw = dataStatusPsw < 0 ? HyphenText : dataStatusPsw;
-                    return (
-                      <tr className={'bg-white hover:bg-gray-100'} key={index}>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{index + 1}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
-                        <td className="truncate px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                          <ExpandableTableData data={data?.unit_kerja} expandClass={'w-40 cursor-pointer'} />
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.date}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                          {checkReturnValueOfString(data?.shift_check_in)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
-                          {checkReturnValueOfString(data?.shift_check_out)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">{checkReturnValueOfString(data?.check_in)}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{checkReturnValueOfString(data?.check_out)}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
-                        <td className="py-2 text-xs font-medium">
-                          {checkReturnValueOfString(data?.status, UnavailableDataText)}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
-                        <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
-                        {isShow && (
-                          <React.Fragment>
-                            <td className="px-6 py-4 text-xs font-medium">
-                              {checkReturnValueOfString(data?.summary?.pengurangan_tk)}
-                            </td>
-                            <td className="px-6 py-4 text-xs font-medium">
-                              {checkReturnValueOfString(data?.summary?.pengurangan_terlambat)}
-                            </td>
-                            <td className="px-6 py-4 text-xs font-medium">
-                              {checkReturnValueOfString(data?.summary?.pengurangan_psw)}
-                            </td>
-                            <td className="px-6 py-4 text-xs font-medium">
-                              {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_datang)}
-                            </td>
-                            <td className="px-6 py-4 text-xs font-medium">
-                              {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_pulang)}
-                            </td>
-                          </React.Fragment>
-                        )}
-                        {!isShow && (
-                          <td className="px-6 py-4 text-xs font-medium">
-                            {data?.summary?.denda_pengurangan ? 'Rp 30.000,00' : 'Rp 0,00'}
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Nama
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Unit Kerja
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Hari dan Tanggal
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Shift Masuk
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Shift Keluar
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Masuk
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Pulang
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Telat(menit)
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        PSW(menit)
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Status Hadir
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Status PSW
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Status Telat
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Status TK
+                      </th>
+                      {isShow && (
+                        <React.Fragment>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            Pengurang TK(%)
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            Pengurang Terlambat(%)
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            Pengurang PSW(%)
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            Pengurang Lupa Absen Datang(%)
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                          >
+                            Pengurang Lupa Absen Pulang(%)
+                          </th>
+                        </React.Fragment>
+                      )}
+                      {!isShow && (
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Pengurangan
+                        </th>
+                      )}
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Last Sync
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(daftarTransaksiList?.list ?? [])?.map((data, index) => {
+                      const dataPsw = data?.summary?.psw;
+                      const dataTelat = data?.summary?.telat;
+                      const dataStatusPsw = data?.summary?.status_psw;
+                      const isBelowZeroPSW = dataPsw < 0 ? HyphenText : dataPsw;
+                      const isBelowZeroDataTelat = dataTelat < 0 ? HyphenText : dataTelat;
+                      const isBelowZeroDataStatusPsw = dataStatusPsw < 0 ? HyphenText : dataStatusPsw;
+                      return (
+                        <tr className={'bg-white hover:bg-gray-100'} key={index}>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {filterState.per_page * (filterState.page - 1) + (index + 1)}
                           </td>
-                        )}
-
-                        <td className="truncate px-6 py-4 text-xs font-medium">
-                          {checkReturnValueOfString(
-                            formatStringDate(data?.summary?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss'),
-                            formatStringDate(data?.summary?.created_at, 'EEEE, dd MMM yyyy, HH:mm:ss')
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
+                          <td className="truncate px-6 py-4 text-xs font-medium text-blue-900">{data?.name}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            <ExpandableTableData data={data?.unit_kerja} expandClass={'w-40 cursor-pointer'} />
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.date}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {checkReturnValueOfString(data?.shift_check_in)}
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {checkReturnValueOfString(data?.shift_check_out)}
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium">{checkReturnValueOfString(data?.check_in)}</td>
+                          <td className="px-6 py-4 text-xs font-medium">{checkReturnValueOfString(data?.check_out)}</td>
+                          <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataTelat}</td>
+                          <td className="px-6 py-4 text-xs font-medium">{isBelowZeroPSW}</td>
+                          <td className="py-2 text-xs font-medium">
+                            {checkReturnValueOfString(data?.status, UnavailableDataText)}
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium">{isBelowZeroDataStatusPsw}</td>
+                          <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_telat}</td>
+                          <td className="px-6 py-4 text-xs font-medium">{data?.summary?.status_tk}</td>
+                          {isShow && (
+                            <React.Fragment>
+                              <td className="px-6 py-4 text-xs font-medium">
+                                {checkReturnValueOfString(data?.summary?.pengurangan_tk)}
+                              </td>
+                              <td className="px-6 py-4 text-xs font-medium">
+                                {checkReturnValueOfString(data?.summary?.pengurangan_terlambat)}
+                              </td>
+                              <td className="px-6 py-4 text-xs font-medium">
+                                {checkReturnValueOfString(data?.summary?.pengurangan_psw)}
+                              </td>
+                              <td className="px-6 py-4 text-xs font-medium">
+                                {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_datang)}
+                              </td>
+                              <td className="px-6 py-4 text-xs font-medium">
+                                {checkReturnValueOfString(data?.summary?.pengurangan_lupa_absen_pulang)}
+                              </td>
+                            </React.Fragment>
                           )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              <Pagination
-                onChange={value => {
-                  changeFilterState({ page: value });
-                }}
-                totalData={daftarTransaksiList ? daftarTransaksiList?.pagination.total_data : 0}
-                perPage={filterState?.per_page}
-                page={filterState?.page}
-              />
+                          {!isShow && (
+                            <td className="px-6 py-4 text-xs font-medium">
+                              {data?.summary?.denda_pengurangan ? 'Rp 30.000,00' : 'Rp 0,00'}
+                            </td>
+                          )}
+
+                          <td className="truncate px-6 py-4 text-xs font-medium">
+                            {checkReturnValueOfString(
+                              formatStringDate(data?.summary?.updated_at, 'EEEE, dd MMM yyyy, HH:mm:ss'),
+                              formatStringDate(data?.summary?.created_at, 'EEEE, dd MMM yyyy, HH:mm:ss')
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
+          <Pagination
+            onChange={value => {
+              changeFilterState({ page: value });
+            }}
+            totalData={daftarTransaksiList ? daftarTransaksiList?.pagination.total_data : 0}
+            perPage={filterState?.per_page}
+            page={filterState?.page}
+          />
         </div>
       )}
     </>

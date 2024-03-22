@@ -1,4 +1,10 @@
-import { ExclamationCircleIcon, EyeIcon, EyeOffIcon, InformationCircleIcon } from '@heroicons/react/outline';
+import {
+  ExclamationCircleIcon,
+  EyeIcon,
+  EyeOffIcon,
+  InformationCircleIcon,
+  QuestionMarkCircleIcon,
+} from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
@@ -9,6 +15,7 @@ import { PostAuthLoginReq, PostAuthLoginRes } from '../types/api/AuthAPI';
 import { Status } from '../types/Common';
 import { getCookie, setCookie } from '../utils/CookieHandler';
 import { callAPI } from '../utils/Fetchers';
+import { ModalResetPassword } from './ModalResetPassword';
 import { CircleProgress } from './shared/CircleProgress';
 import useTawkChat from './shared/hooks/useTawkChat';
 
@@ -18,6 +25,7 @@ export default function LoginPage() {
     const rememberMeCookie = getCookie('rememberme');
     return rememberMeCookie === 1;
   });
+  const [modalOpen, setModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const {
     handleSubmit,
@@ -96,9 +104,13 @@ export default function LoginPage() {
                 </div>
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Kata sandi
-                </label>
+                <div className="flex justify-between">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Kata sandi
+                  </label>
+                  <QuestionMarkCircleIcon className="h-6 w-6 text-blue-400" onClick={() => setModalOpen(true)} />
+                  <ModalResetPassword open={modalOpen} setOpen={setModalOpen} />
+                </div>
                 <div className="mt-1 flex rounded-md shadow-sm">
                   <div className="relative flex flex-grow items-stretch focus-within:z-10">
                     <input

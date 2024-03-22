@@ -9,7 +9,7 @@ import { withErrorBoundary } from '../../../shared/hocs/ErrorBoundary';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
 
-const PER_PAGE = 20;
+const PER_PAGE = 10;
 
 function DaftarPegawai() {
   const { name, unit, id } = getQueryString<{ id: number; name: string; unit: string }>();
@@ -41,6 +41,7 @@ function DaftarPegawai() {
         status_cpns: [1, 3],
         unit_kerja_id: unit,
         jabatan_id: id,
+        status_kepegawaian: 'aktif',
       },
       {
         method: 'GET',
@@ -70,7 +71,7 @@ function DaftarPegawai() {
           <Loader />
         </div>
       ) : (
-        <div className="flex">
+        <div className="flex flex-col">
           <div className="my-[24px] overflow-x-auto sm:mx-0 ">
             <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
               <div className="overflow-hidden sm:rounded-lg">
@@ -126,15 +127,15 @@ function DaftarPegawai() {
                     ))}
                   </tbody>
                 </table>
-                <Pagination
-                  onChange={handlePageChange}
-                  totalData={dataTable ? dataTable.pagination.total_data : 0}
-                  perPage={PER_PAGE}
-                  page={pageNumber}
-                />
               </div>
             </div>
           </div>
+          <Pagination
+            onChange={handlePageChange}
+            totalData={dataTable ? dataTable.pagination.total_data : 0}
+            perPage={PER_PAGE}
+            page={pageNumber}
+          />
         </div>
       )}
     </>

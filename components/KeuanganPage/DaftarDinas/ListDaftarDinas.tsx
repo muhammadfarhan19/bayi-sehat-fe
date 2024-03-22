@@ -17,7 +17,7 @@ function ListDaftarDinas() {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
   });
 
   const toggleAdvancedFilter = () => {
@@ -126,7 +126,7 @@ function ListDaftarDinas() {
             <Loader />
           </div>
         ) : (
-          <div className="flex">
+          <div className="flex flex-col">
             <div className="my-[24px] w-full overflow-x-auto sm:mx-0">
               <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
                 <table className="w-full table-auto rounded-lg bg-gray-100">
@@ -208,16 +208,16 @@ function ListDaftarDinas() {
                     })}
                   </tbody>
                 </table>
-                <Pagination
-                  onChange={value => {
-                    changeFilterState({ page: value });
-                  }}
-                  totalData={listKeuanganDinas ? listKeuanganDinas?.pagination?.total_data : 0}
-                  perPage={filterState?.per_page}
-                  page={filterState?.page}
-                />
               </div>
             </div>
+            <Pagination
+              onChange={value => {
+                changeFilterState({ page: value });
+              }}
+              totalData={listKeuanganDinas ? listKeuanganDinas?.pagination?.total_data : 0}
+              perPage={filterState?.per_page}
+              page={filterState?.page}
+            />
           </div>
         )}
       </div>

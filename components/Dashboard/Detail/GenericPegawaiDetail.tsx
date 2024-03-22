@@ -36,7 +36,7 @@ function GenericPegawaiDetail() {
   const [filter, setFilter] = React.useState<GetPegawaiListReq>(() => {
     const preFilter = {
       page: 1,
-      per_page: 20,
+      per_page: 10,
       status_cpns: queryString.typePegawai === 'pns' ? [1, 3] : [2],
       unit_kerja_id: queryString?.unitKerjaId || null,
     } as GetPegawaiListReq;

@@ -65,6 +65,7 @@ export interface GetUserPersonalPegawaiData {
   golongan_id: number;
   status_kepegawaian: number;
   badge_number: string;
+  updated_at_sk: string;
 }
 
 export type GetUserProfileReq = {
@@ -109,6 +110,7 @@ export interface PutUserPasswordRes {
 export interface PostUserProfileReq {
   pegawai_id: number;
   status_menikah: StatusMenikah;
+  status_cpns?: StatusCpns;
   jumlah_anak: number;
   nik: string;
   email: string;

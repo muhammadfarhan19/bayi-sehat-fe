@@ -35,9 +35,10 @@ function ListPPNPN(props: ListPPNPNProps) {
   const inputTimeout = React.useRef<NodeJS.Timeout>();
   const [filterPPNPN, setFilterPPNPN] = React.useState<GetPegawaiListReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     status_cpns: [2],
     unit_kerja_id: unitKerjaId,
+    status_kepegawaian: 'aktif',
   });
 
   const { data: ppnpnList, isValidating } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
@@ -207,7 +208,9 @@ function ListPPNPN(props: ListPPNPNProps) {
                   {(ppnpnList?.list || []).map((data, dataIdx) => {
                     return (
                       <tr key={data?.pegawai_id} className={'bg-white hover:bg-gray-100'}>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          {filterPPNPN.per_page * (filterPPNPN.page - 1) + (dataIdx + 1)}
+                        </td>
                         {isShownNipCell ? (
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.nip}</td>
                         ) : null}

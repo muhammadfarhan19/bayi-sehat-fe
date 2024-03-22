@@ -17,7 +17,7 @@ function KlaimDetail(props: DetailPenghargaanProps) {
 
   const { data: getKlaimKehadiran } = useCommonApi<GetKehadiranList, GetKehadiranDataList>(
     KlaimKehadiranList.GET_KLAIM_KEHADIRAN_LIST,
-    { page: 1, per_page: 20 },
+    { page: 1, per_page: 10 },
     { method: 'GET' },
     { revalidateOnMount: true }
   );

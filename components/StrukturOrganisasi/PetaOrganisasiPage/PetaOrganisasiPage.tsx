@@ -22,8 +22,10 @@ function PetaOrganisasiPage(props: UnitKerja) {
 
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     unit_kerja_id: unit_kerja_id,
+    keyword: '',
+    status_kepegawaian: 'aktif',
   });
 
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
@@ -84,7 +86,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="Cari"
                 onChange={e => {
-                  changeFilterState({ isi_penugasan: e.target.value === '' ? undefined : e.target.value });
+                  changeFilterState({ keyword: e.target.value === '' ? undefined : e.target.value });
                 }}
               />
               <button

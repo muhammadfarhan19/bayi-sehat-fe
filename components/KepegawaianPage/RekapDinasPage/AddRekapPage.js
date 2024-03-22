@@ -538,7 +538,7 @@ function AddRekapPage(props) {
 
                   <button
                     type="button"
-                    className="mt-[24px] flex inline-flex w-full rounded-md border border-transparent bg-indigo-600 py-2 text-center text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    className="mt-[24px] flex w-full rounded-md border border-transparent bg-indigo-600 py-2 text-center text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     onClick={editDate}
                   >
                     <p className="mx-auto">Simpan</p>

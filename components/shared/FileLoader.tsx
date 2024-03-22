@@ -20,7 +20,10 @@ export default function FileLoader(props: ImgFileProps) {
   const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {
-    if (!!fileUrl.current || !uuid) return;
+    if (!!fileUrl.current || !uuid) {
+      setLoaded(true);
+      return;
+    }
     (async () => {
       const fileRes = await callAPI<null, GetDocumentRes>(DocumentAPI.GET_DOCUMENT.replace(':uuid', uuid), null, {
         method: 'get',
@@ -44,7 +47,7 @@ export default function FileLoader(props: ImgFileProps) {
   }
 
   if (!fileUrl.current) {
-    return null;
+    return <h1 className="text-center text-red-500">Dokumen Tidak Ditemukan</h1>;
   }
 
   if (isImg && !asLink) {

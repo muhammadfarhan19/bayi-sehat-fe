@@ -28,7 +28,7 @@ function KlaimList(props: ListKlaimProps) {
 
   const [filterState, setFilterState] = React.useState<GetKehadiranList>({
     page: 1,
-    per_page: 20,
+    per_page: 10,
     unit_kerja_id: personalData?.unit_kerja_id,
   });
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
@@ -181,178 +181,182 @@ function KlaimList(props: ListKlaimProps) {
           <Loader />
         </div>
       ) : (
-        <div className="my-[24px] overflow-x-auto sm:mx-0 ">
-          <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-            <div className="sm:rounded-lg">
-              <table className="w-full table-auto overflow-auto rounded-lg bg-gray-100">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      No
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Nama
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Tanggal Mulai
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Tanggal Selesai
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Jenis Pengajuan
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Alasan
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-5 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Dokumen
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Status
-                    </th>
-                    <th
-                      scope="col"
-                      className="w-full px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Aksi
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(getKlaimKehadiran?.list || []).map((data, dataIdx) => {
-                    const formattedDate: string = data?.tanggal
-                      ? formatDate(new Date(data?.tanggal), 'dd MMM yyyy')
-                      : '';
-                    const formattedDateSelesai: string = data?.tanggal_selesai
-                      ? formatDate(new Date(data?.tanggal_selesai), 'dd MMM yyyy')
-                      : '';
-                    const statType = PengajuanTypeCuti.find(item => item?.value === data?.type);
-                    const isDitolakNorIsDiterima =
-                      data?.status === StatusPengajuan.Ditolak || data?.status === StatusPengajuan.Diterima;
-                    const currentStatus =
-                      data?.status === StatusPengajuan.Diterima
-                        ? StatusText.Diterima
-                        : data?.status === StatusPengajuan.Ditolak
-                        ? StatusText.Ditolak
-                        : StatusText.Diajukan;
-                    return (
-                      <tr
-                        key={data?.id}
-                        className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
+        <>
+          <div className="my-[24px] overflow-auto sm:mx-0 ">
+            <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
+              <div className="overflow-auto sm:rounded-lg">
+                <table className="table-fix w-full overflow-auto rounded-lg bg-gray-100">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                       >
-                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
-                          {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
-                        </td>
-                        <td
-                          onClick={() => onShowDetail(data?.id)}
-                          className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-500"
+                        No
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Nama
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Tanggal Mulai
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Tanggal Selesai
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Jenis Pengajuan
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Alasan
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-5 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Dokumen
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-10 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Status
+                      </th>
+                      <th
+                        scope="col"
+                        className="w-full px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        Aksi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(getKlaimKehadiran?.list || []).map((data, dataIdx) => {
+                      const formattedDate: string = data?.tanggal
+                        ? formatDate(new Date(data?.tanggal), 'dd MMM yyyy')
+                        : '';
+                      const formattedDateSelesai: string = data?.tanggal_selesai
+                        ? formatDate(new Date(data?.tanggal_selesai), 'dd MMM yyyy')
+                        : '';
+                      const statType = PengajuanTypeCuti.find(item => item?.value === data?.type);
+                      const isDitolakNorIsDiterima =
+                        data?.status === StatusPengajuan.Ditolak || data?.status === StatusPengajuan.Diterima;
+                      const currentStatus =
+                        data?.status === StatusPengajuan.Diterima
+                          ? StatusText.Diterima
+                          : data?.status === StatusPengajuan.Ditolak
+                          ? StatusText.Ditolak
+                          : StatusText.Diajukan;
+                      return (
+                        <tr
+                          key={data?.id}
+                          className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                         >
-                          {data?.nama_pegawai}
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedDate}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedDateSelesai}</td>
-                        <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">{statType?.text}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-blue-900">
-                          <FileLoader uuid={data?.files?.[0]?.document_uuid} asLink>
-                            {data?.files?.[0]?.document_name?.length === 0 ? '-' : data?.files?.[0]?.document_name}
-                          </FileLoader>
-                        </td>
-                        <td className="px-6 py-4 text-xs font-medium text-gray-900">{currentStatus}</td>
-                        <td className="py-4 pr-2">
-                          <button
-                            onClick={() => {
-                              handleShowForm(!formModalState?.open, data?.id);
-                            }}
-                            disabled={isDitolakNorIsDiterima}
-                            type="button"
-                            className={`inline-flex w-36 items-center justify-center rounded border border-transparent ${
-                              isDitolakNorIsDiterima
-                                ? 'bg-gray-300 hover:bg-gray-700 disabled:bg-gray-500'
-                                : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-200'
-                            } px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
+                          <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                            {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
+                          </td>
+                          <td
+                            onClick={() => onShowDetail(data?.id)}
+                            className="cursor-pointer px-6 py-4 text-xs font-medium text-blue-500"
                           >
-                            Proses Klaim
-                          </button>
+                            {data?.nama_pegawai}
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedDate}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{formattedDateSelesai}</td>
+                          <td className="cursor-pointer px-6 py-4 text-xs font-medium text-gray-900">
+                            {statType?.text}
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data?.note}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-blue-900">
+                            <FileLoader uuid={data?.files?.[0]?.document_uuid} asLink>
+                              {data?.files?.[0]?.document_name?.length === 0 ? '-' : data?.files?.[0]?.document_name}
+                            </FileLoader>
+                          </td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{currentStatus}</td>
+                          <td className="py-4 pr-2">
+                            <button
+                              onClick={() => {
+                                handleShowForm(!formModalState?.open, data?.id);
+                              }}
+                              disabled={isDitolakNorIsDiterima}
+                              type="button"
+                              className={`inline-flex w-36 items-center justify-center rounded border border-transparent ${
+                                isDitolakNorIsDiterima
+                                  ? 'bg-gray-300 hover:bg-gray-700 disabled:bg-gray-500'
+                                  : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-200'
+                              } px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
+                            >
+                              Proses Klaim
+                            </button>
 
-                          <br />
+                            <br />
 
-                          <button
-                            onClick={() => {
-                              handleShowBatalForm(
-                                !formBatalModalState?.open,
-                                data?.id,
-                                data?.nama_pegawai,
-                                data?.tanggal
-                              );
-                            }}
-                            type="button"
-                            className={`my-1 inline-flex w-36 items-center justify-center rounded border border-transparent ${'bg-rose-600 hover:bg-rose-700 disabled:bg-indigo-200'} px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
-                          >
-                            Batal
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              {formModalState?.open && (
-                <KlaimModal
-                  open={formModalState?.open}
-                  setOpen={(open: boolean) => handleShowForm(open, 0)}
-                  selectedId={formModalState?.selectedId}
-                  onSuccess={() => mutate()}
-                />
-              )}
+                            <button
+                              onClick={() => {
+                                handleShowBatalForm(
+                                  !formBatalModalState?.open,
+                                  data?.id,
+                                  data?.nama_pegawai,
+                                  data?.tanggal
+                                );
+                              }}
+                              type="button"
+                              className={`my-1 inline-flex w-36 items-center justify-center rounded border border-transparent ${'bg-rose-600 hover:bg-rose-700 disabled:bg-indigo-200'} px-2.5 py-2 text-center text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:text-gray-200`}
+                            >
+                              Batal
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {formModalState?.open && (
+                  <KlaimModal
+                    open={formModalState?.open}
+                    setOpen={(open: boolean) => handleShowForm(open, 0)}
+                    selectedId={formModalState?.selectedId}
+                    onSuccess={() => mutate()}
+                  />
+                )}
 
-              {formBatalModalState?.open && (
-                <BatalModal
-                  open={formBatalModalState?.open}
-                  setOpen={(open: boolean) => handleShowBatalForm(open)}
-                  onSuccess={() => mutate()}
-                  selectedId={formBatalModalState?.selectedId}
-                  name={formBatalModalState?.name}
-                  date={formBatalModalState?.date}
-                />
-              )}
-
-              <Pagination
-                onChange={value => {
-                  changeFilterState({ page: value });
-                }}
-                totalData={getKlaimKehadiran ? getKlaimKehadiran?.pagination.total_data : 0}
-                perPage={filterState?.per_page}
-                page={filterState?.page}
-              />
+                {formBatalModalState?.open && (
+                  <BatalModal
+                    open={formBatalModalState?.open}
+                    setOpen={(open: boolean) => handleShowBatalForm(open)}
+                    onSuccess={() => mutate()}
+                    selectedId={formBatalModalState?.selectedId}
+                    name={formBatalModalState?.name}
+                    date={formBatalModalState?.date}
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+
+          <Pagination
+            onChange={value => {
+              changeFilterState({ page: value });
+            }}
+            totalData={getKlaimKehadiran ? getKlaimKehadiran?.pagination.total_data : 0}
+            perPage={filterState?.per_page}
+            page={filterState?.page}
+          />
+        </>
       )}
     </div>
   );
