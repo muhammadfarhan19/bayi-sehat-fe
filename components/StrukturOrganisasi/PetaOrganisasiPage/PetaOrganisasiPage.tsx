@@ -146,13 +146,19 @@ function PetaOrganisasiPage(props: UnitKerja) {
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                         >
+                          Koordinator
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
                           Nama
                         </th>
                         <th
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                         >
-                          Koordinator
+                          Jabatan
                         </th>
                         <th
                           scope="col"
@@ -171,8 +177,9 @@ function PetaOrganisasiPage(props: UnitKerja) {
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">
                             {filterState.per_page * (filterState.page - 1) + (dataIdx + 1)}
                           </td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.nama}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.divisi}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.nama}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jabatan_str}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">
                             <button
                               type="button"
