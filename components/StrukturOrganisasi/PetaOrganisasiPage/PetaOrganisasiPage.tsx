@@ -1,4 +1,4 @@
-import { AdjustmentsIcon } from '@heroicons/react/outline';
+import { AdjustmentsIcon, InformationCircleIcon, PencilAltIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { StrukturOrganisasiAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
@@ -9,6 +9,7 @@ import useAllowSuperAdmin from '../../shared/hooks/useAllowSuperAdmin';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
 import Pagination from '../../shared/Pagination';
+import UpdateModal from '../UpdateModal';
 
 interface UnitKerja {
   unit_kerja_id: number;
@@ -19,6 +20,21 @@ function PetaOrganisasiPage(props: UnitKerja) {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [loaded, setLoaded] = React.useState(false);
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
+
+  const handleShowForm = (open: boolean, selectedId?: number) => {
+    setFormModalState({
+      open,
+      selectedId,
+    });
+  };
+
+  const [formModalState, setFormModalState] = React.useState<{
+    open: boolean;
+    selectedId?: number;
+  }>({
+    open: false,
+    selectedId: undefined,
+  });
 
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
     page: 1,
@@ -132,8 +148,8 @@ function PetaOrganisasiPage(props: UnitKerja) {
           <div className="flex">
             <div className="my-[24px] w-full overflow-x-auto  sm:mx-0">
               <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
-                <div className="sm:rounded-lg">
-                  <table className="w-full table-auto rounded-lg bg-gray-100">
+                <div className=" sm:rounded-lg">
+                  <table className="w-full table-auto  rounded-lg bg-gray-100">
                     <thead className="bg-gray-50">
                       <tr>
                         <th
@@ -180,21 +196,38 @@ function PetaOrganisasiPage(props: UnitKerja) {
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.divisi}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.nama}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jabatan_str}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                          <td className="flex gap-2 px-6 py-4 text-xs font-medium text-gray-900">
+                            <button
+                              onClick={() => {
+                                handleShowForm(!formModalState?.open, data?.peg_id);
+                              }}
+                              type="button"
+                              className={`rounded-[6px] bg-[#4F46E5] py-2 px-3 text-[14px] font-normal text-gray-50`}
+                            >
+                              <PencilAltIcon className="h-5 w-5" />
+                            </button>
                             <button
                               type="button"
-                              className="rounded-[6px] bg-[#4F46E5] py-[9px] px-[17px] text-[14px] font-normal text-gray-50"
+                              className="rounded-[6px] bg-[#378b22] py-2 px-3 text-[14px] font-normal text-gray-50"
                               onClick={() =>
                                 (window.location.href = `/struktur-organisasi/peta-organisasi?id=${data.id}`)
                               }
                             >
-                              Lihat
+                              <InformationCircleIcon className="h-5 w-5" />
                             </button>
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
+                  {formModalState?.open && (
+                    <UpdateModal
+                      open={formModalState?.open}
+                      setOpen={(open: boolean) => handleShowForm(open, 0)}
+                      selectedId={formModalState?.selectedId}
+                      onSuccess={() => mutate()}
+                    />
+                  )}
                   <Pagination
                     onChange={value => {
                       changeFilterState({ page: value });

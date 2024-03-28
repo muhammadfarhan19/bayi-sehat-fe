@@ -11,6 +11,16 @@ export interface GetStrukturRes {
   data: StrukturData;
 }
 
+export interface PutStrukturDataReq {
+  id: number;
+  divisi: string;
+}
+
+export interface PutStrukturDataRes {
+  status: Status;
+  data: string;
+}
+
 export interface StrukturData {
   list: {
     id: number;
