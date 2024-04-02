@@ -49,6 +49,7 @@ function DetailPegawai() {
     { name: 'Riwayat SKP', href: '#' },
     { name: 'Riwayat Keluarga', href: '#' },
     { name: 'Arsip Digital', href: '#' },
+    { name: 'Riwayat Status Pegawai', href: '#' },
   ];
 
   const ppnpn = [
@@ -272,6 +273,7 @@ function DetailPegawai() {
               {selected === tabs[9]?.name ? <RiwayatSkp /> : null}
               {selected === tabs[10]?.name ? <RiwayatKeluarga /> : null}
               {selected === tabs[11]?.name ? <ArsipDigital /> : null}
+              {selected === tabs[12]?.name ? <HistoryStatus /> : null}
             </>
           ) : (
             <>
