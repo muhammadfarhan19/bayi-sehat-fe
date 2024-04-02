@@ -11,12 +11,34 @@ export interface GetStrukturRes {
   data: StrukturData;
 }
 
+export interface DeleteStrukturDataReq {
+  jabatan_struktural_id?: number;
+  pegawai_id?: number;
+}
+export interface DeleteStrukturDataRes {
+  status: Status;
+  data: string;
+}
+
 export interface PutStrukturDataReq {
   id: number;
+  pegawai_id: number;
   divisi: string;
 }
 
 export interface PutStrukturDataRes {
+  status: Status;
+  data: string;
+}
+export interface PostStrukturDataReq {
+  pegawai_id: number;
+  jabatan_id: number;
+  unit_kerja_id: number;
+  divisi: string;
+  roles: string;
+}
+
+export interface PostStrukturDataRes {
   status: Status;
   data: string;
 }
@@ -36,7 +58,7 @@ export interface StrukturData {
 }
 
 export interface GetDetailStrukturReq {
-  id: number;
+  id?: number;
 }
 
 export interface GetDetailStrukturRes {
@@ -46,6 +68,8 @@ export interface GetDetailStrukturRes {
 
 export interface DetailStrukturData {
   id: number;
+  pegawai_id: number;
+  name: string;
   divisi: string;
   list_anggota: ListAnggota[];
 }
