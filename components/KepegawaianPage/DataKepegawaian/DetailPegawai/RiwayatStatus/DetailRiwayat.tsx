@@ -3,16 +3,17 @@ import React from 'react';
 import { HistoryPegawai } from '../../../../../constants/APIUrls';
 import { StatusPNSText } from '../../../../../constants/Resource';
 import { GetHistoryPegawai, GetIDPegawai } from '../../../../../types/api/RiwayatSatusAPI';
+import { StatusCpns } from '../../../../../types/Common';
 import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 
 export default function ListStatus() {
   const pegawaiInfo = usePersonalData();
 
-  const { data: riwayatPengangkatan } = useCommonApi<GetIDPegawai, GetHistoryPegawai>(
+  const { data: riwayatPengangkatan } = useCommonApi<GetIDPegawai, GetHistoryPegawai[]>(
     HistoryPegawai.GET_HISTORY_LIST,
     { pegawai_id: Number(pegawaiInfo?.pegawai_id) },
-    { method: 'GET' },
+    { method: 'GET' }
   );
 
   return (
@@ -62,23 +63,28 @@ export default function ListStatus() {
                 </td>
               </tr>
             )}
-            {(riwayatPengangkatan || []).map((each, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  {each?.updated_at|| '-'}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  {StatusPNSText[each?.status_lama]|| '-'}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  {StatusPNSText[each?.status_baru ]|| '-'}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">
-                  {each.updated_by || '-'}
-                </td>
-              </tr>
-            ))}
+            {(riwayatPengangkatan || []).map((each, index) => {
+              const statusLama: StatusCpns | undefined = each?.status_lama;
+              const statusBaru: StatusCpns | undefined = each?.status_baru;
+
+              return (
+                <tr key={index}>
+                  <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{index + 1}</td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">
+                    {each?.updated_at || '-'}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">
+                    {StatusPNSText[statusLama] || '-'}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">
+                    {StatusPNSText[statusBaru] || '-'}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#6B7280]">
+                    {each.updated_by || '-'}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
