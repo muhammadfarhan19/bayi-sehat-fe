@@ -308,3 +308,7 @@ export const SummaryAPI = {
   GET_SUMMARY_LIST: config.apiHost + '/transaksi/summary',
   GET_SUMMARY_EXPORT: config.apiHost + '/transaksi/summary/export',
 };
+
+export const HistoryPegawai = {
+  GET_HISTORY_LIST: config.apiHost + '/pegawai/history',
+};
