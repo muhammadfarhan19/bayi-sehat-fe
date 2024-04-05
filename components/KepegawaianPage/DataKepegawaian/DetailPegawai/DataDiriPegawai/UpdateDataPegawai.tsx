@@ -332,7 +332,7 @@ function UpdateDataPegawai() {
                       }}
                       options={(daftarJabatan?.list || []).map(each => ({
                         text: each.name,
-                        value: each?.name,
+                        value: String(each.jabatan_id),
                       }))}
                     />
                   )}
