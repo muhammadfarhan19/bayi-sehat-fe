@@ -186,7 +186,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
                     }}
                     className="rounded-md bg-indigo-600 py-2 px-4 text-sm text-white"
                   >
-                    Tambah KaTU/KTK
+                    Tambah Penugasan
                   </button>
                 </div>
               </div>
@@ -227,7 +227,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                         >
-                          Jabatan
+                          Unit Kerja
                         </th>
                         <th
                           scope="col"
@@ -248,7 +248,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
                           </td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.divisi}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.nama}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.jabatan_str}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.unit_kerja_str}</td>
                           <td className="flex gap-2 px-6 py-4 text-xs font-medium text-gray-900">
                             <button
                               data-twe-toggle="tooltip"

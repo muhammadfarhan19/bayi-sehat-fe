@@ -1,10 +1,11 @@
-import { ChevronLeftIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/outline';
+import { ChevronLeftIcon, InformationCircleIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../action/CommonAction';
 import { StrukturOrganisasiAPI } from '../../../constants/APIUrls';
+import { modalOption } from '../../../constants/Resource';
 import { SnackbarType } from '../../../reducer/CommonReducer';
 import {
   DeleteStrukturDataReq,
@@ -18,25 +19,31 @@ import { getQueryString } from '../../../utils/URLUtils';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import Loader from '../../shared/Loader/Loader';
-import UpdateModal from '../ModalStrukturOrganisasi';
+import ModalStrukturOrganisasiForm from './ModalStrukturOrganisasiDetail';
 
 function DetailPetaOrganisasiPage() {
   const { id } = getQueryString<{ id: number }>();
   const [confirmId, setConfirmId] = React.useState(0);
   const dispatch = useDispatch();
 
-  const handleShowForm = (open: boolean, selectedId?: number) => {
+  const handleShowForm = (open: boolean, type?: modalOption, parentId?: number, selectedId?: number) => {
     setFormModalState({
       open,
+      type,
+      parentId,
       selectedId,
     });
   };
 
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean;
+    type?: string;
+    parentId?: number;
     selectedId?: number;
   }>({
     open: false,
+    type: undefined,
+    parentId: undefined,
     selectedId: undefined,
   });
 
@@ -52,7 +59,7 @@ function DetailPetaOrganisasiPage() {
 
   const handleDelete = async () => {
     const resDelete = await callAPI<DeleteStrukturDataReq, DeleteStrukturDataRes>(
-      StrukturOrganisasiAPI.DELETE_STRUKTUR_ORGANISASI,
+      StrukturOrganisasiAPI.DELETE_PJ_STRUKTUR_ORGANISASI,
       {
         pegawai_id: confirmId,
       },
@@ -87,8 +94,19 @@ function DetailPetaOrganisasiPage() {
           </span>
         </Link>
         <div className="px-6">
-          <div className="flex flex-row py-6">
-            <p className="text-lg font-medium text-gray-900">{dataTable?.divisi}</p>
+          <div className="flex flex-row items-end justify-between py-6">
+            <div className="grid w-1/2 gap-y-1">
+              <p className="text-md font-medium text-[#696969]">{dataTable?.divisi}</p>
+              <p className="text-lg font-medium text-gray-900">{dataTable?.name}</p>
+            </div>
+            <button
+              onClick={() => {
+                handleShowForm(!formModalState?.open, modalOption.add, dataTable?.id);
+              }}
+              className="rounded-md bg-indigo-600 py-2 px-4 text-sm text-white"
+            >
+              Tambah Staff
+            </button>
           </div>
         </div>
         {isValidating ? (
@@ -153,12 +171,28 @@ function DetailPetaOrganisasiPage() {
                               data-twe-ripple-color="light"
                               title="Edit Data"
                               onClick={() => {
-                                handleShowForm(!formModalState?.open, data?.peg_id);
+                                handleShowForm(!formModalState?.open, modalOption.edit, undefined, data.id);
                               }}
                               type="button"
                               className={`rounded-[6px] bg-[#4F46E5] py-2 px-3 text-[14px] font-normal text-gray-50`}
                             >
                               <PencilAltIcon className="h-5 w-5" />
+                            </button>
+                            <button
+                              data-twe-toggle="tooltip"
+                              data-twe-html="true"
+                              data-twe-ripple-init
+                              data-twe-ripple-color="light"
+                              title="Lihat Detail"
+                              type="button"
+                              className={`rounded-[6px] bg-[#378b22] py-2 px-3 text-[14px] font-normal text-gray-50 ${
+                                data.divisi_id === 0 && 'hidden'
+                              }`}
+                              onClick={() =>
+                                (window.location.href = `/struktur-organisasi/peta-organisasi?id=${data?.divisi_id}`)
+                              }
+                            >
+                              <InformationCircleIcon className="h-5 w-5" />
                             </button>
                             <button
                               data-twe-toggle="tooltip"
@@ -178,10 +212,11 @@ function DetailPetaOrganisasiPage() {
                     </tbody>
                   </table>
                   {formModalState?.open && (
-                    <UpdateModal
+                    <ModalStrukturOrganisasiForm
                       open={formModalState?.open}
-                      setOpen={(open: boolean) => handleShowForm(open, 0)}
-                      selectedId={formModalState?.selectedId}
+                      setOpen={(open: boolean) => handleShowForm(open)}
+                      type={formModalState?.type}
+                      parentId={formModalState?.parentId}
                       onSuccess={() => mutate()}
                     />
                   )}
