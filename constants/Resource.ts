@@ -200,6 +200,10 @@ export const StatusPresensiBE = [
 
 export const StrukturKepegawaianRole = [
   {
+    value: 0,
+    text: 'Semua',
+  },
+  {
     value: 1,
     text: 'Pimpinan',
   },

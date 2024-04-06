@@ -29,6 +29,7 @@ interface ModalProps {
   onSuccess: () => void;
   selectedId?: number;
   namaPegawai?: string;
+  role?: number;
 }
 
 interface FormState {
@@ -40,7 +41,7 @@ interface FormState {
 }
 
 function ModalStrukturOrganisasi(props: ModalProps) {
-  const { open, setOpen, onSuccess, selectedId, namaPegawai } = props;
+  const { open, setOpen, onSuccess, selectedId, namaPegawai, role } = props;
   const [queryPegawai, setQueryPegawai] = React.useState('');
   const [pegawaiId, setPegawaiId] = React.useState('');
   const debounce = React.useRef<number>(0);
@@ -74,7 +75,6 @@ function ModalStrukturOrganisasi(props: ModalProps) {
     { page: 1, per_page: 20, jabatan: pegawaiData?.jabatan },
     { method: 'GET' }
   );
-
   const submitHandler = async (formData: FormState) => {
     let resSubmit;
     if (selectedId) {
@@ -95,7 +95,7 @@ function ModalStrukturOrganisasi(props: ModalProps) {
           jabatan_id: getJabatan?.list?.[0]?.jabatan_id || 0,
           unit_kerja_id: pegawaiData?.unit_kerja_id || 0,
           divisi: formData.divisi,
-          role: Number(formData.role),
+          roles: Number(formData.role),
         },
         { method: 'post' }
       );
@@ -185,6 +185,43 @@ function ModalStrukturOrganisasi(props: ModalProps) {
                     <div className="mt-5 sm:col-span-6">
                       <Controller
                         control={control}
+                        name="role"
+                        rules={{ required: 'Mohon Pilih Role' }}
+                        render={({ field: { onChange } }) => (
+                          <>
+                            <AutoComplete
+                              onChange={input => {
+                                onChange(input?.value);
+                              }}
+                              label={'Role'}
+                              onQueryChange={queryText => {
+                                if (debounce.current) {
+                                  clearTimeout(debounce.current);
+                                }
+                                debounce.current = window.setTimeout(() => {
+                                  setQueryPegawai(queryText);
+                                }, 500);
+                              }}
+                              defaultValue={{
+                                text:
+                                  typeof role === undefined
+                                    ? ''
+                                    : StrukturKepegawaianRole.find(each => each.value === role)?.text || '',
+                                value: String(role),
+                              }}
+                              options={StrukturKepegawaianRole.map(each => ({
+                                text: each.text,
+                                value: String(each.value),
+                              }))}
+                            />
+                          </>
+                        )}
+                      />
+                      {errors.pegawaiId && <p className="mt-1 text-xs text-red-500">{errors.pegawaiId.message}</p>}
+                    </div>
+                    <div className="mt-5 sm:col-span-6">
+                      <Controller
+                        control={control}
                         name="pegawaiId"
                         rules={{ required: 'Mohon Pilih Nama Pegawai' }}
                         render={({ field: { onChange } }) => (
@@ -210,41 +247,6 @@ function ModalStrukturOrganisasi(props: ModalProps) {
                               options={(pegawaiList?.list || []).map(each => ({
                                 text: each.name,
                                 value: String(each.pegawai_id),
-                              }))}
-                            />
-                          </>
-                        )}
-                      />
-                      {errors.pegawaiId && <p className="mt-1 text-xs text-red-500">{errors.pegawaiId.message}</p>}
-                    </div>
-                    <div className="mt-5 sm:col-span-6">
-                      <Controller
-                        control={control}
-                        name="role"
-                        rules={{ required: 'Mohon Pilih Role' }}
-                        render={({ field: { onChange } }) => (
-                          <>
-                            <AutoComplete
-                              onChange={input => {
-                                onChange(input?.value);
-                                // setPegawaiId(input?.value);
-                              }}
-                              label={'Role'}
-                              onQueryChange={queryText => {
-                                if (debounce.current) {
-                                  clearTimeout(debounce.current);
-                                }
-                                debounce.current = window.setTimeout(() => {
-                                  setQueryPegawai(queryText);
-                                }, 500);
-                              }}
-                              defaultValue={{
-                                text: typeof namaPegawai === 'undefined' ? '' : dataTable?.name || String(namaPegawai),
-                                value: String(dataTable?.pegawai_id) || String(namaPegawai),
-                              }}
-                              options={StrukturKepegawaianRole.map(each => ({
-                                text: each.text,
-                                value: String(each.value),
                               }))}
                             />
                           </>

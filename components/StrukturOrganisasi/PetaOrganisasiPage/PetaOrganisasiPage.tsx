@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../action/CommonAction';
 import { StrukturOrganisasiAPI, UnitKerjaAPI } from '../../../constants/APIUrls';
+import { StrukturKepegawaianRole } from '../../../constants/Resource';
 import { SnackbarType } from '../../../reducer/CommonReducer';
 import { GetRekapReq } from '../../../types/api/RekapDinasAPI';
 import {
@@ -29,16 +30,18 @@ interface UnitKerja {
 function PetaOrganisasiPage(props: UnitKerja) {
   const { unit_kerja_id } = props;
   const [confirmId, setConfirmId] = React.useState(0);
+  const [selectedRole, setSelectedRole] = React.useState('');
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const [loaded, setLoaded] = React.useState(false);
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
   const dispatch = useDispatch();
 
-  const handleShowForm = (open: boolean, selectedId?: number, name?: string) => {
+  const handleShowForm = (open: boolean, selectedId?: number, name?: string, role?: number) => {
     setFormModalState({
       open,
       selectedId,
       name,
+      role,
     });
   };
 
@@ -46,10 +49,12 @@ function PetaOrganisasiPage(props: UnitKerja) {
     open: boolean;
     selectedId?: number;
     name?: string;
+    role?: number;
   }>({
     open: false,
     selectedId: undefined,
     name: undefined,
+    role: undefined,
   });
 
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
@@ -58,6 +63,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
     unit_kerja_id: unit_kerja_id,
     keyword: '',
     status_kepegawaian: 'aktif',
+    roles: 0,
   });
 
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
@@ -159,32 +165,65 @@ function PetaOrganisasiPage(props: UnitKerja) {
 
           {showAdvancedFilter && (
             <div className="flex w-full flex-row gap-x-[16px]">
-              <div className="w-full pb-2">
-                <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
-                <div className="flex items-center justify-between">
-                  <select
-                    className="block w-[202px] appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
-                    onChange={e => {
-                      changeFilterState({ unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value) });
-                    }}
-                    disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
-                  >
-                    <option value="">Semua</option>
-                    {(unitKerjaList || []).map((item, index) => (
-                      <option
-                        key={`options-${index}`}
-                        value={item?.unit_kerja_id}
-                        selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
-                      >
-                        {item?.name}
-                      </option>
-                    ))}
-                  </select>
+              <div className="flex w-full justify-between pb-2">
+                <div className="flex  gap-2">
+                  <div className="w-fit">
+                    <p className="mb-[4px] text-[14px] font-normal">Unit Kerja</p>
+                    <select
+                      className="block w-[202px] appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                      onChange={e => {
+                        changeFilterState({
+                          unit_kerja_id: e.target.value === '' ? undefined : Number(e.target.value),
+                        });
+                      }}
+                      disabled={!!unit_kerja_id && !isAllowSuperAdminAccessFilter}
+                    >
+                      <option value="">Semua</option>
+                      {(unitKerjaList || []).map((item, index) => (
+                        <option
+                          key={`options-${index}`}
+                          value={item?.unit_kerja_id}
+                          selected={unit_kerja_id === Number(item?.unit_kerja_id) ? true : false}
+                        >
+                          {item?.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="w-fit">
+                    <p className="mb-[4px] text-[14px] font-normal">Tingkat Pegawai</p>
+                    <select
+                      className="block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+                      onChange={e => {
+                        const value = e.target.value;
+                        setSelectedRole(value);
+                        const selectedRoleType = StrukturKepegawaianRole.find(
+                          role => role.value.toString() === value
+                        )?.value;
+                        changeFilterState({
+                          roles: value === '' ? undefined : selectedRoleType,
+                        });
+                      }}
+                      disabled={!!StrukturKepegawaianRole && !isAllowSuperAdminAccessFilter}
+                    >
+                      {StrukturKepegawaianRole.map((item, index) => (
+                        <option
+                          selected={item.value.toString() === selectedRole ? true : false}
+                          key={`options-${index}`}
+                          value={item?.value}
+                        >
+                          {item?.text}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex items-end">
                   <button
                     onClick={() => {
                       handleShowForm(!formModalState?.open);
                     }}
-                    className="rounded-md bg-indigo-600 py-2 px-4 text-sm text-white"
+                    className="h-fit rounded-md bg-indigo-600 py-2 px-4 text-sm text-white"
                   >
                     Tambah Penugasan
                   </button>
@@ -257,7 +296,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
                               data-twe-ripple-color="light"
                               title="Edit Data"
                               onClick={() => {
-                                handleShowForm(!formModalState?.open, data?.id, data?.nama);
+                                handleShowForm(!formModalState?.open, data?.id, data?.nama, data?.roles);
                               }}
                               type="button"
                               className={`rounded-[6px] bg-[#4F46E5] py-2 px-3 text-[14px] font-normal text-gray-50`}
@@ -303,6 +342,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
                       selectedId={formModalState?.selectedId}
                       onSuccess={() => mutate()}
                       namaPegawai={formModalState?.name}
+                      role={formModalState?.role}
                     />
                   )}
                   <Pagination

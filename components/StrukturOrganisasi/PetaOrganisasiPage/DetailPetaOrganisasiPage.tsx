@@ -26,12 +26,21 @@ function DetailPetaOrganisasiPage() {
   const [confirmId, setConfirmId] = React.useState(0);
   const dispatch = useDispatch();
 
-  const handleShowForm = (open: boolean, type?: modalOption, parentId?: number, selectedId?: number) => {
+  const handleShowForm = (
+    open: boolean,
+    type?: modalOption,
+    parentId?: number,
+    selectedId?: number,
+    namaPegawai?: string,
+    role?: number
+  ) => {
     setFormModalState({
       open,
       type,
       parentId,
       selectedId,
+      namaPegawai,
+      role,
     });
   };
 
@@ -40,11 +49,15 @@ function DetailPetaOrganisasiPage() {
     type?: string;
     parentId?: number;
     selectedId?: number;
+    namaPegawai?: string;
+    role?: number;
   }>({
     open: false,
     type: undefined,
     parentId: undefined,
     selectedId: undefined,
+    namaPegawai: undefined,
+    role: undefined,
   });
 
   const {
@@ -171,7 +184,14 @@ function DetailPetaOrganisasiPage() {
                               data-twe-ripple-color="light"
                               title="Edit Data"
                               onClick={() => {
-                                handleShowForm(!formModalState?.open, modalOption.edit, undefined, data.id);
+                                handleShowForm(
+                                  !formModalState?.open,
+                                  modalOption.edit,
+                                  undefined,
+                                  data.divisi_id,
+                                  data.nama,
+                                  data.roles
+                                );
                               }}
                               type="button"
                               className={`rounded-[6px] bg-[#4F46E5] py-2 px-3 text-[14px] font-normal text-gray-50`}
@@ -215,8 +235,10 @@ function DetailPetaOrganisasiPage() {
                     <ModalStrukturOrganisasiForm
                       open={formModalState?.open}
                       setOpen={(open: boolean) => handleShowForm(open)}
+                      selectedId={formModalState?.selectedId}
                       type={formModalState?.type}
                       parentId={formModalState?.parentId}
+                      role={formModalState?.role}
                       onSuccess={() => mutate()}
                     />
                   )}

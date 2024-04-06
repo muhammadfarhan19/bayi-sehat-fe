@@ -35,7 +35,7 @@ export interface PostStrukturDataReq {
   jabatan_id: number;
   unit_kerja_id: number;
   divisi: string;
-  role: number;
+  roles: number;
 }
 
 export interface PostStrukturDataRes {
@@ -45,7 +45,7 @@ export interface PostStrukturDataRes {
 export interface PostDetailStrukturDataReq {
   jabatan_struktural_pegawai_id: number;
   pegawai_id: number;
-  role: number;
+  roles: number;
 }
 
 export interface PostDetailStrukturDataRes {
@@ -63,6 +63,7 @@ export interface StrukturData {
     jabatan_id: number;
     jabatan_str: string;
     divisi: string;
+    roles: number;
   }[];
   pagination: Pagination;
 }
@@ -92,6 +93,7 @@ export interface ListAnggota {
   unit_kerja_str: number;
   divisi: string;
   divisi_id: number;
+  roles: number;
 }
 
 export const siteMapContents = [
