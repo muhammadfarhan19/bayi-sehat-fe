@@ -173,7 +173,9 @@ function DetailPetaOrganisasiPage() {
                           className={dataIdx % 2 === 0 ? 'bg-white hover:bg-gray-100' : 'bg-gray-50 hover:bg-gray-100'}
                         >
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{dataIdx + 1}</td>
-                          <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.divisi}</td>
+                          <td className="px-6 py-4 text-xs font-medium text-gray-900">
+                            {data.divisi_id ? data.divisi : 'Anggota'}
+                          </td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.nama}</td>
                           <td className="px-6 py-4 text-xs font-medium text-gray-900">{data.unit_kerja_str}</td>
                           <td className="flex gap-2 px-6 py-4 text-xs font-medium text-gray-900">

@@ -137,6 +137,8 @@ function PetaOrganisasiPage(props: UnitKerja) {
     mutate();
   };
 
+  const pimpinanUnit = dataTable?.list?.find(data => data.roles === 1);
+
   return (
     <>
       <div className="rounded-lg bg-white shadow">
@@ -160,6 +162,14 @@ function PetaOrganisasiPage(props: UnitKerja) {
               >
                 <AdjustmentsIcon className="h-5  w-5 animate-pulse text-gray-400" />
               </button>
+            </div>
+          </div>
+          <div className="">
+            <div className="flex flex-row items-end justify-between pb-6">
+              <div className="grid w-1/2 gap-y-1">
+                <p className="text-md font-medium text-[#696969]">{pimpinanUnit?.divisi}</p>
+                <p className="text-lg font-medium text-gray-900">{pimpinanUnit?.nama}</p>
+              </div>
             </div>
           </div>
 
