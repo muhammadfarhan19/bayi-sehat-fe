@@ -206,7 +206,15 @@ function ModalStrukturOrganisasiForm(props: ModalProps) {
                                       : StrukturKepegawaianRole.find(each => each.value === role)?.text || '',
                                   value: String(role),
                                 }}
-                                options={StrukturKepegawaianRole.map(each => ({
+                                options={StrukturKepegawaianRole.filter(each => {
+                                  if (typeof parentRole !== 'undefined' && parentRole === 1) {
+                                    return each.value > 1 && each.value <= 3;
+                                  }
+                                  if (typeof parentRole !== 'undefined' && (parentRole === 2 || parentRole === 3)) {
+                                    return each.value >= 4;
+                                  }
+                                  return typeof parentRole !== 'undefined' && each.value > parentRole;
+                                }).map(each => ({
                                   text: each.text,
                                   value: String(each.value),
                                 }))}
