@@ -82,6 +82,7 @@ export interface DetailStrukturData {
   pegawai_id: number;
   name: string;
   divisi: string;
+  roles: number;
   list_anggota: ListAnggota[];
 }
 

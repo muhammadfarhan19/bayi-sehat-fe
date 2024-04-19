@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, InformationCircleIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/outline';
+import { ChevronLeftIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -200,7 +200,7 @@ function DetailPetaOrganisasiPage() {
                             >
                               <PencilAltIcon className="h-5 w-5" />
                             </button>
-                            <button
+                            {/* <button
                               data-twe-toggle="tooltip"
                               data-twe-html="true"
                               data-twe-ripple-init
@@ -215,7 +215,7 @@ function DetailPetaOrganisasiPage() {
                               }
                             >
                               <InformationCircleIcon className="h-5 w-5" />
-                            </button>
+                            </button> */}
                             <button
                               data-twe-toggle="tooltip"
                               data-twe-html="true"
@@ -242,6 +242,7 @@ function DetailPetaOrganisasiPage() {
                       parentId={formModalState?.parentId}
                       role={formModalState?.role}
                       onSuccess={() => mutate()}
+                      parentRole={dataTable?.roles}
                     />
                   )}
                 </div>

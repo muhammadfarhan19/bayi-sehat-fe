@@ -31,6 +31,7 @@ interface ModalProps {
   parentId?: number;
   namaPegawai?: string;
   role?: number;
+  parentRole?: number;
 }
 
 interface FormState {
@@ -42,7 +43,7 @@ interface FormState {
 }
 
 function ModalStrukturOrganisasiForm(props: ModalProps) {
-  const { open, setOpen, onSuccess, parentId, namaPegawai, selectedId, type, role } = props;
+  const { open, setOpen, onSuccess, parentId, namaPegawai, selectedId, type, role, parentRole } = props;
   const [queryPegawai, setQueryPegawai] = React.useState('');
   const debounce = React.useRef<number>(0);
   const dispatch = useDispatch();
@@ -156,7 +157,7 @@ function ModalStrukturOrganisasiForm(props: ModalProps) {
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-sm transition-all">
               <Dialog.Title as="div" className="flex justify-between">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  {type === modalOption.edit ? 'Edit PJ' : 'Tambah PJ'}
+                  {type === modalOption.edit ? `Edit Staff` : `Tambah Staff`}
                 </h3>
                 <XIcon className="h-5 cursor-pointer" onClick={toggleModal} />
               </Dialog.Title>
@@ -171,6 +172,7 @@ function ModalStrukturOrganisasiForm(props: ModalProps) {
                         {...register('divisi', {
                           required: 'Mohon Masukkan Nama Penugasan',
                         })}
+                        value={parentRole === 4 ? 'Anggota' : ''}
                         className="inline-block h-9 w-full rounded-md border-2 border-gray-300 px-2 shadow-sm disabled:bg-gray-200 sm:text-sm"
                         name="divisi"
                       />
