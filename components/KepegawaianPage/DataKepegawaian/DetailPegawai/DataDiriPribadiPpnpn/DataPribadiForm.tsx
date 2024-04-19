@@ -323,31 +323,6 @@ export default function DataPribadiForm(props: UploadFormProps) {
               </div>
               <div className="grid grid-cols-3 gap-x-6">
                 <div className="col-span-2 mt-5">
-                  {/* <Controller
-                    control={control}
-                    name="jabatan"
-                    rules={{ required: false }}
-                    render={({ field: { onChange } }) => (
-                      <AutoCompleteCustom
-                        disabled={!isAllowSuperAdminAccessFilter}
-                        onChange={value => onChange(value.value)}
-                        label={'Nama Jabatan'}
-                        defaultValue={{ text: formJabatanState.text || '', value: formJabatanState.value || '' }}
-                        onQueryChange={queryText => {
-                          if (debounce.current) {
-                            clearTimeout(debounce.current);
-                          }
-                          debounce.current = window.setTimeout(() => {
-                            setQueryJabatan(queryText);
-                          }, 500);
-                        }}
-                        options={(daftarJabatan?.list || []).map(each => ({
-                          text: each.name,
-                          value: String(each.jabatan_id),
-                        }))}
-                      />
-                    )}
-                  /> */}
                   <label htmlFor="jabatan" className="block text-sm font-medium text-gray-700">
                     Jabatan
                   </label>
