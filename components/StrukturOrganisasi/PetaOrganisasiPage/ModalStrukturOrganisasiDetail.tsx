@@ -172,7 +172,7 @@ function ModalStrukturOrganisasiForm(props: ModalProps) {
                         {...register('divisi', {
                           required: 'Mohon Masukkan Nama Penugasan',
                         })}
-                        value={parentRole === 4 ? 'Anggota' : ''}
+                        defaultValue={parentRole === 4 ? 'Anggota' : ''}
                         className="inline-block h-9 w-full rounded-md border-2 border-gray-300 px-2 shadow-sm disabled:bg-gray-200 sm:text-sm"
                         name="divisi"
                       />

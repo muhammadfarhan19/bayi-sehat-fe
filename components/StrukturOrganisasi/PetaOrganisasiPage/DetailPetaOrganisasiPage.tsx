@@ -196,7 +196,7 @@ function DetailPetaOrganisasiPage() {
                                 );
                               }}
                               type="button"
-                              className={`rounded-[6px] bg-[#4F46E5] py-2 px-3 text-[14px] font-normal text-gray-50`}
+                              className={`hidden rounded-[6px] bg-[#4F46E5] py-2 px-3 text-[14px] font-normal text-gray-50`}
                             >
                               <PencilAltIcon className="h-5 w-5" />
                             </button>
