@@ -198,6 +198,38 @@ export const StatusPresensiBE = [
   },
 ];
 
+export const StrukturKepegawaianRole = [
+  {
+    value: 0,
+    text: 'Semua',
+  },
+  {
+    value: 1,
+    text: 'Pimpinan',
+  },
+  {
+    value: 2,
+    text: 'KaTU',
+  },
+  {
+    value: 3,
+    text: 'KTK',
+  },
+  {
+    value: 4,
+    text: 'Penanggung Jawab',
+  },
+  {
+    value: 5,
+    text: 'Staff',
+  },
+];
+
+export enum modalOption {
+  add = 'ADD',
+  edit = 'EDIT',
+}
+
 export enum JamKerja {
   Masuk = 'Jam Kerja Masuk',
   Pulang = 'Jam Kerja Pulang',

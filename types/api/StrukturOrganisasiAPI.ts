@@ -11,6 +11,48 @@ export interface GetStrukturRes {
   data: StrukturData;
 }
 
+export interface DeleteStrukturDataReq {
+  jabatan_struktural_id?: number;
+  pegawai_id?: number;
+}
+export interface DeleteStrukturDataRes {
+  status: Status;
+  data: string;
+}
+
+export interface PutStrukturDataReq {
+  id: number;
+  pegawai_id: number;
+  divisi: string;
+}
+
+export interface PutStrukturDataRes {
+  status: Status;
+  data: string;
+}
+export interface PostStrukturDataReq {
+  pegawai_id: number;
+  jabatan_id: number;
+  unit_kerja_id: number;
+  divisi: string;
+  roles: number;
+}
+
+export interface PostStrukturDataRes {
+  status: Status;
+  data: string;
+}
+export interface PostDetailStrukturDataReq {
+  jabatan_struktural_pegawai_id: number;
+  pegawai_id: number;
+  roles: number;
+}
+
+export interface PostDetailStrukturDataRes {
+  status: Status;
+  data: string;
+}
+
 export interface StrukturData {
   list: {
     id: number;
@@ -21,12 +63,13 @@ export interface StrukturData {
     jabatan_id: number;
     jabatan_str: string;
     divisi: string;
+    roles: number;
   }[];
   pagination: Pagination;
 }
 
 export interface GetDetailStrukturReq {
-  id: number;
+  id?: number;
 }
 
 export interface GetDetailStrukturRes {
@@ -36,16 +79,22 @@ export interface GetDetailStrukturRes {
 
 export interface DetailStrukturData {
   id: number;
+  pegawai_id: number;
+  name: string;
   divisi: string;
+  roles: number;
   list_anggota: ListAnggota[];
 }
 
 export interface ListAnggota {
+  id: number;
   peg_id: number;
   nama: string;
   unit_kerja_id: number;
   unit_kerja_str: number;
   divisi: string;
+  divisi_id: number;
+  roles: number;
 }
 
 export const siteMapContents = [

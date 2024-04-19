@@ -12,6 +12,7 @@ export interface GetRekapReq {
   tipe?: string;
   keyword?: string;
   status_kepegawaian?: string;
+  roles?: number;
 }
 
 export interface GetRekapPegawaiReq {

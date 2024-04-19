@@ -28,6 +28,7 @@ import RiwayatPendidikan from './RiwayatPendidikan';
 import RiwayatPengangkatan from './RiwayatPengangkatan';
 import RiwayatPenghargaan from './RiwayatPenghargaan';
 import RiwayatSkp from './RiwayatSkp';
+import HistoryStatus from './RiwayatStatus';
 import StatusKepegawaian from './StatusKepegawaian';
 
 export type PegawaiType = 'pns' | 'ppnpn';
@@ -48,6 +49,7 @@ function DetailPegawai() {
     { name: 'Riwayat SKP', href: '#' },
     { name: 'Riwayat Keluarga', href: '#' },
     { name: 'Arsip Digital', href: '#' },
+    { name: 'Riwayat Status Pegawai', href: '#' },
   ];
 
   const ppnpn = [
@@ -57,6 +59,7 @@ function DetailPegawai() {
     { name: 'Riwayat Pelatihan/ Diklat', href: '#' },
     { name: 'Riwayat Keluarga', href: '#' },
     { name: 'Arsip Digital', href: '#' },
+    { name: 'Riwayat Status Pegawai', href: '#' },
   ];
   const personalPegawaiData = usePersonalData();
 
@@ -270,6 +273,7 @@ function DetailPegawai() {
               {selected === tabs[9]?.name ? <RiwayatSkp /> : null}
               {selected === tabs[10]?.name ? <RiwayatKeluarga /> : null}
               {selected === tabs[11]?.name ? <ArsipDigital /> : null}
+              {selected === tabs[12]?.name ? <HistoryStatus /> : null}
             </>
           ) : (
             <>
@@ -279,6 +283,7 @@ function DetailPegawai() {
               {selected === tabs[3]?.name ? <RiwayatDiklat /> : null}
               {selected === tabs[4]?.name ? <RiwayatKeluarga /> : null}
               {selected === tabs[5]?.name ? <ArsipDigital /> : null}
+              {selected === tabs[6]?.name ? <HistoryStatus /> : null}
             </>
           )}
         </div>

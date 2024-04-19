@@ -269,6 +269,11 @@ export const CutiAPI = {
 export const StrukturOrganisasiAPI = {
   GET_STRUKTUR_ORGANISASI_LIST: config.apiHost + '/struktur-organisasi/list',
   GET_STRUKTUR_ORGANISASI_VIEW: config.apiHost + '/struktur-organisasi/view',
+  POST_STRUKTUR_ORGANISASI_UPDATE: config.apiHost + '/struktur-organisasi/update',
+  POST_STRUKTUR_ORGANISASI_INSERT: config.apiHost + '/struktur-organisasi/create',
+  POST_PJ_STRUKTUR_ORGANISASI_INSERT: config.apiHost + '/struktur-organisasi/view/create',
+  DELETE_STRUKTUR_ORGANISASI: config.apiHost + '/struktur-organisasi/delete',
+  DELETE_PJ_STRUKTUR_ORGANISASI: config.apiHost + '/struktur-organisasi/view/delete',
 };
 
 export const SyncKehadiranAPI = {
@@ -306,4 +311,8 @@ export const ResumeAPI = {
 export const SummaryAPI = {
   GET_SUMMARY_LIST: config.apiHost + '/transaksi/summary',
   GET_SUMMARY_EXPORT: config.apiHost + '/transaksi/summary/export',
+};
+
+export const HistoryPegawai = {
+  GET_HISTORY_LIST: config.apiHost + '/pegawai/history',
 };

@@ -25,7 +25,6 @@ import useCommonApi from '../../../../shared/hooks/useCommonApi';
 import usePersonalData from '../../../../shared/hooks/usePersonalData';
 import UploadWrapper, { FileObject } from '../../../../shared/Input/UploadWrapper';
 import { LinkFile } from '../DataDiriPribadi';
-import AutoCompleteCustom from '../RiwayatKGB/Shared/CustomComboBox';
 
 interface UploadFormProps {
   open: boolean;
@@ -73,15 +72,9 @@ export default function DataPribadiForm(props: UploadFormProps) {
   const { isAllowSuperAdminAccessFilter } = useAllowSuperAdmin();
   const pegawai = usePersonalData();
   const dispatch = useDispatch();
-  const debounce = React.useRef<number>(0);
-  const [queryJabatan, setQueryJabatan] = React.useState('');
   const toggleModal = () => {
     setOpen(!open);
   };
-  const [formJabatanState, setFormJabatanState] = React.useState<{ text?: string; value?: string }>({
-    text: undefined,
-    value: undefined,
-  });
 
   const {
     control,
@@ -94,12 +87,6 @@ export default function DataPribadiForm(props: UploadFormProps) {
   const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
     UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
     null,
-    { method: 'GET' }
-  );
-
-  const { data: daftarJabatan } = useCommonApi<GetJabatanReq, JabatanData>(
-    JabatanAPI.GET_JABATAN,
-    { page: 1, per_page: 20, jabatan: queryJabatan },
     { method: 'GET' }
   );
 
@@ -249,11 +236,6 @@ export default function DataPribadiForm(props: UploadFormProps) {
       setValue('tempat_lahir', String(pegawai?.tempat_lahir));
       setValue('jenis_kelamin', Number(pegawai?.jenis_kelamin));
       setValue('jabatan', String(getJabatan?.list?.[0]?.jabatan_id || pegawai?.jabatan));
-
-      setFormJabatanState({
-        text: getJabatan?.list?.[0]?.name || pegawai?.jabatan,
-        value: String(getJabatan?.list?.[0]?.jabatan_id || pegawai?.jabatan),
-      });
     }
   }, [open]);
 
@@ -341,30 +323,14 @@ export default function DataPribadiForm(props: UploadFormProps) {
               </div>
               <div className="grid grid-cols-3 gap-x-6">
                 <div className="col-span-2 mt-5">
-                  <Controller
-                    control={control}
+                  <label htmlFor="jabatan" className="block text-sm font-medium text-gray-700">
+                    Jabatan
+                  </label>
+                  <input
+                    {...register('jabatan', { required: true })}
+                    className="block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
                     name="jabatan"
-                    rules={{ required: false }}
-                    render={({ field: { onChange } }) => (
-                      <AutoCompleteCustom
-                        disabled={!isAllowSuperAdminAccessFilter}
-                        onChange={value => onChange(value.value)}
-                        label={'Nama Jabatan'}
-                        defaultValue={{ text: formJabatanState.text || '', value: formJabatanState.value || '' }}
-                        onQueryChange={queryText => {
-                          if (debounce.current) {
-                            clearTimeout(debounce.current);
-                          }
-                          debounce.current = window.setTimeout(() => {
-                            setQueryJabatan(queryText);
-                          }, 500);
-                        }}
-                        options={(daftarJabatan?.list || []).map(each => ({
-                          text: each.name,
-                          value: String(each.jabatan_id),
-                        }))}
-                      />
-                    )}
+                    type="text"
                   />
                   {errors.jabatan && <p className="mt-1 text-xs text-red-500">{errors.jabatan.message}</p>}
                 </div>
