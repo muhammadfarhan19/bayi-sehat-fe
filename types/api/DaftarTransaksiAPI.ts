@@ -39,6 +39,7 @@ export declare module DaftarTransaksi {
   interface Request {
     search?: string;
     unit_kerja?: string;
+
     kode_transaksi: string;
     type: string;
     page: number;

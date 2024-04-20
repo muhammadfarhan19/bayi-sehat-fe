@@ -174,6 +174,7 @@ export interface GetPresensiPegawaiSummaryRes {
     total_kali_lupa_absen_datang: string;
     total_kali_lupa_absen_pulang: string;
     total_presentase_pengurang_kehadiran: number;
+    total_jumlah_potongan_ppnpn: number;
   };
 }
 
