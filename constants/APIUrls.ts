@@ -321,3 +321,8 @@ export const GajiAPI = {
 export const HistoryPegawai = {
   GET_HISTORY_LIST: config.apiHost + '/pegawai/history',
 };
+
+export const GajiPegawai = {
+  GET_TRANSAKSI_GAJI: config.apiHost + '/gaji/resume',
+  GET_EXPORT_GAJI: config.apiHost + '/gaji/resume/export',
+};
