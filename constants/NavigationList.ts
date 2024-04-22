@@ -15,7 +15,6 @@ export const NavigationId = {
   PETA_JABATAN: 117,
   GAJI_KEPEGAWAIAN: 177,
   REKAP_DINAS: 118,
-  GAJI_PEGAWAI: 127,
   DATA_DINAS: 119,
   KEHADIRAN: 120,
   REKAP_KEHADIRAN: 157,
@@ -76,11 +75,6 @@ export const NavigationList: Navigation[] = [
             id: PUBLIC,
             name: 'Peningkatan Kompetensi',
             href: '/peningkatankompetensi',
-          },
-          {
-            id: PUBLIC,
-            name: 'Detail Gaji',
-            href: '/detail-gaji',
           },
         ],
       },
@@ -146,7 +140,7 @@ export const NavigationList: Navigation[] = [
             href: '/kepegawaian/peta-jabatan',
           },
           {
-            id: NavigationId.KEPEGAWAIAN,
+            id: NavigationId.REKAP_KEHADIRAN,
             name: 'Gaji Pegawai',
             href: '/kepegawaian/resume-gaji',
           },
