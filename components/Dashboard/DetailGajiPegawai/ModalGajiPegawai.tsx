@@ -7,11 +7,6 @@ import {
   GetGajiPegawaiReq,
   GetGajiPegawaiRes,
 } from '../../../types/api/GajiAPI';
-import {
-  ContentLabelledItems,
-  HeaderComponents,
-  LabelledRowsItem,
-} from '../../KepegawaianPage/DataKepegawaian/DetailPegawai/ProfileSummaryPegawai/Shared/PageComponents';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import formatRupiah from './shared/FormattedCurrency';
@@ -49,67 +44,80 @@ export default function ModalGajiPegawai(props: ID) {
   );
 
   return (
-    <div id={props.id}>
-      <HeaderComponents name="LAPORAN GAJI PPNPN" />
-      <LabelledRowsItem separatorTop="mt-5 mb-2" title="Data Diri Pegawai" />
-      <ContentLabelledItems subtitle="Nama" value={getGajiPegawai?.list?.[0]?.nama} />
-      <ContentLabelledItems subtitle="Nip" value={getGajiPegawai?.list?.[0]?.nip} />
-      <ContentLabelledItems subtitle="Jabatan" value={getGajiPegawai?.list?.[0]?.jabatan} />
-      <ContentLabelledItems subtitle="Unit Kerja" value={getGajiPegawai?.list?.[0]?.unit_kerja} />
-      <ContentLabelledItems subtitle="Tanggal Priode" value={getGajiPegawai?.list?.[0]?.periode} />
-      <ContentLabelledItems
-        subtitle="Besaran Gaji"
-        value={formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_awal ?? 0)}
-      />
-
-      <div className="flex flex-row ">
-        <span className="pr-11 text-xs">Gaji bermasalah di bulan sebelumnya</span>
-        <span className="text-xs font-bold">
-          {formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_awal ?? 0) +
-            ' - ' +
-            formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_potongan_gaji ?? 0) +
-            ' = ' +
-            formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_bulan_ini ?? 0)}
-        </span>
-      </div>
-
-      <div className="mt-10 rounded bg-white shadow-md">
-        <table className="border-blac w-full table-auto rounded-lg">
-          <caption className="caption-top text-xs">
-            Detail Pemotongan Absensi Bulan {getGajiPegawai?.list?.[0]?.periode}
-          </caption>
-          <thead className="bg-gray-700">
-            <tr className="bg-gray-200 text-sm  leading-normal text-black">
-              <th className="py-3 px-6 text-left">Hari</th>
-              <th className="py-3 px-6 text-left">Tanggal</th>
-              <th className="py-3 px-6 text-left">Status Hadir</th>
-              <th className="py-3 px-6 text-left">Pengurangan</th>
-            </tr>
-          </thead>
-          <tbody className="text-sm font-light text-gray-600">
-            {(getDetailHariBermasalah?.list || []).map((data, dataIdx) => {
-              return (
-                <tr key={dataIdx} className={'border-b border-gray-200 hover:bg-gray-100'}>
-                  <td className="whitespace-nowrap py-3 px-6 text-left text-black">{data?.hari}</td>
-                  <td className="whitespace-nowrap py-3 px-6 text-left text-black">{data?.tanggal}</td>
-                  <td className="whitespace-nowrap py-3 px-6 text-left text-black">{data?.status_kehadiran}</td>
-                  <td className="whitespace-nowrap py-3 px-6 text-left text-black">
-                    {formatRupiah(Number(data?.pengurangan) ?? 0)}
-                  </td>
-                </tr>
-              );
-            })}
+    <>
+      <div id={props.id}>
+        <table className="min-w-full">
+          <tbody className="bg-white">
             <tr>
-              <td colSpan={3} className="whitespace-nowrap px-6 text-left font-bold text-black">
-                Total
+              <td colSpan={2} className="px-6 py-4">
+                <p className="text-lg font-bold text-gray-500">LAPORAN GAJI PPNPN</p>
               </td>
-              <td className="whitespace-nowrap py-3 px-6 text-left font-bold text-black">
-                {formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_bulan_ini ?? 0)}
+            </tr>
+            {[
+              { label: 'Nama', value: getGajiPegawai?.list?.[0]?.nama },
+              { label: 'Nip', value: getGajiPegawai?.list?.[0]?.nip },
+              { label: 'Jabatan', value: getGajiPegawai?.list?.[0]?.jabatan },
+              { label: 'Unit Kerja', value: getGajiPegawai?.list?.[0]?.unit_kerja },
+              { label: 'Tanggal Priode', value: getGajiPegawai?.list?.[0]?.periode },
+              { label: 'Besaran Gaji', value: formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_awal ?? 0) },
+            ].map((each, index) => (
+              <tr key={index}>
+                <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
+                <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
+              </tr>
+            ))}
+            <tr>
+              <td className="px-6 py-4 text-sm font-medium text-[#6B7280]"> Gaji bermasalah di bulan sebelumnya </td>
+              <td>
+                <span className="px-6 py-4 text-sm font-bold text-gray-500">
+                  {`${formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_awal ?? 0)} - 
+                    ${formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_potongan_gaji ?? 0)} = 
+                    ${formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_bulan_ini ?? 0)}`}
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
+        <div className="mt-10 rounded bg-white shadow-md">
+          <table className="border-blac w-full table-auto rounded-lg">
+            <caption className="caption-top text-xs text-gray-500">
+              Detail Pemotongan Absensi Bulan {getGajiPegawai?.list?.[0]?.periode}
+            </caption>
+            <thead className="divide-y divide-gray-200 bg-gray-200 py-3">
+              <tr className="text-sm uppercase leading-normal text-black">
+                <th className="py-3 px-6 text-left">Hari</th>
+                <th className="py-3 px-6 text-left">Tanggal</th>
+                <th className="py-3 px-6 text-left">Status Hadir</th>
+                <th className="py-3 px-6 text-left">Pengurangan</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white text-sm font-light text-gray-600">
+              {(getDetailHariBermasalah?.list || []).map((data, dataIdx) => {
+                return (
+                  <tr key={dataIdx} className={'border-gray-200 hover:bg-gray-100'}>
+                    <td className="whitespace-nowrap py-3 px-6 text-left text-sm text-gray-500">{data?.hari}</td>
+                    <td className="whitespace-nowrap py-3 px-6 text-left text-sm text-gray-500">{data?.tanggal}</td>
+                    <td className="whitespace-nowrap py-3 px-6 text-left text-sm text-gray-500">
+                      {data?.status_kehadiran}
+                    </td>
+                    <td className="whitespace-nowrap py-3 px-6 text-left text-sm text-gray-500">
+                      {formatRupiah(Number(data?.pengurangan) ?? 0)}
+                    </td>
+                  </tr>
+                );
+              })}
+              <tr>
+                <td colSpan={3} className="whitespace-nowrap px-6 text-left font-bold text-black">
+                  Total
+                </td>
+                <td className="whitespace-nowrap py-3 px-6 text-left font-bold text-black">
+                  {formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_bulan_ini ?? 0)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -8,7 +8,7 @@ import { withErrorBoundary } from '../../shared/hocs/ErrorBoundary';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import ModalGajiPegawai from './ModalGajiPegawai';
-import FormattedCurrency from './shared/FormattedCurrency';
+import formatRupiah from './shared/FormattedCurrency';
 
 function DetailGajiPegawai() {
   const [showComponent, setShowComponent] = React.useState(false);
@@ -59,50 +59,38 @@ function DetailGajiPegawai() {
               </div>
             </div>
           </div>
-          <div className="overflow-hidden rounded-lg bg-white shadow">
-            <div className="my-3 px-7 py-1">
-              <h4 className="ml-2 text-lg font-semibold tracking-wider text-gray-900">Detail Gaji</h4>
-            </div>
-            <div className="flex flex-row border-y-[1px] px-7 py-3">
-              <div className="text-l ml-2 basis-[300px] tracking-wider text-gray-700">Nama</div>
-              <div className="text-l text-gray-700">{getGajiPegawai?.list?.[0]?.nama}</div>
-            </div>
-            <div className="flex flex-row border-b-[1px] px-7 py-3">
-              <div className="text-l ml-2 basis-[300px] tracking-wider text-gray-700">Nip</div>
-              <div className="text-l text-gray-700">{getGajiPegawai?.list?.[0]?.nip}</div>
-            </div>
-            <div className="flex flex-row border-b-[1px] px-7 py-3">
-              <div className="text-l ml-2 basis-[300px] tracking-wider text-gray-700">Unit Kerja</div>
-              <div className="text-l text-gray-700">{getGajiPegawai?.list?.[0]?.unit_kerja}</div>
-            </div>
-            <div className="flex flex-row border-b-[1px] px-7 py-3">
-              <div className="text-l ml-2 basis-[300px] tracking-wider text-gray-700">Jabatan</div>
-              <div className="text-l text-gray-700">{getGajiPegawai?.list?.[0]?.jabatan}</div>
-            </div>
-            <div className="flex flex-row border-b-[1px] px-7 py-3">
-              <div className="text-l ml-2 basis-[300px] tracking-wider text-gray-700">Tanggal Priode</div>
-              <div className="text-l text-gray-700">{getGajiPegawai?.list?.[0]?.periode}</div>
-            </div>
-            <div className="flex flex-row border-b-[1px] px-7 py-3">
-              <div className="text-l ml-2 basis-[300px] tracking-wider text-gray-700">Besaran Gaji</div>
-              <div className="text-l text-gray-700">
-                {FormattedCurrency(getGajiPegawai?.list?.[0]?.jumlah_gaji_awal ?? 0)}
-              </div>
-            </div>
-            <div className="flex flex-row border-b-[1px] px-7 py-3">
-              <div className="text-l ml-2 basis-[300px] tracking-wider text-gray-700">
-                Pengurangan Gaji Bulan Sebelumnya
-              </div>
-              <div className="text-l text-gray-700">
-                {FormattedCurrency(getGajiPegawai?.list?.[0]?.jumlah_potongan_gaji ?? 0)}
-              </div>
-            </div>
-            <div className="flex flex-row border-b-[1px] px-7 py-3">
-              <div className="text-l ml-2 basis-[300px] tracking-wider text-gray-700">Total Gaji</div>
-              <div className="text-l font-bold text-gray-700">
-                {FormattedCurrency(getGajiPegawai?.list?.[0]?.jumlah_gaji_bulan_ini ?? 0)}
-              </div>
-            </div>
+          <div className="mt-[12px] rounded-[8px] bg-white py-6 px-[24px] shadow">
+            <table className="min-w-full">
+              <thead></thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td colSpan={2} className="px-6 py-4">
+                    <p className="text-lg font-semibold tracking-wider text-gray-900">Detail Gaji</p>
+                  </td>
+                </tr>
+                {[
+                  { label: 'Nama', value: getGajiPegawai?.list?.[0]?.nama },
+                  { label: 'Nip', value: getGajiPegawai?.list?.[0]?.nip },
+                  { label: 'Unit Kerja', value: getGajiPegawai?.list?.[0]?.unit_kerja },
+                  { label: 'Jabatan', value: getGajiPegawai?.list?.[0]?.jabatan },
+                  { label: 'Tanggal Priode', value: getGajiPegawai?.list?.[0]?.periode },
+                  { label: 'Besaran Gaji', value: formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_awal ?? 0) },
+                  {
+                    label: 'Pengurangan Gaji Bulan Sebelumnya',
+                    value: formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_potongan_gaji ?? 0),
+                  },
+                  {
+                    label: 'Total Gaji',
+                    value: formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_bulan_ini ?? 0),
+                  },
+                ].map((each, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 text-sm font-medium text-[#6B7280]">{each.label}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{each.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </>
       )}
