@@ -157,7 +157,7 @@ function DaftarGajiList(props: DaftarGajiListProps) {
           <Loader />
         </div>
       ) : (
-        <div className="flex flex-col">
+        <div className="flex flex-col pt-5">
           <div className="my-[24px] overflow-x-auto sm:mx-0 ">
             <div className="align-start inline-block min-w-full sm:px-0 lg:px-0">
               <div className="sm:rounded-lg">
@@ -212,7 +212,7 @@ function DaftarGajiList(props: DaftarGajiListProps) {
                           >
                             <td className="px-6 py-4 text-left text-[10px] font-medium text-gray-900">{item?.kode}</td>
                             <td
-                              className="truncate px-6 py-4 text-left text-[10px] font-medium text-cyan-300"
+                              className="truncate px-6 py-4 text-left text-[10px] font-medium text-sky-500"
                               onClick={() => {
                                 if (item?.year && item?.month) {
                                   const selectedDate = new Date(item.year, item?.month - 1);
@@ -220,7 +220,9 @@ function DaftarGajiList(props: DaftarGajiListProps) {
                                 }
                               }}
                             >
-                              {months[item?.month - 1]} {item?.year}
+                              <button>
+                                {months[item?.month - 1]} {item?.year}
+                              </button>
                             </td>
                             <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
                               {item?.tanggal_awal_akhir}
@@ -228,7 +230,7 @@ function DaftarGajiList(props: DaftarGajiListProps) {
                             <td className="truncate px-6 py-4 text-center text-[10px] font-medium text-gray-900">
                               {item?.created_by}
                             </td>
-                            <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-sky-500">
+                            <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">
                               {item?.last_sync}
                             </td>
                             <td className="truncate px-6 py-4 text-left text-[10px] font-medium text-gray-900">

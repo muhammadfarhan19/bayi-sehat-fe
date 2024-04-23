@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { classNames } from '../../../../utils/Components';
-import { tabs } from '../../../DinasPage/DataPegawai/DataDinasPegawai';
+// import { tabs } from '../../../DinasPage/DataPegawai/DataDinasPegawai';
 import { type TabName } from '../../RekapPresensiPage/Shared/types/_sharedType';
 import DaftarGajiDetail from './DaftarGajiDetail';
 import DaftarGajiList from './DaftarGajiList';
@@ -41,6 +41,8 @@ function DaftarTransaksi() {
     }
     setSelected(name);
   };
+
+  const tabs = [{ name: 'Master PPNPN', href: '#' }];
 
   return (
     <>

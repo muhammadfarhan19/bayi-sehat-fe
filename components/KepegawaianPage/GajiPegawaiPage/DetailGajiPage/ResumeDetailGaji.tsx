@@ -3,19 +3,20 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { setSnackbar } from '../../../../action/CommonAction';
-import { GajiPegawai } from '../../../../constants/APIUrls';
+import { GajiPegawai, UnitKerjaAPI } from '../../../../constants/APIUrls';
 // import { GajiPegawai, ResumeAPI, UnitKerjaAPI } from '../../../../constants/APIUrls';
 import { SnackbarType } from '../../../../reducer/CommonReducer';
 import { ResumeDownloadReq, ResumeDownloadRes } from '../../../../types/api/ResumeAPI';
 import { ResumeGaji, ResumeGajiList } from '../../../../types/api/ResumeGajiAPI';
+import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
 // import { type GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
 import { callAPI } from '../../../../utils/Fetchers';
 import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
-import { YearPicker } from '../../DaftarTransaksiPage/Shared';
-import { MonthPicker } from '../../RekapPresensiPage/DetailPage/Shared';
+// import { YearPicker } from '../../DaftarTransaksiPage/Shared';
+// import { MonthPicker } from '../../RekapPresensiPage/DetailPage/Shared';
 import { type TabName } from '../../RekapPresensiPage/Shared/types/_sharedType';
 
 type DaftarTransaksiDetailProps = {
@@ -31,7 +32,7 @@ function ResumeGajiDetail(props: DaftarTransaksiDetailProps) {
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const isCodeUnavail = properties.code?.trim()?.length === 0;
   const TableHeaderPegawaiNipNik = properties?.selectedTab === 'Master PNS' ? 'NIP' : 'NIK';
-  const [selectedDate, setSelectedDate] = React.useState<Date>();
+  // const [selectedDate, setSelectedDate] = React.useState<Date>();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [filterState, setFilterState] = React.useState<ResumeGaji>({
@@ -114,18 +115,24 @@ function ResumeGajiDetail(props: DaftarTransaksiDetailProps) {
     { text: 'Unit Kerja' },
   ];
 
-  const handleDateChange = React.useCallback(
-    (date: Date) => {
-      setSelectedDate(date);
-    },
-    [selectedDate]
-  );
+  // const handleDateChange = React.useCallback(
+  //   (date: Date) => {
+  //     setSelectedDate(date);
+  //   },
+  //   [selectedDate]
+  // );
 
-  const handleViewAllSelected = () => {
-    const updatedFilterState = { ...filterState };
-    delete updatedFilterState.month;
-    setFilterState(updatedFilterState);
-  };
+  // const handleViewAllSelected = () => {
+  //   const updatedFilterState = { ...filterState };
+  //   delete updatedFilterState.month;
+  //   setFilterState(updatedFilterState);
+  // };
+
+  const { data: unitKerjaList } = useCommonApi<null, GetUnitKerjaData[]>(
+    UnitKerjaAPI.GET_UNIT_KERJA_LIST_DIREKTORAT,
+    null,
+    { method: 'GET' }
+  );
 
   return (
     <>
@@ -137,12 +144,13 @@ function ResumeGajiDetail(props: DaftarTransaksiDetailProps) {
       </div>
 
       <div className="mb-1 flex flex-row items-center px-4">
+        <h3 className="text-xl font-medium leading-6 text-gray-900">Kode Transaksi : {properties.code || '-'}</h3>
         <div className="ml-auto flex">
           <input
             type="text"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Cari..."
-            onChange={e => changeFilterState({ kode_transaksi: e.target.value })}
+            onChange={e => changeFilterState({ search: e.target.value })}
           />
           <button
             type="button"
@@ -155,25 +163,18 @@ function ResumeGajiDetail(props: DaftarTransaksiDetailProps) {
       </div>
 
       <div className="my-5 flex flex-row items-center justify-between px-5">
-        <div className="flex flex-[0.1]">
-          <MonthPicker
-            onChange={date => {
-              handleDateChange(date);
-              changeFilterState({ month: date.getMonth() + 1 });
-            }}
-            onViewAllSelected={handleViewAllSelected}
-            disableYear
-            viewAllText
-          />
-        </div>
-        <div className="flex flex-[0.5]">
-          <YearPicker
-            onChange={date => {
-              handleDateChange(date);
-              changeFilterState({ year: date?.getFullYear() });
-            }}
-            selectedMonth={selectedDate?.getMonth()}
-          />
+        <div className="flex flex-[0.3]">
+          <select
+            className="mb-10 block w-full appearance-none truncate rounded-md border border-gray-300 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:bg-gray-200 sm:text-sm"
+            onChange={e => changeFilterState({ unit_kerja: e.target.value })}
+          >
+            <option value="">Semua</option>
+            {(unitKerjaList || []).map((item, index) => (
+              <option key={`options-${index}`} value={item?.name}>
+                {item?.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <button

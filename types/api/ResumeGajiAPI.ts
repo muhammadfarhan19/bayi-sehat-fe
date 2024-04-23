@@ -7,6 +7,8 @@ export interface ResumeGaji {
   type: string;
   month?: number;
   year?: number;
+  unit_kerja?: string;
+  search?: string;
 }
 
 export interface ResumeGajiList {
@@ -25,6 +27,13 @@ export interface ResumeGajiList {
     year?: number;
   }[];
   pagination: Pagination;
+}
+
+export interface UnitReq {
+  kode_transaksi: string;
+  page: number;
+  unit_kerja: string;
+  year: string;
 }
 
 export interface ExportData {
