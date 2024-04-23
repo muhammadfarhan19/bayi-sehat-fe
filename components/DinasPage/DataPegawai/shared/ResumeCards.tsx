@@ -66,7 +66,7 @@ export function ResumeCards() {
             <h3 className="inline-flex text-xl font-semibold tracking-wider text-gray-700">Resume Data Kehadiran</h3>
             <MonthPicker onChange={date => setSelectedDate(date)} type="oke" />
             <Link href="/kehadiran">
-              <a className="flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200">
+              <a className="mr-3 flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200">
                 Klaim Kehadiran
               </a>
             </Link>
@@ -129,11 +129,12 @@ export function ResumeCards() {
                     ? formatRupiah(
                         summaryPersonal?.total_jumlah_potongan_ppnpn === undefined
                           ? 0
-                          : summaryPersonal?.total_jumlah_potongan_ppnpn
+                          : summaryPersonal?.total_jumlah_potongan_ppnpn ?? 0
                       )
                     : summaryPersonal?.total_presentase_pengurang_kehadiran == undefined
                     ? 0
                     : summaryPersonal?.total_presentase_pengurang_kehadiran}
+                  {' %'}
                 </div>
               </div>
             </div>

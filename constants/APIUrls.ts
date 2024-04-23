@@ -316,7 +316,7 @@ export const SummaryAPI = {
 export const GajiAPI = {
   GET_GAJI_DETAIL: config.apiHost + '/gaji/detail',
   GET_HARI_BERMASALAH_DETAIL: config.apiHost + '/gaji/detail/haribermasalah',
-}
+};
 
 export const HistoryPegawai = {
   GET_HISTORY_LIST: config.apiHost + '/pegawai/history',
