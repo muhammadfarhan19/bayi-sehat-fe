@@ -9,6 +9,7 @@ import { SnackbarType } from '../../../../reducer/CommonReducer';
 import { ResumeDownloadReq, ResumeDownloadRes } from '../../../../types/api/ResumeAPI';
 import { ResumeGaji, ResumeGajiList } from '../../../../types/api/ResumeGajiAPI';
 import { GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
+import { formatDate } from '../../../../utils/DateUtil';
 // import { type GetUnitKerjaData } from '../../../../types/api/UnitKerjaAPI';
 import { callAPI } from '../../../../utils/Fetchers';
 import { CircleProgress } from '../../../shared/CircleProgress';
@@ -76,11 +77,13 @@ function ResumeGajiDetail(props: DaftarTransaksiDetailProps) {
     );
 
     if (callApiDownload.status === 200 && callApiDownload.data instanceof Blob) {
-      let url = '';
-      url = window.URL.createObjectURL(callApiDownload.data);
+      const date = new Date();
+      const filename = `ResumeData-${filterState.kode_transaksi}-${formatDate(date, 'ddMMMyyyy')}.xlsx`; // Nama default jika tidak ada informasi nama file dari backend
+
+      const url = window.URL.createObjectURL(callApiDownload.data);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'Resume Data' + '.xlsx');
+      link.setAttribute('download', filename);
       document.body.appendChild(link);
       link.click();
       dispatch(
@@ -90,7 +93,6 @@ function ResumeGajiDetail(props: DaftarTransaksiDetailProps) {
           type: SnackbarType.INFO,
         })
       );
-      setIsLoading(false);
     } else {
       dispatch(
         setSnackbar({
@@ -99,8 +101,8 @@ function ResumeGajiDetail(props: DaftarTransaksiDetailProps) {
           type: SnackbarType.ERROR,
         })
       );
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   const tableHeader = [

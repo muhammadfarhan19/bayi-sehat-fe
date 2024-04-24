@@ -28,17 +28,3 @@ export interface ResumeGajiList {
   }[];
   pagination: Pagination;
 }
-
-export interface UnitReq {
-  kode_transaksi: string;
-  page: number;
-  unit_kerja: string;
-  year: string;
-}
-
-export interface ExportData {
-  unit_kerja: string;
-  kode_transaki: string;
-  search?: string;
-  type: string;
-}
