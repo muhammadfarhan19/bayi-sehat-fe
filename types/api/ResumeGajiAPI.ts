@@ -35,10 +35,3 @@ export interface UnitReq {
   unit_kerja: string;
   year: string;
 }
-
-export interface ExportData {
-  unit_kerja: string;
-  kode_transaki: string;
-  search?: string;
-  type: string;
-}

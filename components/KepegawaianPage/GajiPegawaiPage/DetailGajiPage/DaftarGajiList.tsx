@@ -112,7 +112,7 @@ function DaftarGajiList(props: DaftarGajiListProps) {
   return (
     <>
       <div className="mb-5 flex flex-row items-center px-4 pt-3">
-        <h3 className="text-xl font-medium leading-6 text-gray-900">Resume Gaji</h3>
+        <h3 className="text-xl font-medium leading-6 text-gray-900">Daftar Gaji Pegawai</h3>
         <div className="ml-auto flex">
           <input
             type="text"
