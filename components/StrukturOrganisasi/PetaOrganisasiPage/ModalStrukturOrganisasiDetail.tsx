@@ -54,7 +54,6 @@ function ModalStrukturOrganisasiForm(props: ModalProps) {
 
   const {
     control,
-    register,
     handleSubmit,
     formState: { errors },
     setValue,
@@ -164,20 +163,6 @@ function ModalStrukturOrganisasiForm(props: ModalProps) {
               <form onSubmit={handleSubmit(submitHandler)}>
                 <div className="mt-5 sm:col-span-6">
                   <div className="mt-5 sm:col-span-6">
-                    <label htmlFor="divisi" className="block text-sm font-medium text-gray-700">
-                      Nama Penugasan
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        {...register('divisi', {
-                          required: 'Mohon Masukkan Nama Penugasan',
-                        })}
-                        defaultValue={parentRole === 4 ? 'Anggota' : ''}
-                        className="inline-block h-9 w-full rounded-md border-2 border-gray-300 px-2 shadow-sm disabled:bg-gray-200 sm:text-sm"
-                        name="divisi"
-                      />
-                      {errors.divisi && <p className="mt-1 text-xs text-red-500">{errors.divisi.message}</p>}
-                    </div>
                     {type === modalOption.add && (
                       <div className="mt-5 sm:col-span-6">
                         <Controller
@@ -222,7 +207,7 @@ function ModalStrukturOrganisasiForm(props: ModalProps) {
                             </>
                           )}
                         />
-                        {errors.pegawaiId && <p className="mt-1 text-xs text-red-500">{errors.pegawaiId.message}</p>}
+                        {errors.role && <p className="mt-1 text-xs text-red-500">{errors.role.message}</p>}
                       </div>
                     )}
                     <div className="mt-5 sm:col-span-6">
