@@ -250,7 +250,6 @@ function KlaimCutiSakit() {
             <Controller
               control={control}
               name={'file_name'}
-              rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
               render={({ field: { onChange, value } }) => (
                 <UploadWrapper
                   allowedTypes={['pdf']}
