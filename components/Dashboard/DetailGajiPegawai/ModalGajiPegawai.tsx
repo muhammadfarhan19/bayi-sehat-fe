@@ -111,7 +111,7 @@ export default function ModalGajiPegawai(props: ID) {
                   Total
                 </td>
                 <td className="whitespace-nowrap py-3 px-6 text-left font-bold text-black">
-                  {formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_gaji_bulan_ini ?? 0)}
+                  {formatRupiah(getGajiPegawai?.list?.[0]?.jumlah_potongan_gaji ?? 0)}
                 </td>
               </tr>
             </tbody>

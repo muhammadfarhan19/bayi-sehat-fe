@@ -133,8 +133,7 @@ export function ResumeCards() {
                       )
                     : summaryPersonal?.total_presentase_pengurang_kehadiran == undefined
                     ? 0
-                    : summaryPersonal?.total_presentase_pengurang_kehadiran}
-                  {' %'}
+                    : `${summaryPersonal?.total_presentase_pengurang_kehadiran} %`}
                 </div>
               </div>
             </div>
