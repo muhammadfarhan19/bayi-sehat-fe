@@ -290,7 +290,7 @@ function KlaimCutiSakit() {
             <div className="mt-5 flex flex-row justify-end">
               <button
                 onClick={
-                  watch('tanggal_klaim') && watch('jenis_pengajuan') && watch('file_name') && watch('catatan')
+                  watch('tanggal_klaim') && watch('jenis_pengajuan') && watch('catatan')
                     ? () => handleShowForm(!formModalState?.open)
                     : handleSubmit(submitHandler)
                 }
