@@ -176,9 +176,9 @@ function KlaimCutiSakit() {
       <section aria-labelledby="section-1-title">
         <div className="overflow-hidden rounded-lg bg-white shadow">
           <div className="p-6">
-            <h3 className="text-xl font-medium leading-6 text-gray-900">Kuota Klaim Cuti</h3>
+            <h3 className="text-xl font-medium leading-6 text-gray-900">Kuota Klaim Cuti Tahunan</h3>
             <div className="mt-4 overflow-hidden rounded-lg bg-gray-100 px-4 py-5 shadow sm:p-6">
-              <dt className="truncate text-sm text-gray-500">Sisa Kuota Klaim Cuti</dt>
+              <dt className="truncate text-sm text-gray-500">Sisa Kuota Klaim Cuti Tahunan</dt>
               <dd className="mt-1 text-3xl font-semibold text-indigo-700">{kuotaPengajuanCuti?.sisa_pengajuan} Hari</dd>
             </div>
           </div>
@@ -250,7 +250,6 @@ function KlaimCutiSakit() {
             <Controller
               control={control}
               name={'file_name'}
-              rules={{ required: 'Mohon upload file yang ingin disimpan.' }}
               render={({ field: { onChange, value } }) => (
                 <UploadWrapper
                   allowedTypes={['pdf']}
@@ -291,7 +290,7 @@ function KlaimCutiSakit() {
             <div className="mt-5 flex flex-row justify-end">
               <button
                 onClick={
-                  watch('tanggal_klaim') && watch('jenis_pengajuan') && watch('file_name') && watch('catatan')
+                  watch('tanggal_klaim') && watch('jenis_pengajuan') && watch('catatan')
                     ? () => handleShowForm(!formModalState?.open)
                     : handleSubmit(submitHandler)
                 }

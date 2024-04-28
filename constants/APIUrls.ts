@@ -313,6 +313,16 @@ export const SummaryAPI = {
   GET_SUMMARY_EXPORT: config.apiHost + '/transaksi/summary/export',
 };
 
+export const GajiAPI = {
+  GET_GAJI_DETAIL: config.apiHost + '/gaji/detail',
+  GET_HARI_BERMASALAH_DETAIL: config.apiHost + '/gaji/detail/haribermasalah',
+};
+
 export const HistoryPegawai = {
   GET_HISTORY_LIST: config.apiHost + '/pegawai/history',
+};
+
+export const GajiPegawai = {
+  GET_TRANSAKSI_GAJI: config.apiHost + '/gaji/resume',
+  GET_EXPORT_GAJI: config.apiHost + '/gaji/resume/export',
 };

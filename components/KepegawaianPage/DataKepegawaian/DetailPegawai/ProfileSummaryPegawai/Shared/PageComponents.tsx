@@ -2,8 +2,8 @@ import React from 'react';
 
 interface Header {
   name: string;
-  jabatan: string;
-  contact: string;
+  jabatan?: string;
+  contact?: string;
 }
 
 interface SubData {
@@ -42,7 +42,7 @@ export function HeaderComponents(props: Header) {
           width: '35%',
         }}
       >
-        {props.jabatan}
+        {props?.jabatan}
       </h5>
       <h5
         style={{
@@ -51,7 +51,7 @@ export function HeaderComponents(props: Header) {
           color: '#6B7280',
         }}
       >
-        {props.contact}
+        {props?.contact}
       </h5>
     </>
   );
@@ -67,18 +67,13 @@ export function LabelledRowsItem(props: SubData) {
 
 export function ContentLabelledItems(props: InnerData) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-      }}
-    >
+    <div className="flex flex-row justify-between">
       <span
         style={{
           display: 'flex',
           flex: 1,
           fontSize: 12,
+          padding: 4,
         }}
       >
         {props.subtitle}

@@ -27,6 +27,7 @@ export interface PutStrukturDataReq {
 }
 
 export interface PutStrukturDataRes {
+  error_message?: string;
   status: Status;
   data: string;
 }
@@ -39,6 +40,7 @@ export interface PostStrukturDataReq {
 }
 
 export interface PostStrukturDataRes {
+  error_message: string;
   status: Status;
   data: string;
 }

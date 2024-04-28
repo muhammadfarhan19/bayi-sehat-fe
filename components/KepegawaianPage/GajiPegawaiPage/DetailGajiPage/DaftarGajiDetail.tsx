@@ -14,10 +14,10 @@ import { CircleProgress } from '../../../shared/CircleProgress';
 import useCommonApi from '../../../shared/hooks/useCommonApi';
 import Loader from '../../../shared/Loader/Loader';
 import Pagination from '../../../shared/Pagination';
+import { useResyncTransaction } from '../../DaftarTransaksiPage/utils';
+import useDownloadTransaksi from '../../DaftarTransaksiPage/utils/useDownloadTransaksi';
 import { ExpandableTableData } from '../../RekapPresensiPage/DetailPage/Shared';
 import { type TabName } from '../../RekapPresensiPage/Shared/types/_sharedType';
-import { useResyncTransaction } from '../utils';
-import useDownloadTransaksi from '../utils/useDownloadTransaksi';
 
 type DaftarTransaksiDetailProps = {
   onBack: () => void;
@@ -26,7 +26,7 @@ type DaftarTransaksiDetailProps = {
   selectedTab: string | TabName;
 };
 
-function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
+function DaftarGajiDetail(props: DaftarTransaksiDetailProps) {
   const properties = props;
   const reSync = useResyncTransaction();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
@@ -39,7 +39,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
 
   const [filterState, setFilterState] = React.useState<DaftarTransaksi.Request>({
     page: 1,
-    per_page: 30,
+    per_page: 10,
     kode_transaksi: String(properties.code),
     type:
       properties?.selectedTab === 'Master PNS' ? 'pns' : properties?.selectedTab === 'Master PPNPN' ? 'ppnpn' : 'pppk',
@@ -441,4 +441,4 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
   );
 }
 
-export default DaftarTransaksiDetail;
+export default DaftarGajiDetail;

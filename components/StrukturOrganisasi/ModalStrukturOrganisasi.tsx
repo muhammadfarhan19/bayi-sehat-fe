@@ -30,6 +30,7 @@ interface ModalProps {
   selectedId?: number;
   namaPegawai?: string;
   role?: number;
+  unit_kerja_id?: number;
 }
 
 interface FormState {
@@ -41,7 +42,7 @@ interface FormState {
 }
 
 function ModalStrukturOrganisasi(props: ModalProps) {
-  const { open, setOpen, onSuccess, selectedId, namaPegawai, role } = props;
+  const { open, setOpen, onSuccess, selectedId, namaPegawai, role, unit_kerja_id } = props;
   const [queryPegawai, setQueryPegawai] = React.useState('');
   const [pegawaiId, setPegawaiId] = React.useState('');
   const debounce = React.useRef<number>(0);
@@ -65,7 +66,14 @@ function ModalStrukturOrganisasi(props: ModalProps) {
   );
   const { data: pegawaiList } = useCommonApi<GetPegawaiListReq, GetPegawaiListData>(
     KepegawaianAPI.GET_PEGAWAI_LIST,
-    { page: 1, per_page: 10, status_kepegawaian: 'aktif', status_cpns: [0], nama: queryPegawai },
+    {
+      page: 1,
+      per_page: 10,
+      status_kepegawaian: 'aktif',
+      unit_kerja_id: unit_kerja_id,
+      status_cpns: [0],
+      nama: queryPegawai,
+    },
     { method: 'GET' }
   );
   const pegawaiData = pegawaiList?.list?.find(each => each.pegawai_id === Number(pegawaiId));
@@ -114,7 +122,7 @@ function ModalStrukturOrganisasi(props: ModalProps) {
       dispatch(
         setSnackbar({
           show: true,
-          message: 'Gagal menyimpan data. Mohon coba beberapa saat lagi.',
+          message: resSubmit.data?.error_message || 'Terjadi Kesalahan',
           type: SnackbarType.ERROR,
         })
       );
@@ -210,7 +218,7 @@ function ModalStrukturOrganisasi(props: ModalProps) {
                                       : StrukturKepegawaianRole.find(each => each.value === role)?.text || '',
                                   value: String(role),
                                 }}
-                                options={StrukturKepegawaianRole.map(each => ({
+                                options={StrukturKepegawaianRole.filter(each => each.value < 5).map(each => ({
                                   text: each.text,
                                   value: String(each.value),
                                 }))}
@@ -218,7 +226,7 @@ function ModalStrukturOrganisasi(props: ModalProps) {
                             </>
                           )}
                         />
-                        {errors.pegawaiId && <p className="mt-1 text-xs text-red-500">{errors.pegawaiId.message}</p>}
+                        {errors.role && <p className="mt-1 text-xs text-red-500">{errors.role.message}</p>}
                       </div>
                     )}
                     <div className="mt-5 sm:col-span-6">

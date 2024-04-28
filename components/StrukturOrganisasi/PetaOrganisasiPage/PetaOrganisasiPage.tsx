@@ -36,12 +36,13 @@ function PetaOrganisasiPage(props: UnitKerja) {
   const [showAdvancedFilter, setshowAdvancedFilter] = React.useState(true);
   const dispatch = useDispatch();
 
-  const handleShowForm = (open: boolean, selectedId?: number, name?: string, role?: number) => {
+  const handleShowForm = (open: boolean, selectedId?: number, name?: string, role?: number, unit_kerja_id?: number) => {
     setFormModalState({
       open,
       selectedId,
       name,
       role,
+      unit_kerja_id,
     });
   };
 
@@ -50,11 +51,13 @@ function PetaOrganisasiPage(props: UnitKerja) {
     selectedId?: number;
     name?: string;
     role?: number;
+    unit_kerja_id?: number;
   }>({
     open: false,
     selectedId: undefined,
     name: undefined,
     role: undefined,
+    unit_kerja_id: undefined,
   });
 
   const [filterState, setFilterState] = React.useState<GetRekapReq>({
@@ -216,7 +219,8 @@ function PetaOrganisasiPage(props: UnitKerja) {
                       }}
                       disabled={!!StrukturKepegawaianRole && !isAllowSuperAdminAccessFilter}
                     >
-                      {StrukturKepegawaianRole.map((item, index) => (
+                      <option value="0">Semua</option>
+                      {StrukturKepegawaianRole.filter(each => each.value < 5).map((item, index) => (
                         <option
                           selected={item.value.toString() === selectedRole ? true : false}
                           key={`options-${index}`}
@@ -231,7 +235,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
                 <div className="flex items-end">
                   <button
                     onClick={() => {
-                      handleShowForm(!formModalState?.open);
+                      handleShowForm(!formModalState?.open, undefined, undefined, undefined, unit_kerja_id);
                     }}
                     className="h-fit rounded-md bg-indigo-600 py-2 px-4 text-sm text-white"
                   >
@@ -353,6 +357,7 @@ function PetaOrganisasiPage(props: UnitKerja) {
                       onSuccess={() => mutate()}
                       namaPegawai={formModalState?.name}
                       role={formModalState?.role}
+                      unit_kerja_id={formModalState?.unit_kerja_id}
                     />
                   )}
                   <Pagination

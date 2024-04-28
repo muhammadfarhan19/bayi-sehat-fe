@@ -15,6 +15,7 @@ import Card from '../../shared/Card';
 import useCommonApi from '../../shared/hooks/useCommonApi';
 import usePersonalData from '../../shared/hooks/usePersonalData';
 import DinasCalendar from './DinasCalendar';
+import TotalGajiPegawai from './GajiPegawai/TotalGajiPegawai';
 import JadwalDinas from './JadwalDinas';
 import { ResumeCards } from './shared/ResumeCards';
 
@@ -107,6 +108,7 @@ export default function DetailDinas() {
       {isOwnProfile && (
         <>
           <NotificationListPage />
+          <TotalGajiPegawai />
           <ResumeCards />
         </>
       )}
