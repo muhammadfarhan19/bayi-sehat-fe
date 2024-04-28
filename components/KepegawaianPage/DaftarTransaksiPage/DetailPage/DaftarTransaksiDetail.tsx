@@ -39,7 +39,7 @@ function DaftarTransaksiDetail(props: DaftarTransaksiDetailProps) {
 
   const [filterState, setFilterState] = React.useState<DaftarTransaksi.Request>({
     page: 1,
-    per_page: 10,
+    per_page: 30,
     kode_transaksi: String(properties.code),
     type:
       properties?.selectedTab === 'Master PNS' ? 'pns' : properties?.selectedTab === 'Master PPNPN' ? 'ppnpn' : 'pppk',
