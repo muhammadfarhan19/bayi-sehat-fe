@@ -153,11 +153,12 @@ function KlaimCutiSakit() {
       dispatch(
         setSnackbar({
           show: true,
-          message: 'Gagal menyimpan data',
+          message: resSubmit.data?.error_message,
           type: SnackbarType.ERROR,
         })
       );
       setTimeout(() => window.location.reload(), 3000);
+      console.log(resSubmit);
     }
   };
 

@@ -18,6 +18,7 @@ export interface PostCutiReq {
 export interface PostCutiRes {
   status: string;
   data: string;
+  error_message: string;
 }
 
 export interface GetCutiReq {

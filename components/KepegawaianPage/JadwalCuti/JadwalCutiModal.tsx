@@ -92,7 +92,7 @@ function JadwalCutiModal(props: ModalProps) {
       dispatch(
         setSnackbar({
           show: true,
-          message: 'Gagal menyimpan data',
+          message: resSubmit.data?.error_message,
           type: SnackbarType.ERROR,
         })
       );
