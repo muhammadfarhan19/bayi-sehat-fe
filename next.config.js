@@ -1,3 +1,8 @@
-const withInjectConfig = require('./config/_nextInjectConfig');
+// @ts-check
 
-module.exports = withInjectConfig();
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  /* config options here */
+}
+
+module.exports = nextConfig

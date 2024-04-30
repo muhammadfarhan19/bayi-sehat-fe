@@ -3,6 +3,7 @@
   "printWidth": 120,
   "trailingComma": "es5",
   "arrowParens": "avoid",
+  "semi": false,
   "overrides": [
     {
       "files": "*.md",

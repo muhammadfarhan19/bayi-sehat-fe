@@ -1,14 +1,9 @@
-import React from 'react';
+import React from 'react'
 
-import LoginPage from '../../components/LoginPage';
-import { withAuthenticatedPage } from '../../components/shared/hocs/AuthenticatedPage';
+import LoginPage from '../../components/forms/LoginPage'
 
-function Login() {
-  return (
-    <>
-      <LoginPage />
-    </>
-  );
+const Login = () => {
+  return <LoginPage />
 }
 
-export default withAuthenticatedPage({ checkLogin: false })(Login);
+export default Login
