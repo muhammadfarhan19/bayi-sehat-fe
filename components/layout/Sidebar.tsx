@@ -1,7 +1,7 @@
-import Cookies from 'js-cookie'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
+import { useAuth } from '../../hooks/useAuth'
 import logo from '../../public/assets/logo.png'
 
 interface SidebarLinks {
@@ -21,10 +21,7 @@ const Sidebar: React.FC = () => {
     },
   ]
 
-  const logout = () => {
-    Cookies.remove('token')
-    window.location.href = '/login'
-  }
+  const { logout } = useAuth()
 
   const router = useRouter()
 
