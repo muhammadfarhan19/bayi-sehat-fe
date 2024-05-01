@@ -11,7 +11,6 @@ const LoginPage: React.FC = () => {
     handleSubmit,
     register,
     formState: { errors },
-    setError,
   } = useForm<PostAuthLoginReq>()
 
   const onSubmit = async (val: PostAuthLoginReq) => {
