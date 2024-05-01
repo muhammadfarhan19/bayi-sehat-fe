@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import { Dialog, Transition } from '@headlessui/react'
 import { LockClosedIcon } from '@heroicons/react/outline'
 import React from 'react'
@@ -8,7 +9,7 @@ interface ModalProps {
   setOpen: (open: boolean) => void
   onSuccess?: () => void
   type?: string
-  selectedId?: number
+  selectedId?: string | undefined
 }
 
 interface FormState {
@@ -21,7 +22,8 @@ interface FormState {
 }
 
 function AddBabyForm(props: ModalProps) {
-  const { open, setOpen, onSuccess, selectedId, type } = props
+  const { open, setOpen, selectedId, type } = props
+  const [data, setData] = React.useState([])
 
   const toggleModal = () => {
     setOpen(!open)
@@ -35,30 +37,62 @@ function AddBabyForm(props: ModalProps) {
     setValue,
   } = useForm<FormState>()
 
+  // const fetchBaby = async (id: string | undefined) => {
+  //   await fetch(`http://localhost:4000/baby/${id}`)
+  //     .then(response => response.json())
+  //     .then(response => setData(response))
+  // }
+
   const submitHandler = async (formData: FormState) => {
-    try {
+    let response
+    if (selectedId) {
+      response = await fetch(`http://localhost:4000/baby/${selectedId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+    } else {
       const result = {
         ...formData,
         birthdate: new Date(formData.birthdate).toISOString(),
       }
-      const response = await fetch('http://localhost:4000/baby', {
+      response = await fetch('http://localhost:4000/baby', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(result),
-      }).then(response => response.json())
-
-      if (response.statusCode === 200) {
-        alert(response.message)
-      }
-
-      toggleModal()
-      return response
-    } catch (error) {
-      throw new Error(`Error posting new baby data: ${error}`)
+      })
     }
+
+    if (response.statusText === 'OK') {
+      alert('Berhasil Menyimpan')
+    } else {
+      alert('Gagal Menyimpan')
+    }
+    setOpen(!open)
   }
+
+  // fetchBaby(selectedId)
+  // console.log(data)
+  // React.useEffect(() => {
+  // const fetchBaby = async (id: string | undefined) => {
+  //   return await fetch(`http://localhost:4000/baby/${id}`)
+  //     .then(response => response.json())
+  //     .then(response => setData(response.data))
+  // }
+  // fetchBaby(selectedId)
+  // console.log(typeof data)
+  // console.log(data)
+  // }, [])
+
+  // React.useLayoutEffect(() => {
+  //   if (type === 'edit' && selectedId && data) {
+  //     setValue('name', data.find(value => value.name))
+  //   }
+  // }, [data && type === 'edit'])
 
   return (
     <Transition appear show={open} as={React.Fragment}>
@@ -90,7 +124,9 @@ function AddBabyForm(props: ModalProps) {
           >
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-sm transition-all">
               <Dialog.Title as="div" className="my-5 flex justify-between">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">Masukkan Data Anak</h3>
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  {selectedId ? 'Perbarui Data Bayi' : 'Masukkan Data Anak'}
+                </h3>
                 <button onClick={toggleModal}>
                   <LockClosedIcon />
                 </button>
@@ -153,7 +189,7 @@ function AddBabyForm(props: ModalProps) {
                   />
                 </div>
                 <button type="submit" className="w-full rounded-md border bg-teal-400 p-3 font-semibold text-white">
-                  Tambah
+                  {selectedId ? 'Simpan' : 'Tambah'}
                 </button>
               </form>
             </div>
