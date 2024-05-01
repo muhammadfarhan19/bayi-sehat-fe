@@ -123,7 +123,7 @@ function AddBabyForm(props: ModalProps) {
             leaveTo="opacity-0 scale-95"
           >
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-sm transition-all">
-              <Dialog.Title as="div" className="my-5 flex justify-between">
+              <Dialog.Title as="div" className="mb-5 flex justify-between">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
                   {selectedId ? 'Perbarui Data Bayi' : 'Masukkan Data Anak'}
                 </h3>

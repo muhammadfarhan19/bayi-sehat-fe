@@ -36,8 +36,11 @@ const MonitoringPage: React.FC = () => {
   const handleDelete = async (id: string) => {
     try {
       await axios.delete(`http://localhost:4000/baby/${id}`)
+      alert('Berhasil Menghapus data')
+      router.reload()
     } catch (error) {
       console.log(error)
+      alert('Gagal Menghapus data')
     }
   }
   const router = useRouter()
@@ -169,7 +172,7 @@ const MonitoringPage: React.FC = () => {
                         title="Hapus Data"
                         type="button"
                         className="mx-1 rounded-[6px] bg-red-500 p-2 text-[14px] font-normal text-gray-50"
-                        onClick={() => handleConfirmModal}
+                        onClick={() => handleDelete(baby.id)}
                       >
                         <TrashIcon className="h-5 w-5" />
                       </button>
