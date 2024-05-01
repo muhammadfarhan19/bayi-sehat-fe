@@ -11,21 +11,33 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import React from 'react'
 
+import AddConditionForm from '../../components/forms/AddConditionForm'
 import { calculateAgeInMonths, DETAIL_TABLE_HEAD, DUMMY_CONDITION } from '../../lib/common'
 import { BabyType } from '../../types/babyType'
+import { BabyCondition } from '../../types/conditionType'
 
 const DetailMonitoring = () => {
   const [data, setData] = React.useState<BabyType | undefined>(undefined)
+  const [condition, setCondition] = React.useState<BabyCondition | undefined>(undefined)
+  const [openModal, setOpenModal] = React.useState<boolean>(false)
   const router = useRouter()
 
   const id = router.query.id
+
+  const handleModal = () => {
+    setOpenModal(!openModal)
+  }
 
   React.useEffect(() => {
     const fetchDetailBaby = async (id: any) => {
       const response = await axios.get(`http://localhost:4000/baby/${id}`)
       setData(response.data.data)
-      console.log(data)
     }
+    const fetchBabyCondition = async (id: any) => {
+      const response = await axios.get(`http://localhost:4000/condition/${id}`)
+      setCondition(response.data.data)
+    }
+    fetchBabyCondition(id)
     fetchDetailBaby(id)
   }, [])
 
@@ -42,7 +54,7 @@ const DetailMonitoring = () => {
           </button>
           <button
             className="flex items-center gap-x-1 rounded-md bg-teal-400 py-2 pl-2 pr-4 text-sm text-white"
-            // onClick={() => setOpenModal(!openModal)}
+            onClick={() => handleModal()}
           >
             <PlusIcon className="h-5 w-5" />
             <span>Upload Kondisi</span>
@@ -64,7 +76,8 @@ const DetailMonitoring = () => {
                 </tr>
               </thead>
               <tbody>
-                {DUMMY_CONDITION.map((item, index) => (
+                TODO : fetch baby conditions
+                {/* {condition.((item: any, index: number) => (
                   <tr key={index}>
                     <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.month}</td>
                     <td className="border-b border-gray-200 bg-white p-5 text-sm">
@@ -72,9 +85,8 @@ const DetailMonitoring = () => {
                     </td>
                     <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.berat}</td>
                     <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.tinggi}</td>
-                    <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.BMI()}</td>
                   </tr>
-                ))}
+                ))} */}
               </tbody>
             </table>
           </aside>
@@ -121,14 +133,7 @@ const DetailMonitoring = () => {
           </a>
         </aside>
       </section>
-      {/* {openModal && (
-        <AddFormCondition
-          open={openModal}
-          setOpen={handleModal}
-          onSuccess={() => router.refresh()}
-          id={id}
-        />
-      )} */}
+      {openModal && <AddConditionForm babyId={id} open={openModal} setOpen={handleModal} />}
     </main>
   )
 }

@@ -31,7 +31,7 @@ export const getQueryString = <T = Record<string, string>>(): T => {
   return result as unknown as T
 }
 
-export const DETAIL_TABLE_HEAD = ['Periode', 'Umur (bulan)', 'Berat (kg)', 'Tinggi (cm)', 'BMI']
+export const DETAIL_TABLE_HEAD = ['Periode', 'Umur (bulan)', 'Berat (kg)', 'Tinggi (cm)']
 
 const MONTHS = [
   'Januari',
@@ -54,8 +54,4 @@ export const DUMMY_CONDITION = MONTHS.map((month, index) => ({
   month,
   berat: Math.floor(Math.random() * (6 - 4 + 1)) + 3,
   tinggi: heights[index % heights.length],
-  BMI: function () {
-    const result = this.berat / ((this.tinggi / 100) * (this.tinggi / 100))
-    return result.toFixed(1)
-  },
 }))
