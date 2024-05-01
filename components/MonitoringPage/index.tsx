@@ -1,0 +1,177 @@
+import { InformationCircleIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/outline'
+import axios from 'axios'
+import { useRouter } from 'next/router'
+import React from 'react'
+
+import { BabyType } from '../../types/babyType'
+import AddBabyForm from '../forms/AddBabyForm'
+import ConfirmDialog from '../shared/ConfirmDialog'
+
+const MonitoringPage: React.FC = () => {
+  const [openModal, setOpenModal] = React.useState<boolean>(false)
+  const [openConfirmModal, setOpenConfirmModal] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(true)
+  const [data, setData] = React.useState([])
+  const router = useRouter()
+  const handleModal = () => {
+    setOpenModal(!openModal)
+  }
+  const handleConfirmModal = () => {
+    setOpenConfirmModal(!openConfirmModal)
+  }
+
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(`http://localhost:4000/baby/${id}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  React.useEffect(() => {
+    const getData = async () => {
+      const response = await axios.get(`http://localhost:4000/baby`)
+      setData(response.data.data)
+      setIsLoading(false)
+    }
+    getData()
+  }, [])
+
+  return (
+    <main className="min-h-auto mb-5 flex max-h-screen min-h-full flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
+      <header className="flex items-center justify-between">
+        <aside className="w-auto text-2xl font-semibold">Monitoring</aside>
+        <aside className={`b-2'} w-auto cursor-pointer rounded-md px-4 py-2 hover:bg-gray-50`}>
+          {/* {user} */}
+          nama
+        </aside>
+      </header>
+      <aside className="flex items-center justify-end">
+        <input type="text" placeholder="Cari..." className="w-[300px] rounded-md border px-3 py-2" />
+      </aside>
+      <section className="flex h-full w-full flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold leading-tight">Bayi Terdaftar</h2>
+          <button className="rounded-md bg-teal-400 px-4 py-2 text-sm text-white" onClick={() => handleModal()}>
+            Tambah Bayi
+          </button>
+        </div>
+        <div className="inline-block max-h-[650px] min-w-full overflow-hidden rounded-lg shadow-md hover:overflow-y-scroll">
+          <table className="min-w-full overflow-scroll leading-normal">
+            <thead>
+              <tr>
+                <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                  No
+                </th>
+                <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                  Nama
+                </th>
+                <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                  Jenis Kelamin
+                </th>
+                <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                  Umur
+                </th>
+                <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                  Orang Tua
+                </th>
+                <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                  Alamat
+                </th>
+                <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                  No HP
+                </th>
+                <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                  Status
+                </th>
+                <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                  Aksi
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                <tr>
+                  <td className="p-5">loading...</td>
+                </tr>
+              ) : (
+                data?.map((baby: BabyType, index: number) => (
+                  <tr key={index} className={index % 2 === 0 ? 'hover:bg-gray-200' : 'bg-gray-10 hover:bg-gray-200'}>
+                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{index + 1}</td>
+                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.name}</td>
+                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.gender}</td>
+                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.age} bulan</td>
+                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.parent_name}</td>
+                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.address}</td>
+                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.phone_number}</td>
+                    <td className="border-gray-200 bg-white px-5 py-5  text-sm">
+                      {/* <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
+                        <span
+                          aria-hidden
+                          className={`rounded-ful absolute inset-0 rounded-full opacity-50 ${
+                            baby.is_stunted ? 'bg-red-200 text-red-900' : 'bg-teal-200'
+                          }`}
+                        ></span>
+                        <span className="relative">{baby.is_stunted ? 'Stunting' : 'Sehat'}</span>
+                      </span> */}
+                    </td>
+                    <td className="gap-x-2 border-gray-200 bg-white px-5 py-5 text-sm">
+                      <button
+                        data-twe-toggle="tooltip"
+                        data-twe-html="true"
+                        data-twe-ripple-init
+                        data-twe-ripple-color="light"
+                        title="Lihat Detail"
+                        type="button"
+                        className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50"
+                        onClick={() => {
+                          router.push(`/monitoring/${baby.id}`)
+                        }}
+                      >
+                        <InformationCircleIcon className="h-5 w-5" />
+                      </button>
+                      <button
+                        data-twe-toggle="tooltip"
+                        data-twe-html="true"
+                        data-twe-ripple-init
+                        data-twe-ripple-color="light"
+                        title="Edit Data"
+                        type="button"
+                        className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50"
+                      >
+                        <PencilAltIcon className="h-5 w-5" />
+                      </button>
+                      <button
+                        data-twe-toggle="tooltip"
+                        data-twe-html="true"
+                        data-twe-ripple-init
+                        data-twe-ripple-color="light"
+                        title="Hapus Data"
+                        type="button"
+                        className="mx-1 rounded-[6px] bg-red-500 p-2 text-[14px] font-normal text-gray-50"
+                        onClick={() => handleConfirmModal}
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      {openModal && <AddBabyForm open={openModal} setOpen={handleModal} />}
+      {openConfirmModal && (
+        <ConfirmDialog
+          open={openConfirmModal}
+          message="Anda yakin ingin menghapus data ini?"
+          setOpen={() => handleConfirmModal}
+          onSubmit={() => handleDelete}
+        />
+      )}
+    </main>
+  )
+}
+
+export default MonitoringPage
