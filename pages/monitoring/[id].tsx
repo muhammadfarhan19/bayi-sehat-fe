@@ -40,6 +40,7 @@ const DetailMonitoring = () => {
     fetchBabyCondition(id)
     fetchDetailBaby(id)
   }, [])
+  console.log(condition)
 
   return (
     <main className="min-h-auto flex h-[910px] rounded-2xl border border-teal-400 shadow-lg">
@@ -76,8 +77,7 @@ const DetailMonitoring = () => {
                 </tr>
               </thead>
               <tbody>
-                TODO : fetch baby conditions
-                {/* {condition.((item: any, index: number) => (
+                {/* {condition?.map((item: any, index: number) => (
                   <tr key={index}>
                     <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.month}</td>
                     <td className="border-b border-gray-200 bg-white p-5 text-sm">
