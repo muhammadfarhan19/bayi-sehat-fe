@@ -8,14 +8,27 @@ import AddBabyForm from '../forms/AddBabyForm'
 import ConfirmDialog from '../shared/ConfirmDialog'
 
 const MonitoringPage: React.FC = () => {
-  const [openModal, setOpenModal] = React.useState<boolean>(false)
   const [openConfirmModal, setOpenConfirmModal] = React.useState<boolean>(false)
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const [data, setData] = React.useState([])
-  const router = useRouter()
-  const handleModal = () => {
-    setOpenModal(!openModal)
+  const [formModalState, setFormModalState] = React.useState<{
+    open: boolean
+    type: string | undefined
+    selectedId: string | undefined
+  }>({
+    open: false,
+    type: undefined,
+    selectedId: undefined,
+  })
+
+  const handleModal = (open: boolean, type?: string, selectedId?: string) => {
+    setFormModalState({
+      open,
+      type,
+      selectedId,
+    })
   }
+
   const handleConfirmModal = () => {
     setOpenConfirmModal(!openConfirmModal)
   }
@@ -27,6 +40,7 @@ const MonitoringPage: React.FC = () => {
       console.log(error)
     }
   }
+  const router = useRouter()
 
   React.useEffect(() => {
     const getData = async () => {
@@ -52,7 +66,10 @@ const MonitoringPage: React.FC = () => {
       <section className="flex h-full w-full flex-col gap-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold leading-tight">Bayi Terdaftar</h2>
-          <button className="rounded-md bg-teal-400 px-4 py-2 text-sm text-white" onClick={() => handleModal()}>
+          <button
+            className="rounded-md bg-teal-400 px-4 py-2 text-sm text-white"
+            onClick={() => handleModal(!formModalState.open, 'add')}
+          >
             Tambah Bayi
           </button>
         </div>
@@ -138,6 +155,9 @@ const MonitoringPage: React.FC = () => {
                         title="Edit Data"
                         type="button"
                         className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50"
+                        onClick={() => {
+                          handleModal(!formModalState.open, 'edit', baby.id)
+                        }}
                       >
                         <PencilAltIcon className="h-5 w-5" />
                       </button>
@@ -161,7 +181,13 @@ const MonitoringPage: React.FC = () => {
           </table>
         </div>
       </section>
-      {openModal && <AddBabyForm open={openModal} setOpen={handleModal} />}
+      {formModalState.open && (
+        <AddBabyForm
+          open={formModalState.open}
+          setOpen={(open: boolean) => handleModal(open)}
+          selectedId={formModalState.selectedId}
+        />
+      )}
       {openConfirmModal && (
         <ConfirmDialog
           open={openConfirmModal}
