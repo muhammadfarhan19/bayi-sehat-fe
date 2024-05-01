@@ -3,4 +3,3 @@ export interface BabyCondition {
   height: number
   month: number
 }
-;[]
