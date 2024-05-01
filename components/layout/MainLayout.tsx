@@ -9,7 +9,7 @@ interface MainLayoutProps {
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <main className="relative h-[100dvh] w-full">
-      <section className="flex h-full w-full gap-5 p-10">
+      <section className="flex h-full w-full gap-5 p-5">
         <aside className={`absolute hidden h-[910px] w-[400px] transition-all duration-200 xl:relative xl:block`}>
           <Sidebar />
         </aside>

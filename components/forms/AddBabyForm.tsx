@@ -129,7 +129,7 @@ function AddBabyForm(props: ModalProps) {
                   <input
                     type="text"
                     className="w-full rounded-md border p-3"
-                    placeholder="Nama"
+                    placeholder="Nama Orang Tua"
                     {...register('parent_name')}
                   />
                 </div>
@@ -138,7 +138,7 @@ function AddBabyForm(props: ModalProps) {
                   <input
                     type="text"
                     className="w-full rounded-md border p-3"
-                    placeholder="Nama"
+                    placeholder="Alamat"
                     {...register('address')}
                   />
                 </div>
@@ -147,7 +147,7 @@ function AddBabyForm(props: ModalProps) {
                   <input
                     type="text"
                     className="w-full rounded-md border p-3"
-                    placeholder="Nama"
+                    placeholder="Nomor HP"
                     {...register('phone_number')}
                   />
                 </div>
