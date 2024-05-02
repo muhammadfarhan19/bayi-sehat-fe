@@ -1,9 +1,15 @@
 import moment from 'moment'
 
-export const calculateAgeInMonths = (birthDate: string | Date | undefined) => {
-  const currentDate = moment()
+export const calculateAgeInMonths = (birthDate: string | Date | undefined, month: number) => {
   const formattedBirthDate = moment(birthDate)
-  const ageInMonths = currentDate.diff(formattedBirthDate, 'months')
+  const currentDate = moment().startOf('month')
+  const targetDate = moment()
+    .month(month - 1)
+    .startOf('month')
+
+  // Calculate age based on the provided month's start date
+  const ageInMonths = targetDate.diff(formattedBirthDate, 'months')
+
   return ageInMonths
 }
 
@@ -31,27 +37,53 @@ export const getQueryString = <T = Record<string, string>>(): T => {
   return result as unknown as T
 }
 
-export const DETAIL_TABLE_HEAD = ['Periode', 'Umur (bulan)', 'Berat (kg)', 'Tinggi (cm)']
-
-const MONTHS = [
-  'Januari',
-  'Februari',
-  'Maret',
-  'April',
-  'Mei',
-  'Juni',
-  'Juli',
-  'Agustus',
-  'September',
-  'Oktober',
-  'Nopember',
-  'Desember',
+export const filterMonths = [
+  {
+    value: 1,
+    text: 'Januari',
+  },
+  {
+    value: 2,
+    text: 'Februari',
+  },
+  {
+    value: 3,
+    text: 'Maret',
+  },
+  {
+    value: 4,
+    text: 'April',
+  },
+  {
+    value: 5,
+    text: 'Mei',
+  },
+  {
+    value: 6,
+    text: 'Juni',
+  },
+  {
+    value: 7,
+    text: 'Juli',
+  },
+  {
+    value: 8,
+    text: 'Agustus',
+  },
+  {
+    value: 9,
+    text: 'September',
+  },
+  {
+    value: 10,
+    text: 'Oktober',
+  },
+  {
+    value: 11,
+    text: 'November',
+  },
+  {
+    value: 12,
+    text: 'Desember',
+  },
 ]
-
-const heights = [43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55]
-
-export const DUMMY_CONDITION = MONTHS.map((month, index) => ({
-  month,
-  berat: Math.floor(Math.random() * (6 - 4 + 1)) + 3,
-  tinggi: heights[index % heights.length],
-}))

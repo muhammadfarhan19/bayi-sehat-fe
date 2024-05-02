@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import { Dialog, Transition } from '@headlessui/react'
 import { LockClosedIcon } from '@heroicons/react/outline'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -20,6 +21,8 @@ interface FormState {
 
 function AddConditionForm(props: ModalProps) {
   const { open, setOpen, onSuccess, babyId, type } = props
+
+  const router = useRouter()
 
   const toggleModal = () => {
     setOpen(!open)
@@ -55,6 +58,7 @@ function AddConditionForm(props: ModalProps) {
       }
 
       toggleModal()
+      router.reload()
       return response
     } catch (error) {
       throw new Error(`Error posting new baby data: ${error}`)
@@ -126,11 +130,11 @@ function AddConditionForm(props: ModalProps) {
                   />
                 </div>
                 <div className="m-0 w-full">
-                  <label htmlFor="month">Bulan</label>
+                  <label htmlFor="month">Bulan (1-12)</label>
                   <input
                     type="text"
                     className="w-full rounded-md border p-3"
-                    placeholder="Masukkan Bulan"
+                    placeholder="Masukkan Bulan Dalam Angka"
                     {...register('month', {
                       required: 'Mohon Masukkan Bulan',
                       pattern: {

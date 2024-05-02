@@ -138,19 +138,20 @@ const MonitoringPage: React.FC = () => {
                   <td className="p-5">loading...</td>
                 </tr>
               ) : (
-                filteredData?.map((baby: BabyType, index: number) => (
-                  <tr key={index} className={index % 2 === 0 ? 'hover:bg-gray-200' : 'bg-gray-10 hover:bg-gray-200'}>
-                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{index + 1}</td>
-                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.name}</td>
-                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">
-                      {baby.gender === 'male' ? 'Laki-Laki' : 'Perempuan'}
-                    </td>
-                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.age} bulan</td>
-                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.parent_name}</td>
-                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.address}</td>
-                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.phone_number}</td>
-                    <td className="border-gray-200 bg-white px-5 py-5  text-sm">
-                      {/* <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
+                filteredData
+                  ?.filter(baby => baby.name !== undefined) // Filter out items where name is undefined
+                  .sort((a, b) => a.name!.localeCompare(b.name!))
+                  .map((baby: BabyType, index: number) => (
+                    <tr key={index} className={index % 2 === 0 ? 'hover:bg-gray-200' : 'bg-gray-10 hover:bg-gray-200'}>
+                      <td className="border-gray-200 bg-white px-5 py-5 text-sm">{index + 1}</td>
+                      <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.name}</td>
+                      <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.gender}</td>
+                      <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.age} bulan</td>
+                      <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.parent_name}</td>
+                      <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.address}</td>
+                      <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.phone_number}</td>
+                      <td className="border-gray-200 bg-white px-5 py-5  text-sm">
+                        {/* <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
                         <span
                           aria-hidden
                           className={`rounded-ful absolute inset-0 rounded-full opacity-50 ${
@@ -159,51 +160,51 @@ const MonitoringPage: React.FC = () => {
                         ></span>
                         <span className="relative">{baby.is_stunted ? 'Stunting' : 'Sehat'}</span>
                       </span> */}
-                    </td>
-                    <td className="gap-x-2 border-gray-200 bg-white px-5 py-5 text-sm">
-                      <button
-                        data-twe-toggle="tooltip"
-                        data-twe-html="true"
-                        data-twe-ripple-init
-                        data-twe-ripple-color="light"
-                        title="Lihat Detail"
-                        type="button"
-                        className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50"
-                        onClick={() => {
-                          router.push(`/monitoring/${baby.id}`)
-                        }}
-                      >
-                        <InformationCircleIcon className="h-5 w-5" />
-                      </button>
-                      <button
-                        data-twe-toggle="tooltip"
-                        data-twe-html="true"
-                        data-twe-ripple-init
-                        data-twe-ripple-color="light"
-                        title="Edit Data"
-                        type="button"
-                        className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50"
-                        onClick={() => {
-                          handleModal(!formModalState.open, 'edit', baby.id)
-                        }}
-                      >
-                        <PencilAltIcon className="h-5 w-5" />
-                      </button>
-                      <button
-                        data-twe-toggle="tooltip"
-                        data-twe-html="true"
-                        data-twe-ripple-init
-                        data-twe-ripple-color="light"
-                        title="Hapus Data"
-                        type="button"
-                        className="mx-1 rounded-[6px] bg-red-500 p-2 text-[14px] font-normal text-gray-50"
-                        onClick={() => handleDelete(baby.id)}
-                      >
-                        <TrashIcon className="h-5 w-5" />
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                      <td className="gap-x-2 border-gray-200 bg-white px-5 py-5 text-sm">
+                        <button
+                          data-twe-toggle="tooltip"
+                          data-twe-html="true"
+                          data-twe-ripple-init
+                          data-twe-ripple-color="light"
+                          title="Lihat Detail"
+                          type="button"
+                          className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50"
+                          onClick={() => {
+                            router.push(`/monitoring/${baby.id}`)
+                          }}
+                        >
+                          <InformationCircleIcon className="h-5 w-5" />
+                        </button>
+                        <button
+                          data-twe-toggle="tooltip"
+                          data-twe-html="true"
+                          data-twe-ripple-init
+                          data-twe-ripple-color="light"
+                          title="Edit Data"
+                          type="button"
+                          className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50"
+                          onClick={() => {
+                            handleModal(!formModalState.open, 'edit', baby.id)
+                          }}
+                        >
+                          <PencilAltIcon className="h-5 w-5" />
+                        </button>
+                        <button
+                          data-twe-toggle="tooltip"
+                          data-twe-html="true"
+                          data-twe-ripple-init
+                          data-twe-ripple-color="light"
+                          title="Hapus Data"
+                          type="button"
+                          className="mx-1 rounded-[6px] bg-red-500 p-2 text-[14px] font-normal text-gray-50"
+                          onClick={() => handleDelete(baby.id)}
+                        >
+                          <TrashIcon className="h-5 w-5" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
               )}
             </tbody>
           </table>
