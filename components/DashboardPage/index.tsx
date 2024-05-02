@@ -22,8 +22,8 @@ const DashboardPage: React.FC = () => {
   // console.log(data)
 
   const totalBabies = data?.length
-  const boyBabies = data?.map((baby: BabyType) => baby).filter((baby: BabyType) => baby.gender === 'Laki-Laki').length
-  const girlBabies = data?.map((baby: BabyType) => baby).filter((baby: BabyType) => baby.gender === 'Perempuan').length
+  const boyBabies = data?.map((baby: BabyType) => baby).filter((baby: BabyType) => baby.gender === 'male').length
+  const girlBabies = data?.map((baby: BabyType) => baby).filter((baby: BabyType) => baby.gender === 'female').length
 
   return (
     <main className="min-h-auto flex h-[910px] flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
