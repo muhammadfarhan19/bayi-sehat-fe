@@ -1,6 +1,7 @@
 /* eslint-disable prefer-const */
 import { Dialog, Transition } from '@headlessui/react'
 import { LockClosedIcon } from '@heroicons/react/outline'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -23,7 +24,15 @@ interface FormState {
 
 function AddBabyForm(props: ModalProps) {
   const { open, setOpen, selectedId, type } = props
-  const [data, setData] = React.useState([])
+  const [data, setData] = React.useState<any>({
+    name: undefined,
+    gender: undefined,
+    address: undefined,
+    birthdate: undefined,
+    age: undefined,
+    parent_name: undefined,
+    phone_number: undefined,
+  })
 
   const toggleModal = () => {
     setOpen(!open)
@@ -37,11 +46,13 @@ function AddBabyForm(props: ModalProps) {
     setValue,
   } = useForm<FormState>()
 
-  // const fetchBaby = async (id: string | undefined) => {
-  //   await fetch(`http://localhost:4000/baby/${id}`)
-  //     .then(response => response.json())
-  //     .then(response => setData(response))
-  // }
+  const fetchBaby = async (id: string | undefined) => {
+    await fetch(`http://localhost:4000/baby/${id}`)
+      .then(response => response.json())
+      .then(response => setData(response.data))
+  }
+
+  const router = useRouter()
 
   const submitHandler = async (formData: FormState) => {
     let response
@@ -57,6 +68,7 @@ function AddBabyForm(props: ModalProps) {
       const result = {
         ...formData,
         birthdate: new Date(formData.birthdate).toISOString(),
+        gender: formData.gender === 'Laki-Laki' ? 'Male' : 'Female',
       }
       response = await fetch('http://localhost:4000/baby', {
         method: 'POST',
@@ -65,6 +77,7 @@ function AddBabyForm(props: ModalProps) {
         },
         body: JSON.stringify(result),
       })
+      console.log(response)
     }
 
     if (response.statusText === 'OK') {
@@ -73,26 +86,32 @@ function AddBabyForm(props: ModalProps) {
       alert('Gagal Menyimpan')
     }
     setOpen(!open)
+    router.reload()
   }
 
-  // fetchBaby(selectedId)
-  // console.log(data)
-  // React.useEffect(() => {
-  // const fetchBaby = async (id: string | undefined) => {
-  //   return await fetch(`http://localhost:4000/baby/${id}`)
-  //     .then(response => response.json())
-  //     .then(response => setData(response.data))
-  // }
-  // fetchBaby(selectedId)
-  // console.log(typeof data)
-  // console.log(data)
-  // }, [])
+  React.useEffect(() => {
+    fetchBaby(selectedId)
+    setData({
+      name: data.name,
+      gender: data.gender,
+      address: data.address,
+      birthdate: data.birthdate,
+      age: data.age,
+      parent_name: data.parent_name,
+      phone_number: data.phone_number,
+    })
+  }, [open])
 
-  // React.useLayoutEffect(() => {
-  //   if (type === 'edit' && selectedId && data) {
-  //     setValue('name', data.find(value => value.name))
-  //   }
-  // }, [data && type === 'edit'])
+  React.useLayoutEffect(() => {
+    if (type === 'edit' && selectedId && data) {
+      setValue('name', data.name)
+      setValue('birthdate', data.birthdate)
+      setValue('gender', data.gender)
+      setValue('parent_name', data.parent_name)
+      setValue('address', data.address)
+      setValue('phone_number', data.phone_number)
+    }
+  }, [data && type === 'edit'])
 
   return (
     <Transition appear show={open} as={React.Fragment}>

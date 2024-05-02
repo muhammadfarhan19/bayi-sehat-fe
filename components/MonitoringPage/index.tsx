@@ -11,6 +11,8 @@ const MonitoringPage: React.FC = () => {
   const [openConfirmModal, setOpenConfirmModal] = React.useState<boolean>(false)
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const [data, setData] = React.useState([])
+  const [searchQuery, setSearchQuery] = React.useState<string>('')
+  const [filteredData, setFilteredData] = React.useState<BabyType[]>([])
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean
     type: string | undefined
@@ -20,6 +22,8 @@ const MonitoringPage: React.FC = () => {
     type: undefined,
     selectedId: undefined,
   })
+
+  const router = useRouter()
 
   const handleModal = (open: boolean, type?: string, selectedId?: string) => {
     setFormModalState({
@@ -33,7 +37,7 @@ const MonitoringPage: React.FC = () => {
     setOpenConfirmModal(!openConfirmModal)
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string | undefined) => {
     try {
       await axios.delete(`http://localhost:4000/baby/${id}`)
       alert('Berhasil Menghapus data')
@@ -43,7 +47,20 @@ const MonitoringPage: React.FC = () => {
       alert('Gagal Menghapus data')
     }
   }
-  const router = useRouter()
+
+  const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value)
+  }
+
+  React.useEffect(() => {
+    setFilteredData(
+      data.filter(
+        (baby: BabyType) =>
+          baby?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          baby?.parent_name?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    )
+  }, [searchQuery, data])
 
   React.useEffect(() => {
     const getData = async () => {
@@ -55,7 +72,7 @@ const MonitoringPage: React.FC = () => {
   }, [])
 
   return (
-    <main className="min-h-auto mb-5 flex max-h-screen min-h-full flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
+    <main className="min-h-auto flex h-[910px] flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
       <header className="flex items-center justify-between">
         <aside className="w-auto text-2xl font-semibold">Monitoring</aside>
         <aside className={`b-2'} w-auto cursor-pointer rounded-md px-4 py-2 hover:bg-gray-50`}>
@@ -64,7 +81,13 @@ const MonitoringPage: React.FC = () => {
         </aside>
       </header>
       <aside className="flex items-center justify-end">
-        <input type="text" placeholder="Cari..." className="w-[300px] rounded-md border px-3 py-2" />
+        <input
+          type="text"
+          placeholder="Cari Nama Anak atau Orang Tua"
+          className="w-[300px] rounded-md border px-3 py-2"
+          onChange={handleFilter}
+          value={searchQuery}
+        />
       </aside>
       <section className="flex h-full w-full flex-col gap-3">
         <div className="flex items-center justify-between">
@@ -115,11 +138,13 @@ const MonitoringPage: React.FC = () => {
                   <td className="p-5">loading...</td>
                 </tr>
               ) : (
-                data?.map((baby: BabyType, index: number) => (
+                filteredData?.map((baby: BabyType, index: number) => (
                   <tr key={index} className={index % 2 === 0 ? 'hover:bg-gray-200' : 'bg-gray-10 hover:bg-gray-200'}>
                     <td className="border-gray-200 bg-white px-5 py-5 text-sm">{index + 1}</td>
                     <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.name}</td>
-                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.gender}</td>
+                    <td className="border-gray-200 bg-white px-5 py-5 text-sm">
+                      {baby.gender === 'male' ? 'Laki-Laki' : 'Perempuan'}
+                    </td>
                     <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.age} bulan</td>
                     <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.parent_name}</td>
                     <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.address}</td>
