@@ -19,20 +19,16 @@ const DashboardPage: React.FC = () => {
     }
     getData()
   }, [])
-  // console.log(data)
 
   const totalBabies = data?.length
-  const boyBabies = data?.map((baby: BabyType) => baby).filter((baby: BabyType) => baby.gender === 'male').length
-  const girlBabies = data?.map((baby: BabyType) => baby).filter((baby: BabyType) => baby.gender === 'female').length
+  const boyBabies = data?.map((baby: BabyType) => baby).filter((baby: BabyType) => baby.gender === 'Laki-Laki').length
+  const girlBabies = data?.map((baby: BabyType) => baby).filter((baby: BabyType) => baby.gender === 'Perempuan').length
 
   return (
     <main className="min-h-auto flex h-[910px] flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
       <header className="flex items-center justify-between">
         <aside className="w-auto text-2xl font-semibold">Dashboard</aside>
-        <aside
-          // className={`w-auto cursor-pointer rounded-md px-4 py-2 hover:bg-gray-50 ${user && 'border-b-2'}`}
-          className={`w-auto cursor-pointer rounded-md px-4 py-2 hover:bg-gray-50`}
-        >
+        <aside className={`w-auto cursor-pointer rounded-md px-4 py-2 hover:bg-gray-50`}>
           {/* {user} */}
           nama
         </aside>

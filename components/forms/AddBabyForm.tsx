@@ -77,7 +77,6 @@ function AddBabyForm(props: ModalProps) {
         },
         body: JSON.stringify(result),
       })
-      console.log(response)
     }
 
     if (response.statusText === 'OK') {
@@ -176,7 +175,7 @@ function AddBabyForm(props: ModalProps) {
                 <div className="w-full">
                   <label htmlFor="gender">Jenis Kelamin</label>
                   <select className="w-full rounded-md border p-3" {...register('gender')}>
-                    <option value="Laki-Laki">Laki-laki</option>
+                    <option value="Laki-Laki">Laki-Laki</option>
                     <option value="Perempuan">Perempuan</option>
                   </select>
                 </div>

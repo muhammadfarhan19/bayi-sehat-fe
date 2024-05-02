@@ -8,17 +8,17 @@ import {
   UserIcon,
 } from '@heroicons/react/outline'
 import axios from 'axios'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 
 import AddConditionForm from '../../components/forms/AddConditionForm'
-import { calculateAgeInMonths, DETAIL_TABLE_HEAD, DUMMY_CONDITION } from '../../lib/common'
+import { calculateAgeInMonths, filterMonths } from '../../lib/common'
+import avatar from '../../public/assets/avatar.png'
 import { BabyType } from '../../types/babyType'
-import { BabyCondition } from '../../types/conditionType'
 
 const DetailMonitoring = () => {
   const [data, setData] = React.useState<BabyType | undefined>(undefined)
-  const [condition, setCondition] = React.useState<BabyCondition | undefined>(undefined)
   const [openModal, setOpenModal] = React.useState<boolean>(false)
   const router = useRouter()
 
@@ -33,14 +33,8 @@ const DetailMonitoring = () => {
       const response = await axios.get(`http://localhost:4000/baby/${id}`)
       setData(response.data.data)
     }
-    const fetchBabyCondition = async (id: any) => {
-      const response = await axios.get(`http://localhost:4000/condition/${id}`)
-      setCondition(response.data.data)
-    }
-    fetchBabyCondition(id)
     fetchDetailBaby(id)
-  }, [])
-  console.log(condition)
+  }, [openModal])
 
   return (
     <main className="min-h-auto flex h-[910px] rounded-2xl border border-teal-400 shadow-lg">
@@ -66,40 +60,50 @@ const DetailMonitoring = () => {
             <table className="min-w-full leading-normal">
               <thead>
                 <tr>
-                  {DETAIL_TABLE_HEAD.map((item: string, index: number) => (
-                    <th
-                      key={index}
-                      className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white"
-                    >
-                      {item}
-                    </th>
-                  ))}
+                  <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                    Periode
+                  </th>
+                  <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                    Umur (bulan)
+                  </th>
+                  <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                    Berat (kg)
+                  </th>
+                  <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                    Tinggi (cm)
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {/* {condition?.map((item: any, index: number) => (
-                  <tr key={index}>
-                    <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.month}</td>
-                    <td className="border-b border-gray-200 bg-white p-5 text-sm">
-                      {calculateAgeInMonths(data?.birthdate)} Bulan
-                    </td>
-                    <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.berat}</td>
-                    <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.tinggi}</td>
-                  </tr>
-                ))} */}
+                {data?.baby_condition
+                  ?.sort((a, b) => a.month - b.month)
+                  .map((item, index: number) => (
+                    <tr key={index}>
+                      <td className="border-b border-gray-200 bg-white p-5 text-sm">
+                        {filterMonths.filter(arr => arr.value === item.month)[0].text}
+                      </td>
+                      <td className="border-b border-gray-200 bg-white p-5 text-sm">
+                        {calculateAgeInMonths(data?.birthdate, item.month)} Bulan
+                      </td>
+                      <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.weight}</td>
+                      <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.height}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </aside>
           {/* TODO : Chart */}
-          <aside className="max-h-[300px] w-full">{/* <LineChartComponent /> */}</aside>
+          <aside className="max-h-[300px] w-full">{/* Render the Doughnut chart */}</aside>
         </section>
       </section>
       <section className="flex h-full w-1/3 flex-col space-y-10 rounded-2xl bg-teal-50 p-10">
         <aside className="flex w-auto flex-col items-center gap-y-5 rounded-xl border py-10 shadow-lg">
-          <section className="h-[70px] w-[70px] rounded-full">{/* <Image src={avatar} alt="avatar" /> */}</section>
+          <section className="h-[70px] w-[70px] rounded-full">
+            <Image src={avatar} alt="avatar" />
+          </section>
           <section className="text-center">
             <h1>{data?.name}</h1>
-            <h1>{data?.gender}</h1>
+            <h1> {data?.gender === 'male' ? 'Laki-Laki' : 'Perempuan'}</h1>
           </section>
         </aside>
         <aside className="h-auto w-full space-y-5">
