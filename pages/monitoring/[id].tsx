@@ -7,18 +7,17 @@ import {
   StatusOnlineIcon,
   UserIcon,
 } from '@heroicons/react/outline'
-import axios from 'axios'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 
 import AddConditionForm from '../../components/forms/AddConditionForm'
+import { useAPI } from '../../hooks/useAPI'
 import { calculateAgeInMonths, filterMonths } from '../../lib/common'
 import avatar from '../../public/assets/avatar.png'
 import { BabyType } from '../../types/babyType'
 
 const DetailMonitoring = () => {
-  const [data, setData] = React.useState<BabyType | undefined>(undefined)
   const [openModal, setOpenModal] = React.useState<boolean>(false)
   const router = useRouter()
 
@@ -28,13 +27,7 @@ const DetailMonitoring = () => {
     setOpenModal(!openModal)
   }
 
-  React.useEffect(() => {
-    const fetchDetailBaby = async (id: any) => {
-      const response = await axios.get(`http://localhost:4000/baby/${id}`)
-      setData(response.data.data)
-    }
-    fetchDetailBaby(id)
-  }, [openModal])
+  const { data, isValidating, mutate } = useAPI<BabyType, any>(`http://localhost:4000/baby/${id}`, 'GET')
 
   return (
     <main className="min-h-auto flex h-[910px] rounded-2xl border border-teal-400 shadow-lg">
@@ -76,8 +69,8 @@ const DetailMonitoring = () => {
               </thead>
               <tbody>
                 {data?.baby_condition
-                  ?.sort((a, b) => a.month - b.month)
-                  .map((item, index: number) => (
+                  ?.sort((a: any, b: any) => a.month - b.month)
+                  .map((item: any, index: number) => (
                     <tr key={index}>
                       <td className="border-b border-gray-200 bg-white p-5 text-sm">
                         {filterMonths.filter(arr => arr.value === item.month)[0].text}
