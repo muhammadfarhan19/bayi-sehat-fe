@@ -3,14 +3,13 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import React from 'react'
 
+import { useAPI } from '../../hooks/useAPI'
 import { BabyType } from '../../types/babyType'
 import AddBabyForm from '../forms/AddBabyForm'
 import ConfirmDialog from '../shared/ConfirmDialog'
 
 const MonitoringPage: React.FC = () => {
   const [openConfirmModal, setOpenConfirmModal] = React.useState<boolean>(false)
-  const [isLoading, setIsLoading] = React.useState<boolean>(true)
-  const [data, setData] = React.useState([])
   const [searchQuery, setSearchQuery] = React.useState<string>('')
   const [filteredData, setFilteredData] = React.useState<BabyType[]>([])
   const [formModalState, setFormModalState] = React.useState<{
@@ -52,24 +51,20 @@ const MonitoringPage: React.FC = () => {
     setSearchQuery(e.target.value)
   }
 
-  React.useEffect(() => {
-    setFilteredData(
-      data.filter(
-        (baby: BabyType) =>
-          baby?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          baby?.parent_name?.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    )
-  }, [searchQuery, data])
+  const { data, error, isValidating, mutate } = useAPI<BabyType, any>('http://localhost:4000/baby', 'GET')
 
   React.useEffect(() => {
-    const getData = async () => {
-      const response = await axios.get(`http://localhost:4000/baby`)
-      setData(response.data.data)
-      setIsLoading(false)
+    if (data) {
+      // Check if data is not undefined
+      setFilteredData(
+        data?.filter(
+          (baby: BabyType) =>
+            baby?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            baby?.parent_name?.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      )
     }
-    getData()
-  }, [])
+  }, [searchQuery, data])
 
   return (
     <main className="min-h-auto flex h-[910px] flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
@@ -133,7 +128,7 @@ const MonitoringPage: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {isLoading ? (
+              {isValidating ? (
                 <tr>
                   <td className="p-5">loading...</td>
                 </tr>

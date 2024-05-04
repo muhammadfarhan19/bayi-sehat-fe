@@ -5,6 +5,9 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
+import { useAPI } from '../../hooks/useAPI'
+import { BabyType, GetBabyRes } from '../../types/api/baby.type'
+
 interface ModalProps {
   open: boolean
   setOpen: (open: boolean) => void
@@ -14,6 +17,7 @@ interface ModalProps {
 }
 
 interface FormState {
+  id: string
   name: string
   gender: string
   birthdate: Date
@@ -44,7 +48,7 @@ function AddBabyForm(props: ModalProps) {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<FormState>()
+  } = useForm<BabyType>()
 
   const fetchBaby = async (id: string | undefined) => {
     await fetch(`http://localhost:4000/baby/${id}`)
@@ -54,32 +58,15 @@ function AddBabyForm(props: ModalProps) {
 
   const router = useRouter()
 
-  const submitHandler = async (formData: FormState) => {
+  const submitHandler = async (formData: BabyType) => {
     let response
     if (selectedId) {
-      response = await fetch(`http://localhost:4000/baby/${selectedId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
+      response = useAPI<BabyType, GetBabyRes>(`http://localhost:4000/baby/${selectedId}`, 'PUT', formData)
     } else {
-      const result = {
-        ...formData,
-        birthdate: new Date(formData.birthdate).toISOString(),
-        gender: formData.gender === 'Laki-Laki' ? 'Male' : 'Female',
-      }
-      response = await fetch('http://localhost:4000/baby', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(result),
-      })
+      response = useAPI<BabyType, GetBabyRes>('http://localhost:4000/baby', 'POST', formData)
     }
 
-    if (response.statusText === 'OK') {
+    if (response.data?.statusCode === 200) {
       alert('Berhasil Menyimpan')
     } else {
       alert('Gagal Menyimpan')
@@ -143,9 +130,17 @@ function AddBabyForm(props: ModalProps) {
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-sm transition-all">
               <Dialog.Title as="div" className="mb-5 flex justify-between">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  {selectedId ? 'Perbarui Data Bayi' : 'Masukkan Data Anak'}
+                  {selectedId ? 'Perbarui' : 'Masukkan'} Data Anak
                 </h3>
-                <button onClick={toggleModal}>
+                <button
+                  data-twe-toggle="tooltip"
+                  data-twe-html="true"
+                  data-twe-ripple-init
+                  data-twe-ripple-color="light"
+                  title="Keluar"
+                  type="button"
+                  onClick={toggleModal}
+                >
                   <LockClosedIcon />
                 </button>
               </Dialog.Title>
