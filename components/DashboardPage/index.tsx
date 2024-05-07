@@ -7,6 +7,7 @@ import boyBaby from '../../public/assets/boy.png'
 import girlBaby from '../../public/assets/girl.png'
 import { GetBabyRes } from '../../types/api/baby.type'
 import { BabyType } from '../../types/babyType'
+import PieChartComponent from '../charts/PieChartComponent'
 
 const DashboardPage: React.FC = () => {
   const { data, isValidating } = useAPI<BabyType, any>('http://localhost:4000/baby', 'GET')
@@ -57,6 +58,7 @@ const DashboardPage: React.FC = () => {
         </aside>
         <aside className="grid h-1/2 w-full grid-cols-2 items-center gap-x-5">
           <div className="flex h-[350px] w-full items-center rounded-md border border-teal-400 shadow-md hover:cursor-pointer">
+            <PieChartComponent />
             <section className="flex flex-col justify-between gap-5 px-5">
               <aside className="flex items-center gap-5">
                 <div className="h-[20px] w-[20px] rounded-full bg-[#0088FE]" />
@@ -69,6 +71,7 @@ const DashboardPage: React.FC = () => {
             </section>
           </div>
           <div className="flex h-[350px] w-full items-center rounded-md border border-teal-400 shadow-md hover:cursor-pointer">
+            <PieChartComponent />
             <section className="flex flex-col justify-between gap-5 px-5">
               <aside className="flex items-center gap-5">
                 <div className="h-[20px] w-[20px] rounded-full bg-[#0088FE]" />
