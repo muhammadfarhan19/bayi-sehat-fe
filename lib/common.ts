@@ -1,13 +1,13 @@
 import moment from 'moment'
 
+import { BabyCondition } from '../types/conditionType'
+
 export const calculateAgeInMonths = (birthDate: string | Date | undefined, month: number) => {
   const formattedBirthDate = moment(birthDate)
   const currentDate = moment().startOf('month')
   const targetDate = moment()
     .month(month - 1)
     .startOf('month')
-
-  // Calculate age based on the provided month's start date
   const ageInMonths = targetDate.diff(formattedBirthDate, 'months')
 
   return ageInMonths
@@ -87,3 +87,13 @@ export const filterMonths = [
     text: 'Desember',
   },
 ]
+
+export function formatBabyConditions(
+  babyConditions: BabyCondition[]
+): { weight: number; height: number; month: string }[] {
+  return babyConditions?.map(condition => ({
+    weight: condition.weight,
+    height: condition.height,
+    month: filterMonths.find(month => month.value === condition.month)?.text || '',
+  }))
+}

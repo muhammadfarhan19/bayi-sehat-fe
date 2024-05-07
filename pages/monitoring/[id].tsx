@@ -7,15 +7,19 @@ import {
   StatusOnlineIcon,
   UserIcon,
 } from '@heroicons/react/outline'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 
+import LineChartComponent from '../../components/charts/LineChartComponent'
 import AddConditionForm from '../../components/forms/AddConditionForm'
 import { useAPI } from '../../hooks/useAPI'
-import { calculateAgeInMonths, filterMonths } from '../../lib/common'
+import { calculateAgeInMonths, filterMonths, formatBabyConditions } from '../../lib/common'
 import avatar from '../../public/assets/avatar.png'
 import { BabyType } from '../../types/babyType'
+
+// const LineChartComponent = dynamic(() => import('../../components/charts/LineChartComponent'), { ssr: false })
 
 const DetailMonitoring = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false)
@@ -28,6 +32,8 @@ const DetailMonitoring = () => {
   }
 
   const { data, isValidating, mutate } = useAPI<BabyType, any>(`http://localhost:4000/baby/${id}`, 'GET')
+
+  const dataCondition = formatBabyConditions(data?.baby_condition)
 
   return (
     <main className="min-h-auto flex h-[910px] rounded-2xl border border-teal-400 shadow-lg">
@@ -48,45 +54,53 @@ const DetailMonitoring = () => {
             <span>Upload Kondisi</span>
           </button>
         </header>
-        <section className="flex flex-col gap-y-5 py-5">
-          <aside className="inline-block max-h-[350px] min-w-full overflow-auto rounded-lg shadow-md">
-            <table className="min-w-full leading-normal">
-              <thead>
-                <tr>
-                  <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
-                    Periode
-                  </th>
-                  <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
-                    Umur (bulan)
-                  </th>
-                  <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
-                    Berat (kg)
-                  </th>
-                  <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
-                    Tinggi (cm)
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.baby_condition
-                  ?.sort((a: any, b: any) => a.month - b.month)
-                  .map((item: any, index: number) => (
-                    <tr key={index}>
-                      <td className="border-b border-gray-200 bg-white p-5 text-sm">
-                        {filterMonths.filter(arr => arr.value === item.month)[0].text}
-                      </td>
-                      <td className="border-b border-gray-200 bg-white p-5 text-sm">
-                        {calculateAgeInMonths(data?.birthdate, item.month)} Bulan
-                      </td>
-                      <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.weight}</td>
-                      <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.height}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+        <section className="flex flex-col gap-y-14 py-5">
+          <div className="flex flex-col gap-y-4">
+            <h2 className="text-xl font-semibold">Tabel Kondisi</h2>
+            <aside className="inline-block max-h-[350px] min-w-full overflow-auto rounded-lg shadow-md">
+              <table className="min-w-full leading-normal">
+                <thead>
+                  <tr>
+                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                      Periode
+                    </th>
+                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                      Umur (bulan)
+                    </th>
+                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                      Berat (kg)
+                    </th>
+                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                      Keterangan
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.baby_condition
+                    ?.sort((a: any, b: any) => a.month - b.month)
+                    .map((item: any, index: number, array: any[]) => {
+                      const weightStatus = index > 0 ? (item.weight > array[index - 1].weight ? 'naik' : 'turun') : '-'
+                      return (
+                        <tr key={index}>
+                          <td className="border-b border-gray-200 bg-white p-5 text-sm">
+                            {filterMonths.filter(arr => arr.value === item.month)[0].text}
+                          </td>
+                          <td className="border-b border-gray-200 bg-white p-5 text-sm">
+                            {calculateAgeInMonths(data?.birthdate, item.month)} Bulan
+                          </td>
+                          <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.weight}</td>
+                          <td className="border-b border-gray-200 bg-white p-5 text-sm">{weightStatus}</td>
+                        </tr>
+                      )
+                    })}
+                </tbody>
+              </table>
+            </aside>
+          </div>
+          <aside className="max-h-[300px] w-full">
+            <h2 className="mb-4 text-xl font-semibold">Grafik Kondisi</h2>
+            <LineChartComponent data={dataCondition} />
           </aside>
-          {/* TODO : Chart */}
-          <aside className="max-h-[300px] w-full">{/* Render the Doughnut chart */}</aside>
         </section>
       </section>
       <section className="flex h-full w-1/3 flex-col space-y-10 rounded-2xl bg-teal-50 p-10">
@@ -95,7 +109,7 @@ const DetailMonitoring = () => {
             <Image src={avatar} alt="avatar" />
           </section>
           <section className="text-center">
-            <h1>{data?.name}</h1>
+            <h1 className="text-lg font-semibold">{data?.name}</h1>
             <h1> {data?.gender === 'male' ? 'Laki-Laki' : 'Perempuan'}</h1>
           </section>
         </aside>
@@ -110,7 +124,7 @@ const DetailMonitoring = () => {
           </section>
           <section className="flex cursor-pointer items-center gap-x-3 rounded-xl border bg-teal-400 p-3 transition-all duration-100 hover:shadow-md">
             <StatusOnlineIcon className="h-5 w-5" />
-            {/* <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
+            <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
               <span
                 aria-hidden
                 className={`rounded-ful absolute inset-0 rounded-full border border-teal-400  ${
@@ -118,7 +132,7 @@ const DetailMonitoring = () => {
                 }`}
               ></span>
               <span className="relative">{data?.is_stunted ? 'Stunting' : 'Sehat'}</span>
-            </span> */}
+            </span>
           </section>
           <a
             // href={`https://wa.me/${phoneNumberConverter(data.phone_number)}`}
