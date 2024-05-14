@@ -1,11 +1,11 @@
 /* eslint-disable prefer-const */
 import { Dialog, Transition } from '@headlessui/react'
 import { LockClosedIcon } from '@heroicons/react/outline'
+import axios from 'axios'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
-import { useAPI } from '../../hooks/useAPI'
 import { BabyType, GetBabyRes } from '../../types/api/baby.type'
 
 interface ModalProps {
@@ -14,16 +14,6 @@ interface ModalProps {
   onSuccess?: () => void
   type?: string
   selectedId?: string | undefined
-}
-
-interface FormState {
-  id: string
-  name: string
-  gender: string
-  birthdate: Date
-  parent_name: string
-  address: string
-  phone_number: string
 }
 
 function AddBabyForm(props: ModalProps) {
@@ -51,26 +41,21 @@ function AddBabyForm(props: ModalProps) {
   } = useForm<BabyType>()
 
   const fetchBaby = async (id: string | undefined) => {
-    await fetch(`http://localhost:4000/baby/${id}`)
-      .then(response => response.json())
-      .then(response => setData(response.data))
+    const response = await axios.get(`http://localhost:4000/baby/${id}`)
+    setData(response.data.data)
   }
+  console.log(data)
 
   const router = useRouter()
 
   const submitHandler = async (formData: BabyType) => {
     let response
     if (selectedId) {
-      response = useAPI<BabyType, GetBabyRes>(`http://localhost:4000/baby/${selectedId}`, 'PUT', formData)
+      response = await axios.put(`http://localhost:4000/baby/${selectedId}`, formData)
     } else {
-      response = useAPI<BabyType, GetBabyRes>('http://localhost:4000/baby', 'POST', formData)
+      response = await axios.post('http://localhost:4000/baby', formData)
     }
-
-    if (response.data?.statusCode === 200) {
-      alert('Berhasil Menyimpan')
-    } else {
-      alert('Gagal Menyimpan')
-    }
+    alert(response.data.message)
     setOpen(!open)
     router.reload()
   }

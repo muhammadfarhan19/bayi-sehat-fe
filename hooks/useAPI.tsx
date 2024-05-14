@@ -7,7 +7,7 @@ export const useAPI = <RequestData, ResponseData>(
   requestData?: RequestData,
   axiosConfig?: any
 ) => {
-  const fetcher = async (url: string, requestData?: RequestData) => {
+  const fetcher = async (url: string) => {
     try {
       const response = await axios({ url, method, ...axiosConfig, data: requestData })
       return response.data.data
@@ -16,7 +16,9 @@ export const useAPI = <RequestData, ResponseData>(
     }
   }
 
-  const { data, error, isValidating, mutate } = useSWR<ResponseData>(apiUrl, fetcher, axiosConfig)
+  const { data, error, isValidating, mutate } = useSWR<ResponseData>(apiUrl, fetcher, {
+    ...axiosConfig,
+  })
 
   return { data, error, isValidating, mutate }
 }

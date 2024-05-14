@@ -32,6 +32,7 @@ const DetailMonitoring = () => {
   }
 
   const { data, isValidating, mutate } = useAPI<BabyType, any>(`http://localhost:4000/baby/${id}`, 'GET')
+  console.log(data)
 
   const dataCondition = formatBabyConditions(data?.baby_condition)
 

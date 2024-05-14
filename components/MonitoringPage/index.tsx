@@ -55,7 +55,6 @@ const MonitoringPage: React.FC = () => {
 
   React.useEffect(() => {
     if (data) {
-      // Check if data is not undefined
       setFilteredData(
         data?.filter(
           (baby: BabyType) =>
@@ -86,12 +85,12 @@ const MonitoringPage: React.FC = () => {
       </aside>
       <section className="flex h-full w-full flex-col gap-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold leading-tight">Bayi Terdaftar</h2>
+          <h2 className="text-xl font-semibold leading-tight">Anak Terdaftar</h2>
           <button
             className="rounded-md bg-teal-400 px-4 py-2 text-sm text-white"
             onClick={() => handleModal(!formModalState.open, 'add')}
           >
-            Tambah Bayi
+            Tambah Anak
           </button>
         </div>
         <div className="inline-block max-h-[650px] min-w-full overflow-hidden rounded-lg shadow-md hover:overflow-y-scroll">
