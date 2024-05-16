@@ -9,8 +9,8 @@ import AddBabyForm from '../forms/AddBabyForm'
 import ConfirmDialog from '../shared/ConfirmDialog'
 
 const MonitoringPage: React.FC = () => {
-  const [openConfirmModal, setOpenConfirmModal] = React.useState<boolean>(false)
   const [searchQuery, setSearchQuery] = React.useState<string>('')
+  const [confirmId, setConfirmId] = React.useState<string | undefined>('')
   const [filteredData, setFilteredData] = React.useState<BabyType[]>([])
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean
@@ -32,15 +32,24 @@ const MonitoringPage: React.FC = () => {
     })
   }
 
-  const handleConfirmModal = () => {
-    setOpenConfirmModal(!openConfirmModal)
-  }
+  // const handleDelete = async (id: string | undefined) => {
+  //   try {
+  //     await axios.delete(`http://localhost:4000/baby/${id}`)
+  //     alert('Berhasil Menghapus data')
+  //     setConfirmId(id)
+  //     mutate()
+  //   } catch (error) {
+  //     console.log(error)
+  //     alert('Gagal Menghapus data')
+  //   }
+  // }
 
-  const handleDelete = async (id: string | undefined) => {
+  const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:4000/baby/${id}`)
+      await axios.delete(`http://localhost:4000/baby/${confirmId}`)
       alert('Berhasil Menghapus data')
-      router.reload()
+      setConfirmId('')
+      mutate()
     } catch (error) {
       console.log(error)
       alert('Gagal Menghapus data')
@@ -191,8 +200,8 @@ const MonitoringPage: React.FC = () => {
                           data-twe-ripple-color="light"
                           title="Hapus Data"
                           type="button"
-                          className="focus:ring-ted-500 mx-1 rounded-[6px] bg-red-500 p-2 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                          onClick={() => handleDelete(baby.id)}
+                          className="focus:ring-ted-500 mx-1 rounded-[6px] bg-red-500 p-2 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-red-400  focus:ring-offset-2"
+                          onClick={() => setConfirmId(baby.id)}
                         >
                           <TrashIcon className="h-5 w-5" />
                         </button>
@@ -211,14 +220,12 @@ const MonitoringPage: React.FC = () => {
           selectedId={formModalState.selectedId}
         />
       )}
-      {openConfirmModal && (
-        <ConfirmDialog
-          open={openConfirmModal}
-          message="Anda yakin ingin menghapus data ini?"
-          setOpen={() => handleConfirmModal}
-          onSubmit={() => handleDelete}
-        />
-      )}
+      <ConfirmDialog
+        open={!!confirmId}
+        message="Anda yakin ingin menghapus data ini?"
+        onClose={() => setConfirmId('')}
+        onConfirm={handleDelete}
+      />
     </main>
   )
 }

@@ -39,13 +39,14 @@ const LoginPage: React.FC = () => {
         Silakan Login menggunakan <br />
         Email yang sudah terdaftar
       </aside>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="block w-full  space-y-5">
         <input
           type="text"
           className="w-full rounded-md border p-3"
           placeholder="email"
           {...register('email', { required: true })}
         />
+        {/* {errors.email && <p className="mt-1 text-sm text-red-500 h-20">{errors.email.message}</p>} */}
         <input
           type="password"
           className="w-full rounded-md border p-3"

@@ -6,8 +6,8 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { dateToISO, GenderList } from '../../lib/common'
-import { BabyType, GetBabyRes } from '../../types/api/baby.type'
+import { GenderList } from '../../lib/common'
+import { BabyType } from '../../types/api/baby.type'
 import AutoComplete from '../shared/ComboBox'
 
 interface ModalProps {
@@ -129,7 +129,7 @@ function AddBabyForm(props: ModalProps) {
                   <label htmlFor="name">Nama</label>
                   <input
                     type="text"
-                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none                     focus:ring-1 focus:ring-teal-400`}
+                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400`}
                     placeholder="Nama"
                     {...register('name', {
                       required: 'Mohon Masukkan Nama',
@@ -141,7 +141,7 @@ function AddBabyForm(props: ModalProps) {
                   <label htmlFor="birthdate">Tanggal Lahir</label>
                   <input
                     type="date"
-                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none                     focus:ring-1 focus:ring-teal-400`}
+                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400`}
                     {...register('birthdate', {
                       required: 'Mohon Masukkan Tanggal Lahir',
                     })}
@@ -159,7 +159,6 @@ function AddBabyForm(props: ModalProps) {
                         <AutoComplete
                           onChange={input => {
                             onChange(input?.text)
-                            setQueryGender(input?.text)
                           }}
                           placeholder="Jenis Kelamin"
                           label={null}
@@ -189,9 +188,11 @@ function AddBabyForm(props: ModalProps) {
                   <label htmlFor="name">Nama Orang Tua</label>
                   <input
                     type="text"
-                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400  focus:outline-none                     focus:ring-1 focus:ring-teal-400`}
+                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400`}
                     placeholder="Nama Orang Tua"
-                    {...register('parent_name')}
+                    {...register('parent_name', {
+                      required: 'Mohon Masukkan Nama Orang Tua',
+                    })}
                   />
                   {errors.parent_name && <p className="mt-1 text-sm text-red-500">{errors.parent_name.message}</p>}
                 </div>
@@ -199,9 +200,11 @@ function AddBabyForm(props: ModalProps) {
                   <label htmlFor="name">Alamat</label>
                   <input
                     type="text"
-                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none                     focus:ring-1 focus:ring-teal-400`}
+                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400`}
                     placeholder="Alamat"
-                    {...register('address')}
+                    {...register('address', {
+                      required: 'Mohon Masukkan Alamat',
+                    })}
                   />
                   {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address.message}</p>}
                 </div>
@@ -209,9 +212,11 @@ function AddBabyForm(props: ModalProps) {
                   <label htmlFor="name">No HP</label>
                   <input
                     type="text"
-                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none                     focus:ring-1 focus:ring-teal-400`}
+                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400`}
                     placeholder="Nomor HP"
-                    {...register('phone_number')}
+                    {...register('phone_number', {
+                      required: 'Mohon Masukkan Nomor HP',
+                    })}
                   />
                   {errors.phone_number && <p className="mt-1 text-sm text-red-500">{errors.phone_number.message}</p>}
                 </div>
