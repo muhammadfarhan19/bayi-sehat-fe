@@ -9,7 +9,7 @@ export const useAPI = <RequestData, ResponseData>(
 ) => {
   const fetcher = async (url: string) => {
     try {
-      const response = await axios({ url, method, ...axiosConfig, data: requestData })
+      const response = await axios({ url, method, data: requestData, ...axiosConfig })
       return response.data.data
     } catch (error: any) {
       throw new Error(error.response?.data || error.message)

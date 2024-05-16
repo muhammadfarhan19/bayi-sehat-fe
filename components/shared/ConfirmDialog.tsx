@@ -1,23 +1,19 @@
 import { Dialog, Transition } from '@headlessui/react'
 import React from 'react'
 
-interface ModalProps {
+interface ConfirmDialogProps {
+  message: string
+  onClose: () => void
+  onConfirm: () => void
   open: boolean
-  setOpen: (open: boolean) => void
-  onSubmit: () => void
-  message?: string
 }
 
-function ConfirmDialog(props: ModalProps) {
-  const { open, setOpen, onSubmit, message } = props
-
-  const toggleModal = () => {
-    setOpen(!open)
-  }
+function ConfirmDialog(props: ConfirmDialogProps) {
+  const { message, onClose, onConfirm, open } = props
 
   return (
     <Transition appear show={open} as={React.Fragment}>
-      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={toggleModal}>
+      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
         <div className="min-h-screen px-4 text-center">
           <Transition.Child
             as={React.Fragment}
@@ -55,15 +51,15 @@ function ConfirmDialog(props: ModalProps) {
                 <div className="flex flex-row">
                   <button
                     type="button"
-                    className="mr-2 inline-flex rounded border border-indigo-600 px-2.5 py-1.5 text-xs font-medium text-indigo-600 shadow-sm hover:border-indigo-700"
-                    onClick={() => setOpen}
+                    className="mr-2 inline-flex rounded border border-teal-400 px-2.5 py-1.5 text-xs font-medium text-teal-400 shadow-sm hover:border-teal-500"
+                    onClick={onClose}
                   >
                     Batal
                   </button>
                   <button
                     type="button"
-                    className="inline-flex rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-900 hover:bg-indigo-200"
-                    onClick={() => onSubmit}
+                    className="inline-flex rounded border border-transparent bg-red-400 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-red-500"
+                    onClick={onConfirm}
                   >
                     Hapus
                   </button>
