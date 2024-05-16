@@ -37,6 +37,25 @@ export const getQueryString = <T = Record<string, string>>(): T => {
   return result as unknown as T
 }
 
+export const dateToISO = (dateStr: string | Date) => {
+  return moment(dateStr, 'DDMMYYYY').toISOString()
+}
+
+export function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
+
+export const GenderList = [
+  {
+    value: 1,
+    text: 'Laki-Laki',
+  },
+  {
+    value: 2,
+    text: 'Perempuan',
+  },
+]
+
 export const filterMonths = [
   {
     value: 1,

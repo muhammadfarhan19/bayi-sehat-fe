@@ -87,7 +87,7 @@ const MonitoringPage: React.FC = () => {
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold leading-tight">Anak Terdaftar</h2>
           <button
-            className="rounded-md bg-teal-400 px-4 py-2 text-sm text-white"
+            className="rounded-md bg-teal-400 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
             onClick={() => handleModal(!formModalState.open, 'add')}
           >
             Tambah Anak
@@ -163,7 +163,7 @@ const MonitoringPage: React.FC = () => {
                           data-twe-ripple-color="light"
                           title="Lihat Detail"
                           type="button"
-                          className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50"
+                          className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
                           onClick={() => {
                             router.push(`/monitoring/${baby.id}`)
                           }}
@@ -177,7 +177,7 @@ const MonitoringPage: React.FC = () => {
                           data-twe-ripple-color="light"
                           title="Edit Data"
                           type="button"
-                          className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50"
+                          className="mx-1 rounded-[6px] bg-teal-400 p-2 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
                           onClick={() => {
                             handleModal(!formModalState.open, 'edit', baby.id)
                           }}
@@ -191,7 +191,7 @@ const MonitoringPage: React.FC = () => {
                           data-twe-ripple-color="light"
                           title="Hapus Data"
                           type="button"
-                          className="mx-1 rounded-[6px] bg-red-500 p-2 text-[14px] font-normal text-gray-50"
+                          className="focus:ring-ted-500 mx-1 rounded-[6px] bg-red-500 p-2 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
                           onClick={() => handleDelete(baby.id)}
                         >
                           <TrashIcon className="h-5 w-5" />

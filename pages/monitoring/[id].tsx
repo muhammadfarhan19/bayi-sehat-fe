@@ -48,7 +48,7 @@ const DetailMonitoring = () => {
             <h1 className="text-xl">kembali</h1>
           </button>
           <button
-            className="flex items-center gap-x-1 rounded-md bg-teal-400 py-2 pl-2 pr-4 text-sm text-white"
+            className="flex items-center gap-x-1 rounded-md bg-teal-400 py-2 pl-2 pr-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
             onClick={() => handleModal()}
           >
             <PlusIcon className="h-5 w-5" />

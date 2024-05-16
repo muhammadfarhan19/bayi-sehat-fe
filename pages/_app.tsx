@@ -6,15 +6,12 @@ import { useRouter } from 'next/router'
 
 import AuthLayout from '../components/layout/AuthLayout'
 import MainLayout from '../components/layout/MainLayout'
-import { AuthProvider, useAuth } from '../hooks/useAuth'
+import { AuthProvider } from '../hooks/useAuth'
 
 const authLayoutDisability = ['/login']
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // const { isLogin } = useAuth()
-  const { pathname, push } = useRouter()
-
-  // if (!isLogin) push('/login')
+  const { pathname } = useRouter()
 
   return (
     <>

@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import { Dialog, Transition } from '@headlessui/react'
-import { LockClosedIcon } from '@heroicons/react/outline'
+import { XIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+
+import { filterMonths } from '../../lib/common'
+import AutoComplete from '../shared/ComboBox'
 
 interface ModalProps {
   open: boolean
@@ -20,9 +23,10 @@ interface FormState {
 }
 
 function AddConditionForm(props: ModalProps) {
-  const { open, setOpen, onSuccess, babyId, type } = props
-
+  const { open, setOpen, babyId } = props
+  const debounce = React.useRef<number>(0)
   const router = useRouter()
+  const [queryMonth, setQueryMonth] = React.useState('')
 
   const toggleModal = () => {
     setOpen(!open)
@@ -97,7 +101,7 @@ function AddConditionForm(props: ModalProps) {
               <Dialog.Title as="div" className="mb-5 flex justify-between">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">Masukkan Kondisi Anak</h3>
                 <button onClick={toggleModal}>
-                  <LockClosedIcon />
+                  <XIcon className="h-5 w-5" />
                 </button>
               </Dialog.Title>
               <form onSubmit={handleSubmit(submitHandler)} className="flex h-auto w-full flex-col space-y-4">
@@ -105,20 +109,24 @@ function AddConditionForm(props: ModalProps) {
                   <label htmlFor="weight">Berat (kg)</label>
                   <input
                     type="text"
-                    className="w-full rounded-md border p-3"
+                    className={`w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:outline-none focus:ring-1  focus:ring-teal-400 ${
+                      errors.weight && 'border-red-500 focus:border-none'
+                    } focus:border-teal-400`}
                     placeholder="Masukkan Berat Badan Dalam Kilogram"
                     {...register('weight', {
                       required: 'Mohon Masukkan Berat Badan dalam Kilogram',
                     })}
                   />
-                  {errors.weight && <p>{errors.weight.message}</p>}
+                  {errors.weight && <p className="mt-1 text-sm text-red-500">{errors.weight.message}</p>}
                 </div>
 
                 <div className="m-0 w-full">
                   <label htmlFor="height">Tinggi (m)</label>
                   <input
                     type="text"
-                    className="w-full rounded-md border p-3"
+                    className={`w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:outline-none focus:ring-1  focus:ring-teal-400 ${
+                      errors.height && 'border-red-500 focus:border-none'
+                    } focus:border-teal-400`}
                     placeholder="Masukkan Tinggi Badan Dalam Meter"
                     {...register('height', {
                       required: 'Mohon Masukkan Tinggi Badan Dalam Meter',
@@ -128,23 +136,48 @@ function AddConditionForm(props: ModalProps) {
                       },
                     })}
                   />
+                  {errors.height && <p className="mt-1 text-sm text-red-500">{errors.height.message}</p>}
                 </div>
                 <div className="m-0 w-full">
-                  <label htmlFor="month">Bulan (1-12)</label>
-                  <input
-                    type="text"
-                    className="w-full rounded-md border p-3"
-                    placeholder="Masukkan Bulan Dalam Angka"
-                    {...register('month', {
-                      required: 'Mohon Masukkan Bulan',
-                      pattern: {
-                        value: /^[0-9.]+$/,
-                        message: 'Hanya masukkan angka dan titik (.)',
-                      },
-                    })}
+                  <label htmlFor="month">Bulan</label>
+                  <Controller
+                    control={control}
+                    name="month"
+                    rules={{ required: 'Mohon Pilih Bulan' }}
+                    render={({ field: { onChange } }) => (
+                      <>
+                        <AutoComplete
+                          onChange={input => {
+                            onChange(input?.value)
+                          }}
+                          placeholder="Pilih Bulan"
+                          label={null}
+                          onQueryChange={queryText => {
+                            if (debounce.current) {
+                              clearTimeout(debounce.current)
+                            }
+                            debounce.current = window.setTimeout(() => {
+                              setQueryMonth(queryText)
+                            }, 500)
+                          }}
+                          defaultValue={{
+                            text: '',
+                            value: '',
+                          }}
+                          options={filterMonths.map(each => ({
+                            text: each.text,
+                            value: String(each.value),
+                          }))}
+                        />
+                      </>
+                    )}
                   />
+                  {errors.month && <p className="mt-1 text-sm text-red-500">{errors.month.message}</p>}
                 </div>
-                <button type="submit" className="w-full rounded-md border bg-teal-400 p-3 font-semibold text-white">
+                <button
+                  type="submit"
+                  className="w-full rounded-md border bg-teal-400 p-3 font-semibold text-white focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
+                >
                   Tambah
                 </button>
               </form>
