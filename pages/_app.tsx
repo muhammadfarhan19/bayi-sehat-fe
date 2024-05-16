@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 
 import AuthLayout from '../components/layout/AuthLayout'
 import MainLayout from '../components/layout/MainLayout'
-import { AuthProvider } from '../hooks/useAuth'
 
 const authLayoutDisability = ['/login']
 
@@ -19,19 +18,17 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>Bayi Sehat</title>
         <link rel="icon" type="image/x-icon" href="../../public/assets/logo.png" />
       </Head>
-      <AuthProvider>
-        {authLayoutDisability.includes(pathname) ? (
-          <AuthLayout>
-            {/* @ts-ignore */}
-            <Component {...pageProps} />
-          </AuthLayout>
-        ) : (
-          <MainLayout>
-            {/* @ts-ignore */}
-            <Component {...pageProps} />
-          </MainLayout>
-        )}
-      </AuthProvider>
+      {authLayoutDisability.includes(pathname) ? (
+        <AuthLayout>
+          {/* @ts-ignore */}
+          <Component {...pageProps} />
+        </AuthLayout>
+      ) : (
+        <MainLayout>
+          {/* @ts-ignore */}
+          <Component {...pageProps} />
+        </MainLayout>
+      )}
     </>
   )
 }
