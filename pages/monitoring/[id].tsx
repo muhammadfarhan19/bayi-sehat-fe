@@ -2,9 +2,11 @@
 import {
   ArrowCircleLeftIcon,
   LocationMarkerIcon,
+  PencilAltIcon,
   PhoneIcon,
   PlusIcon,
   StatusOnlineIcon,
+  TrashIcon,
   UserIcon,
 } from '@heroicons/react/outline'
 import dynamic from 'next/dynamic'
@@ -22,17 +24,28 @@ import { BabyType } from '../../types/babyType'
 // const LineChartComponent = dynamic(() => import('../../components/charts/LineChartComponent'), { ssr: false })
 
 const DetailMonitoring = () => {
-  const [openModal, setOpenModal] = React.useState<boolean>(false)
+  const [formModalState, setFormModalState] = React.useState<{
+    open: boolean
+    type: string | undefined
+    selectedId: string | undefined
+  }>({
+    open: false,
+    type: undefined,
+    selectedId: undefined,
+  })
   const router = useRouter()
 
   const id = router.query.id
 
-  const handleModal = () => {
-    setOpenModal(!openModal)
+  const handleModal = (open: boolean, type?: string, selectedId?: string) => {
+    setFormModalState({
+      open,
+      type,
+      selectedId,
+    })
   }
 
   const { data, isValidating, mutate } = useAPI<BabyType, any>(`http://localhost:4000/baby/${id}`, 'GET')
-  console.log(data)
 
   const dataCondition = formatBabyConditions(data?.baby_condition)
 
@@ -49,7 +62,7 @@ const DetailMonitoring = () => {
           </button>
           <button
             className="flex items-center gap-x-1 rounded-md bg-teal-400 py-2 pl-2 pr-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
-            onClick={() => handleModal()}
+            onClick={() => handleModal(!formModalState.open, 'add')}
           >
             <PlusIcon className="h-5 w-5" />
             <span>Upload Kondisi</span>
@@ -74,23 +87,61 @@ const DetailMonitoring = () => {
                     <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
                       Keterangan
                     </th>
+                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                      Aksi
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {data?.baby_condition
                     ?.sort((a: any, b: any) => a.month - b.month)
                     .map((item: any, index: number, array: any[]) => {
-                      const weightStatus = index > 0 ? (item.weight > array[index - 1].weight ? 'naik' : 'turun') : '-'
+                      const weightStatus =
+                        index > 0
+                          ? item.weight > array[index - 1].weight
+                            ? 'naik'
+                            : item.weight < array[index - 1].weight
+                            ? 'turun'
+                            : 'Tetap'
+                          : '-'
                       return (
                         <tr key={index}>
-                          <td className="border-b border-gray-200 bg-white p-5 text-sm">
+                          <td className="border-b border-gray-200 bg-white p-3 text-sm">
                             {filterMonths.filter(arr => arr.value === item.month)[0].text}
                           </td>
-                          <td className="border-b border-gray-200 bg-white p-5 text-sm">
+                          <td className="border-b border-gray-200 bg-white p-3 text-sm">
                             {calculateAgeInMonths(data?.birthdate, item.month)} Bulan
                           </td>
-                          <td className="border-b border-gray-200 bg-white p-5 text-sm">{item.weight}</td>
-                          <td className="border-b border-gray-200 bg-white p-5 text-sm">{weightStatus}</td>
+                          <td className="border-b border-gray-200 bg-white p-3 text-sm">{item.weight}</td>
+                          <td className="border-b border-gray-200 bg-white p-3 text-sm">{weightStatus}</td>
+                          <td className="flex gap-x-2 border-b border-gray-200 bg-white p-3 text-sm">
+                            <button
+                              data-twe-toggle="tooltip"
+                              data-twe-html="true"
+                              data-twe-ripple-init
+                              data-twe-ripple-color="light"
+                              title="Edit Data"
+                              type="button"
+                              className="mx-1 rounded-[6px] bg-teal-400 p-1.5 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
+                              onClick={() => {
+                                handleModal(!formModalState.open, 'edit', item.id)
+                              }}
+                            >
+                              <PencilAltIcon className="h-4 w-4" />
+                            </button>
+                            <button
+                              data-twe-toggle="tooltip"
+                              data-twe-html="true"
+                              data-twe-ripple-init
+                              data-twe-ripple-color="light"
+                              title="Hapus Data"
+                              type="button"
+                              className="focus:ring-ted-500 mx-1 rounded-[6px] bg-red-500 p-1.5 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-red-400  focus:ring-offset-2"
+                              // onClick={() => setConfirmId(baby.id)}
+                            >
+                              <TrashIcon className="h-4 w-4" />
+                            </button>
+                          </td>
                         </tr>
                       )
                     })}
@@ -145,7 +196,14 @@ const DetailMonitoring = () => {
           </a>
         </aside>
       </section>
-      {openModal && <AddConditionForm babyId={id} open={openModal} setOpen={handleModal} />}
+      {formModalState.open && (
+        <AddConditionForm
+          babyId={id}
+          open={formModalState.open}
+          setOpen={handleModal}
+          selectedId={formModalState.selectedId}
+        />
+      )}
     </main>
   )
 }
