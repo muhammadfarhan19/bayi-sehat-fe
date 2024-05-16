@@ -1,12 +1,14 @@
 /* eslint-disable prefer-const */
 import { Dialog, Transition } from '@headlessui/react'
-import { LockClosedIcon } from '@heroicons/react/outline'
+import { XIcon } from '@heroicons/react/outline'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
+import { dateToISO, GenderList } from '../../lib/common'
 import { BabyType, GetBabyRes } from '../../types/api/baby.type'
+import AutoComplete from '../shared/ComboBox'
 
 interface ModalProps {
   open: boolean
@@ -18,6 +20,8 @@ interface ModalProps {
 
 function AddBabyForm(props: ModalProps) {
   const { open, setOpen, selectedId, type } = props
+  const [queryGender, setQueryGender] = React.useState('')
+
   const [data, setData] = React.useState<any>({
     name: undefined,
     gender: undefined,
@@ -27,6 +31,7 @@ function AddBabyForm(props: ModalProps) {
     parent_name: undefined,
     phone_number: undefined,
   })
+  const debounce = React.useRef<number>(0)
 
   const toggleModal = () => {
     setOpen(!open)
@@ -44,7 +49,6 @@ function AddBabyForm(props: ModalProps) {
     const response = await axios.get(`http://localhost:4000/baby/${id}`)
     setData(response.data.data)
   }
-  console.log(data)
 
   const router = useRouter()
 
@@ -62,19 +66,10 @@ function AddBabyForm(props: ModalProps) {
 
   React.useEffect(() => {
     fetchBaby(selectedId)
-    setData({
-      name: data.name,
-      gender: data.gender,
-      address: data.address,
-      birthdate: data.birthdate,
-      age: data.age,
-      parent_name: data.parent_name,
-      phone_number: data.phone_number,
-    })
-  }, [open])
+  }, [selectedId])
 
   React.useLayoutEffect(() => {
-    if (type === 'edit' && selectedId && data) {
+    if (selectedId && data) {
       setValue('name', data.name)
       setValue('birthdate', data.birthdate)
       setValue('gender', data.gender)
@@ -82,7 +77,7 @@ function AddBabyForm(props: ModalProps) {
       setValue('address', data.address)
       setValue('phone_number', data.phone_number)
     }
-  }, [data && type === 'edit'])
+  }, [data, selectedId])
 
   return (
     <Transition appear show={open} as={React.Fragment}>
@@ -126,7 +121,7 @@ function AddBabyForm(props: ModalProps) {
                   type="button"
                   onClick={toggleModal}
                 >
-                  <LockClosedIcon />
+                  <XIcon className="h-5 w-5" />
                 </button>
               </Dialog.Title>
               <form onSubmit={handleSubmit(submitHandler)} className="flex h-auto w-full flex-col space-y-4">
@@ -134,59 +129,96 @@ function AddBabyForm(props: ModalProps) {
                   <label htmlFor="name">Nama</label>
                   <input
                     type="text"
-                    className="w-full rounded-md border p-3"
+                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none                     focus:ring-1 focus:ring-teal-400`}
                     placeholder="Nama"
                     {...register('name', {
                       required: 'Mohon Masukkan Nama',
                     })}
                   />
+                  {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
                 </div>
                 <div className="w-full">
                   <label htmlFor="birthdate">Tanggal Lahir</label>
                   <input
                     type="date"
-                    className="w-full rounded-md border p-3"
-                    placeholder="DD/MM/YYYY"
+                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none                     focus:ring-1 focus:ring-teal-400`}
                     {...register('birthdate', {
                       required: 'Mohon Masukkan Tanggal Lahir',
                     })}
                   />
+                  {errors.birthdate && <p className="mt-1 text-sm text-red-500">{errors.birthdate.message}</p>}
                 </div>
                 <div className="w-full">
                   <label htmlFor="gender">Jenis Kelamin</label>
-                  <select className="w-full rounded-md border p-3" {...register('gender')}>
-                    <option value="Laki-Laki">Laki-Laki</option>
-                    <option value="Perempuan">Perempuan</option>
-                  </select>
+                  <Controller
+                    control={control}
+                    name="gender"
+                    rules={{ required: 'Mohon Pilih Jenis Kelamin' }}
+                    render={({ field: { onChange } }) => (
+                      <>
+                        <AutoComplete
+                          onChange={input => {
+                            onChange(input?.text)
+                            setQueryGender(input?.text)
+                          }}
+                          placeholder="Jenis Kelamin"
+                          label={null}
+                          onQueryChange={queryText => {
+                            if (debounce.current) {
+                              clearTimeout(debounce.current)
+                            }
+                            debounce.current = window.setTimeout(() => {
+                              setQueryGender(queryText)
+                            }, 500)
+                          }}
+                          defaultValue={{
+                            text: '',
+                            value: '',
+                          }}
+                          options={GenderList.map(each => ({
+                            text: each.text,
+                            value: String(each.value),
+                          }))}
+                        />
+                      </>
+                    )}
+                  />
+                  {errors.gender && <p className="mt-1 text-sm text-red-500">{errors.gender.message}</p>}
                 </div>
                 <div className="m-0 w-full">
                   <label htmlFor="name">Nama Orang Tua</label>
                   <input
                     type="text"
-                    className="w-full rounded-md border p-3"
+                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400  focus:outline-none                     focus:ring-1 focus:ring-teal-400`}
                     placeholder="Nama Orang Tua"
                     {...register('parent_name')}
                   />
+                  {errors.parent_name && <p className="mt-1 text-sm text-red-500">{errors.parent_name.message}</p>}
                 </div>
                 <div className="m-0 w-full">
                   <label htmlFor="name">Alamat</label>
                   <input
                     type="text"
-                    className="w-full rounded-md border p-3"
+                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none                     focus:ring-1 focus:ring-teal-400`}
                     placeholder="Alamat"
                     {...register('address')}
                   />
+                  {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address.message}</p>}
                 </div>
                 <div className="m-0 w-full">
                   <label htmlFor="name">No HP</label>
                   <input
                     type="text"
-                    className="w-full rounded-md border p-3"
+                    className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none                     focus:ring-1 focus:ring-teal-400`}
                     placeholder="Nomor HP"
                     {...register('phone_number')}
                   />
+                  {errors.phone_number && <p className="mt-1 text-sm text-red-500">{errors.phone_number.message}</p>}
                 </div>
-                <button type="submit" className="w-full rounded-md border bg-teal-400 p-3 font-semibold text-white">
+                <button
+                  type="submit"
+                  className="w-full rounded-md border bg-teal-400 p-3 font-semibold text-white focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
+                >
                   {selectedId ? 'Simpan' : 'Tambah'}
                 </button>
               </form>
