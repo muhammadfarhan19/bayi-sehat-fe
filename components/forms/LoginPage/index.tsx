@@ -1,3 +1,4 @@
+import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -15,15 +16,14 @@ const LoginPage: React.FC = () => {
 
   const onSubmit = async (val: PostAuthLoginReq) => {
     try {
-      const response: any = await fetch('http://localhost:4000/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(val),
-      }).then(response => response.json())
+      const response: any = await axios.post('http://localhost:4000/auth/login', val, {
+        withCredentials: true,
+      })
 
-      if (response?.statusCode === 200) {
-        const { accessToken, refreshToken } = response.data
+      console.log(response.data)
+
+      if (response?.data?.statusCode === 200) {
+        const { accessToken, refreshToken } = response.data.data
         Cookies.set('token', accessToken)
         Cookies.set('refreshtoken', refreshToken)
         router.push('/')

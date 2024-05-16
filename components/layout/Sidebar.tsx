@@ -1,7 +1,7 @@
+import Cookies from 'js-cookie'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
-import { useAuth } from '../../hooks/useAuth'
 import logo from '../../public/assets/logo.png'
 
 interface SidebarLinks {
@@ -10,6 +10,7 @@ interface SidebarLinks {
 }
 
 const Sidebar: React.FC = () => {
+  const { reload } = useRouter()
   const links: SidebarLinks[] = [
     {
       name: 'Dashboard',
@@ -21,7 +22,11 @@ const Sidebar: React.FC = () => {
     },
   ]
 
-  const { logout } = useAuth()
+  const handleLogout = () => {
+    Cookies.remove('token')
+    Cookies.remove('refreshtoken')
+    reload()
+  }
 
   const router = useRouter()
 
@@ -46,7 +51,7 @@ const Sidebar: React.FC = () => {
       </section>
       <button
         className="rounded-full border bg-white py-3 text-center font-semibold text-red-500"
-        onClick={() => logout}
+        onClick={handleLogout}
       >
         Logout
       </button>

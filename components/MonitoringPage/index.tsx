@@ -32,18 +32,6 @@ const MonitoringPage: React.FC = () => {
     })
   }
 
-  // const handleDelete = async (id: string | undefined) => {
-  //   try {
-  //     await axios.delete(`http://localhost:4000/baby/${id}`)
-  //     alert('Berhasil Menghapus data')
-  //     setConfirmId(id)
-  //     mutate()
-  //   } catch (error) {
-  //     console.log(error)
-  //     alert('Gagal Menghapus data')
-  //   }
-  // }
-
   const handleDelete = async () => {
     try {
       await axios.delete(`http://localhost:4000/baby/${confirmId}`)
