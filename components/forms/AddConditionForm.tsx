@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
+import axios from 'axios'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -13,6 +14,7 @@ interface ModalProps {
   setOpen: (open: boolean) => void
   onSuccess?: () => void
   type?: string
+  selectedId?: string | undefined
   babyId: string | string[] | undefined
 }
 
@@ -23,10 +25,19 @@ interface FormState {
 }
 
 function AddConditionForm(props: ModalProps) {
-  const { open, setOpen, babyId } = props
+  const { open, setOpen, onSuccess, type, selectedId, babyId } = props
   const debounce = React.useRef<number>(0)
   const router = useRouter()
   const [queryMonth, setQueryMonth] = React.useState('')
+  const [data, setData] = React.useState<{
+    month: undefined | number
+    weight: undefined | number
+    height: undefined | number
+  }>({
+    month: undefined,
+    weight: undefined,
+    height: undefined,
+  })
 
   const toggleModal = () => {
     setOpen(!open)
@@ -35,6 +46,7 @@ function AddConditionForm(props: ModalProps) {
   const {
     control,
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<FormState>()
@@ -68,6 +80,23 @@ function AddConditionForm(props: ModalProps) {
       throw new Error(`Error posting new baby data: ${error}`)
     }
   }
+  const fetchBabyCondition = async (id: string | undefined) => {
+    const response = await axios.get(`http://localhost:4000/condition/${id}`)
+    setData(response.data.data)
+  }
+
+  React.useEffect(() => {
+    fetchBabyCondition(selectedId)
+  }, [selectedId])
+
+  // React.useLayoutEffect(() => {
+  //   if (selectedId && data) {
+  //     setValue('weight', data.weight)
+  //     setValue('height', data.height)
+  //     setValue('month', data.month)
+  //   }
+  // }, [data, selectedId])
+  // console.log(data)
 
   return (
     <Transition appear show={open} as={React.Fragment}>
@@ -99,7 +128,9 @@ function AddConditionForm(props: ModalProps) {
           >
             <div className="my-8 inline-block w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-sm transition-all">
               <Dialog.Title as="div" className="mb-5 flex justify-between">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">Masukkan Kondisi Anak</h3>
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  {selectedId ? 'Perbarui' : 'Masukkan'} Kondisi Anak
+                </h3>
                 <button onClick={toggleModal}>
                   <XIcon className="h-5 w-5" />
                 </button>
@@ -178,7 +209,7 @@ function AddConditionForm(props: ModalProps) {
                   type="submit"
                   className="w-full rounded-md border bg-teal-400 p-3 font-semibold text-white focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
                 >
-                  Tambah
+                  {selectedId ? 'Simpan' : 'Tambah'}
                 </button>
               </form>
             </div>
