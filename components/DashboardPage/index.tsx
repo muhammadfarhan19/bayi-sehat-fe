@@ -12,8 +12,39 @@ const DashboardPage: React.FC = () => {
   const { data, isValidating } = useAPI<BabyType, any>('http://localhost:4000/baby', 'GET')
 
   const totalBabies = data?.length
-  const boyBabies = data?.map((baby: any) => baby).filter((baby: any) => baby.gender === 'Laki-Laki').length
-  const girlBabies = data?.map((baby: any) => baby).filter((baby: any) => baby.gender === 'Perempuan').length
+  const boyBabies = data?.filter((baby: BabyType) => baby.gender === 'Laki-Laki').length
+  const girlBabies = data?.filter((baby: BabyType) => baby.gender === 'Perempuan').length
+  const severelyUnderweight = data
+    ?.map((baby: BabyType) => baby)
+    .filter((baby: BabyType) => baby.status.category === 'Severely Underweights').length
+  const underweight = data
+    ?.map((baby: BabyType) => baby)
+    .filter((baby: BabyType) => baby.status.category === 'Underweight').length
+  const normal = data?.filter((baby: BabyType) => baby.status.category === 'Normal').length
+  const overweight = data?.filter((baby: BabyType) => baby.status.category === 'Overweight').length
+
+  const dataChart = [
+    {
+      name: 'Severely Underweight',
+      value: severelyUnderweight,
+      color: '#EF4444',
+    },
+    {
+      name: 'Underweight',
+      value: underweight,
+      color: '#EAb308',
+    },
+    {
+      name: 'Normal',
+      value: normal,
+      color: '#2DD4BF',
+    },
+    {
+      name: 'Overweight',
+      value: overweight,
+      color: '#F97316',
+    },
+  ]
 
   return (
     <main className="min-h-auto flex h-[910px] flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
@@ -58,20 +89,26 @@ const DashboardPage: React.FC = () => {
         </aside>
         <aside className="grid h-1/2 w-full grid-cols-2 items-center gap-x-5">
           <div className="flex h-[350px] w-full items-center rounded-md border border-teal-400 shadow-md hover:cursor-pointer">
-            <PieChartComponent />
+            <PieChartComponent data={dataChart} />
             <section className="flex flex-col justify-between gap-5 px-5">
-              <aside className="flex items-center gap-5">
-                <div className="h-[20px] w-[20px] rounded-full bg-[#0088FE]" />
-                <h1>Stunting</h1>
-              </aside>
-              <aside className="flex items-center gap-5">
-                <div className="h-[20px] w-[20px] rounded-full bg-teal-400" />
-                <h1>Tidak Stunting</h1>
-              </aside>
+              {dataChart.map((item, i) => (
+                <aside className="flex items-center gap-5">
+                  <div
+                    className={`grid h-6 w-9 place-items-center rounded-full border pb-0.5 font-semibold text-white`}
+                    style={{ backgroundColor: item.color }}
+                  >
+                    {item.value}
+                  </div>
+                  <h1>{item.name}</h1>
+                  {/* <span className="rounded-full border px-2 py-0.5" style={{ backgroundColor: item.color }}>
+                    {item.value}
+                  </span> */}
+                </aside>
+              ))}
             </section>
           </div>
           <div className="flex h-[350px] w-full items-center rounded-md border border-teal-400 shadow-md hover:cursor-pointer">
-            <PieChartComponent />
+            {/* <PieChartComponent /> */}
             <section className="flex flex-col justify-between gap-5 px-5">
               <aside className="flex items-center gap-5">
                 <div className="h-[20px] w-[20px] rounded-full bg-[#0088FE]" />

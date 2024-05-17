@@ -120,7 +120,7 @@ const MonitoringPage: React.FC = () => {
             Tambah Anak
           </button>
         </div>
-        <div className="inline-block max-h-[650px] min-w-full overflow-hidden rounded-lg shadow-md hover:overflow-y-scroll">
+        <div className="inline-block max-h-[650px] min-w-full overflow-hidden rounded-lg shadow-md hover:overflow-scroll">
           <table className="min-w-full overflow-scroll leading-normal">
             <thead>
               <tr>
@@ -160,8 +160,7 @@ const MonitoringPage: React.FC = () => {
                 </tr>
               ) : (
                 filteredData
-                  ?.filter(baby => baby.name !== undefined) // Filter out items where name is undefined
-                  .sort((a, b) => a.name!.localeCompare(b.name!))
+                  ?.filter(baby => baby.name !== undefined)
                   .map((baby: BabyType, index: number) => (
                     <tr key={index} className={index % 2 === 0 ? 'hover:bg-gray-200' : 'bg-gray-10 hover:bg-gray-200'}>
                       <td className="border-gray-200 bg-white px-5 py-5 text-sm">{index + 1}</td>
@@ -172,21 +171,7 @@ const MonitoringPage: React.FC = () => {
                       <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.address}</td>
                       <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.phone_number}</td>
                       <td className="border-gray-200 bg-white px-5 py-5  text-sm">
-                        <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
-                          <span
-                            aria-hidden
-                            className={`absolute inset-0 rounded-full opacity-50 ${
-                              baby.status?.category === 'Normal'
-                                ? 'bg-teal-400'
-                                : baby.status?.category === 'Underweight'
-                                ? 'bg-yellow-400'
-                                : 'bg-red-500'
-                            }`}
-                          ></span>
-                          <span className="relative">{baby.status?.category}</span>
-                        </span>
-
-                        {/* <StatusBadge baby={baby.status?.category} /> */}
+                        <StatusBadge category={baby.status?.category} />
                       </td>
                       <td className="gap-x-2 border-gray-200 bg-white px-5 py-5 text-sm">
                         <button

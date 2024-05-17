@@ -94,7 +94,9 @@ function AddBabyForm(props: ModalProps) {
   }
 
   React.useEffect(() => {
-    fetchBaby(selectedId)
+    if (selectedId) {
+      fetchBaby(selectedId)
+    }
   }, [selectedId])
 
   React.useLayoutEffect(() => {
@@ -231,11 +233,9 @@ function AddBabyForm(props: ModalProps) {
                     type="text"
                     className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400`}
                     placeholder="Alamat"
-                    {...register('address', {
-                      required: 'Mohon Masukkan Alamat',
-                    })}
+                    {...register('address')}
                   />
-                  {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address.message}</p>}
+                  {/* {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address.message}</p>} */}
                 </div>
                 <div className="m-0 w-full">
                   <label htmlFor="name">No HP</label>
@@ -243,11 +243,9 @@ function AddBabyForm(props: ModalProps) {
                     type="text"
                     className={`} w-full rounded-md border-gray-300 p-3 text-sm focus:border-teal-400 focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400`}
                     placeholder="Nomor HP"
-                    {...register('phone_number', {
-                      required: 'Mohon Masukkan Nomor HP',
-                    })}
+                    {...register('phone_number')}
                   />
-                  {errors.phone_number && <p className="mt-1 text-sm text-red-500">{errors.phone_number.message}</p>}
+                  {/* {errors.phone_number && <p className="mt-1 text-sm text-red-500">{errors.phone_number.message}</p>} */}
                 </div>
                 <button
                   type="submit"

@@ -179,13 +179,7 @@ function AddConditionForm(props: ModalProps) {
                       errors.height && 'border-red-500 focus:border-none'
                     } focus:border-teal-400`}
                     placeholder="Masukkan Tinggi Badan Dalam Meter"
-                    {...register('height', {
-                      required: 'Mohon Masukkan Tinggi Badan Dalam Meter',
-                      pattern: {
-                        value: /^[0-9.]+$/,
-                        message: 'Hanya masukkan angka dan titik (.)',
-                      },
-                    })}
+                    {...register('height')}
                   />
                   {errors.height && <p className="mt-1 text-sm text-red-500">{errors.height.message}</p>}
                 </div>
