@@ -1,21 +1,23 @@
 import React from 'react'
 
-import { BabyType } from '../../types/babyType'
-
 interface StatusBadgeProps {
-  baby: BabyType
+  category: string | undefined
 }
 
-const StatusBadge: React.FC<StatusBadgeProps> = ({ baby }) => {
+const StatusBadge: React.FC<StatusBadgeProps> = ({ category }) => {
   return (
-    <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
+    <span
+      className={`relative inline-block px-3 py-1 font-semibold leading-tight ${
+        category === 'Underweight' ? 'text-black' : 'text-white'
+      }`}
+    >
       <span
         aria-hidden
-        className={`rounded-ful absolute inset-0 rounded-full opacity-50 ${
-          baby.status.category === 'Normal' ? 'bg-red-200 text-red-900' : 'bg-teal-200'
+        className={`absolute inset-0 rounded-full ${
+          category === 'Normal' ? 'bg-teal-400' : category === 'Underweight' ? 'bg-yellow-400' : 'bg-red-500'
         }`}
       ></span>
-      <span className="relative">{baby.status ? 'Normal' : 'Severely Underweight'}</span>
+      <span className="relative">{category}</span>
     </span>
   )
 }

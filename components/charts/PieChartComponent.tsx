@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from 'recharts'
+import React from 'react'
+import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts'
 
 interface PieChartLabels {
   cx: any
@@ -11,12 +11,20 @@ interface PieChartLabels {
   index: any
 }
 
+interface DataChartTypes {
+  name: string
+  value: number
+  color: string
+}
+
 const data = [
-  { name: 'Stunting', value: 100 },
-  { name: 'Sehat', value: 300 },
+  { name: 'Severely Underweight', value: 900 },
+  { name: 'Underweight', value: 200 },
+  { name: 'Normal', value: 300 },
+  { name: 'Overweight', value: 300 },
 ]
 
-const COLORS = ['#0088FE', '#2dd4bf']
+const COLORS = ['#EF4444', '#eab308', '#0088FE', '#f97316']
 
 const RADIAN = Math.PI / 180
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: PieChartLabels) => {
@@ -31,9 +39,9 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   )
 }
 
-const PieChartComponent = () => {
+const PieChartComponent = ({ data }: { data: DataChartTypes[] }) => {
   return (
-    <ResponsiveContainer width="60%" height="100%">
+    <ResponsiveContainer width="50%" height="100%">
       <PieChart width={400} height={400}>
         <Pie
           data={data}
@@ -42,11 +50,11 @@ const PieChartComponent = () => {
           labelLine={false}
           label={renderCustomizedLabel}
           outerRadius={80}
-          fill="#8884d8"
+          // fill="#8884d8"
           dataKey="value"
         >
           {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
       </PieChart>

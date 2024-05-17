@@ -16,6 +16,7 @@ import React from 'react'
 
 import LineChartComponent from '../../components/charts/LineChartComponent'
 import AddConditionForm from '../../components/forms/AddConditionForm'
+import StatusBadge from '../../components/shared/StatusBadge'
 import { withReduxPage } from '../../hooks/ReduxPage'
 import { useAPI } from '../../hooks/useAPI'
 import { calculateAgeInMonths, filterMonths, formatBabyConditions } from '../../lib/common'
@@ -162,13 +163,14 @@ const DetailMonitoring = () => {
         </section>
       </section>
       <section className="flex h-full w-1/3 flex-col space-y-10 rounded-2xl bg-teal-50 p-10">
-        <aside className="flex w-auto flex-col items-center gap-y-5 rounded-xl border py-10 shadow-lg">
+        <aside className="flex w-auto flex-col items-center gap-y-3 rounded-xl border py-7 shadow-lg">
           <section className="h-[70px] w-[70px] rounded-full">
             <Image src={avatar} alt="avatar" />
           </section>
-          <section className="text-center">
+          <section className="flex flex-col space-y-3 text-center">
             <h1 className="text-lg font-semibold">{data?.name}</h1>
             <h1> {data?.gender === 'male' ? 'Laki-Laki' : 'Perempuan'}</h1>
+            <StatusBadge category={data?.status?.category} />
           </section>
         </aside>
         <aside className="h-auto w-full space-y-5">
@@ -179,22 +181,6 @@ const DetailMonitoring = () => {
           <section className="flex cursor-pointer items-center gap-x-3 rounded-xl border bg-teal-400 p-3 transition-all duration-100 hover:shadow-md">
             <LocationMarkerIcon className="h-5 w-5" />
             <h1>{data?.address}</h1>
-          </section>
-          <section className="flex cursor-pointer items-center gap-x-3 rounded-xl border bg-teal-400 p-3 transition-all duration-100 hover:shadow-md">
-            <StatusOnlineIcon className="h-5 w-5" />
-            <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
-              <span
-                aria-hidden
-                className={`absolute inset-0 rounded-full opacity-50 ${
-                  data?.status?.category === 'Normal'
-                    ? 'bg-blue-400'
-                    : data?.status?.category === 'Underweight'
-                    ? 'bg-yellow-400'
-                    : 'bg-red-500 text-white'
-                } ${typeof data?.status?.category === null ? 'bg-white' : ''}`}
-              ></span>
-              <span className="relative">{data?.status?.category}</span>
-            </span>
           </section>
           <a
             // href={`https://wa.me/${phoneNumberConverter(data.phone_number)}`}
