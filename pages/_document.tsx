@@ -1,5 +1,4 @@
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
-import { useRouter } from 'next/router'
 import * as React from 'react'
 
 class MyDocument extends Document {
@@ -12,7 +11,7 @@ class MyDocument extends Document {
     const meta = {
       title: 'Bayi Sehat',
       description: 'Sayangi Anak Kita, Cegah Stunting Sejak Dini',
-      image: '/favicon.png',
+      image: '../../public/assets/logo.png',
     }
 
     return (
