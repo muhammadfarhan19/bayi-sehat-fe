@@ -32,7 +32,7 @@ const LoginPage: React.FC = () => {
         dispatch(
           setSnackbar({
             show: true,
-            message: response.data.message || 'Data berhasil dihapus.',
+            message: response.data.message,
             type: SnackbarType.INFO,
           })
         )
@@ -40,7 +40,7 @@ const LoginPage: React.FC = () => {
         dispatch(
           setSnackbar({
             show: true,
-            message: response.data.message || 'Terjadi Kesalahan',
+            message: response.data.message,
             type: SnackbarType.ERROR,
           })
         )
@@ -49,7 +49,7 @@ const LoginPage: React.FC = () => {
       dispatch(
         setSnackbar({
           show: true,
-          message: error.message || 'Terjadi Kesalahan',
+          message: 'Email atau Kata Sandi Salah!!',
           type: SnackbarType.ERROR,
         })
       )

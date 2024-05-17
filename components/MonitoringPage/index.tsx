@@ -93,8 +93,9 @@ const MonitoringPage: React.FC = () => {
     <main className="min-h-auto flex h-[910px] flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
       <header className="flex items-center justify-between">
         <aside className="w-auto text-2xl font-semibold">Monitoring</aside>
-        <aside className={`b-2 w-auto cursor-pointer rounded-md px-4 py-2 hover:bg-gray-50`}>
-          {/* {user?.data?.[0]?.name} */}
+        <aside
+          className={`w-auto cursor-pointer border-b-2 px-4 py-2 hover:bg-gray-200 hover:transition-all hover:duration-300`}
+        >
           Posyandu Gading
         </aside>
       </header>
