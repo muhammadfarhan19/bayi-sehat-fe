@@ -5,14 +5,17 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
+import { setSnackbar } from '../../action/CommonAction'
 import { filterMonths } from '../../lib/common'
+import { SnackbarType } from '../../reducer/CommonReducer'
 import AutoComplete from '../shared/ComboBox'
 
 interface ModalProps {
   open: boolean
   setOpen: (open: boolean) => void
-  onSuccess?: () => void
+  onSuccess: () => void
   type?: string
   selectedId?: string | undefined
   babyId: string | string[] | undefined
@@ -28,6 +31,7 @@ function AddConditionForm(props: ModalProps) {
   const { open, setOpen, onSuccess, type, selectedId, babyId } = props
   const debounce = React.useRef<number>(0)
   const router = useRouter()
+  const dispatch = useDispatch()
   const [queryMonth, setQueryMonth] = React.useState('')
   const [data, setData] = React.useState<{
     month: undefined | number
@@ -67,18 +71,34 @@ function AddConditionForm(props: ModalProps) {
         body: JSON.stringify(result),
       }).then(response => response.json())
 
-      if (response.statusCode === 201) {
-        alert(response.message)
+      if (response.status) {
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: response.data.message || 'Data berhasil tersimpan.',
+            type: SnackbarType.INFO,
+          })
+        )
       } else {
-        console.log('failed')
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: response.data.message || 'Terjadi Kesalahan',
+            type: SnackbarType.ERROR,
+          })
+        )
       }
-
-      toggleModal()
-      router.reload()
-      return response
-    } catch (error) {
-      throw new Error(`Error posting new baby data: ${error}`)
+    } catch (error: any) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: error.message || 'Terjadi Kesalahan',
+          type: SnackbarType.ERROR,
+        })
+      )
     }
+    onSuccess()
+    setOpen(!open)
   }
   const fetchBabyCondition = async (id: string | undefined) => {
     const response = await axios.get(`http://localhost:4000/condition/${id}`)
