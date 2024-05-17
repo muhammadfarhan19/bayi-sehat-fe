@@ -16,4 +16,8 @@ export interface BabyType {
   }[]
   parent_name: string | undefined
   phone_number: string | undefined
+  status: {
+    score: number
+    category: string | undefined
+  }
 }

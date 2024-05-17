@@ -46,6 +46,9 @@ const DetailMonitoring = () => {
 
   const { data, isValidating, mutate } = useAPI<BabyType, any>(`http://localhost:4000/baby/${id}`, 'GET')
 
+  const ZScore = data?.status?.score
+  console.log(ZScore)
+
   const dataCondition = formatBabyConditions(data?.baby_condition)
 
   return (
@@ -87,6 +90,9 @@ const DetailMonitoring = () => {
                       Keterangan
                     </th>
                     <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                      Z-Score
+                    </th>
+                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
                       Aksi
                     </th>
                   </tr>
@@ -113,6 +119,7 @@ const DetailMonitoring = () => {
                           </td>
                           <td className="border-b border-gray-200 bg-white p-3 text-sm">{item.weight}</td>
                           <td className="border-b border-gray-200 bg-white p-3 text-sm">{weightStatus}</td>
+                          <td className="border-b border-gray-200 bg-white p-3 text-sm">{ZScore}</td>
                           <td className="flex gap-x-2 border-b border-gray-200 bg-white p-3 text-sm">
                             <button
                               data-twe-toggle="tooltip"
@@ -178,11 +185,15 @@ const DetailMonitoring = () => {
             <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
               <span
                 aria-hidden
-                className={`rounded-ful absolute inset-0 rounded-full border border-teal-400  ${
-                  data?.is_stunted ? 'bg-red-400 text-red-900' : 'bg-teal-200'
-                }`}
+                className={`absolute inset-0 rounded-full opacity-50 ${
+                  data?.status?.category === 'Normal'
+                    ? 'bg-blue-400'
+                    : data?.status?.category === 'Underweight'
+                    ? 'bg-yellow-400'
+                    : 'bg-red-500 text-white'
+                } ${typeof data?.status?.category === null ? 'bg-white' : ''}`}
               ></span>
-              <span className="relative">{data?.is_stunted ? 'Stunting' : 'Sehat'}</span>
+              <span className="relative">{data?.status?.category}</span>
             </span>
           </section>
           <a

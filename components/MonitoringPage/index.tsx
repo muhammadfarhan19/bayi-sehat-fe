@@ -11,6 +11,7 @@ import { GetAuthRes, UserData } from '../../types/api/user.type'
 import { BabyType } from '../../types/babyType'
 import AddBabyForm from '../forms/AddBabyForm'
 import ConfirmDialog from '../shared/ConfirmDialog'
+import StatusBadge from '../shared/StatusBadge'
 
 const MonitoringPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState<string>('')
@@ -88,6 +89,7 @@ const MonitoringPage: React.FC = () => {
       )
     }
   }, [searchQuery, data])
+  // console.log(data);
 
   return (
     <main className="min-h-auto flex h-[910px] flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
@@ -170,15 +172,21 @@ const MonitoringPage: React.FC = () => {
                       <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.address}</td>
                       <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.phone_number}</td>
                       <td className="border-gray-200 bg-white px-5 py-5  text-sm">
-                        {/* <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
-                        <span
-                          aria-hidden
-                          className={`rounded-ful absolute inset-0 rounded-full opacity-50 ${
-                            baby.is_stunted ? 'bg-red-200 text-red-900' : 'bg-teal-200'
-                          }`}
-                        ></span>
-                        <span className="relative">{baby.is_stunted ? 'Stunting' : 'Sehat'}</span>
-                      </span> */}
+                        <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
+                          <span
+                            aria-hidden
+                            className={`absolute inset-0 rounded-full opacity-50 ${
+                              baby.status?.category === 'Normal'
+                                ? 'bg-teal-400'
+                                : baby.status?.category === 'Underweight'
+                                ? 'bg-yellow-400'
+                                : 'bg-red-500'
+                            }`}
+                          ></span>
+                          <span className="relative">{baby.status?.category}</span>
+                        </span>
+
+                        {/* <StatusBadge baby={baby.status?.category} /> */}
                       </td>
                       <td className="gap-x-2 border-gray-200 bg-white px-5 py-5 text-sm">
                         <button
