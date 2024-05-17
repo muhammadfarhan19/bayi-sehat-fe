@@ -3,10 +3,14 @@ import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
+import { setSnackbar } from '../../../action/CommonAction'
+import { SnackbarType } from '../../../reducer/CommonReducer'
 import { PostAuthLoginReq, PostAuthLoginRes } from '../../../types/authType'
 
 const LoginPage: React.FC = () => {
+  const dispatch = useDispatch()
   const router = useRouter()
   const {
     handleSubmit,
@@ -20,16 +24,35 @@ const LoginPage: React.FC = () => {
         withCredentials: true,
       })
 
-      console.log(response.data)
-
       if (response?.data?.statusCode === 200) {
         const { accessToken, refreshToken } = response.data.data
         Cookies.set('token', accessToken)
         Cookies.set('refreshtoken', refreshToken)
         router.push('/')
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: response.data.message || 'Data berhasil dihapus.',
+            type: SnackbarType.INFO,
+          })
+        )
+      } else {
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: response.data.message || 'Terjadi Kesalahan',
+            type: SnackbarType.ERROR,
+          })
+        )
       }
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: error.message || 'Terjadi Kesalahan',
+          type: SnackbarType.ERROR,
+        })
+      )
     }
   }
 

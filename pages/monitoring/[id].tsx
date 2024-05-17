@@ -16,12 +16,11 @@ import React from 'react'
 
 import LineChartComponent from '../../components/charts/LineChartComponent'
 import AddConditionForm from '../../components/forms/AddConditionForm'
+import { withReduxPage } from '../../hooks/ReduxPage'
 import { useAPI } from '../../hooks/useAPI'
 import { calculateAgeInMonths, filterMonths, formatBabyConditions } from '../../lib/common'
 import avatar from '../../public/assets/avatar.png'
 import { BabyType } from '../../types/babyType'
-
-// const LineChartComponent = dynamic(() => import('../../components/charts/LineChartComponent'), { ssr: false })
 
 const DetailMonitoring = () => {
   const [formModalState, setFormModalState] = React.useState<{
@@ -71,7 +70,7 @@ const DetailMonitoring = () => {
         <section className="flex flex-col gap-y-14 py-5">
           <div className="flex flex-col gap-y-4">
             <h2 className="text-xl font-semibold">Tabel Kondisi</h2>
-            <aside className="inline-block max-h-[350px] min-w-full overflow-auto rounded-lg shadow-md">
+            <aside className="inline-block max-h-[250px] min-w-full overflow-auto rounded-lg shadow-md">
               <table className="min-w-full leading-normal">
                 <thead>
                   <tr>
@@ -202,10 +201,11 @@ const DetailMonitoring = () => {
           open={formModalState.open}
           setOpen={handleModal}
           selectedId={formModalState.selectedId}
+          onSuccess={() => mutate()}
         />
       )}
     </main>
   )
 }
 
-export default DetailMonitoring
+export default withReduxPage()(DetailMonitoring)

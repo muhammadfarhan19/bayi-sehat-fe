@@ -2,8 +2,12 @@ import { InformationCircleIcon, PencilAltIcon, TrashIcon } from '@heroicons/reac
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 
+import { setSnackbar } from '../../action/CommonAction'
 import { useAPI } from '../../hooks/useAPI'
+import { SnackbarType } from '../../reducer/CommonReducer'
+import { GetAuthRes, UserData } from '../../types/api/user.type'
 import { BabyType } from '../../types/babyType'
 import AddBabyForm from '../forms/AddBabyForm'
 import ConfirmDialog from '../shared/ConfirmDialog'
@@ -21,8 +25,10 @@ const MonitoringPage: React.FC = () => {
     type: undefined,
     selectedId: undefined,
   })
-
+  const dispatch = useDispatch()
   const router = useRouter()
+
+  const { data: user } = useAPI<UserData, GetAuthRes>('http://localhost:4000/auth', 'GET')
 
   const handleModal = (open: boolean, type?: string, selectedId?: string) => {
     setFormModalState({
@@ -34,14 +40,35 @@ const MonitoringPage: React.FC = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:4000/baby/${confirmId}`)
-      alert('Berhasil Menghapus data')
-      setConfirmId('')
-      mutate()
-    } catch (error) {
-      console.log(error)
-      alert('Gagal Menghapus data')
+      const response = await axios.delete(`http://localhost:4000/baby/${confirmId}`)
+      if (response.status === 200) {
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: response.data.message || 'Data berhasil dihapus.',
+            type: SnackbarType.INFO,
+          })
+        )
+      } else {
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: response.data.message || 'Terjadi Kesalahan',
+            type: SnackbarType.ERROR,
+          })
+        )
+      }
+    } catch (error: any) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: error.message || 'Terjadi Kesalahan',
+          type: SnackbarType.ERROR,
+        })
+      )
     }
+    setConfirmId('')
+    mutate()
   }
 
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,9 +93,9 @@ const MonitoringPage: React.FC = () => {
     <main className="min-h-auto flex h-[910px] flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
       <header className="flex items-center justify-between">
         <aside className="w-auto text-2xl font-semibold">Monitoring</aside>
-        <aside className={`b-2'} w-auto cursor-pointer rounded-md px-4 py-2 hover:bg-gray-50`}>
-          {/* {user} */}
-          nama
+        <aside className={`b-2 w-auto cursor-pointer rounded-md px-4 py-2 hover:bg-gray-50`}>
+          {/* {user?.data?.[0]?.name} */}
+          Posyandu Gading
         </aside>
       </header>
       <aside className="flex items-center justify-end">
@@ -206,6 +233,7 @@ const MonitoringPage: React.FC = () => {
           open={formModalState.open}
           setOpen={(open: boolean) => handleModal(open)}
           selectedId={formModalState.selectedId}
+          onSuccess={() => mutate()}
         />
       )}
       <ConfirmDialog

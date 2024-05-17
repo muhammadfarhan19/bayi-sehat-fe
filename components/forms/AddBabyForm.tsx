@@ -5,23 +5,26 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
+import { setSnackbar } from '../../action/CommonAction'
 import { GenderList } from '../../lib/common'
+import { SnackbarType } from '../../reducer/CommonReducer'
 import { BabyType } from '../../types/api/baby.type'
 import AutoComplete from '../shared/ComboBox'
 
 interface ModalProps {
   open: boolean
   setOpen: (open: boolean) => void
-  onSuccess?: () => void
+  onSuccess: () => void
   type?: string
   selectedId?: string | undefined
 }
 
 function AddBabyForm(props: ModalProps) {
-  const { open, setOpen, selectedId, type } = props
+  const { open, setOpen, selectedId, type, onSuccess } = props
   const [queryGender, setQueryGender] = React.useState('')
-
+  const dispatch = useDispatch()
   const [data, setData] = React.useState<any>({
     name: undefined,
     gender: undefined,
@@ -54,14 +57,40 @@ function AddBabyForm(props: ModalProps) {
 
   const submitHandler = async (formData: BabyType) => {
     let response
-    if (selectedId) {
-      response = await axios.put(`http://localhost:4000/baby/${selectedId}`, formData)
-    } else {
-      response = await axios.post('http://localhost:4000/baby', formData)
+    try {
+      if (selectedId) {
+        response = await axios.put(`http://localhost:4000/baby/${selectedId}`, formData)
+      } else {
+        response = await axios.post('http://localhost:4000/baby', formData)
+      }
+      if (response.status === 200) {
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: response.data.message || 'Data berhasil tersimpan.',
+            type: SnackbarType.INFO,
+          })
+        )
+      } else {
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: response.data.message || 'Terjadi Kesalahan',
+            type: SnackbarType.ERROR,
+          })
+        )
+      }
+    } catch (error: any) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: error.message || 'Terjadi Kesalahan',
+          type: SnackbarType.ERROR,
+        })
+      )
     }
-    alert(response.data.message)
+    onSuccess()
     setOpen(!open)
-    router.reload()
   }
 
   React.useEffect(() => {
