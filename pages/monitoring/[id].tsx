@@ -109,94 +109,98 @@ const DetailMonitoring = () => {
           </button>
         </header>
         <section className="flex flex-col gap-y-14 py-5">
-          <div className="flex flex-col gap-y-4">
-            <h2 className="text-xl font-semibold">Tabel Kondisi</h2>
-            <aside className="inline-block max-h-[250px] min-w-full overflow-auto rounded-lg shadow-md">
-              <table className="min-w-full leading-normal">
-                <thead>
-                  <tr>
-                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
-                      Periode
-                    </th>
-                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
-                      Umur (bulan)
-                    </th>
-                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
-                      Berat (kg)
-                    </th>
-                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
-                      Keterangan
-                    </th>
-                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
-                      Z-Score
-                    </th>
-                    <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
-                      Aksi
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data?.baby_condition
-                    ?.sort((a: any, b: any) => a.month - b.month)
-                    .map((item: any, index: number, array: any[]) => {
-                      const weightStatus =
-                        index > 0
-                          ? item.weight > array[index - 1].weight
-                            ? 'naik'
-                            : item.weight < array[index - 1].weight
-                            ? 'turun'
-                            : 'Tetap'
-                          : '-'
-                      return (
-                        <tr key={index}>
-                          <td className="border-b border-gray-200 bg-white p-3 text-sm">
-                            {filterMonths.filter(arr => arr.value === item.month)[0].text}
-                          </td>
-                          <td className="border-b border-gray-200 bg-white p-3 text-sm">
-                            {calculateAgeInMonths(data?.birthdate, item.month)} Bulan
-                          </td>
-                          <td className="border-b border-gray-200 bg-white p-3 text-sm">{item.weight}</td>
-                          <td className="border-b border-gray-200 bg-white p-3 text-sm">{weightStatus}</td>
-                          <td className="border-b border-gray-200 bg-white p-3 text-sm">{ZScore}</td>
-                          <td className="flex gap-x-2 border-b border-gray-200 bg-white p-3 text-sm">
-                            <button
-                              data-twe-toggle="tooltip"
-                              data-twe-html="true"
-                              data-twe-ripple-init
-                              data-twe-ripple-color="light"
-                              title="Edit Data"
-                              type="button"
-                              className="mx-1 rounded-[6px] bg-teal-400 p-1.5 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
-                              onClick={() => {
-                                handleModal(!formModalState.open, 'edit', item.id)
-                              }}
-                            >
-                              <PencilAltIcon className="h-4 w-4" />
-                            </button>
-                            <button
-                              data-twe-toggle="tooltip"
-                              data-twe-html="true"
-                              data-twe-ripple-init
-                              data-twe-ripple-color="light"
-                              title="Hapus Data"
-                              type="button"
-                              className="focus:ring-ted-500 mx-1 rounded-[6px] bg-red-500 p-1.5 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-red-400  focus:ring-offset-2"
-                              onClick={() => setConfirmId(item.id)}
-                            >
-                              <TrashIcon className="h-4 w-4" />
-                            </button>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                </tbody>
-              </table>
-            </aside>
-          </div>
-          <aside className="max-h-[300px] w-full">
-            <h2 className="mb-4 text-xl font-semibold">Grafik Kondisi</h2>
-            <LineChartComponent data={dataCondition} />
-          </aside>
+          {!isValidating && data?.baby_condition?.length ? (
+            <>
+              <div className="flex flex-col gap-y-4">
+                <h2 className="text-xl font-semibold">Tabel Kondisi</h2>
+                <aside className="inline-block max-h-[250px] min-w-full overflow-auto rounded-lg shadow-md">
+                  <table className="min-w-full leading-normal">
+                    <thead>
+                      <tr>
+                        <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                          Periode
+                        </th>
+                        <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                          Umur (bulan)
+                        </th>
+                        <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                          Berat (kg)
+                        </th>
+                        <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                          Keterangan
+                        </th>
+                        <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                          Z-Score
+                        </th>
+                        <th className="border-b-2 border-teal-400 bg-teal-400 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white">
+                          Aksi
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data?.baby_condition
+                        ?.sort((a: any, b: any) => a.month - b.month)
+                        .map((item: any, index: number, array: any[]) => {
+                          const weightStatus =
+                            index > 0
+                              ? item.weight > array[index - 1].weight
+                                ? 'naik'
+                                : item.weight < array[index - 1].weight
+                                ? 'turun'
+                                : 'Tetap'
+                              : '-'
+                          return (
+                            <tr key={index}>
+                              <td className="border-b border-gray-200 bg-white p-3 text-sm">
+                                {filterMonths.filter(arr => arr.value === item.month)[0].text}
+                              </td>
+                              <td className="border-b border-gray-200 bg-white p-3 text-sm">
+                                {calculateAgeInMonths(data?.birthdate, item.month)} Bulan
+                              </td>
+                              <td className="border-b border-gray-200 bg-white p-3 text-sm">{item.weight}</td>
+                              <td className="border-b border-gray-200 bg-white p-3 text-sm">{weightStatus}</td>
+                              <td className="border-b border-gray-200 bg-white p-3 text-sm">{ZScore}</td>
+                              <td className="flex gap-x-2 border-b border-gray-200 bg-white p-3 text-sm">
+                                <button
+                                  data-twe-toggle="tooltip"
+                                  data-twe-html="true"
+                                  data-twe-ripple-init
+                                  data-twe-ripple-color="light"
+                                  title="Edit Data"
+                                  type="button"
+                                  className="mx-1 rounded-[6px] bg-teal-400 p-1.5 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
+                                  onClick={() => {
+                                    handleModal(!formModalState.open, 'edit', item.id)
+                                  }}
+                                >
+                                  <PencilAltIcon className="h-4 w-4" />
+                                </button>
+                                <button
+                                  data-twe-toggle="tooltip"
+                                  data-twe-html="true"
+                                  data-twe-ripple-init
+                                  data-twe-ripple-color="light"
+                                  title="Hapus Data"
+                                  type="button"
+                                  className="focus:ring-ted-500 mx-1 rounded-[6px] bg-red-500 p-1.5 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-red-400  focus:ring-offset-2"
+                                  onClick={() => setConfirmId(item.id)}
+                                >
+                                  <TrashIcon className="h-4 w-4" />
+                                </button>
+                              </td>
+                            </tr>
+                          )
+                        })}
+                    </tbody>
+                  </table>
+                </aside>
+              </div>
+              <aside className="max-h-[300px] w-full">
+                <h2 className="mb-4 text-xl font-semibold">Grafik Kondisi</h2>
+                <LineChartComponent data={dataCondition} />
+              </aside>
+            </>
+          ) : null}
         </section>
       </section>
       <section className="flex h-full w-1/3 flex-col space-y-10 rounded-2xl bg-teal-50 p-10">
@@ -207,7 +211,7 @@ const DetailMonitoring = () => {
           <section className="flex flex-col space-y-3 text-center">
             <h1 className="text-lg font-semibold">{data?.name}</h1>
             <h1> {data?.gender === 'male' ? 'Laki-Laki' : 'Perempuan'}</h1>
-            <StatusBadge category={data?.status?.category} />
+            {data?.baby_condition?.length > 0 && <StatusBadge category={data?.status?.category} />}
           </section>
         </aside>
         <aside className="h-auto w-full space-y-5">

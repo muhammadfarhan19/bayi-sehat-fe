@@ -167,7 +167,7 @@ const MonitoringPage: React.FC = () => {
                       <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.address}</td>
                       <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.phone_number}</td>
                       <td className="border-gray-200 bg-white px-5 py-5  text-sm">
-                        <StatusBadge category={baby.status?.category} />
+                        {filteredData?.[0]?.baby_condition.length && <StatusBadge category={baby.status?.category} />}
                       </td>
                       <td className="gap-x-2 border-gray-200 bg-white px-5 py-5 text-sm">
                         <button
