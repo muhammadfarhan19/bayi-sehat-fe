@@ -96,6 +96,9 @@ function AddBabyForm(props: ModalProps) {
     }
   }, [selectedId])
 
+  setValue('address', 'Dukuh Gading')
+  setValue('phone_number', '-')
+
   React.useLayoutEffect(() => {
     if (selectedId && data) {
       setValue('name', data.name)

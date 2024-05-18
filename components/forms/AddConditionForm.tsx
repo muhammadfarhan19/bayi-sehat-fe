@@ -54,7 +54,9 @@ function AddConditionForm(props: ModalProps) {
         month: Number(formData.month),
       }
       if (selectedId) {
-        response = await axios.patch(`http://localhost:4000/condition/${babyId}`, result, { withCredentials: true })
+        response = await axios.put(`http://localhost:4000/condition/update/${babyId}`, result, {
+          withCredentials: true,
+        })
       } else {
         response = await axios.post(`http://localhost:4000/condition/${babyId}`, result, { withCredentials: true })
       }
@@ -89,7 +91,7 @@ function AddConditionForm(props: ModalProps) {
     setOpen(!open)
   }
   const fetchBabyCondition = async (id: string | undefined) => {
-    const response = await axios.get(`http://localhost:4000/condition/${id}`)
+    const response = await axios.get(`http://localhost:4000/condition/detail/${id}`)
     setData(response.data.data)
   }
 
@@ -104,6 +106,7 @@ function AddConditionForm(props: ModalProps) {
       setValue('weight', data.weight)
       setValue('height', data.height)
       setValue('month', data.month)
+      console.log(selectedId)
     }
   }, [data, selectedId])
 
