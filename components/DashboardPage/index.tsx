@@ -16,12 +16,12 @@ const DashboardPage: React.FC = () => {
   const girlBabies = data?.filter((baby: BabyType) => baby.gender === 'Perempuan').length
   const severelyUnderweight = data
     ?.map((baby: BabyType) => baby)
-    .filter((baby: BabyType) => baby.status.category === 'Severely Underweights').length
+    .filter((baby: BabyType) => baby?.status?.category === 'Severely Underweights').length
   const underweight = data
     ?.map((baby: BabyType) => baby)
-    .filter((baby: BabyType) => baby.status.category === 'Underweight').length
-  const normal = data?.filter((baby: BabyType) => baby.status.category === 'Normal').length
-  const overweight = data?.filter((baby: BabyType) => baby.status.category === 'Overweight').length
+    .filter((baby: BabyType) => baby?.status?.category === 'Underweight').length
+  const normal = data?.filter((baby: BabyType) => baby?.status?.category === 'Normal').length
+  const overweight = data?.filter((baby: BabyType) => baby?.status?.category === 'Overweight').length
 
   const dataChart = [
     {

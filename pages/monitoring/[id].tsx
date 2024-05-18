@@ -9,21 +9,27 @@ import {
   TrashIcon,
   UserIcon,
 } from '@heroicons/react/outline'
+import axios from 'axios'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 
+import { setSnackbar } from '../../action/CommonAction'
 import LineChartComponent from '../../components/charts/LineChartComponent'
 import AddConditionForm from '../../components/forms/AddConditionForm'
+import ConfirmDialog from '../../components/shared/ConfirmDialog'
 import StatusBadge from '../../components/shared/StatusBadge'
 import { withReduxPage } from '../../hooks/ReduxPage'
 import { useAPI } from '../../hooks/useAPI'
 import { calculateAgeInMonths, filterMonths, formatBabyConditions } from '../../lib/common'
 import avatar from '../../public/assets/avatar.png'
+import { SnackbarType } from '../../reducer/CommonReducer'
 import { BabyType } from '../../types/babyType'
 
 const DetailMonitoring = () => {
+  const [confirmId, setConfirmId] = React.useState<string | undefined>('')
   const [formModalState, setFormModalState] = React.useState<{
     open: boolean
     type: string | undefined
@@ -34,7 +40,7 @@ const DetailMonitoring = () => {
     selectedId: undefined,
   })
   const router = useRouter()
-
+  const dispatch = useDispatch()
   const id = router.query.id
 
   const handleModal = (open: boolean, type?: string, selectedId?: string) => {
@@ -47,9 +53,40 @@ const DetailMonitoring = () => {
 
   const { data, isValidating, mutate } = useAPI<BabyType, any>(`http://localhost:4000/baby/${id}`, 'GET')
 
-  const ZScore = data?.status?.score
-  console.log(ZScore)
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`http://localhost:4000/condition/${confirmId}`)
+      if (response.status === 200) {
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: response.data.message || 'Data berhasil dihapus.',
+            type: SnackbarType.INFO,
+          })
+        )
+      } else {
+        dispatch(
+          setSnackbar({
+            show: true,
+            message: response.data.message || 'Terjadi Kesalahan',
+            type: SnackbarType.ERROR,
+          })
+        )
+      }
+    } catch (error: any) {
+      dispatch(
+        setSnackbar({
+          show: true,
+          message: error.message || 'Terjadi Kesalahan',
+          type: SnackbarType.ERROR,
+        })
+      )
+    }
+    setConfirmId('')
+    mutate()
+  }
 
+  const ZScore = data?.status?.score
   const dataCondition = formatBabyConditions(data?.baby_condition)
 
   return (
@@ -144,7 +181,7 @@ const DetailMonitoring = () => {
                               title="Hapus Data"
                               type="button"
                               className="focus:ring-ted-500 mx-1 rounded-[6px] bg-red-500 p-1.5 text-[14px] font-normal text-gray-50 focus:outline-none focus:ring-2 focus:ring-red-400  focus:ring-offset-2"
-                              // onClick={() => setConfirmId(baby.id)}
+                              onClick={() => setConfirmId(item.id)}
                             >
                               <TrashIcon className="h-4 w-4" />
                             </button>
@@ -201,6 +238,12 @@ const DetailMonitoring = () => {
           onSuccess={() => mutate()}
         />
       )}
+      <ConfirmDialog
+        open={!!confirmId}
+        message="Anda yakin ingin menghapus data ini?"
+        onClose={() => setConfirmId('')}
+        onConfirm={handleDelete}
+      />
     </main>
   )
 }

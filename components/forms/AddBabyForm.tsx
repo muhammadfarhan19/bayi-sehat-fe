@@ -2,7 +2,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import axios from 'axios'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -52,8 +51,6 @@ function AddBabyForm(props: ModalProps) {
     const response = await axios.get(`http://localhost:4000/baby/${id}`)
     setData(response.data.data)
   }
-
-  const router = useRouter()
 
   const submitHandler = async (formData: BabyType) => {
     let response

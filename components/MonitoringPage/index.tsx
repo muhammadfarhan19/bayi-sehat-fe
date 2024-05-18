@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux'
 import { setSnackbar } from '../../action/CommonAction'
 import { useAPI } from '../../hooks/useAPI'
 import { SnackbarType } from '../../reducer/CommonReducer'
-import { GetAuthRes, UserData } from '../../types/api/user.type'
 import { BabyType } from '../../types/babyType'
 import AddBabyForm from '../forms/AddBabyForm'
 import ConfirmDialog from '../shared/ConfirmDialog'
@@ -28,8 +27,6 @@ const MonitoringPage: React.FC = () => {
   })
   const dispatch = useDispatch()
   const router = useRouter()
-
-  const { data: user } = useAPI<UserData, GetAuthRes>('http://localhost:4000/auth', 'GET')
 
   const handleModal = (open: boolean, type?: string, selectedId?: string) => {
     setFormModalState({
@@ -89,7 +86,6 @@ const MonitoringPage: React.FC = () => {
       )
     }
   }, [searchQuery, data])
-  // console.log(data);
 
   return (
     <main className="min-h-auto flex h-[910px] flex-col gap-10 rounded-2xl border border-teal-400 px-10 py-5 shadow-lg">
