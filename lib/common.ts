@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-import { BabyCondition } from '../types/conditionType'
+import { BabyCondition } from '../types/api/baby.type'
 
 export const calculateAgeInMonths = (birthDate: string | Date | undefined, month: number) => {
   const formattedBirthDate = moment(birthDate)

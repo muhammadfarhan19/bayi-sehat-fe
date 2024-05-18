@@ -1,5 +1,11 @@
+export interface GetBabyConditionRes {
+  status: boolean
+  statusCode: number
+  data: BabyCondition
+}
+
 export interface BabyCondition {
-  weight: number
-  height: number
-  month: number
+  month: number | undefined
+  weight: number | undefined
+  height: number | undefined
 }

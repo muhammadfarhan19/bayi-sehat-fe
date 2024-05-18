@@ -2,7 +2,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import axios from 'axios'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -30,18 +29,9 @@ interface FormState {
 function AddConditionForm(props: ModalProps) {
   const { open, setOpen, onSuccess, type, selectedId, babyId } = props
   const debounce = React.useRef<number>(0)
-  const router = useRouter()
   const dispatch = useDispatch()
   const [queryMonth, setQueryMonth] = React.useState('')
-  const [data, setData] = React.useState<{
-    month: undefined | number
-    weight: undefined | number
-    height: undefined | number
-  }>({
-    month: undefined,
-    weight: undefined,
-    height: undefined,
-  })
+  const [data, setData] = React.useState<any>({})
 
   const toggleModal = () => {
     setOpen(!open)
@@ -56,20 +46,18 @@ function AddConditionForm(props: ModalProps) {
   } = useForm<FormState>()
 
   const submitHandler = async (formData: FormState) => {
+    let response
     try {
       const result = {
         weight: Number(formData.weight),
         height: Number(formData.height),
         month: Number(formData.month),
       }
-      const response = await fetch(`http://localhost:4000/condition/${babyId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(result),
-      }).then(response => response.json())
+      if (selectedId) {
+        response = await axios.patch(`http://localhost:4000/condition/${babyId}`, result, { withCredentials: true })
+      } else {
+        response = await axios.post(`http://localhost:4000/condition/${babyId}`, result, { withCredentials: true })
+      }
 
       if (response.status) {
         dispatch(
@@ -106,17 +94,18 @@ function AddConditionForm(props: ModalProps) {
   }
 
   React.useEffect(() => {
-    fetchBabyCondition(selectedId)
+    if (selectedId) {
+      fetchBabyCondition(selectedId)
+    }
   }, [selectedId])
 
-  // React.useLayoutEffect(() => {
-  //   if (selectedId && data) {
-  //     setValue('weight', data.weight)
-  //     setValue('height', data.height)
-  //     setValue('month', data.month)
-  //   }
-  // }, [data, selectedId])
-  // console.log(data)
+  React.useLayoutEffect(() => {
+    if (selectedId && data) {
+      setValue('weight', data.weight)
+      setValue('height', data.height)
+      setValue('month', data.month)
+    }
+  }, [data, selectedId])
 
   return (
     <Transition appear show={open} as={React.Fragment}>
