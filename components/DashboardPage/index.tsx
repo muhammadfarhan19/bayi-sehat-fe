@@ -27,7 +27,7 @@ const DashboardPage: React.FC = () => {
     {
       name: 'Severely Underweight',
       value: severelyUnderweight,
-      color: '#EF4444',
+      color: '#F97316',
     },
     {
       name: 'Underweight',
@@ -42,7 +42,20 @@ const DashboardPage: React.FC = () => {
     {
       name: 'Overweight',
       value: overweight,
-      color: '#F97316',
+      color: '#EF4444',
+    },
+  ]
+
+  const dataGenderChart = [
+    {
+      name: 'Laki-Laki',
+      value: boyBabies,
+      color: '#0088FE',
+    },
+    {
+      name: 'Perempuan',
+      value: girlBabies,
+      color: '#2DD4BF',
     },
   ]
 
@@ -53,7 +66,7 @@ const DashboardPage: React.FC = () => {
         <aside
           className={`w-auto cursor-pointer border-b-2 px-4 py-2 hover:bg-gray-200 hover:transition-all hover:duration-300`}
         >
-          Posyandu Gading
+          Posyandu Arimbi
         </aside>
       </header>
       <section className="flex h-full w-full flex-col items-start">
@@ -100,15 +113,12 @@ const DashboardPage: React.FC = () => {
                     {item.value}
                   </div>
                   <h1>{item.name}</h1>
-                  {/* <span className="rounded-full border px-2 py-0.5" style={{ backgroundColor: item.color }}>
-                    {item.value}
-                  </span> */}
                 </aside>
               ))}
             </section>
           </div>
           <div className="flex h-[350px] w-full items-center rounded-md border border-teal-400 shadow-md hover:cursor-pointer">
-            {/* <PieChartComponent /> */}
+            <PieChartComponent data={dataGenderChart} />
             <section className="flex flex-col justify-between gap-5 px-5">
               <aside className="flex items-center gap-5">
                 <div className="h-[20px] w-[20px] rounded-full bg-[#0088FE]" />
