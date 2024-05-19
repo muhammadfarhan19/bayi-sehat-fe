@@ -94,7 +94,7 @@ const MonitoringPage: React.FC = () => {
         <aside
           className={`w-auto cursor-pointer border-b-2 px-4 py-2 hover:bg-gray-200 hover:transition-all hover:duration-300`}
         >
-          Posyandu Gading
+          Posyandu Arimbi
         </aside>
       </header>
       <aside className="flex items-center justify-end">
@@ -167,7 +167,9 @@ const MonitoringPage: React.FC = () => {
                       <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.address}</td>
                       <td className="border-gray-200 bg-white px-5 py-5 text-sm">{baby.phone_number}</td>
                       <td className="border-gray-200 bg-white px-5 py-5  text-sm">
-                        {filteredData?.[0]?.baby_condition.length && <StatusBadge category={baby.status?.category} />}
+                        {filteredData?.[0]?.baby_condition.length ? (
+                          <StatusBadge category={baby.status?.category} />
+                        ) : null}
                       </td>
                       <td className="gap-x-2 border-gray-200 bg-white px-5 py-5 text-sm">
                         <button

@@ -25,7 +25,7 @@ function Snackbar(props: SnackbarProps) {
         setOpen(false)
         setTimeout(() => {
           dispatch(setSnackbar({ show: false }))
-        }, 1000)
+        }, 500)
       }, timeout)
     }
   }, [])
@@ -34,7 +34,7 @@ function Snackbar(props: SnackbarProps) {
     setOpen(false)
     setTimeout(() => {
       dispatch(setSnackbar({ show: false }))
-    }, 1000)
+    }, 500)
   }
 
   return (
