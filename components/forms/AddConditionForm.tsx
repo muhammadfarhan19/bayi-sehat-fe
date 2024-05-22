@@ -54,7 +54,7 @@ function AddConditionForm(props: ModalProps) {
         month: Number(formData.month),
       }
       if (selectedId) {
-        response = await axios.put(`http://localhost:4000/condition/update/${babyId}`, result)
+        response = await axios.put(`http://localhost:4000/condition/update/${selectedId}`, result)
       } else {
         response = await axios.post(`http://localhost:4000/condition/${babyId}`, result, { withCredentials: true })
       }
