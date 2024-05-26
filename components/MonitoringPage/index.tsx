@@ -5,6 +5,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 
 import { setSnackbar } from '../../action/CommonAction'
+import { BabyAPI } from '../../constants/APIUrls'
 import { useAPI } from '../../hooks/useAPI'
 import { SnackbarType } from '../../reducer/CommonReducer'
 import { BabyType } from '../../types/babyType'
@@ -38,7 +39,7 @@ const MonitoringPage: React.FC = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:4000/baby/${confirmId}`)
+      const response = await axios.delete(BabyAPI.DELETE_BABY + confirmId)
       if (response.status === 200) {
         dispatch(
           setSnackbar({
@@ -73,7 +74,7 @@ const MonitoringPage: React.FC = () => {
     setSearchQuery(e.target.value)
   }
 
-  const { data, error, isValidating, mutate } = useAPI<BabyType, any>('http://localhost:4000/baby', 'GET')
+  const { data, error, isValidating, mutate } = useAPI<BabyType, any>(BabyAPI.GET_BABIES, 'GET')
 
   React.useEffect(() => {
     if (data) {

@@ -6,8 +6,9 @@ import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
 import { setSnackbar } from '../../../action/CommonAction'
+import { AuthAPI } from '../../../constants/APIUrls'
 import { SnackbarType } from '../../../reducer/CommonReducer'
-import { PostAuthLoginReq, PostAuthLoginRes } from '../../../types/authType'
+import { PostAuthLoginReq } from '../../../types/authType'
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch()
@@ -20,7 +21,7 @@ const LoginPage: React.FC = () => {
 
   const onSubmit = async (val: PostAuthLoginReq) => {
     try {
-      const response: any = await axios.post('http://localhost:4000/auth/login', val, {
+      const response: any = await axios.post(AuthAPI.POST_AUTH, val, {
         withCredentials: true,
       })
 

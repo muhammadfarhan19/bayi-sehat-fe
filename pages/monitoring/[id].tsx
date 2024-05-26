@@ -10,7 +10,6 @@ import {
   UserIcon,
 } from '@heroicons/react/outline'
 import axios from 'axios'
-import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -21,6 +20,7 @@ import LineChartComponent from '../../components/charts/LineChartComponent'
 import AddConditionForm from '../../components/forms/AddConditionForm'
 import ConfirmDialog from '../../components/shared/ConfirmDialog'
 import StatusBadge from '../../components/shared/StatusBadge'
+import { BabyAPI, ConditionAPI } from '../../constants/APIUrls'
 import { withReduxPage } from '../../hooks/ReduxPage'
 import { useAPI } from '../../hooks/useAPI'
 import { calculateAgeInMonths, filterMonths, formatBabyConditions } from '../../lib/common'
@@ -51,11 +51,11 @@ const DetailMonitoring = () => {
     })
   }
 
-  const { data, isValidating, mutate } = useAPI<BabyType, any>(`http://localhost:4000/baby/${id}`, 'GET')
+  const { data, isValidating, mutate } = useAPI<BabyType, any>(BabyAPI.GET_BABY + id, 'GET')
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:4000/condition/${confirmId}`)
+      const response = await axios.delete(ConditionAPI.DELETE_CONDITIONS + confirmId)
       if (response.status === 200) {
         dispatch(
           setSnackbar({

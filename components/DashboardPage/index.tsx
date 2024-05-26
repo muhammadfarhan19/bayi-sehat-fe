@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import React from 'react'
 
+import { BabyAPI } from '../../constants/APIUrls'
 import { useAPI } from '../../hooks/useAPI'
 import boyBaby from '../../public/assets/boy.png'
 import girlBaby from '../../public/assets/girl.png'
@@ -9,11 +10,11 @@ import { BabyType } from '../../types/babyType'
 import PieChartComponent from '../charts/PieChartComponent'
 
 const DashboardPage: React.FC = () => {
-  const { data, isValidating } = useAPI<BabyType, any>('http://localhost:4000/baby', 'GET')
+  const { data, isValidating } = useAPI<BabyType, any>(BabyAPI.GET_BABIES, 'GET')
+  const { data: maleBaby } = useAPI<BabyType, any>(BabyAPI.GET_MALE_BABIES, 'GET')
+  const { data: femaleBaby } = useAPI<BabyType, any>(BabyAPI.GET_FEMALE_BABIES, 'GET')
 
   const totalBabies = data?.length
-  const boyBabies = data?.filter((baby: BabyType) => baby.gender === 'Laki-Laki').length
-  const girlBabies = data?.filter((baby: BabyType) => baby.gender === 'Perempuan').length
   const severelyUnderweight = data
     ?.map((baby: BabyType) => baby)
     .filter((baby: BabyType) => baby?.status?.category === 'Severely Underweights').length
@@ -49,12 +50,12 @@ const DashboardPage: React.FC = () => {
   const dataGenderChart = [
     {
       name: 'Laki-Laki',
-      value: boyBabies,
+      value: maleBaby?.length,
       color: '#0088FE',
     },
     {
       name: 'Perempuan',
-      value: girlBabies,
+      value: femaleBaby?.length,
       color: '#2DD4BF',
     },
   ]
@@ -87,7 +88,7 @@ const DashboardPage: React.FC = () => {
             </aside>
             <aside className="border-s-2 grid place-items-center gap-y-3 pl-5">
               <h1 className="text-3xl font-semibold">Laki-Laki</h1>
-              <h1 className="text-5xl font-bold">{isValidating ? '-' : boyBabies}</h1>
+              <h1 className="text-5xl font-bold">{isValidating ? '-' : maleBaby?.length}</h1>
             </aside>
           </div>
           <div className="flex h-full w-full cursor-pointer items-center justify-center gap-5 rounded-xl bg-teal-400 px-3 text-white shadow-lg duration-100 ease-in-out hover:-translate-y-0.5">
@@ -96,7 +97,7 @@ const DashboardPage: React.FC = () => {
             </aside>
             <aside className="border-s-2 grid place-items-center gap-y-3 pl-5">
               <h1 className="text-3xl font-semibold">Perempuan</h1>
-              <h1 className="text-5xl font-bold">{isValidating ? '-' : girlBabies}</h1>
+              <h1 className="text-5xl font-bold">{isValidating ? '-' : femaleBaby?.length}</h1>
             </aside>
           </div>
         </aside>

@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
 import { setSnackbar } from '../../action/CommonAction'
+import { BabyAPI } from '../../constants/APIUrls'
 import { GenderList } from '../../lib/common'
 import { SnackbarType } from '../../reducer/CommonReducer'
 import { BabyType } from '../../types/api/baby.type'
@@ -48,7 +49,7 @@ function AddBabyForm(props: ModalProps) {
   } = useForm<BabyType>()
 
   const fetchBaby = async (id: string | undefined) => {
-    const response = await axios.get(`http://localhost:4000/baby/${id}`)
+    const response = await axios.get(BabyAPI.GET_BABY + id)
     setData(response.data.data)
   }
 
@@ -56,9 +57,9 @@ function AddBabyForm(props: ModalProps) {
     let response
     try {
       if (selectedId) {
-        response = await axios.put(`http://localhost:4000/baby/${selectedId}`, formData)
+        response = await axios.put(BabyAPI.PUT_BABY + selectedId, formData)
       } else {
-        response = await axios.post('http://localhost:4000/baby', formData)
+        response = await axios.post(BabyAPI.POST_BABY, formData)
       }
       if (response.status === 200) {
         dispatch(
