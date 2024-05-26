@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
 import { setSnackbar } from '../../action/CommonAction'
+import { ConditionAPI } from '../../constants/APIUrls'
 import { filterMonths } from '../../lib/common'
 import { SnackbarType } from '../../reducer/CommonReducer'
 import AutoComplete from '../shared/ComboBox'
@@ -54,9 +55,9 @@ function AddConditionForm(props: ModalProps) {
         month: Number(formData.month),
       }
       if (selectedId) {
-        response = await axios.put(`http://localhost:4000/condition/update/${selectedId}`, result)
+        response = await axios.put(ConditionAPI.UPDATE_CONDITIONS + selectedId, result)
       } else {
-        response = await axios.post(`http://localhost:4000/condition/${babyId}`, result, { withCredentials: true })
+        response = await axios.post(ConditionAPI.POST_CONDITIONS + babyId, result, { withCredentials: true })
       }
 
       if (response.status) {
