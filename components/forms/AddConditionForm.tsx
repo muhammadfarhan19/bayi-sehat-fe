@@ -90,7 +90,7 @@ function AddConditionForm(props: ModalProps) {
     setOpen(!open)
   }
   const fetchBabyCondition = async (id: string | undefined) => {
-    const response = await axios.get(`http://localhost:4000/condition/detail/${id}`)
+    const response = await axios.get(ConditionAPI.GET_DETAIL_CONDITION + id)
     setData(response.data.data)
   }
 

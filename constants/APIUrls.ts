@@ -16,6 +16,7 @@ export const BabyAPI = {
 
 export const ConditionAPI = {
   GET_CONDITIONS: EnvironmentConfig.apiHost + '/condition',
+  GET_DETAIL_CONDITION: EnvironmentConfig.apiHost + '/condition/detail/',
   POST_CONDITIONS: EnvironmentConfig.apiHost + '/condition/create/',
   DELETE_CONDITIONS: EnvironmentConfig.apiHost + '/condition/delete/',
   UPDATE_CONDITIONS: EnvironmentConfig.apiHost + '/condition/update/',
